@@ -11,7 +11,40 @@
 | Database       | PostgreSQL                    | Primary relational DB        |
 | Cache / Queue  | Redis                         | Cache, Pub/Sub, Stream       |
 | Object Storage | MinIO (S3-compatible)         | File upload/download, assets |
+| Identity       | Keycloak (OAuth2 / OIDC)      | SSO, used by Workflow project |
 | Container      | Docker Compose                | Local orchestration          |
+
+### Authentication (Per-Project Strategy)
+
+Each project demonstrates a different auth pattern to showcase breadth:
+
+| Project      | Auth Method                    | Showcase Focus                          |
+| ------------ | ------------------------------ | --------------------------------------- |
+| Whiteboard   | JWT + Anonymous Guest          | Anonymous/authenticated hybrid access   |
+| Workflow     | Keycloak (OAuth2/OIDC + SSO)  | Enterprise SSO + RBAC                   |
+| 3D Asset     | API Key + JWT + Resource ACL   | M2M auth + asset-level permissions      |
+
+**Whiteboard** — Fast entry, no forced login:
+```
+Registered user: Email/Password → Backend issues JWT
+Guest mode:      Anonymous token (read-only, limited features)
+```
+
+**Workflow** — Enterprise-grade SSO via Keycloak (Docker):
+```
+Keycloak (Identity Provider)
+├─ OAuth2 Authorization Code Flow
+├─ RBAC roles: Admin / Manager / Employee
+├─ Spring Security integration
+└─ Simulates corporate SSO locally
+```
+
+**3D Asset** — Mixed client types (browser + IoT + Unity):
+```
+API Key:  IoT devices / Unity client (M2M authentication)
+JWT:      Web user login
+Role:     Owner / Editor / Viewer (resource-level ACL per asset)
+```
 
 ### File Upload/Download (Shared Pattern)
 
@@ -44,6 +77,7 @@ Client ← presigned URL    ← Backend API ← MinIO bucket
 | DB           | PostgreSQL                         |
 | Cache/Queue  | Redis (Pub/Sub + Stream)          |
 | Storage      | MinIO (images, exports)           |
+| Auth         | JWT + Anonymous Guest             |
 | AI           | Ollama + LangChain                |
 
 ### Core Tech Highlights
@@ -69,6 +103,7 @@ Client ← presigned URL    ← Backend API ← MinIO bucket
 | DB              | PostgreSQL                                 |
 | Cache/Queue     | Redis (Cache + Stream)                    |
 | Storage         | MinIO (attachments, documents)            |
+| Auth            | Keycloak (OAuth2/OIDC + SSO + RBAC)      |
 
 ### Core Tech Highlights
 
@@ -93,6 +128,7 @@ Client ← presigned URL    ← Backend API ← MinIO bucket
 | DB               | PostgreSQL                     |
 | Cache/Sync       | Redis (Pub/Sub + Stream)      |
 | Storage          | MinIO (3D assets, versioned)  |
+| Auth             | API Key + JWT + Resource ACL  |
 | IoT              | MQTT (Mosquitto)              |
 | Streaming (opt)  | Redis Stream (or Kafka)       |
 | AI (opt)         | Python + ONNX Runtime         |
@@ -116,5 +152,6 @@ Client ← presigned URL    ← Backend API ← MinIO bucket
 | Mobile/Client | React Native       | Kotlin + Swift        | Unity (C#)          |
 | Backend       | Node.js (NestJS)   | Kotlin (Spring Boot)  | ASP.NET Core        |
 | Realtime      | Socket.IO + Yjs    | Temporal              | SignalR + MQTT       |
+| Auth          | JWT + Guest        | Keycloak (OAuth2/SSO) | API Key + JWT + ACL |
 | File Storage  | MinIO              | MinIO                 | MinIO (versioned)   |
 | AI            | Ollama + LangChain | —                     | ONNX Runtime (opt)  |
