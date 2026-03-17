@@ -4,33 +4,56 @@
 
 ---
 
-## Shared Infrastructure (All Projects)
+## At a Glance
 
-| Layer          | Tech                          | Purpose                      |
-| -------------- | ----------------------------- | ---------------------------- |
-| Database       | PostgreSQL                    | Primary relational DB        |
-| Cache / Queue  | Redis                         | Cache, Pub/Sub, Stream       |
-| Object Storage | MinIO (S3-compatible)         | File upload/download, assets |
-| Identity       | Keycloak (OAuth2 / OIDC)      | SSO, used by Workflow project |
-| Container      | Docker Compose                | Local orchestration          |
+Three full-stack projects, each with a different tech stack, sharing the same local infrastructure.
 
-### Authentication (Per-Project Strategy)
+| Dimension     | Whiteboard             | Workflow                | 3D Asset              |
+| ------------- | ---------------------- | ----------------------- | --------------------- |
+| **Frontend**  | React                  | Vue 3                   | React + Three.js      |
+| **Mobile**    | React Native           | Kotlin + Swift + WebView| Unity (C#)            |
+| **Backend**   | Node.js (NestJS)       | Kotlin (Spring Boot)    | ASP.NET Core          |
+| **Realtime**  | Socket.IO + Yjs (CRDT) | Temporal                | SignalR + MQTT        |
+| **Auth**      | JWT + Guest            | Keycloak (OAuth2 / SSO) | API Key + JWT + ACL   |
+| **Storage**   | MinIO                  | MinIO                   | MinIO (versioned)     |
+| **AI**        | Ollama + LangChain     | —                       | ONNX Runtime (opt)    |
 
-Each project demonstrates a different auth pattern to showcase breadth:
+---
 
-| Project      | Auth Method                    | Showcase Focus                          |
-| ------------ | ------------------------------ | --------------------------------------- |
-| Whiteboard   | JWT + Anonymous Guest          | Anonymous/authenticated hybrid access   |
-| Workflow     | Keycloak (OAuth2/OIDC + SSO)  | Enterprise SSO + RBAC                   |
-| 3D Asset     | API Key + JWT + Resource ACL   | M2M auth + asset-level permissions      |
+## Shared Infrastructure
 
-**Whiteboard** — Fast entry, no forced login:
+All three projects connect to the same local services via Docker Compose.
+
+| Service        | Tech                      | What It Does                             |
+| -------------- | ------------------------- | ---------------------------------------- |
+| Database       | PostgreSQL                | Relational data for all projects         |
+| Cache / Queue  | Redis                     | Caching, Pub/Sub, Stream (task queue)    |
+| Object Storage | MinIO (S3-compatible)     | File upload / download for all projects  |
+| Identity       | Keycloak                  | OAuth2 / OIDC provider (Workflow project)|
+| Container      | Docker Compose            | One command to start everything          |
+
+---
+
+### Authentication
+
+Each project uses a different strategy to match its use case.
+
+| Project    | Method                       | Why This Approach                                |
+| ---------- | ---------------------------- | ------------------------------------------------ |
+| Whiteboard | JWT + Anonymous Guest        | Users need instant access — no forced sign-up    |
+| Workflow   | Keycloak (OAuth2/OIDC + SSO) | Enterprise apps require SSO and role management  |
+| 3D Asset   | API Key + JWT + Resource ACL | IoT devices and Unity clients can't do OAuth redirects |
+
+<details>
+<summary>Details per project</summary>
+
+**Whiteboard** — Anonymous + authenticated hybrid:
 ```
-Registered user: Email/Password → Backend issues JWT
-Guest mode:      Anonymous token (read-only, limited features)
+Registered → Email/Password → Backend issues JWT
+Guest      → Anonymous token (read-only, limited features)
 ```
 
-**Workflow** — Enterprise-grade SSO via Keycloak (Docker):
+**Workflow** — Enterprise SSO via Keycloak (Docker):
 ```
 Keycloak (Identity Provider)
 ├─ OAuth2 Authorization Code Flow
@@ -39,119 +62,116 @@ Keycloak (Identity Provider)
 └─ Simulates corporate SSO locally
 ```
 
-**3D Asset** — Mixed client types (browser + IoT + Unity):
+**3D Asset** — Mixed clients (browser + IoT + Unity):
 ```
-API Key:  IoT devices / Unity client (M2M authentication)
-JWT:      Web user login
-Role:     Owner / Editor / Viewer (resource-level ACL per asset)
-```
-
-### File Upload/Download (Shared Pattern)
-
-All three projects use MinIO for file storage with a consistent pattern:
-
-```
-Client → multipart upload → Backend API → MinIO bucket
-Client ← presigned URL    ← Backend API ← MinIO bucket
+API Key → IoT devices / Unity client (M2M)
+JWT     → Web user login
+ACL     → Owner / Editor / Viewer per asset
 ```
 
-| Project      | Upload Types                        | Bucket Strategy              |
-| ------------ | ----------------------------------- | ---------------------------- |
-| Whiteboard   | Images, exported PNG/PDF            | `whiteboard-assets`          |
-| Workflow      | Form attachments, approval docs, reports | `workflow-documents`    |
-| 3D Asset     | GLB/FBX models, textures, scenes    | `3d-assets` (versioned)      |
+</details>
 
 ---
 
-## 1. Realtime AI Whiteboard
+### File Upload / Download
 
-### Tech Stack
+All projects use MinIO with the same pattern:
 
-| Layer        | Tech                              |
-| ------------ | --------------------------------- |
-| Web          | React                             |
-| Mobile       | React Native (iOS + Android)      |
-| Backend      | Node.js (NestJS)                  |
-| Realtime     | WebSocket (Socket.IO)             |
-| State Sync   | Yjs (CRDT)                        |
-| DB           | PostgreSQL                         |
-| Cache/Queue  | Redis (Pub/Sub + Stream)          |
-| Storage      | MinIO (images, exports)           |
-| Auth         | JWT + Anonymous Guest             |
-| AI           | Ollama + LangChain                |
+```
+Upload:   Client → multipart → Backend API → MinIO bucket
+Download: Client ← presigned URL ← Backend API ← MinIO
+```
 
-### Core Tech Highlights
+| Project    | What Gets Uploaded                          | Bucket              |
+| ---------- | ------------------------------------------- | ------------------- |
+| Whiteboard | Images, exported PNG / PDF                  | `whiteboard-assets` |
+| Workflow   | Form attachments, approval docs, reports    | `workflow-documents`|
+| 3D Asset   | GLB / FBX models, textures, scene files     | `3d-assets`         |
 
-- **Realtime Collaboration**: CRDT (Yjs) for conflict-free editing
-- **Multi-node Sync**: WebSocket + Redis Pub/Sub
-- **AI Integration**: Local LLM (Ollama) + task queue (Redis Stream)
-- **Cross-platform**: React + React Native shared logic
-- **File Handling**: Image import to canvas, export whiteboard as PNG/PDF via MinIO
+> 3D Asset uses **chunked upload** for large files (50MB+) and **versioned buckets** for asset history.
 
 ---
 
-## 2. Enterprise Workflow System
+## Project Details
 
-### Tech Stack
+### 1. Realtime AI Whiteboard
 
-| Layer           | Tech                                      |
-| --------------- | ----------------------------------------- |
-| Web             | Vue 3 + Pinia + Element Plus              |
-| Mobile          | Kotlin (Android) + Swift (iOS) + WebView  |
-| Backend         | Kotlin + Spring Boot                      |
-| Workflow Engine | Temporal                                   |
-| DB              | PostgreSQL                                 |
-| Cache/Queue     | Redis (Cache + Stream)                    |
-| Storage         | MinIO (attachments, documents)            |
-| Auth            | Keycloak (OAuth2/OIDC + SSO + RBAC)      |
+A collaborative whiteboard with AI assistance — think Miro + ChatGPT, fully local.
 
-### Core Tech Highlights
+| Layer        | Tech                         |
+| ------------ | ---------------------------- |
+| Web          | React                        |
+| Mobile       | React Native (iOS + Android) |
+| Backend      | Node.js (NestJS)             |
+| Realtime     | WebSocket (Socket.IO)        |
+| State Sync   | Yjs (CRDT)                   |
+| DB           | PostgreSQL                   |
+| Cache/Queue  | Redis (Pub/Sub + Stream)     |
+| Storage      | MinIO                        |
+| Auth         | JWT + Anonymous Guest        |
+| AI           | Ollama + LangChain           |
 
-- **Permission System**: RBAC (Role-Based Access Control)
-- **Workflow Engine**: Temporal (state machine + task orchestration)
-- **Cross-platform**: WebView shared frontend UI
-- **Audit & Tracking**: Audit log + workflow tracing (DB)
-- **File Handling**: Form attachments, approval documents upload/download, report export via MinIO
+**Key technical decisions:**
 
----
-
-## 3. 3D Asset Collaboration (Digital Twin + AIoT)
-
-### Tech Stack
-
-| Layer            | Tech                          |
-| ---------------- | ----------------------------- |
-| Web              | React + Three.js              |
-| Client           | Unity (C#)                    |
-| Backend          | ASP.NET Core                  |
-| Realtime         | SignalR                       |
-| DB               | PostgreSQL                     |
-| Cache/Sync       | Redis (Pub/Sub + Stream)      |
-| Storage          | MinIO (3D assets, versioned)  |
-| Auth             | API Key + JWT + Resource ACL  |
-| IoT              | MQTT (Mosquitto)              |
-| Streaming (opt)  | Redis Stream (or Kafka)       |
-| AI (opt)         | Python + ONNX Runtime         |
-
-### Core Tech Highlights
-
-- **Digital Twin**: 3D model + realtime IoT data mapping
-- **Realtime Sync**: SignalR + Redis Pub/Sub
-- **Asset Management**: 3D file version control (MinIO), chunked upload for large models
-- **IoT Pipeline**: MQTT → Stream → Backend
-- **Cross-platform Sync**: Unity + Web shared state
-- **File Handling**: GLB/FBX upload (chunked/multipart), texture management, presigned URL download, browser 3D preview (Three.js)
+| Challenge                  | Solution                                        |
+| -------------------------- | ----------------------------------------------- |
+| Multi-user editing conflicts | CRDT (Yjs) — conflict-free, no central lock    |
+| Scale to multiple servers  | Redis Pub/Sub bridges WebSocket instances        |
+| AI without cloud API costs | Ollama runs LLM locally, Redis Stream for queue  |
+| One codebase, two platforms| React + React Native shared business logic       |
 
 ---
 
-## Tech Diversity Overview
+### 2. Enterprise Workflow System
 
-| Dimension     | Whiteboard         | Workflow              | 3D Asset            |
-| ------------- | ------------------ | --------------------- | ------------------- |
-| Frontend      | React              | Vue 3                 | React + Three.js    |
-| Mobile/Client | React Native       | Kotlin + Swift        | Unity (C#)          |
-| Backend       | Node.js (NestJS)   | Kotlin (Spring Boot)  | ASP.NET Core        |
-| Realtime      | Socket.IO + Yjs    | Temporal              | SignalR + MQTT       |
-| Auth          | JWT + Guest        | Keycloak (OAuth2/SSO) | API Key + JWT + ACL |
-| File Storage  | MinIO              | MinIO                 | MinIO (versioned)   |
-| AI            | Ollama + LangChain | —                     | ONNX Runtime (opt)  |
+An approval and task management system with role-based access — think Jira + custom workflow engine.
+
+| Layer           | Tech                                     |
+| --------------- | ---------------------------------------- |
+| Web             | Vue 3 + Pinia + Element Plus             |
+| Mobile          | Kotlin (Android) + Swift (iOS) + WebView |
+| Backend         | Kotlin + Spring Boot                     |
+| Workflow Engine | Temporal                                  |
+| DB              | PostgreSQL                               |
+| Cache/Queue     | Redis (Cache + Stream)                   |
+| Storage         | MinIO                                    |
+| Auth            | Keycloak (OAuth2/OIDC + SSO + RBAC)     |
+
+**Key technical decisions:**
+
+| Challenge                    | Solution                                       |
+| ---------------------------- | ---------------------------------------------- |
+| Complex multi-step approvals | Temporal — durable workflow with retry/timeout  |
+| Enterprise-grade permissions | Keycloak RBAC (Admin / Manager / Employee)      |
+| Audit compliance             | Every action logged to DB with timestamp + actor|
+| Native + Web with shared UI  | WebView for shared screens, native for platform features |
+
+---
+
+### 3. 3D Asset Collaboration (Digital Twin + AIoT)
+
+A platform for managing 3D assets with real-time IoT data overlay — think Figma for 3D + IoT dashboard.
+
+| Layer           | Tech                         |
+| --------------- | ---------------------------- |
+| Web             | React + Three.js             |
+| Client          | Unity (C#)                   |
+| Backend         | ASP.NET Core                 |
+| Realtime        | SignalR                      |
+| DB              | PostgreSQL                   |
+| Cache/Sync      | Redis (Pub/Sub + Stream)     |
+| Storage         | MinIO (versioned)            |
+| Auth            | API Key + JWT + Resource ACL |
+| IoT             | MQTT (Mosquitto)             |
+| Streaming (opt) | Redis Stream (or Kafka)      |
+| AI (opt)        | Python + ONNX Runtime        |
+
+**Key technical decisions:**
+
+| Challenge                      | Solution                                        |
+| ------------------------------ | ----------------------------------------------- |
+| Large 3D files (50MB+)        | Chunked multipart upload + versioned MinIO       |
+| IoT sensor data ingestion     | MQTT (Mosquitto) → Redis Stream → Backend        |
+| Browser 3D preview            | Three.js renders GLB/FBX without Unity install   |
+| Unity ↔ Web state sync        | SignalR + Redis Pub/Sub as shared message bus     |
+| Device auth (no browser)      | API Key for M2M, JWT for web users               |
