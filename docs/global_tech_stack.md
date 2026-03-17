@@ -1,101 +1,120 @@
-1. Realtime AI Whiteboard
-Tech Stack
+# Global Tech Stack
 
-Web：React
+> All infrastructure runs **locally** — no cloud services. Docker Compose for orchestration.
 
-Mobile：React Native（iOS + Android）
+---
 
-Backend：Node.js（NestJS）
+## Shared Infrastructure (All Projects)
 
-Realtime：WebSocket（Socket.IO）
+| Layer          | Tech                          | Purpose                      |
+| -------------- | ----------------------------- | ---------------------------- |
+| Database       | PostgreSQL                    | Primary relational DB        |
+| Cache / Queue  | Redis                         | Cache, Pub/Sub, Stream       |
+| Object Storage | MinIO (S3-compatible)         | File upload/download, assets |
+| Container      | Docker Compose                | Local orchestration          |
 
-State Sync：Yjs（CRDT）
+### File Upload/Download (Shared Pattern)
 
-DB：PostgreSQL
+All three projects use MinIO for file storage with a consistent pattern:
 
-Cache / Queue：Redis（Pub/Sub + Stream）
+```
+Client → multipart upload → Backend API → MinIO bucket
+Client ← presigned URL    ← Backend API ← MinIO bucket
+```
 
-Storage：MinIO
+| Project      | Upload Types                        | Bucket Strategy              |
+| ------------ | ----------------------------------- | ---------------------------- |
+| Whiteboard   | Images, exported PNG/PDF            | `whiteboard-assets`          |
+| Workflow      | Form attachments, approval docs, reports | `workflow-documents`    |
+| 3D Asset     | GLB/FBX models, textures, scenes    | `3d-assets` (versioned)      |
 
-AI：Ollama + LangChain
+---
 
-核心技術（精簡）
+## 1. Realtime AI Whiteboard
 
-即時協作：CRDT（Yjs）避免衝突
+### Tech Stack
 
-多節點同步：WebSocket + Redis Pub/Sub
+| Layer        | Tech                              |
+| ------------ | --------------------------------- |
+| Web          | React                             |
+| Mobile       | React Native (iOS + Android)      |
+| Backend      | Node.js (NestJS)                  |
+| Realtime     | WebSocket (Socket.IO)             |
+| State Sync   | Yjs (CRDT)                        |
+| DB           | PostgreSQL                         |
+| Cache/Queue  | Redis (Pub/Sub + Stream)          |
+| Storage      | MinIO (images, exports)           |
+| AI           | Ollama + LangChain                |
 
-AI 整合：Local LLM（Ollama）+ 任務佇列（Redis Stream）
+### Core Tech Highlights
 
-跨平台：React + React Native 共用邏輯
+- **Realtime Collaboration**: CRDT (Yjs) for conflict-free editing
+- **Multi-node Sync**: WebSocket + Redis Pub/Sub
+- **AI Integration**: Local LLM (Ollama) + task queue (Redis Stream)
+- **Cross-platform**: React + React Native shared logic
+- **File Handling**: Image import to canvas, export whiteboard as PNG/PDF via MinIO
 
-2. Enterprise Workflow System
-Tech Stack
+---
 
-Web：Vue 3 + Pinia + Element Plus
+## 2. Enterprise Workflow System
 
-Mobile：Kotlin（Android）+ Swift（iOS）+ WebView
+### Tech Stack
 
-Backend：Kotlin + Spring Boot
+| Layer           | Tech                                      |
+| --------------- | ----------------------------------------- |
+| Web             | Vue 3 + Pinia + Element Plus              |
+| Mobile          | Kotlin (Android) + Swift (iOS) + WebView  |
+| Backend         | Kotlin + Spring Boot                      |
+| Workflow Engine | Temporal                                   |
+| DB              | PostgreSQL                                 |
+| Cache/Queue     | Redis (Cache + Stream)                    |
+| Storage         | MinIO (attachments, documents)            |
 
-Workflow Engine：Temporal
+### Core Tech Highlights
 
-DB：PostgreSQL
+- **Permission System**: RBAC (Role-Based Access Control)
+- **Workflow Engine**: Temporal (state machine + task orchestration)
+- **Cross-platform**: WebView shared frontend UI
+- **Audit & Tracking**: Audit log + workflow tracing (DB)
+- **File Handling**: Form attachments, approval documents upload/download, report export via MinIO
 
-Cache / Queue：Redis（Cache + Stream）
+---
 
-核心技術（精簡）
+## 3. 3D Asset Collaboration (Digital Twin + AIoT)
 
-權限系統：RBAC（Role-Based Access Control）
+### Tech Stack
 
-流程引擎：Temporal（狀態機 + 任務編排）
+| Layer            | Tech                          |
+| ---------------- | ----------------------------- |
+| Web              | React + Three.js              |
+| Client           | Unity (C#)                    |
+| Backend          | ASP.NET Core                  |
+| Realtime         | SignalR                       |
+| DB               | PostgreSQL                     |
+| Cache/Sync       | Redis (Pub/Sub + Stream)      |
+| Storage          | MinIO (3D assets, versioned)  |
+| IoT              | MQTT (Mosquitto)              |
+| Streaming (opt)  | Redis Stream (or Kafka)       |
+| AI (opt)         | Python + ONNX Runtime         |
 
-跨端整合：WebView 共用前端 UI
+### Core Tech Highlights
 
-系統設計：Audit Log + 流程追蹤（DB）
+- **Digital Twin**: 3D model + realtime IoT data mapping
+- **Realtime Sync**: SignalR + Redis Pub/Sub
+- **Asset Management**: 3D file version control (MinIO), chunked upload for large models
+- **IoT Pipeline**: MQTT → Stream → Backend
+- **Cross-platform Sync**: Unity + Web shared state
+- **File Handling**: GLB/FBX upload (chunked/multipart), texture management, presigned URL download, browser 3D preview (Three.js)
 
-3. 3D Asset Collaboration（Digital Twin + AIoT）
-Tech Stack
+---
 
-Web：React + Three.js
+## Tech Diversity Overview
 
-Client：Unity（C#）
-
-Backend：ASP.NET Core
-
-Realtime：SignalR
-
-DB：PostgreSQL
-
-Cache / Sync：Redis（Pub/Sub + Stream）
-
-Storage：MinIO（3D Assets）
-
-IoT：MQTT（Mosquitto）
-
-Streaming（選用）：Redis Stream（或 Kafka）
-
-AI（選用）：Python + ONNX Runtime
-
-核心技術（精簡）
-
-Digital Twin：3D 模型 + 即時 IoT 資料映射
-
-即時同步：SignalR + Redis Pub/Sub
-
-資產管理：3D 檔案版本控制（MinIO）
-
-IoT Pipeline：MQTT → Stream → Backend
-
-跨端同步：Unity + Web 共用狀態
-
-🔧 全域共用（3個專案）
-Infra（全部 local）
-
-PostgreSQL
-
-Redis（Cache / PubSub / Stream）
-
-MinIO（Object Storage）
-
-Docker Compose
+| Dimension     | Whiteboard         | Workflow              | 3D Asset            |
+| ------------- | ------------------ | --------------------- | ------------------- |
+| Frontend      | React              | Vue 3                 | React + Three.js    |
+| Mobile/Client | React Native       | Kotlin + Swift        | Unity (C#)          |
+| Backend       | Node.js (NestJS)   | Kotlin (Spring Boot)  | ASP.NET Core        |
+| Realtime      | Socket.IO + Yjs    | Temporal              | SignalR + MQTT       |
+| File Storage  | MinIO              | MinIO                 | MinIO (versioned)   |
+| AI            | Ollama + LangChain | —                     | ONNX Runtime (opt)  |
