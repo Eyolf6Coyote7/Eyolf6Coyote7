@@ -196,13 +196,24 @@ Each project uses a different Redis DB index to avoid key collisions.
 
 ## Kafka Topics
 
-| Topic | Project | Purpose |
-|-------|---------|---------|
-| `workflow.approval-events` | Workflow | Approval state changes |
-| `workflow.audit-log` | Workflow | All user actions for compliance |
-| `workflow.notifications` | Workflow | Async email/push notifications |
-| `asset3d.iot-sensor-data` | 3D Asset | IoT sensor readings (from MQTT bridge) |
-| `asset3d.asset-events` | 3D Asset | Asset upload, version, delete events |
+| Topic | Project | Purpose | Partitions |
+|-------|---------|---------|------------|
+| `workflow.approval-events` | Workflow | Approval state changes | 3 (by `workflow_id`) |
+| `workflow.audit-log` | Workflow | All user actions for compliance | 6 (by `user_id`) |
+| `workflow.notifications` | Workflow | Async email/push notifications | 3 (by `recipient_id`) |
+| `asset3d.iot-sensor-data` | 3D Asset | IoT sensor readings (from MQTT bridge) | 6 (by `device_id`) |
+| `asset3d.asset-events` | 3D Asset | Asset upload, version, delete events | 3 (by `asset_id`) |
+
+### Kafka Design Patterns
+
+| Pattern | Where | Why |
+|---------|-------|-----|
+| **Event Sourcing** | `workflow.approval-events` | Store every approval state change as immutable event. Rebuild current state by replaying events. Enables audit trail and time-travel debugging. |
+| **Exactly-once Semantics** | `workflow.audit-log` | Use Kafka transactions (`enable.idempotence=true` + `transactional.id`) to guarantee each audit entry is written exactly once. Critical for compliance — duplicates or missing entries are unacceptable. |
+| **Partitioning Strategy** | All topics | Partition by entity ID (e.g. `workflow_id`, `device_id`) to guarantee ordering within the same entity while allowing parallel consumption across partitions. |
+| **Consumer Groups** | `workflow.notifications` | Multiple notification workers in the same consumer group — Kafka auto-balances partitions across workers for horizontal scaling. |
+| **MQTT → Kafka Bridge** | `asset3d.iot-sensor-data` | Mosquitto receives high-frequency IoT data via lightweight MQTT protocol, bridges to Kafka for durable storage and downstream processing. Decouples ingestion from processing. |
+| **Compacted Topic** | `asset3d.asset-events` (planned) | Log compaction keeps only the latest event per `asset_id` — acts as a materialized view of current asset state without querying the database. |
 
 ---
 

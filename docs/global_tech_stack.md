@@ -135,8 +135,9 @@ An approval and task management system with role-based access — think Jira + c
 | Mobile          | Kotlin (Android) + Swift (iOS) + WebView |
 | Backend         | Kotlin + Spring Boot                     |
 | Workflow Engine | Temporal                                  |
+| Event Streaming | Kafka (KRaft)                             |
 | DB              | PostgreSQL                               |
-| Cache/Queue     | Redis (Cache + Stream)                   |
+| Cache           | Redis                                    |
 | Storage         | MinIO                                    |
 | Auth            | Keycloak (OAuth2/OIDC + SSO + RBAC)     |
 
@@ -146,7 +147,8 @@ An approval and task management system with role-based access — think Jira + c
 | ---------------------------- | ---------------------------------------------- |
 | Complex multi-step approvals | Temporal — durable workflow with retry/timeout  |
 | Enterprise-grade permissions | Keycloak RBAC (Admin / Manager / Employee)      |
-| Audit compliance             | Every action logged to DB with timestamp + actor|
+| Audit compliance             | Kafka event sourcing — immutable audit log with exactly-once guarantee |
+| Async notifications          | Kafka consumer groups — horizontal scaling of notification workers |
 | Native + Web with shared UI  | WebView for shared screens, native for platform features |
 
 ---
@@ -161,12 +163,12 @@ A platform for managing 3D assets with real-time IoT data overlay — think Figm
 | Client          | Unity (C#)                   |
 | Backend         | ASP.NET Core                 |
 | Realtime        | SignalR                      |
+| IoT Broker      | MQTT (Mosquitto)             |
+| Event Streaming | Kafka (via MQTT → Kafka bridge) |
 | DB              | PostgreSQL                   |
-| Cache/Sync      | Redis (Pub/Sub + Stream)     |
+| Cache           | Redis (Pub/Sub)              |
 | Storage         | MinIO (versioned)            |
 | Auth            | API Key + JWT + Resource ACL |
-| IoT             | MQTT (Mosquitto)             |
-| Streaming (opt) | Redis Stream (or Kafka)      |
 | AI (opt)        | Python + ONNX Runtime        |
 
 **Key technical decisions:**
@@ -174,10 +176,12 @@ A platform for managing 3D assets with real-time IoT data overlay — think Figm
 | Challenge                      | Solution                                        |
 | ------------------------------ | ----------------------------------------------- |
 | Large 3D files (50MB+)        | Chunked multipart upload + versioned MinIO       |
-| IoT sensor data ingestion     | MQTT (Mosquitto) → Redis Stream → Backend        |
+| IoT sensor data ingestion     | MQTT (Mosquitto) → Kafka bridge → consumer processing |
+| IoT data ordering             | Kafka partitioning by `device_id` — ordered per device, parallel across devices |
 | Browser 3D preview            | Three.js renders GLB/FBX without Unity install   |
 | Unity ↔ Web state sync        | SignalR + Redis Pub/Sub as shared message bus     |
 | Device auth (no browser)      | API Key for M2M, JWT for web users               |
+| Asset state tracking          | Kafka compacted topic as materialized view of current asset state |
 
 ---
 
