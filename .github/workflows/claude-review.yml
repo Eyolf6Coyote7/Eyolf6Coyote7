@@ -58,7 +58,11 @@ jobs:
         env:
           HOME: ${{ steps.home.outputs.dir }}
         run: |
-          claude -p "$(cat /tmp/review_prompt.txt)" --output-format text > /tmp/review_comment.md
+          claude -p "$(cat /tmp/review_prompt.txt)" --output-format text > /tmp/review_comment.md 2>&1 || {
+            echo "Claude CLI exit code: $?"
+            cat /tmp/review_comment.md || true
+            exit 1
+          }
 
       - name: Post review comment
         run: |
