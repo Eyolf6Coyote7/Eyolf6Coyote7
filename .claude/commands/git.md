@@ -36,11 +36,21 @@ git config user.email "mickey985ha@gmail.com"
 **3. Workflow order** — always follow this sequence:
 
 ```
-Create Issue → Branch from dev → Commit (with #issue) → Push → PR to dev
+1. Create Issue
+2. Branch from dev
+3. Commit (with #issue)
+4. Push feature branch
+5. Create PR to dev
+6. Claude Code Review (post comment on PR via gh pr comment)
+7. Read Gemini Review comments (if any)
+8. Fix all review comments (Claude + Gemini)
+9. Human Merge (user decides when to merge)
 ```
 
 > Never push before the issue exists. Commit message must reference the issue number.
 > Feature branches always branch from `dev` and PR back to `dev`.
+> Claude must ALWAYS review after creating a PR — never skip.
+> After fixing review comments, re-read Gemini comments to ensure nothing is missed.
 
 ---
 
@@ -69,14 +79,17 @@ Examples:
 ### Development Flow
 
 ```
-1. Create Issue
+1. Create Issue on GitHub
 2. Create feature branch from dev
-   └─ git checkout -b feature/#<issue>-xxx dev
-3. Develop + Commit (with #issue)
+   └─ git checkout -b <type>/#<issue>-xxx dev
+3. Develop + Commit (with #issue in message)
 4. Push feature branch
-5. Create PR → dev
-6. Merge PR (squash or merge commit)
-7. When milestone ready: PR dev → stable + tag version
+5. Create PR → dev (with --assignee, --label, --project)
+6. Claude Code Review (post review comment on PR)
+7. Read Gemini Review comments (if any)
+8. Fix all review comments (commit + push to same branch)
+9. Human Merge (user decides when to merge)
+10. When milestone ready: PR dev → stable + tag version
 ```
 
 ### Release Flow (dev → stable)
@@ -344,19 +357,35 @@ graph LR
 🟢 Low / 🟡 Medium / 🔴 High — with one-line reasoning
 ```
 
-### Post Review
+### Step-by-step
 
-```bash
-gh pr comment <pr-number> --body "<review content>"
+1. **Claude Review** — after creating PR, immediately review and post comment:
+   ```bash
+   gh pr comment <pr-number> --body "<review content>"
+   ```
+
+2. **Gemini Review** — read Gemini's review comments on the PR:
+   ```bash
+   gh api repos/<owner>/<repo>/pulls/<pr-number>/comments --jq '.[].body'
+   gh api repos/<owner>/<repo>/pulls/<pr-number>/reviews --jq '.[].body'
+   ```
+
+3. **Fix all review comments** — apply fixes from both Claude and Gemini reviews, commit + push to the same branch.
+
+4. **Human Merge** — user decides when to merge. Never merge automatically.
+
+### Full Workflow
+
 ```
-
-### Workflow
-
-```
-Issue → Branch → Commit → Push → PR → Code Review (comment on PR) → Merge
+Issue → Branch → Commit → Push → PR
+  → Claude Review (gh pr comment)
+  → Read Gemini Review
+  → Fix all review comments
+  → Human Merge
 ```
 
 > Review is done by Claude directly via `gh pr comment`, NOT via GitHub Actions.
+> Always check for Gemini review comments after posting Claude review.
 
 ---
 
