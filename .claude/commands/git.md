@@ -223,7 +223,12 @@ git push
 ### Create PR
 
 ```bash
-gh pr create --title "<emoji><type>#<issue>: <title>" --body "$(cat <<'EOF'
+gh pr create \
+  --title "<emoji><type>#<issue>: <title>" \
+  --assignee @me \
+  --label "<label>" \
+  --project "Fullstack AI Workspace" \
+  --body "$(cat <<'EOF'
 ## Summary
 
 <1-3 bullet points explaining what and why>
@@ -235,9 +240,20 @@ gh pr create --title "<emoji><type>#<issue>: <title>" --body "$(cat <<'EOF'
 ## Test Plan
 
 <How to test, or "N/A">
+
+## Related Issue
+
+Closes #<issue-number>
 EOF
 )"
 ```
+
+### PR Defaults
+
+Always include:
+- `--assignee @me` — auto-assign PR creator
+- `--label` — match the issue label (e.g. `chore`, `project:whiteboard`)
+- `--project "Fullstack AI Workspace"` — add to project board
 
 ### PR Title Format
 

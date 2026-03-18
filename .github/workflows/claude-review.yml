@@ -4,6 +4,9 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+env:
+  PATH: /Users/jerrywolf/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin
+
 jobs:
   review:
     runs-on: self-hosted
@@ -14,36 +17,44 @@ jobs:
           fetch-depth: 0
 
       - name: Get PR diff
-        id: diff
         run: |
-          DIFF=$(gh pr diff ${{ github.event.pull_request.number }} --repo ${{ github.repository }})
-          echo "$DIFF" > /tmp/pr_diff.txt
+          gh pr diff ${{ github.event.pull_request.number }} \
+            --repo ${{ github.repository }} > /tmp/pr_diff.txt
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Claude Code Review
         run: |
-          claude -p "You are a senior code reviewer. Analyze this PR diff and provide:
+          cat <<'PROMPT' > /tmp/review_prompt.txt
+          You are a senior code reviewer. Analyze the following PR diff and respond in this exact markdown format:
 
           ## 🤖 Claude Code Review
 
           ### Summary
-          - Brief overview of changes
+          - 1-3 bullet points of what changed and why
 
           ### Architecture Impact
-          - Generate a mermaid diagram showing affected components and their relationships
-          - Wrap in \`\`\`mermaid code block
+          ```mermaid
+          graph LR
+            A[Component] --> B[Component]
+          ```
+          (Generate a mermaid diagram showing affected components and their relationships.
+           If changes are docs-only, show which doc sections were affected.)
 
           ### Review
           | File | Severity | Comment |
           |------|----------|---------|
-          (list issues found: ⚠️ warning, 💡 suggestion, ✅ good)
+          | `file:line` | ⚠️ / 💡 / ✅ | description |
 
           ### Risk Level
-          🟢 Low / 🟡 Medium / 🔴 High
+          🟢 Low / 🟡 Medium / 🔴 High — with one-line reasoning
+          PROMPT
+
+          claude -p "$(cat /tmp/review_prompt.txt)
 
           Here is the diff:
-          $(cat /tmp/pr_diff.txt)" > /tmp/review_comment.md
+
+          $(cat /tmp/pr_diff.txt)" --output-format text > /tmp/review_comment.md
 
       - name: Post review comment
         run: |
