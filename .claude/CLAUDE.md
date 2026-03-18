@@ -1,48 +1,42 @@
 # Fullstack AI Workspace
 
-A monorepo containing three full-stack portfolio projects, each with a different tech stack.
+Monorepo containing three fullstack portfolio projects demonstrating diverse tech stacks.
 
 ## Projects
 
-| Project | Frontend | Backend | Key Tech |
-|---------|----------|---------|----------|
-| **Realtime AI Whiteboard** | React + React Native | Node.js (NestJS) | Socket.IO, Yjs (CRDT), Ollama |
-| **Enterprise Workflow System** | Vue 3 + Kotlin/Swift | Kotlin (Spring Boot) | Temporal, Keycloak |
-| **3D Asset Collaboration** | React + Three.js + Unity | ASP.NET Core | SignalR, MQTT, MinIO versioned |
+| Project | Backend | Frontend | Mobile |
+|---------|---------|----------|--------|
+| Realtime AI Whiteboard | Node.js (NestJS) | React + Yjs | React Native |
+| Enterprise Workflow System | Kotlin (Spring Boot) + Temporal | Vue 3 + Element Plus | Kotlin (Android) + Swift (iOS) |
+| 3D Asset Collaboration | ASP.NET Core | React + Three.js | Unity (C#) |
 
-## Repo Structure
+## Shared Infrastructure
 
-```
-fullstack_ai_workspace/
-├─ docs/                          ← global docs
-├─ realtime_ai_whiteboard/        ← project 1
-│   ├─ docs/  web/  mobile/  backend/
-├─ enterprise_workflow_system/    ← project 2
-│   ├─ docs/  web/  mobile/  backend/
-├─ 3d_asset_collaboration/        ← project 3
-│   ├─ docs/  web/  client/  backend/
-├─ .claude/                       ← Claude Code config
-└─ .github/                       ← GitHub templates + workflows
-```
+All local, no cloud: PostgreSQL, Redis, MinIO, Docker Compose, Keycloak, MQTT (Mosquitto).
 
-## Git Conventions
+## Git Workflow
 
-- **Branch strategy**: `dev` (default) → `stable` (demo ready). No `main` branch.
-- **Feature branches**: `<type>/#<issue>-<description>` from `dev`
-- **Commits**: Conventional Commits with emoji — `<emoji><type>#<issue>: <description>`
-- **Version tags**: `<project>/v<major>.<minor>.<patch>` following SemVer
-- **Workflow**: Create Issue → Branch from dev → Commit → Push → PR to dev
+- **Default branch**: `dev`
+- **Stable branch**: `stable` (demo ready)
+- **Feature branches**: `<type>/#<issue>-<description>`
+- **Commit format**: `<emoji><type>#<issue>: <description>`
+- **Conventional Commits** — version bumps are determined by commit types
+- **Tag format**: `<project>/v<major>.<minor>.<patch>`
+- Always create an issue before committing. Never push without an issue reference.
 
 See `.claude/commands/git.md` for full git workflow details.
 
-## Shared Infrastructure (All Local)
+## Git Identity
 
-- PostgreSQL, Redis, MinIO, Keycloak — all via Docker Compose
-- No cloud services
+```bash
+git config user.name "wolf04"
+git config user.email "mickey985ha@gmail.com"
+```
 
-## Important Rules
+## GitHub CLI
 
-- All code and docs in English
-- Always reference GitHub issue number in commits and PRs
-- Never push directly to `dev` or `stable` — always use PRs
-- File upload/download uses MinIO with presigned URLs
+Always switch to personal account before `gh` operations:
+
+```bash
+gh auth switch --user coyote7wolf
+```

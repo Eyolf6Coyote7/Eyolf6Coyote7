@@ -12,28 +12,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # TODO: Add linting per project when code is added
-      - name: Check commit messages
+      - name: Check commit messages follow conventional commits
         run: |
-          echo "Checking conventional commit format..."
-          # Validate last commit message follows convention
-          COMMIT_MSG=$(git log -1 --pretty=%B)
-          if echo "$COMMIT_MSG" | grep -qE '^(✨feat|🐛fix|♻️refactor|📘docs|🧪test|📦chore|🎨style|🎉init|🚀release)'; then
-            echo "✅ Commit message follows convention"
-          else
-            echo "⚠️ Commit message may not follow convention: $COMMIT_MSG"
-            echo "Expected format: <emoji><type>#<issue>: <description>"
-          fi
+          echo "TODO: Add commitlint when projects have package.json"
+          echo "For now, this is a placeholder."
 
-  # TODO: Add test jobs per project when code is added
-  # whiteboard-test:
-  #   runs-on: self-hosted
-  #   steps: ...
+  # Uncomment per-project jobs as development progresses:
   #
-  # workflow-test:
+  # whiteboard:
   #   runs-on: self-hosted
-  #   steps: ...
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - run: cd realtime_ai_whiteboard/backend && npm ci && npm test
   #
-  # 3d-asset-test:
+  # workflow:
   #   runs-on: self-hosted
-  #   steps: ...
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - run: cd enterprise_workflow_system/backend && ./gradlew test
+  #
+  # 3d-asset:
+  #   runs-on: self-hosted
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - run: cd 3d_asset_collaboration/backend && dotnet test

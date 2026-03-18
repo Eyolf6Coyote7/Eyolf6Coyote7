@@ -16,16 +16,24 @@ Personal Git workflow for **github.self.com** repos (user: `coyote7wolf`).
 
 ## Prerequisites
 
-**1. Git user config** — ensure per-repo user config is set before first commit:
+**1. Switch gh account** before any `gh` CLI operation (PR, issue, project):
 
 ```bash
-git config user.name "<your-name>"
-git config user.email "<your-email>"
+gh auth switch --user coyote7wolf
 ```
 
-> Verify with `git config user.name` before first commit.
+> Default `gh` account is `EyolfLin-Metropia` (work). Always switch first.
 
-**2. Workflow order** — always follow this sequence:
+**2. Git user config** — set per-repo using `.gitconfig-self`:
+
+```bash
+git config user.name "wolf04"
+git config user.email "mickey985ha@gmail.com"
+```
+
+> Source: `~/.gitconfig-self`. Always verify with `git config user.name` before first commit.
+
+**3. Workflow order** — always follow this sequence:
 
 ```
 Create Issue → Branch from dev → Commit (with #issue) → Push → PR to dev

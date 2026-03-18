@@ -1,29 +1,24 @@
 {
-  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
   "packages": {
-    ".": {
-      "release-type": "simple",
-      "include-component-in-tag": true,
-      "component": "workspace",
-      "changelog-path": "CHANGELOG.md"
-    },
     "realtime_ai_whiteboard": {
-      "release-type": "node",
-      "include-component-in-tag": true,
+      "release-type": "simple",
       "component": "whiteboard",
-      "changelog-path": "CHANGELOG.md"
+      "tag-separator": "/"
     },
     "enterprise_workflow_system": {
       "release-type": "simple",
-      "include-component-in-tag": true,
       "component": "workflow",
-      "changelog-path": "CHANGELOG.md"
+      "tag-separator": "/"
     },
     "3d_asset_collaboration": {
       "release-type": "simple",
-      "include-component-in-tag": true,
       "component": "3d-asset",
-      "changelog-path": "CHANGELOG.md"
+      "tag-separator": "/"
+    },
+    ".": {
+      "release-type": "simple",
+      "component": "workspace",
+      "tag-separator": "/"
     }
   }
 }

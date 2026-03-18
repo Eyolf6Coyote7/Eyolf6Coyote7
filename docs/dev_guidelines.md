@@ -1,49 +1,49 @@
 # Development Guidelines
 
-> All infrastructure runs locally. No cloud services. Docker Compose for orchestration.
-
----
-
 ## Branch Strategy
 
 ### Long-lived Branches
 
-| Branch   | Purpose                              | Protection                          |
-| -------- | ------------------------------------ | ----------------------------------- |
-| `dev`    | Main development line (default)      | PR only, no direct push             |
-| `stable` | Stable version / demo ready          | PR only, no direct push, require review |
+| Branch   | Purpose                        | Default |
+| -------- | ------------------------------ | ------- |
+| `dev`    | Main development line          | ✅ Yes  |
+| `stable` | Stable version / demo ready    | No      |
 
-> **Note**: Branch protection rules will be enforced via GitHub settings once the repo is public. Until then, follow these rules by convention.
+> No `main` branch. `dev` is the GitHub default branch.
 
-- No `main` branch — `dev` is the GitHub default
-- All feature branches merge to `dev` via PR
-- `stable` is only updated from `dev` when a milestone is ready
+### Feature Branches
 
-### Feature Branch Naming
+Format: `<type>/#<issue-number>-<short-description>`
 
 ```
-<type>/#<issue-number>-<short-description>
+feature/#12-ai-whiteboard-canvas
+fix/#5-websocket-reconnect
+chore/#8-setup-ci
 ```
 
-Examples:
-- `feature/#12-ai-whiteboard-canvas`
-- `fix/#5-websocket-reconnect`
-- `chore/#8-setup-ci`
-
----
-
-## Development Flow
+### Development Flow
 
 ```
-1. Create GitHub Issue
+1. Create Issue on GitHub
 2. Create feature branch from dev
-   └─ git checkout -b <type>/#<issue>-<description> dev
-3. Develop + Commit (reference #issue in every commit)
+   └─ git checkout -b feature/#<issue>-xxx dev
+3. Develop + Commit (with #issue in message)
 4. Push feature branch
-5. Create PR → dev (use PR template)
-6. Claude auto-reviews PR (self-hosted runner)
-7. Merge PR (squash or merge commit)
-8. When milestone ready: PR dev → stable + auto-tag via release-please
+5. Create PR → dev
+6. Merge PR (squash or merge commit)
+7. When milestone ready: PR dev → stable + tag
+```
+
+> ⚠️ Never push before the issue exists.
+
+### Release Flow (dev → stable)
+
+```bash
+gh pr create --base stable --title "🚀release: v0.x.0" --body "..."
+# After merge, tag on stable
+git checkout stable && git pull
+git tag -a <project>/v0.x.0 -m "<project>/v0.x.0: <description>"
+git push origin <project>/v0.x.0
 ```
 
 ---
@@ -53,43 +53,35 @@ Examples:
 ### Format
 
 ```
-<emoji><type>#<issue>: <short description>
+<emoji><type>#<issue-number>: <short description>
 ```
 
-No issue number? Use scope:
+If no issue number, use scope:
+
 ```
 <emoji><type>(<scope>): <short description>
 ```
 
 ### Types & Emoji
 
-| Type       | Emoji | Use Case                              | Version Bump |
-| ---------- | ----- | ------------------------------------- | ------------ |
-| `feat`     | ✨    | New feature                           | minor        |
-| `fix`      | 🐛    | Bug fix                               | patch        |
-| `refactor` | ♻️    | Code refactoring (no behavior change) | none         |
-| `docs`     | 📘    | Documentation only                    | none         |
-| `test`     | 🧪    | Adding/updating tests                 | none         |
-| `chore`    | 📦    | Build, tooling, config changes        | none         |
-| `style`    | 🎨    | Formatting, whitespace (no logic)     | none         |
-| `init`     | 🎉    | Initial project setup                 | minor        |
+| Type       | Emoji | Use Case                              |
+| ---------- | ----- | ------------------------------------- |
+| `feat`     | ✨    | New feature                           |
+| `fix`      | 🐛    | Bug fix                               |
+| `refactor` | ♻️    | Code refactoring (no behavior change) |
+| `docs`     | 📘    | Documentation only                    |
+| `test`     | 🧪    | Adding/updating tests                 |
+| `chore`    | 📦    | Build, tooling, config changes        |
+| `style`    | 🎨    | Formatting, whitespace (no logic)     |
+| `init`     | 🎉    | Initial project setup                 |
 
 ### Rules
 
 1. Emoji + Type always together, type lowercase
-2. Reference issue number `#<number>` in every commit
-3. English, imperative mood, no period
-4. Body: bullet points for main changes (optional for small commits)
-5. Add `BREAKING CHANGE:` in commit footer for major version bump
-
-### Examples
-
-```
-✨feat#12: add real-time cursor sync
-🐛fix#5: resolve websocket disconnect
-🎉init(workspace): initialize folder structure
-📦chore(ci): add GitHub Actions workflow
-```
+2. `#<number>` if linked to a GitHub issue
+3. `(<scope>)` if no issue — e.g. `(whiteboard)`, `(ci)`
+4. English, imperative mood, no period
+5. Body: bullet points (optional for small commits)
 
 ---
 
@@ -110,68 +102,57 @@ No issue number? Use scope:
 | `workflow`   | Enterprise Workflow System |
 | `3d-asset`   | 3D Asset Collaboration     |
 
-### SemVer Rules (Conventional Commits)
+### Version Bumping (Conventional Commits + SemVer)
 
-| Commit Type              | Version Bump       |
-| ------------------------ | ------------------ |
-| `fix`                    | patch `0.0.X`      |
-| `feat`                   | minor `0.X.0`      |
-| any + `BREAKING CHANGE`  | major `X.0.0`      |
-| `docs/chore/style/refactor/test` | no release |
+| Commit Type | Version Bump | Trigger |
+| ----------- | ------------ | ------- |
+| `fix`       | **patch** `0.0.X` | Bug fix, backward compatible |
+| `feat`      | **minor** `0.X.0` | New feature, backward compatible |
+| any + `BREAKING CHANGE` footer | **major** `X.0.0` | Not backward compatible |
+| `docs`, `chore`, `style`, `refactor`, `test` | **no release** | No version bump |
 
 > Automated via `release-please` GitHub Action on `stable` branch.
 
 ---
 
-## Pull Request
+## Branch Protection
 
-### PR Title
+> ⚠️ Deferred until repo is set to public (GitHub Free limitation).
 
-Same format as commit:
-```
-<emoji><type>#<issue>: <short description>
-```
+Target rules:
 
-### PR Body
-
-Use the template at `.github/pull_request_template.md`:
-- Summary (what & why)
-- Changes (files/modules affected)
-- Test Plan
-- Related Issues
-
-### Auto Review
-
-Every PR triggers Claude Code Review (self-hosted runner):
-- Code review with severity levels
-- Mermaid architecture diagram of affected components
-- Risk assessment
+| Branch   | Rules                                        |
+| -------- | -------------------------------------------- |
+| `dev`    | PR only, no direct push                      |
+| `stable` | PR only, no direct push, require review      |
 
 ---
 
 ## CI/CD
 
-| Workflow | Trigger | What It Does |
-|----------|---------|--------------|
-| `ci.yml` | PR to dev/stable, push to dev | Lint, commit format check, tests |
-| `claude-review.yml` | PR opened/updated | Auto code review + mermaid diagram |
-| `release-please.yml` | Push to stable | Auto-tag based on conventional commits |
-
-All workflows run on **self-hosted runner** (local Mac).
+- **CI**: GitHub Actions on self-hosted runner (macOS ARM64)
+  - Runs on PR to `dev` and `stable`
+  - Commit message lint (planned)
+  - Per-project test jobs (planned)
+- **CD**: None — all local development, no cloud deployment
+- **Auto Review**: Claude Code reviews PRs with architecture mermaid diagrams
+- **Auto Tag**: `release-please` creates tags on `stable` merges
 
 ---
 
-## Code Standards
+## Git Identity
 
-- All code and documentation in **English**
-- Each project has its own tech stack — see `docs/global_tech_stack.md`
-- Shared infrastructure via Docker Compose — see `docs/global_infra.md`
-- 8-phase development flow per project:
-  1. Project Proposal
-  2. Product Spec
-  3. System Architecture
-  4. Technical Design
-  5. UI/UX Design (Figma)
-  6. Development Roadmap
-  7. Development
-  8. Testing
+Per-repo config (not global):
+
+```bash
+git config user.name "wolf04"
+git config user.email "mickey985ha@gmail.com"
+```
+
+## GitHub CLI
+
+Switch to personal account before operations:
+
+```bash
+gh auth switch --user coyote7wolf
+```

@@ -8,12 +8,16 @@
 
 <!-- List changed files/modules and what changed -->
 
-- `<file/module>`: <what changed>
+-
 
 ## Test Plan
 
-<!-- How to test, or "N/A" -->
+<!-- How to test this PR, or "N/A" -->
 
-## Related Issues
+-
 
-<!-- Link to GitHub issues: Closes #XX -->
+## Related Issue
+
+<!-- Link to GitHub issue: Closes #<number> -->
+
+Closes #
