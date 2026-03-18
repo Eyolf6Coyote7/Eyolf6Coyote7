@@ -20,16 +20,14 @@ Each project follows the same document lifecycle. Phases are sequential for init
 
 For new features after initial release, don't rewrite docs. Follow this flow:
 
-```
-1. Write RFC (rfcs/RFC-XXX-feature-name.md)
-2. Update PRD (add feature section)
-3. Update system_architecture.md (if architecture changes)
-4. Write ADR (adrs/ADR-XXX-decision.md) for major tech decisions
-5. Update technical_design.md (add feature detail)
-6. Update ui_ux_design.md (new Figma screens)
-7. Develop
-8. Update testing_strategy.md (add test plan for feature)
-```
+1. Write RFC (`rfcs/RFC-XXX-feature-name.md`)
+2. Update `prd.md` (add feature section)
+3. Update `system_architecture.md` (if architecture changes)
+4. Write ADR (`adrs/ADR-XXX-decision.md`) for major tech decisions
+5. Update `technical_design.md` (add feature detail)
+6. Update `ui_ux_design.md` (new Figma screens)
+7. Update `testing_strategy.md` (add test plan for feature)
+8. Develop
 
 ### Document Update Frequency
 
