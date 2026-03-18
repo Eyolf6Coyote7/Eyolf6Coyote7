@@ -1,4 +1,6 @@
 {
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "prerelease-type": "rc",
   "packages": {
     "realtime_ai_whiteboard": {
       "release-type": "simple",
