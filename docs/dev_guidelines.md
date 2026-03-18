@@ -212,8 +212,16 @@ If no issue number, use scope:
 
 ### Format
 
+| Branch | Tag Format | Example |
+|--------|-----------|---------|
+| `dev` | `<project>/v<major>.<minor>.<patch>-rc.<n>` | `workspace/v0.2.0-rc.1` |
+| `stable` | `<project>/v<major>.<minor>.<patch>` | `workspace/v0.2.0` |
+
+**RC = Release Candidate** — a version that is feature-complete but not yet verified as stable. It's the "this should be ready, but let's test first" version. When an RC is promoted to `stable` without changes, the `-rc.N` suffix is dropped.
+
 ```
-<project>/v<major>.<minor>.<patch>
+dev:    workspace/v0.2.0-rc.1  →  workspace/v0.2.0-rc.2  (fixes)
+stable: workspace/v0.2.0       (promoted from rc.2, same code)
 ```
 
 ### Project Prefixes
@@ -234,7 +242,7 @@ If no issue number, use scope:
 | any + `BREAKING CHANGE` footer | **major** `X.0.0` | Not backward compatible |
 | `docs`, `chore`, `style`, `refactor`, `test` | **no release** | No version bump |
 
-> Automated via `release-please` GitHub Action on `stable` branch.
+> Automated via `release-please` GitHub Action. Triggers on push to both `dev` (RC tags) and `stable` (release tags).
 
 ---
 
