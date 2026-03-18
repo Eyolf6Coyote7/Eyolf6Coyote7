@@ -175,3 +175,207 @@ A platform for managing 3D assets with real-time IoT data overlay — think Figm
 | Browser 3D preview            | Three.js renders GLB/FBX without Unity install   |
 | Unity ↔ Web state sync        | SignalR + Redis Pub/Sub as shared message bus     |
 | Device auth (no browser)      | API Key for M2M, JWT for web users               |
+
+---
+
+## Observability
+
+All three projects share the same observability stack via Docker Compose.
+
+| Layer   | Tech                      | What It Does                              |
+| ------- | ------------------------- | ----------------------------------------- |
+| Logging | Pino / Logback / Serilog  | Structured JSON logs per backend runtime  |
+| Metrics | Prometheus + Grafana      | Collect and visualize system/app metrics  |
+| Tracing | OpenTelemetry → Jaeger    | Distributed tracing across services       |
+
+| Project    | Logging Library | Tracing Integration                    |
+| ---------- | --------------- | -------------------------------------- |
+| Whiteboard | Pino (Node.js)  | OpenTelemetry JS SDK → Jaeger          |
+| Workflow   | Logback (Kotlin)| OpenTelemetry Java SDK → Jaeger        |
+| 3D Asset   | Serilog (.NET)  | OpenTelemetry .NET SDK → Jaeger        |
+
+> Staff-level interview signal: "How do you debug a production issue across services?"
+
+---
+
+## API Design Strategy
+
+Each project uses a different API style to demonstrate breadth.
+
+| Project    | API Style         | Why                                            |
+| ---------- | ----------------- | ---------------------------------------------- |
+| Whiteboard | REST + WebSocket  | Simple CRUD + realtime — no over-engineering   |
+| Workflow   | GraphQL           | Complex relational queries (approvals, roles)  |
+| 3D Asset   | gRPC + REST       | gRPC streaming for large file transfer, REST for web |
+
+<details>
+<summary>Details per project</summary>
+
+**Whiteboard** — REST for CRUD, WebSocket for realtime:
+```
+GET  /api/boards/:id        → fetch board
+POST /api/boards             → create board
+WS   /ws/board/:id          → realtime cursor + drawing sync
+```
+
+**Workflow** — GraphQL for flexible queries:
+```graphql
+query {
+  workflow(id: "...") {
+    steps { assignee { name, role } status }
+    attachments { url, uploadedAt }
+  }
+}
+```
+
+**3D Asset** — gRPC for streaming, REST for web:
+```
+gRPC  AssetService.Upload    → chunked bidirectional stream
+gRPC  AssetService.Download  → server-side stream
+REST  GET /api/assets/:id    → metadata + presigned URL
+```
+
+</details>
+
+---
+
+## Resilience Patterns
+
+| Pattern              | Tech                        | Project    |
+| -------------------- | --------------------------- | ---------- |
+| Circuit Breaker      | Resilience4j (Spring Boot)  | Workflow   |
+| Retry + Exp. Backoff | Polly (.NET)                | 3D Asset   |
+| Retry + Backoff      | NestJS built-in / axios-retry | Whiteboard |
+| Graceful Degradation | AI offline fallback         | Whiteboard |
+| Timeout / Deadline   | Temporal activity timeout   | Workflow   |
+| Bulkhead             | Resilience4j                | Workflow   |
+
+> Whiteboard: if Ollama is down, AI features gracefully degrade — users can still draw and collaborate.
+
+---
+
+## Testing Strategy
+
+| Layer       | Tool                  | Project    | What It Tests                     |
+| ----------- | --------------------- | ---------- | --------------------------------- |
+| Unit        | Jest                  | Whiteboard | Services, utils, pure functions   |
+| Unit        | JUnit 5               | Workflow   | Services, domain logic            |
+| Unit        | xUnit                 | 3D Asset   | Services, domain logic            |
+| Integration | Testcontainers        | Workflow   | DB queries, Temporal workflows    |
+| E2E         | Playwright            | Whiteboard | Multi-user realtime collaboration |
+| Load        | k6                    | 3D Asset   | Large file upload stress test     |
+| API         | Supertest             | Whiteboard | REST endpoint contracts           |
+| API         | REST Assured          | Workflow   | GraphQL query validation          |
+
+> Staff-level interview signal: "How do you decide what to test and at what layer?"
+
+---
+
+## Security & Compliance
+
+Demonstrates understanding of SOC 2 / ISO 27001 controls without formal certification.
+
+### OWASP Top 10 Coverage
+
+| Risk                  | Mitigation                                | Project    |
+| --------------------- | ----------------------------------------- | ---------- |
+| Injection (SQL/NoSQL) | Parameterized queries, ORM (TypeORM / Exposed / EF Core) | All |
+| Broken Auth           | Keycloak (OAuth2), JWT validation, token expiry | All |
+| Sensitive Data Exposure | TLS in transit, MinIO encryption at rest | All |
+| XXE                   | Disable external entity parsing           | Workflow   |
+| Broken Access Control | RBAC (Keycloak), Resource ACL             | Workflow, 3D Asset |
+| Security Misconfiguration | Hardened Docker images, no default passwords | All |
+| XSS                   | React/Vue auto-escaping, CSP headers      | All        |
+| Insecure Deserialization | Input validation, DTO schemas           | All        |
+
+### SOC 2 / ISO 27001 Aligned Controls
+
+| Control                | Implementation                             | Project    |
+| ---------------------- | ------------------------------------------ | ---------- |
+| Audit Log              | All operations logged: who / what / when   | Workflow   |
+| Encryption at rest     | MinIO server-side encryption (SSE-S3)      | 3D Asset   |
+| Encryption in transit  | TLS everywhere (HTTPS, WSS, gRPCs)        | All        |
+| RBAC / Least privilege | Keycloak role mapping, resource-level ACL  | Workflow, 3D Asset |
+| Input validation       | DTO validation at API boundary             | All        |
+| Secret management      | `.env` + Docker secrets (no hardcoded secrets) | All    |
+| Data retention policy  | Auto-cleanup old asset versions            | 3D Asset   |
+| Incident response      | Structured logging + Grafana alerts        | All        |
+
+> Staff-level interview signal: "How do you approach security in your systems?"
+
+---
+
+## Database Patterns
+
+| Pattern              | Tech / Approach                          | Project    |
+| -------------------- | ---------------------------------------- | ---------- |
+| Migration            | TypeORM migrations                       | Whiteboard |
+| Migration            | Flyway                                   | Workflow   |
+| Migration            | EF Core migrations                       | 3D Asset   |
+| Indexing strategy     | Composite indexes on hot query paths     | All        |
+| Query optimization   | EXPLAIN ANALYZE, N+1 detection           | All        |
+| Connection pooling   | HikariCP / Npgsql / pg pool              | All        |
+| Soft delete          | `deleted_at` timestamp                   | Workflow   |
+| Optimistic locking   | Version column for concurrent edits      | 3D Asset   |
+
+---
+
+## Caching Strategy
+
+| Pattern           | Implementation                        | Project    |
+| ----------------- | ------------------------------------- | ---------- |
+| Cache-aside       | Redis GET → miss → DB → SET           | All        |
+| Write-through     | Update DB + Redis in same transaction | Workflow   |
+| Cache invalidation | Event-driven invalidation via Redis Pub/Sub | Whiteboard |
+| TTL-based expiry  | Short TTL for volatile data           | All        |
+| Session cache     | Redis for JWT session metadata        | Workflow   |
+
+---
+
+## Architecture Decision Records (ADR)
+
+Each major technical choice is documented as an ADR in project docs.
+
+| ADR | Decision | Project |
+| --- | -------- | ------- |
+| ADR-001 | Why Temporal over Bull for workflow engine | Workflow |
+| ADR-002 | Why gRPC for 3D asset transfer | 3D Asset |
+| ADR-003 | Why Keycloak over Auth0 for enterprise auth | Workflow |
+| ADR-004 | Why Yjs (CRDT) over OT for collaborative editing | Whiteboard |
+| ADR-005 | Why MQTT over WebSocket for IoT ingestion | 3D Asset |
+| ADR-006 | Why GraphQL over REST for workflow queries | Workflow |
+
+> ADR format: Context → Decision → Consequences. Stored in each project's `docs/` folder.
+
+---
+
+## Performance
+
+| Concern              | Approach                                  | Project    |
+| -------------------- | ----------------------------------------- | ---------- |
+| N+1 query detection  | DataLoader (GraphQL), eager loading       | Workflow   |
+| Connection pooling   | HikariCP / Npgsql / pg pool              | All        |
+| Throttling           | Cursor sync throttled to 60fps max       | Whiteboard |
+| Lazy loading         | Three.js progressive LOD for 3D models   | 3D Asset   |
+| Bundle size          | Code splitting, tree shaking             | All (web)  |
+| Image optimization   | Sharp (Node.js) for thumbnail generation | Whiteboard |
+| Profiling            | Clinic.js / async-profiler / dotnet-trace | Per runtime |
+
+---
+
+## Tech Diversity Overview
+
+| Dimension         | Whiteboard         | Workflow              | 3D Asset             |
+| ----------------- | ------------------ | --------------------- | -------------------- |
+| Language (BE)     | TypeScript         | Kotlin                | C#                   |
+| Language (FE)     | TypeScript (React) | TypeScript (Vue 3)    | TypeScript (React)   |
+| Language (Mobile) | TypeScript (RN)    | Kotlin + Swift        | C# (Unity)           |
+| API Style         | REST + WebSocket   | GraphQL               | gRPC + REST          |
+| Auth              | JWT + Guest        | Keycloak OAuth2/SSO   | API Key + JWT + ACL  |
+| Realtime          | Socket.IO + CRDT   | Temporal              | SignalR + MQTT       |
+| Resilience        | Retry + Graceful   | Circuit Breaker + Bulkhead | Retry + Backoff |
+| Testing           | Jest + Playwright  | JUnit + Testcontainers | xUnit + k6           |
+| Observability     | Pino + OTel JS     | Logback + OTel Java   | Serilog + OTel .NET  |
+| DB Migration      | TypeORM            | Flyway                | EF Core              |
+
+> Every dimension uses a different approach across the three projects — maximum breadth for portfolio demonstration.
