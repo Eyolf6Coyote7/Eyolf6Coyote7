@@ -13,6 +13,8 @@
 | `dev`    | Main development line (default)      | PR only, no direct push             |
 | `stable` | Stable version / demo ready          | PR only, no direct push, require review |
 
+> **Note**: Branch protection rules will be enforced via GitHub settings once the repo is public. Until then, follow these rules by convention.
+
 - No `main` branch — `dev` is the GitHub default
 - All feature branches merge to `dev` via PR
 - `stable` is only updated from `dev` when a milestone is ready
