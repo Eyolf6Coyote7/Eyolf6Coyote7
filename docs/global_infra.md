@@ -20,7 +20,7 @@ graph TD
   subgraph "Backend Services (host)"
     WB[Whiteboard API<br/>:4001]
     WF[Workflow API<br/>:4002]
-    TD[3D Asset API<br/>:4003]
+    TDA[3D Asset API<br/>:4003]
   end
 
   WB --> PG
@@ -31,12 +31,12 @@ graph TD
   WF --> MIO
   WF --> KC
   WF --> KF
-  TD --> PG
-  TD --> RD
-  TD --> MIO
-  TD --> MQ
+  TDA --> PG
+  TDA --> RD
+  TDA --> MIO
+  TDA --> MQ
   MQ -->|bridge| KF
-  TD --> KF
+  TDA --> KF
 ```
 
 ---
