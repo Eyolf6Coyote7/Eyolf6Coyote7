@@ -14,6 +14,7 @@ Three full-stack projects, each with a different tech stack, sharing the same lo
 | **Mobile**    | React Native           | Kotlin + Swift + WebView| Unity (C#)            |
 | **Backend**   | Node.js (NestJS)       | Kotlin (Spring Boot)    | ASP.NET Core          |
 | **Realtime**  | Socket.IO + Yjs (CRDT) | Temporal                | SignalR + MQTT        |
+| **Messaging** | Redis Stream           | Kafka                   | MQTT → Kafka          |
 | **Auth**      | JWT + Guest            | Keycloak (OAuth2 / SSO) | API Key + JWT + ACL   |
 | **Storage**   | MinIO                  | MinIO                   | MinIO (versioned)     |
 | **AI**        | Ollama + LangChain     | —                       | ONNX Runtime (opt)    |
@@ -27,9 +28,11 @@ All three projects connect to the same local services via Docker Compose.
 | Service        | Tech                      | What It Does                             |
 | -------------- | ------------------------- | ---------------------------------------- |
 | Database       | PostgreSQL                | Relational data for all projects         |
-| Cache / Queue  | Redis                     | Caching, Pub/Sub, Stream (task queue)    |
+| Cache          | Redis                     | Caching, Pub/Sub, Stream (Whiteboard AI queue) |
 | Object Storage | MinIO (S3-compatible)     | File upload / download for all projects  |
 | Identity       | Keycloak                  | OAuth2 / OIDC provider (Workflow project)|
+| Event Streaming| Kafka (KRaft mode)        | Event bus for Workflow + 3D Asset        |
+| IoT Broker     | Mosquitto (MQTT)          | IoT sensor ingestion (3D Asset project)  |
 | Container      | Docker Compose            | One command to start everything          |
 
 ---
@@ -132,8 +135,9 @@ An approval and task management system with role-based access — think Jira + c
 | Mobile          | Kotlin (Android) + Swift (iOS) + WebView |
 | Backend         | Kotlin + Spring Boot                     |
 | Workflow Engine | Temporal                                  |
+| Event Streaming | Kafka (KRaft)                             |
 | DB              | PostgreSQL                               |
-| Cache/Queue     | Redis (Cache + Stream)                   |
+| Cache           | Redis                                    |
 | Storage         | MinIO                                    |
 | Auth            | Keycloak (OAuth2/OIDC + SSO + RBAC)     |
 
@@ -143,7 +147,8 @@ An approval and task management system with role-based access — think Jira + c
 | ---------------------------- | ---------------------------------------------- |
 | Complex multi-step approvals | Temporal — durable workflow with retry/timeout  |
 | Enterprise-grade permissions | Keycloak RBAC (Admin / Manager / Employee)      |
-| Audit compliance             | Every action logged to DB with timestamp + actor|
+| Audit compliance             | Kafka event sourcing — immutable audit log with exactly-once guarantee |
+| Async notifications          | Kafka consumer groups — horizontal scaling of notification workers |
 | Native + Web with shared UI  | WebView for shared screens, native for platform features |
 
 ---
@@ -158,12 +163,12 @@ A platform for managing 3D assets with real-time IoT data overlay — think Figm
 | Client          | Unity (C#)                   |
 | Backend         | ASP.NET Core                 |
 | Realtime        | SignalR                      |
+| IoT Broker      | MQTT (Mosquitto)             |
+| Event Streaming | Kafka (via MQTT → Kafka bridge) |
 | DB              | PostgreSQL                   |
-| Cache/Sync      | Redis (Pub/Sub + Stream)     |
+| Cache           | Redis (Pub/Sub)              |
 | Storage         | MinIO (versioned)            |
 | Auth            | API Key + JWT + Resource ACL |
-| IoT             | MQTT (Mosquitto)             |
-| Streaming (opt) | Redis Stream (or Kafka)      |
 | AI (opt)        | Python + ONNX Runtime        |
 
 **Key technical decisions:**
@@ -171,30 +176,26 @@ A platform for managing 3D assets with real-time IoT data overlay — think Figm
 | Challenge                      | Solution                                        |
 | ------------------------------ | ----------------------------------------------- |
 | Large 3D files (50MB+)        | Chunked multipart upload + versioned MinIO       |
-| IoT sensor data ingestion     | MQTT (Mosquitto) → Redis Stream → Backend        |
+| IoT sensor data ingestion     | MQTT (Mosquitto) → Kafka bridge → consumer processing |
+| IoT data ordering             | Kafka partitioning by `device_id` — ordered per device, parallel across devices |
 | Browser 3D preview            | Three.js renders GLB/FBX without Unity install   |
 | Unity ↔ Web state sync        | SignalR + Redis Pub/Sub as shared message bus     |
 | Device auth (no browser)      | API Key for M2M, JWT for web users               |
+| Asset state tracking          | Kafka compacted topic as materialized view of current asset state |
 
 ---
 
-## Observability
+## Observability (Production Knowledge)
 
-All three projects share the same observability stack via Docker Compose.
+Not part of local Docker setup, but each project uses structured logging for debuggability.
 
-| Layer   | Tech                      | What It Does                              |
-| ------- | ------------------------- | ----------------------------------------- |
-| Logging | Pino / Logback / Serilog  | Structured JSON logs per backend runtime  |
-| Metrics | Prometheus + Grafana      | Collect and visualize system/app metrics  |
-| Tracing | OpenTelemetry → Jaeger    | Distributed tracing across services       |
+| Project    | Logging Library | Format |
+| ---------- | --------------- | ------ |
+| Whiteboard | Pino (Node.js)  | Structured JSON |
+| Workflow   | Logback (Kotlin)| Structured JSON |
+| 3D Asset   | Serilog (.NET)  | Structured JSON |
 
-| Project    | Logging Library | Tracing Integration                    |
-| ---------- | --------------- | -------------------------------------- |
-| Whiteboard | Pino (Node.js)  | OpenTelemetry JS SDK → Jaeger          |
-| Workflow   | Logback (Kotlin)| OpenTelemetry Java SDK → Jaeger        |
-| 3D Asset   | Serilog (.NET)  | OpenTelemetry .NET SDK → Jaeger        |
-
-> Staff-level interview signal: "How do you debug a production issue across services?"
+> In production, these would feed into Prometheus + Grafana (metrics) and OpenTelemetry + Jaeger (tracing). Not included in local setup to keep the focus on application code.
 
 ---
 
@@ -373,9 +374,10 @@ Each major technical choice is documented as an ADR in project docs.
 | API Style         | REST + WebSocket   | GraphQL               | gRPC + REST          |
 | Auth              | JWT + Guest        | Keycloak OAuth2/SSO   | API Key + JWT + ACL  |
 | Realtime          | Socket.IO + CRDT   | Temporal              | SignalR + MQTT       |
+| Messaging         | Redis Stream       | Kafka                 | MQTT → Kafka         |
 | Resilience        | Retry + Graceful   | Circuit Breaker + Bulkhead | Retry + Backoff |
 | Testing           | Jest + Playwright  | JUnit + Testcontainers | xUnit + k6           |
-| Observability     | Pino + OTel JS     | Logback + OTel Java   | Serilog + OTel .NET  |
+| Logging           | Pino               | Logback               | Serilog              |
 | DB Migration      | TypeORM            | Flyway                | EF Core              |
 
 > Every dimension uses a different approach across the three projects — maximum breadth for portfolio demonstration.
