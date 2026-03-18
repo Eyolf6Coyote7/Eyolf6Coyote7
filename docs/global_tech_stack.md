@@ -294,7 +294,7 @@ Demonstrates understanding of SOC 2 / ISO 27001 controls without formal certific
 | ---------------------- | ------------------------------------------ | ---------- |
 | Audit Log              | All operations logged: who / what / when   | Workflow   |
 | Encryption at rest     | MinIO server-side encryption (SSE-S3)      | 3D Asset   |
-| Encryption in transit  | TLS everywhere (HTTPS, WSS, gRPCS)        | All        |
+| Encryption in transit  | TLS everywhere (HTTPS, WSS, gRPCs)        | All        |
 | RBAC / Least privilege | Keycloak role mapping, resource-level ACL  | Workflow, 3D Asset |
 | Input validation       | DTO validation at API boundary             | All        |
 | Secret management      | `.env` + Docker secrets (no hardcoded secrets) | All    |
@@ -326,7 +326,7 @@ Demonstrates understanding of SOC 2 / ISO 27001 controls without formal certific
 | ----------------- | ------------------------------------- | ---------- |
 | Cache-aside       | Redis GET → miss → DB → SET           | All        |
 | Write-through     | Update DB + Redis in same transaction | Workflow   |
-| Cache invalidation| Event-driven invalidation via Redis Pub/Sub | Whiteboard |
+| Cache invalidation | Event-driven invalidation via Redis Pub/Sub | Whiteboard |
 | TTL-based expiry  | Short TTL for volatile data           | All        |
 | Session cache     | Redis for JWT session metadata        | Workflow   |
 
@@ -359,7 +359,7 @@ Each major technical choice is documented as an ADR in project docs.
 | Lazy loading         | Three.js progressive LOD for 3D models   | 3D Asset   |
 | Bundle size          | Code splitting, tree shaking             | All (web)  |
 | Image optimization   | Sharp (Node.js) for thumbnail generation | Whiteboard |
-| Profiling            | Clinic.js / async-profiler / dotnet-trace| Per runtime|
+| Profiling            | Clinic.js / async-profiler / dotnet-trace | Per runtime |
 
 ---
 
@@ -374,7 +374,7 @@ Each major technical choice is documented as an ADR in project docs.
 | Auth              | JWT + Guest        | Keycloak OAuth2/SSO   | API Key + JWT + ACL  |
 | Realtime          | Socket.IO + CRDT   | Temporal              | SignalR + MQTT       |
 | Resilience        | Retry + Graceful   | Circuit Breaker + Bulkhead | Retry + Backoff |
-| Testing           | Jest + Playwright  | JUnit + Testcontainers| xUnit + k6           |
+| Testing           | Jest + Playwright  | JUnit + Testcontainers | xUnit + k6           |
 | Observability     | Pino + OTel JS     | Logback + OTel Java   | Serilog + OTel .NET  |
 | DB Migration      | TypeORM            | Flyway                | EF Core              |
 
