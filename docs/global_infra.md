@@ -14,9 +14,7 @@ graph TD
     MIO[(MinIO<br/>:9000 / :9001)]
     KC[(Keycloak<br/>:8080)]
     MQ[(Mosquitto<br/>:1883)]
-    PROM[(Prometheus<br/>:9090)]
-    GRAF[(Grafana<br/>:3000)]
-    JAEG[(Jaeger<br/>:16686)]
+    KF[(Kafka<br/>:9092)]
   end
 
   subgraph "Backend Services (host)"
@@ -32,18 +30,26 @@ graph TD
   WF --> RD
   WF --> MIO
   WF --> KC
+  WF --> KF
   TD --> PG
   TD --> RD
   TD --> MIO
   TD --> MQ
-  PROM --> WB
-  PROM --> WF
-  PROM --> TD
-  GRAF --> PROM
-  JAEG --> WB
-  JAEG --> WF
-  JAEG --> TD
+  MQ -->|bridge| KF
+  TD --> KF
 ```
+
+---
+
+## Messaging Patterns
+
+Each project uses a different messaging pattern to demonstrate breadth.
+
+| Pattern | Tech | Project | Use Case |
+|---------|------|---------|----------|
+| Stream (log-based) | Redis Stream | Whiteboard | AI task queue (lightweight, already have Redis) |
+| Event Streaming | Kafka | Workflow | Approval events, audit log, async notifications |
+| IoT Pub/Sub → Event Stream | MQTT → Kafka | 3D Asset | MQTT collects IoT sensor data, bridges to Kafka for persistence |
 
 ---
 
@@ -52,7 +58,7 @@ graph TD
 ### Docker Compose Structure
 
 ```
-docker-compose.yml          ← shared infra (always up)
+docker-compose.yml              ← shared infra (always up)
 docker-compose.whiteboard.yml   ← whiteboard backend (optional)
 docker-compose.workflow.yml     ← workflow backend (optional)
 docker-compose.3d-asset.yml     ← 3d-asset backend (optional)
@@ -79,10 +85,8 @@ docker compose -f docker-compose.yml -f docker-compose.whiteboard.yml up -d
 | MinIO (Console) | 9001 | 9001 | http://localhost:9001 |
 | Keycloak | 8080 | 8080 | http://localhost:8080 |
 | Mosquitto (MQTT) | 1883 | 1883 | — |
-| Prometheus | 9090 | 9090 | http://localhost:9090 |
-| Grafana | 3000 | 3000 | http://localhost:3000 |
-| Jaeger (UI) | 16686 | 16686 | http://localhost:16686 |
-| Jaeger (OTLP) | 4317 | 4317 | — |
+| Kafka | 9092 | 9092 | — |
+| Kafka (controller) | 9093 | 9093 | — |
 
 ### Backend Services (run on host, not Docker)
 
@@ -102,9 +106,8 @@ docker compose -f docker-compose.yml -f docker-compose.whiteboard.yml up -d
 | Redis | `redis_data` | `/data` | RDB snapshots |
 | MinIO | `minio_data` | `/data` | Object storage files |
 | Keycloak | `kc_data` | `/opt/keycloak/data` | Realm config, users |
-| Prometheus | `prom_data` | `/prometheus` | Metrics time series |
-| Grafana | `grafana_data` | `/var/lib/grafana` | Dashboards, datasources |
 | Mosquitto | `mqtt_data` | `/mosquitto/data` | Message persistence |
+| Kafka | `kafka_data` | `/var/lib/kafka/data` | Event log segments |
 
 Reset all data:
 ```bash
@@ -138,8 +141,8 @@ KEYCLOAK_ADMIN_PASSWORD=admin_local
 MQTT_USER=workspace
 MQTT_PASSWORD=mqtt_local
 
-# Grafana
-GF_SECURITY_ADMIN_PASSWORD=admin_local
+# Kafka (KRaft mode, no ZooKeeper)
+KAFKA_CLUSTER_ID=local-workspace-cluster
 ```
 
 > **All passwords are for local development only.** Never use these in production.
@@ -154,7 +157,7 @@ GF_SECURITY_ADMIN_PASSWORD=admin_local
 | `MINIO_BUCKET` | `whiteboard-assets` | `workflow-documents` | `3d-assets` |
 | `KEYCLOAK_URL` | — | `http://localhost:8080` | — |
 | `MQTT_URL` | — | — | `mqtt://localhost:1883` |
-| `OTEL_EXPORTER_OTLP_ENDPOINT` | `http://localhost:4317` | `http://localhost:4317` | `http://localhost:4317` |
+| `KAFKA_BOOTSTRAP_SERVERS` | — | `localhost:9092` | `localhost:9092` |
 | `PORT` | `4001` | `4002` | `4003` |
 
 ---
@@ -186,8 +189,20 @@ Each project uses a different Redis DB index to avoid key collisions.
 | DB Index | Project | Usage |
 |----------|---------|-------|
 | 0 | Whiteboard | Cache, Pub/Sub, Stream (AI queue) |
-| 1 | Workflow | Cache, Session, Stream (task queue) |
-| 2 | 3D Asset | Cache, Pub/Sub, Stream (IoT ingest) |
+| 1 | Workflow | Cache, Session |
+| 2 | 3D Asset | Cache, Pub/Sub |
+
+---
+
+## Kafka Topics
+
+| Topic | Project | Purpose |
+|-------|---------|---------|
+| `workflow.approval-events` | Workflow | Approval state changes |
+| `workflow.audit-log` | Workflow | All user actions for compliance |
+| `workflow.notifications` | Workflow | Async email/push notifications |
+| `asset3d.iot-sensor-data` | 3D Asset | IoT sensor readings (from MQTT bridge) |
+| `asset3d.asset-events` | 3D Asset | Asset upload, version, delete events |
 
 ---
 
@@ -219,12 +234,10 @@ mc version enable local/3d-assets
 | MinIO | ~0.3 GB | Low |
 | Keycloak | ~0.5 GB | Medium |
 | Mosquitto | ~0.1 GB | Low |
-| Prometheus | ~0.3 GB | Low |
-| Grafana | ~0.2 GB | Low |
-| Jaeger | ~0.3 GB | Low |
-| **Total (infra)** | **~2.4 GB** | |
+| Kafka (KRaft) | ~0.5 GB | Medium |
+| **Total (infra)** | **~2.1 GB** | |
 
-With all 3 backends + Ollama (7B model): ~15 GB total. Fits comfortably in 32 GB.
+With all 3 backends + Ollama (7B model): ~13 GB total. Fits comfortably in 32 GB.
 
 ---
 

@@ -14,6 +14,7 @@ Three full-stack projects, each with a different tech stack, sharing the same lo
 | **Mobile**    | React Native           | Kotlin + Swift + WebView| Unity (C#)            |
 | **Backend**   | Node.js (NestJS)       | Kotlin (Spring Boot)    | ASP.NET Core          |
 | **Realtime**  | Socket.IO + Yjs (CRDT) | Temporal                | SignalR + MQTT        |
+| **Messaging** | Redis Stream           | Kafka                   | MQTT → Kafka          |
 | **Auth**      | JWT + Guest            | Keycloak (OAuth2 / SSO) | API Key + JWT + ACL   |
 | **Storage**   | MinIO                  | MinIO                   | MinIO (versioned)     |
 | **AI**        | Ollama + LangChain     | —                       | ONNX Runtime (opt)    |
@@ -27,9 +28,11 @@ All three projects connect to the same local services via Docker Compose.
 | Service        | Tech                      | What It Does                             |
 | -------------- | ------------------------- | ---------------------------------------- |
 | Database       | PostgreSQL                | Relational data for all projects         |
-| Cache / Queue  | Redis                     | Caching, Pub/Sub, Stream (task queue)    |
+| Cache          | Redis                     | Caching, Pub/Sub, Stream (Whiteboard AI queue) |
 | Object Storage | MinIO (S3-compatible)     | File upload / download for all projects  |
 | Identity       | Keycloak                  | OAuth2 / OIDC provider (Workflow project)|
+| Event Streaming| Kafka (KRaft mode)        | Event bus for Workflow + 3D Asset        |
+| IoT Broker     | Mosquitto (MQTT)          | IoT sensor ingestion (3D Asset project)  |
 | Container      | Docker Compose            | One command to start everything          |
 
 ---
@@ -178,23 +181,17 @@ A platform for managing 3D assets with real-time IoT data overlay — think Figm
 
 ---
 
-## Observability
+## Observability (Production Knowledge)
 
-All three projects share the same observability stack via Docker Compose.
+Not part of local Docker setup, but each project uses structured logging for debuggability.
 
-| Layer   | Tech                      | What It Does                              |
-| ------- | ------------------------- | ----------------------------------------- |
-| Logging | Pino / Logback / Serilog  | Structured JSON logs per backend runtime  |
-| Metrics | Prometheus + Grafana      | Collect and visualize system/app metrics  |
-| Tracing | OpenTelemetry → Jaeger    | Distributed tracing across services       |
+| Project    | Logging Library | Format |
+| ---------- | --------------- | ------ |
+| Whiteboard | Pino (Node.js)  | Structured JSON |
+| Workflow   | Logback (Kotlin)| Structured JSON |
+| 3D Asset   | Serilog (.NET)  | Structured JSON |
 
-| Project    | Logging Library | Tracing Integration                    |
-| ---------- | --------------- | -------------------------------------- |
-| Whiteboard | Pino (Node.js)  | OpenTelemetry JS SDK → Jaeger          |
-| Workflow   | Logback (Kotlin)| OpenTelemetry Java SDK → Jaeger        |
-| 3D Asset   | Serilog (.NET)  | OpenTelemetry .NET SDK → Jaeger        |
-
-> Staff-level interview signal: "How do you debug a production issue across services?"
+> In production, these would feed into Prometheus + Grafana (metrics) and OpenTelemetry + Jaeger (tracing). Not included in local setup to keep the focus on application code.
 
 ---
 
@@ -373,9 +370,10 @@ Each major technical choice is documented as an ADR in project docs.
 | API Style         | REST + WebSocket   | GraphQL               | gRPC + REST          |
 | Auth              | JWT + Guest        | Keycloak OAuth2/SSO   | API Key + JWT + ACL  |
 | Realtime          | Socket.IO + CRDT   | Temporal              | SignalR + MQTT       |
+| Messaging         | Redis Stream       | Kafka                 | MQTT → Kafka         |
 | Resilience        | Retry + Graceful   | Circuit Breaker + Bulkhead | Retry + Backoff |
 | Testing           | Jest + Playwright  | JUnit + Testcontainers | xUnit + k6           |
-| Observability     | Pino + OTel JS     | Logback + OTel Java   | Serilog + OTel .NET  |
+| Logging           | Pino               | Logback               | Serilog              |
 | DB Migration      | TypeORM            | Flyway                | EF Core              |
 
 > Every dimension uses a different approach across the three projects — maximum breadth for portfolio demonstration.
