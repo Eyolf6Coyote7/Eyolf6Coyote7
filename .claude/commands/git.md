@@ -315,6 +315,51 @@ gh project item-add <project-number> --url <issue-url>
 
 ---
 
+## Code Review
+
+After creating a PR, **always perform a code review** and post the result as a PR comment.
+
+### Review Format
+
+```markdown
+## 🤖 Claude Code Review
+
+### Summary
+- 1-3 bullet points of what changed and why
+
+### Architecture Impact
+```mermaid
+graph LR
+  A[Component] --> B[Component]
+```
+(Generate a mermaid diagram showing affected components and their relationships.
+ If changes are docs-only, show which doc sections were affected.)
+
+### Review
+| File | Severity | Comment |
+|------|----------|---------|
+| `file:line` | ⚠️ warning / 💡 suggestion / ✅ good | description |
+
+### Risk Level
+🟢 Low / 🟡 Medium / 🔴 High — with one-line reasoning
+```
+
+### Post Review
+
+```bash
+gh pr comment <pr-number> --body "<review content>"
+```
+
+### Workflow
+
+```
+Issue → Branch → Commit → Push → PR → Code Review (comment on PR) → Merge
+```
+
+> Review is done by Claude directly via `gh pr comment`, NOT via GitHub Actions.
+
+---
+
 ## Quick Reference
 
 | Action             | Command                                    |
