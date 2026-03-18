@@ -21,8 +21,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Claude Code Review
-        env:
-          PATH: ${{ format('{0}/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin', env.HOME) }}
         run: |
           cat <<'PROMPT' > /tmp/review_prompt.txt
           You are a senior code reviewer. Analyze the following PR diff and respond in this exact markdown format:
