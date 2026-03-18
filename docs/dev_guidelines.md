@@ -1,5 +1,52 @@
 # Development Guidelines
 
+## Development Phases
+
+Each project follows the same document lifecycle. Phases are sequential for initial development.
+
+### Initial Development (v0 → v1)
+
+| Phase | Document | Purpose |
+|-------|----------|---------|
+| 1 | `conops.md` | Concept of Operations — product vision, target users, high-level scenarios |
+| 2 | `prd.md` | Product Requirements — features, user stories, acceptance criteria |
+| 3 | `system_architecture.md` | System design — components, data flow, infrastructure |
+| 4 | `technical_design.md` | Implementation detail — APIs, DB schema, algorithms |
+| 5 | `ui_ux_design.md` | UI/UX — wireframes, Figma links, design system |
+| 6 | `development_roadmap.md` | Timeline — milestones, priorities, dependencies |
+| 7 | `testing_strategy.md` | Test plan — unit, integration, E2E, load |
+
+### Feature Iteration (v1+)
+
+For new features after initial release, don't rewrite docs. Follow this flow:
+
+```
+1. Write RFC (rfcs/RFC-XXX-feature-name.md)
+2. Update PRD (add feature section)
+3. Update system_architecture.md (if architecture changes)
+4. Write ADR (adrs/ADR-XXX-decision.md) for major tech decisions
+5. Update technical_design.md (add feature detail)
+6. Update ui_ux_design.md (new Figma screens)
+7. Develop
+8. Update testing_strategy.md (add test plan for feature)
+```
+
+### Document Update Frequency
+
+| Document | When to Update |
+|----------|---------------|
+| `conops.md` | Rarely — only when product direction changes |
+| `prd.md` | Per major feature — append section, don't rewrite |
+| `system_architecture.md` | Major architecture changes only |
+| `technical_design.md` | Per feature — add implementation detail |
+| `ui_ux_design.md` | Per feature — link new Figma screens |
+| `development_roadmap.md` | Per milestone — update timeline |
+| `testing_strategy.md` | Per feature — add test plan |
+| `adrs/` | Append only — one file per major decision, never edit old ADRs |
+| `rfcs/` | Per major feature — write before development, mark status when done |
+
+---
+
 ## Branch Strategy
 
 ### Long-lived Branches
