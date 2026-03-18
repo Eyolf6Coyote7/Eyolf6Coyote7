@@ -1,0 +1,32 @@
+name: CI — Whiteboard
+
+on:
+  pull_request:
+    paths:
+      - 'realtime_ai_whiteboard/**'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: ESLint + Prettier
+        run: echo "TODO: Enable when package.json exists"
+        # - uses: actions/setup-node@v4
+        #   with:
+        #     node-version: 20
+        # - run: cd realtime_ai_whiteboard/web && npm ci && npm run lint
+        # - run: cd realtime_ai_whiteboard/backend && npm ci && npm run lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unit tests
+        run: echo "TODO: Enable when tests exist"
+        # - uses: actions/setup-node@v4
+        #   with:
+        #     node-version: 20
+        # - run: cd realtime_ai_whiteboard/backend && npm ci && npm test

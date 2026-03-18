@@ -1,0 +1,33 @@
+name: CI — Workflow
+
+on:
+  pull_request:
+    paths:
+      - 'enterprise_workflow_system/**'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: ktlint
+        run: echo "TODO: Enable when build.gradle.kts exists"
+        # - uses: actions/setup-java@v4
+        #   with:
+        #     distribution: temurin
+        #     java-version: 21
+        # - run: cd enterprise_workflow_system/backend && ./gradlew ktlintCheck
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unit tests
+        run: echo "TODO: Enable when tests exist"
+        # - uses: actions/setup-java@v4
+        #   with:
+        #     distribution: temurin
+        #     java-version: 21
+        # - run: cd enterprise_workflow_system/backend && ./gradlew test
