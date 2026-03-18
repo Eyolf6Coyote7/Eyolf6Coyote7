@@ -20,16 +20,14 @@ Each project follows the same document lifecycle. Phases are sequential for init
 
 For new features after initial release, don't rewrite docs. Follow this flow:
 
-```
-1. Write RFC (rfcs/RFC-XXX-feature-name.md)
-2. Update PRD (add feature section)
-3. Update system_architecture.md (if architecture changes)
-4. Write ADR (adrs/ADR-XXX-decision.md) for major tech decisions
-5. Update technical_design.md (add feature detail)
-6. Update ui_ux_design.md (new Figma screens)
-7. Develop
-8. Update testing_strategy.md (add test plan for feature)
-```
+1. Write RFC (`rfcs/RFC-XXX-feature-name.md`)
+2. Update `prd.md` (add feature section)
+3. Update `system_architecture.md` (if architecture changes)
+4. Write ADR (`adrs/ADR-XXX-decision.md`) for major tech decisions
+5. Update `technical_design.md` (add feature detail)
+6. Update `ui_ux_design.md` (new Figma screens)
+7. Update `testing_strategy.md` (add test plan for feature)
+8. Develop
 
 ### Document Update Frequency
 
@@ -44,6 +42,84 @@ For new features after initial release, don't rewrite docs. Follow this flow:
 | `testing_strategy.md` | Per feature — add test plan |
 | `adrs/` | Append only — one file per major decision, never edit old ADRs |
 | `rfcs/` | Per major feature — write before development, mark status when done |
+
+### ADR (Architecture Decision Record)
+
+Records **why** a technical decision was made. Written after making a tech choice. Never edited — if a decision is reversed, write a new ADR that supersedes it.
+
+| | |
+|---|---|
+| **Answers** | Why did we choose A over B? |
+| **When** | After making a technical choice |
+| **Size** | Short — one decision per file |
+| **Editable** | No — append only. New ADR supersedes old one |
+
+File: `adrs/ADR-XXX-short-name.md`
+
+```markdown
+# ADR-001: Why Temporal over Bull for workflow engine
+
+## Status
+Accepted
+
+## Context
+We need a workflow engine for multi-step approval flows.
+
+## Decision
+Use Temporal instead of Bull.
+
+## Reason
+- Bull is a job queue, not a workflow engine
+- Temporal supports long-running workflows with retry/timeout
+- Temporal has built-in state persistence
+
+## Consequences
+- Need to run Temporal server (Docker, ~2.5GB RAM)
+- Team needs to learn Temporal SDK
+```
+
+### RFC (Request for Comments)
+
+A **proposal** written before developing a major feature. Describes the problem, proposed solution, and alternatives considered. Status is updated as it progresses.
+
+| | |
+|---|---|
+| **Answers** | How should we implement this feature? |
+| **When** | Before starting development of a major feature |
+| **Size** | Detailed — full proposal with alternatives |
+| **Editable** | Yes — update status (Draft → Approved → Implemented) |
+
+File: `rfcs/RFC-XXX-short-name.md`
+
+```markdown
+# RFC-001: Realtime Cursor Sync
+
+## Status
+Implemented (whiteboard/v0.3.0)
+
+## Problem
+Users can't see other people's cursors on the whiteboard.
+
+## Proposal
+WebSocket broadcast cursor position via Redis Pub/Sub,
+throttled to 60fps.
+
+## Alternatives Considered
+1. Polling — too slow (200ms+ latency)
+2. SSE — one-directional, can't send cursor from client
+
+## Decision
+Approved. Implemented in PR #15.
+```
+
+### ADR vs RFC
+
+| | ADR | RFC |
+|---|-----|-----|
+| **Purpose** | Record a tech decision | Propose a feature implementation |
+| **Timing** | After deciding | Before developing |
+| **Scope** | One decision | One feature |
+| **Mutability** | Never edit, only supersede | Update status field |
 
 ---
 
@@ -136,8 +212,16 @@ If no issue number, use scope:
 
 ### Format
 
+| Branch | Tag Format | Example |
+|--------|-----------|---------|
+| `dev` | `<project>/v<major>.<minor>.<patch>-rc.<n>` | `workspace/v0.2.0-rc.1` |
+| `stable` | `<project>/v<major>.<minor>.<patch>` | `workspace/v0.2.0` |
+
+**RC = Release Candidate** — a version that is feature-complete but not yet verified as stable. It's the "this should be ready, but let's test first" version. When an RC is promoted to `stable` without changes, the `-rc.N` suffix is dropped.
+
 ```
-<project>/v<major>.<minor>.<patch>
+dev:    workspace/v0.2.0-rc.1  →  workspace/v0.2.0-rc.2  (fixes)
+stable: workspace/v0.2.0       (promoted from rc.2, same code)
 ```
 
 ### Project Prefixes
@@ -158,7 +242,7 @@ If no issue number, use scope:
 | any + `BREAKING CHANGE` footer | **major** `X.0.0` | Not backward compatible |
 | `docs`, `chore`, `style`, `refactor`, `test` | **no release** | No version bump |
 
-> Automated via `release-please` GitHub Action on `stable` branch.
+> Automated via `release-please` GitHub Action. Triggers on push to both `dev` (RC tags) and `stable` (release tags).
 
 ---
 
