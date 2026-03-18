@@ -43,6 +43,84 @@ For new features after initial release, don't rewrite docs. Follow this flow:
 | `adrs/` | Append only — one file per major decision, never edit old ADRs |
 | `rfcs/` | Per major feature — write before development, mark status when done |
 
+### ADR (Architecture Decision Record)
+
+Records **why** a technical decision was made. Written after making a tech choice. Never edited — if a decision is reversed, write a new ADR that supersedes it.
+
+| | |
+|---|---|
+| **Answers** | Why did we choose A over B? |
+| **When** | After making a technical choice |
+| **Size** | Short — one decision per file |
+| **Editable** | No — append only. New ADR supersedes old one |
+
+File: `adrs/ADR-XXX-short-name.md`
+
+```markdown
+# ADR-001: Why Temporal over Bull for workflow engine
+
+## Status
+Accepted
+
+## Context
+We need a workflow engine for multi-step approval flows.
+
+## Decision
+Use Temporal instead of Bull.
+
+## Reason
+- Bull is a job queue, not a workflow engine
+- Temporal supports long-running workflows with retry/timeout
+- Temporal has built-in state persistence
+
+## Consequences
+- Need to run Temporal server (Docker, ~2.5GB RAM)
+- Team needs to learn Temporal SDK
+```
+
+### RFC (Request for Comments)
+
+A **proposal** written before developing a major feature. Describes the problem, proposed solution, and alternatives considered. Status is updated as it progresses.
+
+| | |
+|---|---|
+| **Answers** | How should we implement this feature? |
+| **When** | Before starting development of a major feature |
+| **Size** | Detailed — full proposal with alternatives |
+| **Editable** | Yes — update status (Draft → Approved → Implemented) |
+
+File: `rfcs/RFC-XXX-short-name.md`
+
+```markdown
+# RFC-001: Realtime Cursor Sync
+
+## Status
+Implemented (whiteboard/v0.3.0)
+
+## Problem
+Users can't see other people's cursors on the whiteboard.
+
+## Proposal
+WebSocket broadcast cursor position via Redis Pub/Sub,
+throttled to 60fps.
+
+## Alternatives Considered
+1. Polling — too slow (200ms+ latency)
+2. SSE — one-directional, can't send cursor from client
+
+## Decision
+Approved. Implemented in PR #15.
+```
+
+### ADR vs RFC
+
+| | ADR | RFC |
+|---|-----|-----|
+| **Purpose** | Record a tech decision | Propose a feature implementation |
+| **Timing** | After deciding | Before developing |
+| **Scope** | One decision | One feature |
+| **Mutability** | Never edit, only supersede | Update status field |
+
 ---
 
 ## Branch Strategy
