@@ -20,7 +20,13 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Get real HOME
+        id: home
+        run: echo "dir=$(eval echo ~$(whoami))" >> "$GITHUB_OUTPUT"
+
       - name: Claude Code Review
+        env:
+          HOME: ${{ steps.home.outputs.dir }}
         run: |
           cat <<'PROMPT' > /tmp/review_prompt.txt
           You are a senior code reviewer. Analyze the following PR diff and respond in this exact markdown format:
