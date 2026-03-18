@@ -47,7 +47,7 @@ For new features after initial release, don't rewrite docs. Follow this flow:
 
 Records **why** a technical decision was made. Written after making a tech choice. Never edited — if a decision is reversed, write a new ADR that supersedes it.
 
-| | |
+| Property | Description |
 |---|---|
 | **Answers** | Why did we choose A over B? |
 | **When** | After making a technical choice |
@@ -82,7 +82,7 @@ Use Temporal instead of Bull.
 
 A **proposal** written before developing a major feature. Describes the problem, proposed solution, and alternatives considered. Status is updated as it progresses.
 
-| | |
+| Property | Description |
 |---|---|
 | **Answers** | How should we implement this feature? |
 | **When** | Before starting development of a major feature |
