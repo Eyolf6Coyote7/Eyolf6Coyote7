@@ -10,24 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: ktlint
-        run: echo "TODO: Enable when build.gradle.kts exists"
-        # - uses: actions/setup-java@v4
-        #   with:
-        #     distribution: temurin
-        #     java-version: 21
-        # - run: cd enterprise_workflow_system/backend && ./gradlew ktlintCheck
+      # TODO: setup-java + ./gradlew ktlintCheck when build.gradle.kts exists
+      - name: ktlint (placeholder)
+        run: echo "Skipped — no build.gradle.kts yet"
 
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Unit tests
-        run: echo "TODO: Enable when tests exist"
-        # - uses: actions/setup-java@v4
-        #   with:
-        #     distribution: temurin
-        #     java-version: 21
-        # - run: cd enterprise_workflow_system/backend && ./gradlew test
+      # TODO: setup-java + ./gradlew test when tests exist
+      - name: Unit tests (placeholder)
+        run: echo "Skipped — no tests yet"

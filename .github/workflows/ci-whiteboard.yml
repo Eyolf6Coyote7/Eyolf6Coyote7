@@ -10,23 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: ESLint + Prettier
-        run: echo "TODO: Enable when package.json exists"
-        # - uses: actions/setup-node@v4
-        #   with:
-        #     node-version: 20
-        # - run: cd realtime_ai_whiteboard/web && npm ci && npm run lint
-        # - run: cd realtime_ai_whiteboard/backend && npm ci && npm run lint
+      # TODO: setup-node + npm run lint when package.json exists
+      - name: ESLint + Prettier (placeholder)
+        run: echo "Skipped — no package.json yet"
 
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Unit tests
-        run: echo "TODO: Enable when tests exist"
-        # - uses: actions/setup-node@v4
-        #   with:
-        #     node-version: 20
-        # - run: cd realtime_ai_whiteboard/backend && npm ci && npm test
+      # TODO: setup-node + npm test when tests exist
+      - name: Unit tests (placeholder)
+        run: echo "Skipped — no tests yet"
