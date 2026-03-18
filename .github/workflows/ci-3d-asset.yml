@@ -1,0 +1,31 @@
+name: CI — 3D Asset
+
+on:
+  pull_request:
+    paths:
+      - '3d_asset_collaboration/**'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: dotnet format
+        run: echo "TODO: Enable when .csproj exists"
+        # - uses: actions/setup-dotnet@v4
+        #   with:
+        #     dotnet-version: 8.0.x
+        # - run: cd 3d_asset_collaboration/backend && dotnet format --verify-no-changes
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unit tests
+        run: echo "TODO: Enable when tests exist"
+        # - uses: actions/setup-dotnet@v4
+        #   with:
+        #     dotnet-version: 8.0.x
+        # - run: cd 3d_asset_collaboration/backend && dotnet test
