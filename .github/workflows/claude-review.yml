@@ -24,12 +24,10 @@ jobs:
         id: home
         run: echo "dir=$(eval echo ~$(whoami))" >> "$GITHUB_OUTPUT"
 
-      - name: Claude Code Review
-        env:
-          HOME: ${{ steps.home.outputs.dir }}
+      - name: Build review prompt
         run: |
-          cat <<'PROMPT' > /tmp/review_prompt.txt
-          You are a senior code reviewer. Analyze the following PR diff and respond in this exact markdown format:
+          cat > /tmp/review_prompt.txt <<'EOF'
+          You are a senior code reviewer. Analyze the following PR diff and respond in this exact markdown format. Output ONLY the markdown, no extra text.
 
           ## 🤖 Claude Code Review
 
@@ -41,8 +39,7 @@ jobs:
           graph LR
             A[Component] --> B[Component]
           ```
-          (Generate a mermaid diagram showing affected components and their relationships.
-           If changes are docs-only, show which doc sections were affected.)
+          (Generate a mermaid diagram showing affected components and their relationships. If changes are docs-only, show which doc sections were affected.)
 
           ### Review
           | File | Severity | Comment |
@@ -51,13 +48,17 @@ jobs:
 
           ### Risk Level
           🟢 Low / 🟡 Medium / 🔴 High — with one-line reasoning
-          PROMPT
 
-          claude -p "$(cat /tmp/review_prompt.txt)
-
+          ---
           Here is the diff:
+          EOF
+          cat /tmp/pr_diff.txt >> /tmp/review_prompt.txt
 
-          $(cat /tmp/pr_diff.txt)" --output-format text > /tmp/review_comment.md
+      - name: Claude Code Review
+        env:
+          HOME: ${{ steps.home.outputs.dir }}
+        run: |
+          claude -p "$(cat /tmp/review_prompt.txt)" --output-format text > /tmp/review_comment.md
 
       - name: Post review comment
         run: |
