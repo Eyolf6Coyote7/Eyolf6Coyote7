@@ -102,6 +102,139 @@ Download: Client ← presigned URL ← Backend API ← MinIO
 
 ---
 
+## System Overview (14 Systems)
+
+### Whiteboard — 4 Systems
+
+```mermaid
+graph TD
+  subgraph "User-facing"
+    WEB[Whiteboard Web App<br/>React]
+    MOB[Whiteboard Mobile App<br/>React Native]
+  end
+
+  subgraph "Backend"
+    BFF[BFF + API<br/>NestJS]
+    AIW[AI Worker<br/>Redis Stream → Ollama]
+  end
+
+  subgraph "Infrastructure"
+    PG[(PostgreSQL)]
+    RD[(Redis)]
+    MIO[(MinIO)]
+    UL[(Unleash)]
+  end
+
+  WEB -->|REST + WebSocket| BFF
+  MOB -->|REST + WebSocket| BFF
+  BFF --> PG
+  BFF --> RD
+  BFF --> MIO
+  BFF --> UL
+  BFF -->|enqueue AI task| RD
+  AIW -->|consume stream| RD
+  AIW -->|call LLM| OLL[Ollama]
+  AIW -->|store result| PG
+```
+
+### Workflow — 5 Systems
+
+```mermaid
+graph TD
+  subgraph "User-facing"
+    EMP[Employee Portal<br/>Vue 3]
+    ADM[Admin Dashboard<br/>Vue 3]
+    WMOB[Mobile App<br/>Kotlin + Swift]
+  end
+
+  subgraph "Backend"
+    API[Workflow API<br/>Spring Boot + GraphQL]
+    NW[Notification Worker<br/>Kafka consumer]
+  end
+
+  subgraph "Workflow Engine"
+    TMP[Temporal]
+  end
+
+  subgraph "Infrastructure"
+    PG[(PostgreSQL)]
+    RD[(Redis)]
+    KF[(Kafka)]
+    KC[(Keycloak)]
+    MIO[(MinIO)]
+    UL[(Unleash)]
+  end
+
+  EMP -->|GraphQL| API
+  ADM -->|GraphQL + REST| API
+  WMOB -->|GraphQL| API
+  API --> TMP
+  API --> PG
+  API --> RD
+  API --> MIO
+  API --> KC
+  API --> UL
+  API -->|produce events| KF
+  TMP --> PG
+  NW -->|consume| KF
+  NW -->|push| FCM[FCM / APNs / Email]
+```
+
+### 3D Asset — 5 Systems
+
+```mermaid
+graph TD
+  subgraph "User-facing"
+    PORTAL[Asset Portal<br/>React + Three.js]
+    UNITY[Unity Client<br/>C#]
+  end
+
+  subgraph "Backend"
+    AAPI[Asset API<br/>ASP.NET Core]
+    IOT_C[IoT Consumer<br/>Kafka consumer]
+  end
+
+  subgraph "IoT Pipeline"
+    IOT_B[IoT Ingestion<br/>MQTT → Kafka bridge]
+    MQTT[(Mosquitto)]
+  end
+
+  subgraph "Infrastructure"
+    PG[(PostgreSQL)]
+    RD[(Redis)]
+    KF[(Kafka)]
+    MIO[(MinIO)]
+    UL[(Unleash)]
+  end
+
+  PORTAL -->|REST| AAPI
+  PORTAL -->|SignalR| AAPI
+  UNITY -->|gRPC| AAPI
+  UNITY -->|SignalR| AAPI
+  AAPI --> PG
+  AAPI --> RD
+  AAPI --> MIO
+  AAPI --> KF
+  AAPI --> UL
+  DEVICES[IoT Devices] -->|MQTT| MQTT
+  MQTT --> IOT_B
+  IOT_B -->|produce| KF
+  IOT_C -->|consume| KF
+  IOT_C --> PG
+  IOT_C -->|alert| AAPI
+```
+
+### System Count Summary
+
+| Project | User-facing | Backend | Async Workers | Total |
+|---------|------------|---------|---------------|-------|
+| Whiteboard | 2 (Web, Mobile) | 1 (BFF + API) | 1 (AI Worker) | **4** |
+| Workflow | 3 (Employee, Admin, Mobile) | 1 (Workflow API) | 1 (Notification Worker) | **5** |
+| 3D Asset | 2 (Portal, Unity) | 1 (Asset API) | 2 (IoT Ingestion, IoT Consumer) | **5** |
+| **Total** | **7** | **3** | **4** | **14** |
+
+---
+
 ## Project Details
 
 ### 1. Realtime AI Whiteboard
