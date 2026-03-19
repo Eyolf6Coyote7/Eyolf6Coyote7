@@ -122,7 +122,7 @@ graph LR
 
 > Go is chosen for the gateway because of its low latency, small memory footprint, and excellent concurrency model — ideal for a proxy layer.
 
-### Whiteboard — 4 Systems
+### Whiteboard — 5 Systems
 
 ```mermaid
 graph TD
@@ -133,7 +133,15 @@ graph TD
 
   subgraph "Backend"
     BFF[BFF + API<br/>NestJS]
-    AIW[AI Worker<br/>Redis Stream → Ollama]
+    AIS[AI Service<br/>LangChain + MCP]
+  end
+
+  subgraph "AI Pipeline"
+    IC[Intent Classifier]
+    RAG[RAG Assembler]
+    LLM[Ollama<br/>Quantized LLM]
+    MCP_S[MCP Server]
+    FT[Fine-tune Pipeline<br/>LoRA + HuggingFace]
   end
 
   subgraph "Infrastructure"
@@ -141,6 +149,9 @@ graph TD
     RD[(Redis)]
     MIO[(MinIO)]
     UL[(Unleash)]
+    VDB[(ChromaDB<br/>Vector DB)]
+    EMB[Embedding Model<br/>all-MiniLM]
+    LF[Langfuse<br/>LLM Observability]
   end
 
   WEB -->|REST + WebSocket| BFF
@@ -150,9 +161,19 @@ graph TD
   BFF --> MIO
   BFF --> UL
   BFF -->|enqueue AI task| RD
-  AIW -->|consume stream| RD
-  AIW -->|call LLM| OLL[Ollama]
-  AIW -->|store result| PG
+  AIS -->|consume stream| RD
+  AIS --> IC
+  IC -->|info retrieval| RAG
+  IC -->|action needed| MCP_S
+  RAG --> EMB
+  EMB --> VDB
+  RAG --> LLM
+  MCP_S -->|User Tool| PG
+  MCP_S -->|Data Tool| PG
+  MCP_S -->|Task Tool| BFF
+  LLM --> LF
+  FT -->|update weights| LLM
+  AIS -->|store result| PG
 ```
 
 ### Workflow — 5 Systems
@@ -248,11 +269,11 @@ graph TD
 
 | Project | User-facing | Backend | Async Workers | Total |
 |---------|------------|---------|---------------|-------|
-| Whiteboard | 2 (Web, Mobile) | 1 (BFF + API) | 1 (AI Worker) | **4** |
+| Whiteboard | 2 (Web, Mobile) | 1 (BFF + API) | 2 (AI Service, Fine-tune Pipeline) | **5** |
 | Workflow | 3 (Employee, Admin, Mobile) | 1 (Workflow API) | 1 (Notification Worker) | **5** |
 | 3D Asset | 2 (Portal, Unity) | 1 (Asset API) | 3 (AI Service, IoT Ingestion, IoT Consumer) | **6** |
 | Shared | — | 1 (API Gateway) | — | **1** |
-| **Total** | **7** | **4** | **5** | **16** |
+| **Total** | **7** | **4** | **6** | **17** |
 
 ---
 
@@ -275,7 +296,12 @@ graph TD
 | Storage      | MinIO                        |
 | Auth         | JWT + Anonymous Guest        |
 | Feature Flags| Unleash                      |
-| AI           | Ollama + LangChain           |
+| AI / LLM     | Ollama (quantized) + LangChain |
+| RAG          | Embedding → ChromaDB → RAG Assembler |
+| MCP          | MCP Server (User / Data / Task tools) |
+| Fine-tuning  | HuggingFace + LoRA           |
+| LLM Observability | Langfuse                |
+| Vector DB    | ChromaDB                     |
 
 **Key technical decisions:**
 
@@ -283,7 +309,12 @@ graph TD
 | -------------------------- | ----------------------------------------------- |
 | Multi-user editing conflicts | CRDT (Yjs) — conflict-free, no central lock    |
 | Scale to multiple servers  | Redis Pub/Sub bridges WebSocket instances        |
-| AI without cloud API costs | Ollama runs LLM locally, Redis Stream for queue  |
+| AI without cloud API costs | Ollama runs quantized LLM locally               |
+| AI context awareness       | RAG — embed board content into ChromaDB, retrieve relevant context for prompts |
+| AI tool execution          | MCP Server — LLM decides when to call tools (create board, search, export) |
+| AI quality improvement     | LoRA fine-tuning on user feedback via HuggingFace pipeline |
+| AI observability           | Langfuse traces every LLM call (latency, tokens, cost, quality) |
+| Intent routing             | Classifier routes to info retrieval (RAG) or action execution (MCP) |
 | One codebase, two platforms| React + React Native shared business logic       |
 | Multi-tenancy (SaaS)      | Schema-per-tenant in PostgreSQL — data isolation |
 | Usage metering             | Track API calls + storage per tenant → Kafka     |

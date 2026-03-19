@@ -17,6 +17,8 @@ graph TD
     KF[(Kafka<br/>:9092)]
     UL[(Unleash<br/>:4242)]
     MH[(MailHog<br/>:1025 / :8025)]
+    CHR[(ChromaDB<br/>:8000)]
+    LF[(Langfuse<br/>:3100)]
   end
 
   subgraph "Backend Services (host)"
@@ -98,6 +100,8 @@ docker compose -f docker-compose.yml -f docker-compose.whiteboard.yml up -d
 | Unleash | 4242 | 4242 | http://localhost:4242 |
 | MailHog (SMTP) | 1025 | 1025 | — |
 | MailHog (Web UI) | 8025 | 8025 | http://localhost:8025 |
+| ChromaDB | 8000 | 8000 | — |
+| Langfuse | 3100 | 3100 | http://localhost:3100 |
 
 ### Backend Services (run on host, not Docker)
 
@@ -120,6 +124,8 @@ docker compose -f docker-compose.yml -f docker-compose.whiteboard.yml up -d
 | Mosquitto | `mqtt_data` | `/mosquitto/data` | Message persistence |
 | Kafka | `kafka_data` | `/var/lib/kafka/data` | Event log segments |
 | Unleash | — | Uses PostgreSQL | Feature toggle config (stored in `workspace` DB) |
+| ChromaDB | `chroma_data` | `/chroma/chroma` | Vector embeddings |
+| Langfuse | — | Uses PostgreSQL | LLM traces and metrics (stored in `workspace` DB) |
 
 Reset all data:
 ```bash
@@ -163,6 +169,15 @@ UNLEASH_ADMIN_TOKEN=default:development.unleash-insecure-api-token
 # MailHog (local SMTP)
 SMTP_HOST=localhost
 SMTP_PORT=1025
+
+# ChromaDB
+CHROMA_HOST=localhost
+CHROMA_PORT=8000
+
+# Langfuse
+LANGFUSE_HOST=http://localhost:3100
+LANGFUSE_PUBLIC_KEY=pk-local
+LANGFUSE_SECRET_KEY=sk-local
 ```
 
 > **All passwords are for local development only.** Never use these in production.
@@ -180,6 +195,9 @@ SMTP_PORT=1025
 | `KAFKA_BOOTSTRAP_SERVERS` | — | `localhost:9092` | `localhost:9092` |
 | `UNLEASH_URL` | `http://localhost:4242/api` | `http://localhost:4242/api` | `http://localhost:4242/api` |
 | `SMTP_HOST` | — | `localhost:1025` | `localhost:1025` |
+| `CHROMA_URL` | `http://localhost:8000` | — | — |
+| `LANGFUSE_HOST` | `http://localhost:3100` | — | — |
+| `OLLAMA_URL` | `http://localhost:11434` | — | — |
 | `PORT` | `4001` | `4002` | `4003` |
 
 ---
@@ -389,6 +407,71 @@ MailHog intercepts all outgoing SMTP email locally — no real emails are sent.
 
 ---
 
+## AI / LLM Pipeline (Whiteboard)
+
+Local AI infrastructure — no cloud APIs, all runs on Mac.
+
+### Services
+
+| Service | Tech | Port | Purpose |
+|---------|------|------|---------|
+| Ollama | Local LLM runtime | 11434 | Serve quantized models (Llama 3, Mistral, etc.) |
+| ChromaDB | Vector database (Docker) | 8000 | Store and query document embeddings for RAG |
+| Langfuse | LLM observability (Docker) | 3100 | Trace LLM calls, measure latency/tokens/quality |
+| Embedding Model | all-MiniLM-L6-v2 (via Ollama) | — | Generate embeddings for RAG |
+
+### Pipeline Flow
+
+```
+User prompt
+  → Intent Classifier (info retrieval or action?)
+
+Info Retrieval path:
+  → Embedding Model (vectorize query)
+  → ChromaDB (find relevant context)
+  → RAG Assembler (context + prompt)
+  → Ollama LLM (generate response)
+  → Langfuse (trace)
+  → Response to user
+
+Action Execution path:
+  → MCP Server (route to tool)
+  → Tool executes (create board, search, export)
+  → LLM generates final response with tool result
+  → Langfuse (trace)
+  → Response to user
+```
+
+### MCP Tools
+
+| Tool | What It Does | Example |
+|------|-------------|---------|
+| User Tool | Read/update user profile, preferences | "What boards have I created?" |
+| Data Tool | Query board data, search content | "Find boards about marketing" |
+| Task Tool | Execute actions via Backend API | "Create a new brainstorm board" |
+
+### Fine-tuning (Offline)
+
+| Component | Tech | Purpose |
+|-----------|------|---------|
+| Dataset | User feedback + usage data | Collect what works, what doesn't |
+| Fine-tune | HuggingFace + LoRA (Low-Rank Adaptation) | Lightweight fine-tune without retraining full model |
+| Quantization | GGUF (via llama.cpp) | Compress model for Mac (4-bit / 8-bit) |
+| Deploy | Copy weights to Ollama | `ollama create whiteboard-ai -f Modelfile` |
+
+> Fine-tuning runs offline on schedule. Not part of the real-time pipeline.
+
+### Resource Estimates (AI)
+
+| Service | RAM | GPU |
+|---------|-----|-----|
+| Ollama (7B model, 4-bit) | ~4-5 GB | Metal (Apple Silicon) |
+| ChromaDB | ~0.3 GB | — |
+| Langfuse | ~0.3 GB | — |
+| **Total (AI)** | **~5 GB** | |
+
+---
+
 ## MinIO Buckets
 
 | Bucket | Project | Versioned |
@@ -420,9 +503,11 @@ mc version enable local/3d-assets
 | Kafka (KRaft) | ~0.5 GB | Medium |
 | Unleash | ~0.3 GB | Low |
 | MailHog | ~0.1 GB | Low |
-| **Total (infra)** | **~2.5 GB** | |
+| ChromaDB | ~0.3 GB | Low |
+| Langfuse | ~0.3 GB | Low |
+| **Total (infra)** | **~3.1 GB** | |
 
-With all 3 backends + Ollama (7B model) + Storybook: ~15 GB total. Fits comfortably in 32 GB.
+With all 3 backends + Ollama (7B, 4-bit) + Storybook: ~18 GB total. Fits in 32 GB.
 
 ---
 
