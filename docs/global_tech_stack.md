@@ -8,16 +8,19 @@
 
 Three full-stack projects, each with a different tech stack, sharing the same local infrastructure.
 
-| Dimension     | Whiteboard             | Workflow                | 3D Asset              |
-| ------------- | ---------------------- | ----------------------- | --------------------- |
-| **Frontend**  | React                  | Vue 3                   | React + Three.js      |
-| **Mobile**    | React Native           | Kotlin + Swift + WebView| Unity (C#)            |
-| **Backend**   | Node.js (NestJS)       | Kotlin (Spring Boot)    | ASP.NET Core          |
-| **Realtime**  | Socket.IO + Yjs (CRDT) | Temporal                | SignalR + MQTT        |
-| **Messaging** | Redis Stream           | Kafka                   | MQTT → Kafka          |
-| **Auth**      | JWT + Guest            | Keycloak (OAuth2 / SSO) | API Key + JWT + ACL   |
-| **Storage**   | MinIO                  | MinIO                   | MinIO (versioned)     |
-| **AI**        | Ollama + LangChain     | —                       | ONNX Runtime (opt)    |
+| Dimension        | Whiteboard             | Workflow                | 3D Asset              |
+| ---------------- | ---------------------- | ----------------------- | --------------------- |
+| **Frontend**     | React                  | Vue 3 + Admin Panel     | React + Three.js      |
+| **Mobile**       | React Native           | Kotlin + Swift + WebView| Unity (C#)            |
+| **Backend**      | Node.js (NestJS)       | Kotlin (Spring Boot)    | ASP.NET Core          |
+| **Realtime**     | Socket.IO + Yjs (CRDT) | Temporal                | SignalR + MQTT        |
+| **Messaging**    | Redis Stream           | Kafka                   | MQTT → Kafka          |
+| **Auth**         | JWT + Guest            | Keycloak (OAuth2 / SSO) | API Key + JWT + ACL   |
+| **Storage**      | MinIO                  | MinIO                   | MinIO (versioned)     |
+| **Feature Flags**| Unleash                | Unleash + Admin UI      | Unleash               |
+| **Remote Config**| Theme + AI toggle      | White-label branding    | Unity scene defaults  |
+| **Analytics**    | Kafka events           | Kafka events + Admin    | Kafka events          |
+| **AI**           | Ollama + LangChain     | —                       | ONNX Runtime (opt)    |
 
 ---
 
@@ -33,6 +36,7 @@ All three projects connect to the same local services via Docker Compose.
 | Identity       | Keycloak                  | OAuth2 / OIDC provider (Workflow project)|
 | Event Streaming| Kafka (KRaft mode)        | Event bus for Workflow + 3D Asset        |
 | IoT Broker     | Mosquitto (MQTT)          | IoT sensor ingestion (3D Asset project)  |
+| Feature Flags  | Unleash                   | Feature toggles, A/B testing, kill switch|
 | Container      | Docker Compose            | One command to start everything          |
 
 ---
@@ -375,6 +379,9 @@ Each major technical choice is documented as an ADR in project docs.
 | Auth              | JWT + Guest        | Keycloak OAuth2/SSO   | API Key + JWT + ACL  |
 | Realtime          | Socket.IO + CRDT   | Temporal              | SignalR + MQTT       |
 | Messaging         | Redis Stream       | Kafka                 | MQTT → Kafka         |
+| Feature Flags     | Unleash            | Unleash + Admin UI    | Unleash              |
+| Remote Config     | Theme + AI toggle  | White-label branding  | Unity scene defaults |
+| Analytics         | Kafka events       | Kafka events + Admin  | Kafka events         |
 | Resilience        | Retry + Graceful   | Circuit Breaker + Bulkhead | Retry + Backoff |
 | Testing           | Jest + Playwright  | JUnit + Testcontainers | xUnit + k6           |
 | Logging           | Pino               | Logback               | Serilog              |

@@ -15,6 +15,7 @@ graph TD
     KC[(Keycloak<br/>:8080)]
     MQ[(Mosquitto<br/>:1883)]
     KF[(Kafka<br/>:9092)]
+    UL[(Unleash<br/>:4242)]
   end
 
   subgraph "Backend Services (host)"
@@ -26,17 +27,22 @@ graph TD
   WB --> PG
   WB --> RD
   WB --> MIO
+  WB --> UL
+  WB --> KF
   WF --> PG
   WF --> RD
   WF --> MIO
   WF --> KC
   WF --> KF
+  WF --> UL
   TD --> PG
   TD --> RD
   TD --> MIO
   TD --> MQ
   MQ -->|bridge| KF
   TD --> KF
+  TD --> UL
+  UL --> PG
 ```
 
 ---
@@ -87,6 +93,7 @@ docker compose -f docker-compose.yml -f docker-compose.whiteboard.yml up -d
 | Mosquitto (MQTT) | 1883 | 1883 | — |
 | Kafka | 9092 | 9092 | — |
 | Kafka (controller) | 9093 | 9093 | — |
+| Unleash | 4242 | 4242 | http://localhost:4242 |
 
 ### Backend Services (run on host, not Docker)
 
@@ -108,6 +115,7 @@ docker compose -f docker-compose.yml -f docker-compose.whiteboard.yml up -d
 | Keycloak | `kc_data` | `/opt/keycloak/data` | Realm config, users |
 | Mosquitto | `mqtt_data` | `/mosquitto/data` | Message persistence |
 | Kafka | `kafka_data` | `/var/lib/kafka/data` | Event log segments |
+| Unleash | — | Uses PostgreSQL | Feature toggle config (stored in `workspace` DB) |
 
 Reset all data:
 ```bash
@@ -143,6 +151,10 @@ MQTT_PASSWORD=mqtt_local
 
 # Kafka (KRaft mode, no ZooKeeper)
 KAFKA_CLUSTER_ID=local-workspace-cluster
+
+# Unleash
+UNLEASH_URL=http://localhost:4242/api
+UNLEASH_ADMIN_TOKEN=default:development.unleash-insecure-api-token
 ```
 
 > **All passwords are for local development only.** Never use these in production.
@@ -158,6 +170,7 @@ KAFKA_CLUSTER_ID=local-workspace-cluster
 | `KEYCLOAK_URL` | — | `http://localhost:8080` | — |
 | `MQTT_URL` | — | — | `mqtt://localhost:1883` |
 | `KAFKA_BOOTSTRAP_SERVERS` | — | `localhost:9092` | `localhost:9092` |
+| `UNLEASH_URL` | `http://localhost:4242/api` | `http://localhost:4242/api` | `http://localhost:4242/api` |
 | `PORT` | `4001` | `4002` | `4003` |
 
 ---
@@ -217,6 +230,113 @@ Each project uses a different Redis DB index to avoid key collisions.
 
 ---
 
+## Feature Toggles (Unleash)
+
+Unleash provides feature flag management for all three projects via a shared server.
+
+| Feature Flag | Project | Type | Purpose |
+|-------------|---------|------|---------|
+| `whiteboard.ai-assistant` | Whiteboard | Release | Gradual rollout of AI features |
+| `whiteboard.guest-mode` | Whiteboard | Kill switch | Disable anonymous access if abused |
+| `workflow.new-approval-ui` | Workflow | Experiment | A/B test new approval interface |
+| `workflow.kafka-audit` | Workflow | Release | Switch audit log from DB to Kafka |
+| `asset3d.iot-dashboard` | 3D Asset | Release | Enable IoT data overlay on 3D view |
+| `asset3d.versioned-upload` | 3D Asset | Release | Enable asset version history |
+
+### Unleash SDK per Project
+
+| Project | SDK | Integration |
+|---------|-----|-------------|
+| Whiteboard | `unleash-client-node` | NestJS middleware |
+| Workflow | `unleash-client-kotlin` | Spring Boot filter |
+| 3D Asset | `Unleash.Client` (.NET) | ASP.NET Core middleware |
+
+> Staff-level interview signal: "How do you release features without deploying? How do you do A/B testing?"
+
+---
+
+## Remote Config
+
+Mobile apps fetch config on startup — UI, copy, and branding can change without app store release.
+
+```
+GET /api/config/mobile
+```
+
+```json
+{
+  "theme": {
+    "primary_color": "#1976D2",
+    "brand_logo_url": "https://minio:9000/whiteboard-assets/logo.png",
+    "dark_mode_enabled": true
+  },
+  "features": {
+    "ai_assistant": true,
+    "guest_mode": false
+  },
+  "copy": {
+    "welcome_title": "Welcome to Whiteboard",
+    "onboarding_cta": "Start Drawing"
+  }
+}
+```
+
+| Project | What's Configurable |
+|---------|-------------------|
+| Whiteboard | Theme colors, AI toggle, welcome copy |
+| Workflow | Branding (white-label), approval form labels, notification templates |
+| 3D Asset | Unity scene defaults, IoT refresh interval, upload size limit |
+
+> Backed by Unleash feature flags + a config table in PostgreSQL. No external service needed.
+
+---
+
+## Event Tracking / Analytics
+
+User behavior events are written to Kafka for analysis. No third-party analytics required.
+
+### Kafka Analytics Topics
+
+| Topic | Project | Events |
+|-------|---------|--------|
+| `analytics.whiteboard-events` | Whiteboard | board_created, drawing_started, ai_prompt_sent, export_pdf |
+| `analytics.workflow-events` | Workflow | workflow_created, step_approved, step_rejected, document_uploaded |
+| `analytics.asset3d-events` | 3D Asset | asset_uploaded, asset_viewed_3d, iot_alert_triggered |
+
+### Event Schema
+
+```json
+{
+  "event_id": "uuid",
+  "user_id": "uuid",
+  "event": "board_created",
+  "properties": { "board_type": "ai", "template": "brainstorm" },
+  "timestamp": "2026-03-19T10:00:00Z",
+  "session_id": "uuid"
+}
+```
+
+> In production, a Kafka consumer would aggregate these into a dashboard. For local dev, events are stored in Kafka and can be inspected via CLI (`kafka-console-consumer`).
+
+---
+
+## Admin Panel
+
+The Workflow project includes an admin dashboard for managing the system.
+
+| Feature | Tech | Description |
+|---------|------|-------------|
+| User management | Keycloak Admin API | CRUD users, assign roles (Admin/Manager/Employee) |
+| Workflow templates | Vue 3 admin UI | Create/edit approval flow templates |
+| Feature toggles | Unleash UI (embedded) | Toggle features per environment/user segment |
+| Remote config | Custom admin UI | Edit mobile config (theme, copy, branding) |
+| Analytics | Kafka consumer → charts | View user behavior metrics |
+| Audit log | Kafka topic viewer | Browse compliance audit trail |
+
+> Admin panel is part of the Workflow project's web frontend, behind `Admin` role gate via Keycloak.
+
+---
+
 ## MinIO Buckets
 
 | Bucket | Project | Versioned |
@@ -246,9 +366,10 @@ mc version enable local/3d-assets
 | Keycloak | ~0.5 GB | Medium |
 | Mosquitto | ~0.1 GB | Low |
 | Kafka (KRaft) | ~0.5 GB | Medium |
-| **Total (infra)** | **~2.1 GB** | |
+| Unleash | ~0.3 GB | Low |
+| **Total (infra)** | **~2.4 GB** | |
 
-With all 3 backends + Ollama (7B model): ~13 GB total. Fits comfortably in 32 GB.
+With all 3 backends + Ollama (7B model): ~14 GB total. Fits comfortably in 32 GB.
 
 ---
 
