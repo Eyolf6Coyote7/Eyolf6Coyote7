@@ -6,21 +6,24 @@
 
 ## At a Glance
 
-Three full-stack projects, each with a different tech stack, sharing the same local infrastructure.
+Three full-stack projects targeting different industries, each with a different tech stack, sharing the same local infrastructure.
 
-| Dimension        | Whiteboard             | Workflow                | 3D Asset              |
-| ---------------- | ---------------------- | ----------------------- | --------------------- |
-| **Frontend**     | React                  | Vue 3 + Admin Panel     | React + Three.js      |
-| **Mobile**       | React Native           | Kotlin + Swift + WebView| Unity (C#)            |
-| **Backend**      | Node.js (NestJS)       | Kotlin (Spring Boot)    | ASP.NET Core          |
-| **Realtime**     | Socket.IO + Yjs (CRDT) | Temporal                | SignalR + MQTT        |
-| **Messaging**    | Redis Stream           | Kafka                   | MQTT → Kafka          |
-| **Auth**         | JWT + Guest            | Keycloak (OAuth2 / SSO) | API Key + JWT + ACL   |
-| **Storage**      | MinIO                  | MinIO                   | MinIO (versioned)     |
-| **Feature Flags**| Unleash                | Unleash + Admin UI      | Unleash               |
-| **Remote Config**| Theme + AI toggle      | White-label branding    | Unity scene defaults  |
-| **Analytics**    | Kafka events           | Kafka events + Admin    | Kafka events          |
-| **AI**           | Ollama + LangChain     | —                       | ONNX Runtime (opt)    |
+| Dimension        | Whiteboard                | Workflow                   | 3D Asset                 |
+| ---------------- | ------------------------- | -------------------------- | ------------------------ |
+| **Industry**     | SaaS                      | Semiconductor / Manufacturing | Media / Advertising    |
+| **Product Type** | Collaborative tool (Miro) | Approval system (Jira)     | DAM + Digital Twin       |
+| **Frontend**     | React                     | Vue 3 + Admin Panel        | React + Three.js         |
+| **Mobile**       | React Native              | Kotlin + Swift + WebView   | Unity (C#)               |
+| **Backend**      | Node.js (NestJS)          | Kotlin (Spring Boot)       | ASP.NET Core             |
+| **API Style**    | REST + WebSocket          | GraphQL                    | gRPC + REST              |
+| **Realtime**     | Socket.IO + Yjs (CRDT)    | Temporal                   | SignalR + MQTT           |
+| **Messaging**    | Redis Stream              | Kafka                      | MQTT → Kafka             |
+| **Auth**         | JWT + Guest               | Keycloak (OAuth2 / SSO)    | API Key + JWT + ACL      |
+| **Storage**      | MinIO                     | MinIO                      | MinIO (versioned)        |
+| **Feature Flags**| Unleash                   | Unleash + Admin UI         | Unleash                  |
+| **Remote Config**| Theme + AI toggle         | White-label branding       | Unity scene defaults     |
+| **Analytics**    | Kafka events              | Kafka events + Admin       | Kafka events             |
+| **AI**           | Ollama + LangChain        | —                          | ONNX Runtime (opt)       |
 
 ---
 
@@ -103,19 +106,21 @@ Download: Client ← presigned URL ← Backend API ← MinIO
 
 ### 1. Realtime AI Whiteboard
 
-A collaborative whiteboard with AI assistance — think Miro + ChatGPT, fully local.
+**Industry:** SaaS — collaborative tool (think Miro + ChatGPT, fully local)
 
 | Layer        | Tech                         |
 | ------------ | ---------------------------- |
 | Web          | React                        |
 | Mobile       | React Native (iOS + Android) |
 | Backend      | Node.js (NestJS)             |
+| API          | REST + WebSocket             |
 | Realtime     | WebSocket (Socket.IO)        |
 | State Sync   | Yjs (CRDT)                   |
-| DB           | PostgreSQL                   |
+| DB           | PostgreSQL (schema-per-tenant)|
 | Cache/Queue  | Redis (Pub/Sub + Stream)     |
 | Storage      | MinIO                        |
 | Auth         | JWT + Anonymous Guest        |
+| Feature Flags| Unleash                      |
 | AI           | Ollama + LangChain           |
 
 **Key technical decisions:**
@@ -126,24 +131,30 @@ A collaborative whiteboard with AI assistance — think Miro + ChatGPT, fully lo
 | Scale to multiple servers  | Redis Pub/Sub bridges WebSocket instances        |
 | AI without cloud API costs | Ollama runs LLM locally, Redis Stream for queue  |
 | One codebase, two platforms| React + React Native shared business logic       |
+| Multi-tenancy (SaaS)      | Schema-per-tenant in PostgreSQL — data isolation |
+| Usage metering             | Track API calls + storage per tenant → Kafka     |
+| Subscription access control| Plan-based feature gating via Unleash            |
 
 ---
 
 ### 2. Enterprise Workflow System
 
-An approval and task management system with role-based access — think Jira + custom workflow engine.
+**Industry:** Semiconductor / Manufacturing — approval and compliance system (think Jira + custom workflow engine)
 
 | Layer           | Tech                                     |
 | --------------- | ---------------------------------------- |
 | Web             | Vue 3 + Pinia + Element Plus             |
+| Admin Panel     | Vue 3 (user mgmt, config, analytics)    |
 | Mobile          | Kotlin (Android) + Swift (iOS) + WebView |
 | Backend         | Kotlin + Spring Boot                     |
+| API             | GraphQL                                  |
 | Workflow Engine | Temporal                                  |
 | Event Streaming | Kafka (KRaft)                             |
 | DB              | PostgreSQL                               |
 | Cache           | Redis                                    |
 | Storage         | MinIO                                    |
 | Auth            | Keycloak (OAuth2/OIDC + SSO + RBAC)     |
+| Feature Flags   | Unleash + Admin UI                       |
 
 **Key technical decisions:**
 
@@ -151,7 +162,8 @@ An approval and task management system with role-based access — think Jira + c
 | ---------------------------- | ---------------------------------------------- |
 | Complex multi-step approvals | Temporal — durable workflow with retry/timeout  |
 | Enterprise-grade permissions | Keycloak RBAC (Admin / Manager / Employee)      |
-| Audit compliance             | Kafka event sourcing — immutable audit log with exactly-once guarantee |
+| Audit compliance (SOC 2)    | Kafka event sourcing — immutable audit log with exactly-once guarantee |
+| Data retention policy        | Kafka log retention + PostgreSQL archival       |
 | Async notifications          | Kafka consumer groups — horizontal scaling of notification workers |
 | Native + Web with shared UI  | WebView for shared screens, native for platform features |
 
@@ -159,13 +171,14 @@ An approval and task management system with role-based access — think Jira + c
 
 ### 3. 3D Asset Collaboration (Digital Twin + AIoT)
 
-A platform for managing 3D assets with real-time IoT data overlay — think Figma for 3D + IoT dashboard.
+**Industry:** Media / Advertising — DAM (Digital Asset Management) + Digital Twin + IoT dashboard
 
 | Layer           | Tech                         |
 | --------------- | ---------------------------- |
 | Web             | React + Three.js             |
 | Client          | Unity (C#)                   |
 | Backend         | ASP.NET Core                 |
+| API             | gRPC + REST                  |
 | Realtime        | SignalR                      |
 | IoT Broker      | MQTT (Mosquitto)             |
 | Event Streaming | Kafka (via MQTT → Kafka bridge) |
@@ -173,13 +186,16 @@ A platform for managing 3D assets with real-time IoT data overlay — think Figm
 | Cache           | Redis (Pub/Sub)              |
 | Storage         | MinIO (versioned)            |
 | Auth            | API Key + JWT + Resource ACL |
+| Feature Flags   | Unleash                      |
 | AI (opt)        | Python + ONNX Runtime        |
 
 **Key technical decisions:**
 
 | Challenge                      | Solution                                        |
 | ------------------------------ | ----------------------------------------------- |
-| Large 3D files (50MB+)        | Chunked multipart upload + versioned MinIO       |
+| Large 3D files (50MB+)        | gRPC bidirectional stream + versioned MinIO      |
+| DAM asset library              | Tagging, search, preview, version tree per asset |
+| Cross-brand asset sharing      | Tenant-scoped buckets + resource-level ACL       |
 | IoT sensor data ingestion     | MQTT (Mosquitto) → Kafka bridge → consumer processing |
 | IoT data ordering             | Kafka partitioning by `device_id` — ordered per device, parallel across devices |
 | Browser 3D preview            | Three.js renders GLB/FBX without Unity install   |
@@ -370,21 +386,24 @@ Each major technical choice is documented as an ADR in project docs.
 
 ## Tech Diversity Overview
 
-| Dimension         | Whiteboard         | Workflow              | 3D Asset             |
-| ----------------- | ------------------ | --------------------- | -------------------- |
-| Language (BE)     | TypeScript         | Kotlin                | C#                   |
-| Language (FE)     | TypeScript (React) | TypeScript (Vue 3)    | TypeScript (React)   |
-| Language (Mobile) | TypeScript (RN)    | Kotlin + Swift        | C# (Unity)           |
-| API Style         | REST + WebSocket   | GraphQL               | gRPC + REST          |
-| Auth              | JWT + Guest        | Keycloak OAuth2/SSO   | API Key + JWT + ACL  |
-| Realtime          | Socket.IO + CRDT   | Temporal              | SignalR + MQTT       |
-| Messaging         | Redis Stream       | Kafka                 | MQTT → Kafka         |
-| Feature Flags     | Unleash            | Unleash + Admin UI    | Unleash              |
-| Remote Config     | Theme + AI toggle  | White-label branding  | Unity scene defaults |
-| Analytics         | Kafka events       | Kafka events + Admin  | Kafka events         |
-| Resilience        | Retry + Graceful   | Circuit Breaker + Bulkhead | Retry + Backoff |
-| Testing           | Jest + Playwright  | JUnit + Testcontainers | xUnit + k6           |
-| Logging           | Pino               | Logback               | Serilog              |
-| DB Migration      | TypeORM            | Flyway                | EF Core              |
+| Dimension         | Whiteboard              | Workflow                    | 3D Asset                  |
+| ----------------- | ----------------------- | --------------------------- | ------------------------- |
+| **Industry**      | SaaS                    | Semiconductor / Mfg         | Media / Advertising       |
+| Language (BE)     | TypeScript              | Kotlin                      | C#                        |
+| Language (FE)     | TypeScript (React)      | TypeScript (Vue 3)          | TypeScript (React)        |
+| Language (Mobile) | TypeScript (RN)         | Kotlin + Swift              | C# (Unity)                |
+| API Style         | REST + WebSocket        | GraphQL                     | gRPC + REST               |
+| Auth              | JWT + Guest             | Keycloak OAuth2/SSO         | API Key + JWT + ACL       |
+| Realtime          | Socket.IO + CRDT        | Temporal                    | SignalR + MQTT            |
+| Messaging         | Redis Stream            | Kafka                       | MQTT → Kafka              |
+| Multi-tenancy     | Schema-per-tenant       | Row-level (org_id)          | Bucket-per-tenant         |
+| Feature Flags     | Unleash                 | Unleash + Admin UI          | Unleash                   |
+| Remote Config     | Theme + AI toggle       | White-label branding        | Unity scene defaults      |
+| Analytics         | Kafka events            | Kafka events + Admin        | Kafka events              |
+| Resilience        | Retry + Graceful        | Circuit Breaker + Bulkhead  | Retry + Backoff           |
+| Testing           | Jest + Playwright       | JUnit + Testcontainers      | xUnit + k6                |
+| Logging           | Pino                    | Logback                     | Serilog                   |
+| DB Migration      | TypeORM                 | Flyway                      | EF Core                   |
 
 > Every dimension uses a different approach across the three projects — maximum breadth for portfolio demonstration.
+> Each project targets a different industry to demonstrate domain adaptability.
