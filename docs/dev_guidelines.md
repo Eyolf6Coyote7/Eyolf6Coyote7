@@ -416,54 +416,6 @@ When reviewing a PR, Claude also checks:
 
 ---
 
-## Incident Response / Runbook
-
-### Severity Levels
-
-| Level | Definition | Response Time | Example |
-|-------|-----------|---------------|---------|
-| **P0** | System down, all users affected | < 15 min | DB connection lost, API 500 for all requests |
-| **P1** | Major feature broken, many users affected | < 1 hour | Kafka consumer lag > 10min, file upload failing |
-| **P2** | Minor feature broken, workaround exists | < 4 hours | Push notifications delayed, search slow |
-| **P3** | Cosmetic / non-urgent | Next business day | UI misalignment, typo in notification |
-
-### Incident Workflow
-
-```
-1. Detect — Sentry alert / user report / health check failure
-2. Assess — Determine severity (P0-P3)
-3. Mitigate — Feature flag kill switch / rollback / restart service
-4. Communicate — Update status (GitHub issue)
-5. Fix — Root cause fix on feature branch
-6. Review — Post-mortem (what happened, why, how to prevent)
-```
-
-### Runbook: Common Issues
-
-| Issue | Check | Fix |
-|-------|-------|-----|
-| API 500 | `docker compose ps` — is DB up? | `docker compose restart postgres` |
-| Kafka consumer lag | Check consumer group lag | Restart consumer, check for poison message |
-| MinIO upload fails | Check disk space on `minio_data` volume | `docker compose exec minio mc admin info local` |
-| Keycloak login fails | Check Keycloak logs | `docker compose logs keycloak` — usually realm config issue |
-| WebSocket disconnect | Check Redis Pub/Sub | `redis-cli monitor` — check if pub/sub messages flowing |
-
-### Rollback Procedure
-
-```bash
-# 1. Identify the bad commit
-git log --oneline dev
-
-# 2. Revert via PR (never force push)
-git revert <bad-commit>
-git push origin fix/#XX-rollback
-
-# 3. Or use feature flag kill switch
-# Toggle off the feature in Unleash UI (http://localhost:4242)
-```
-
----
-
 ## Tech Debt Tracking
 
 ### How to Track
