@@ -384,6 +384,186 @@ Each major technical choice is documented as an ADR in project docs.
 
 ---
 
+## Mobile Engineering
+
+### Offline-first
+
+| Project | Strategy | Sync |
+|---------|----------|------|
+| Whiteboard | CRDT (Yjs) — edit offline, auto-merge on reconnect | Conflict-free by design |
+| Workflow | Local SQLite cache, queue pending approvals | Sync on reconnect, server wins |
+| 3D Asset | Cache asset metadata locally, defer uploads | Background upload when online |
+
+### Push Notifications
+
+| Project | Android | iOS | Use Case |
+|---------|---------|-----|----------|
+| Whiteboard | FCM | APNs | "@mention in board", "AI result ready" |
+| Workflow | FCM | APNs | "Approval pending", "Step rejected", "Deadline approaching" |
+| 3D Asset | FCM via Unity | APNs via Unity | "Asset upload complete", "IoT alert" |
+
+> Push notification service runs as a Kafka consumer — reads from `workflow.notifications` / `analytics.*-events` topics.
+
+### Deep Linking
+
+| Project | Android | iOS | Example |
+|---------|---------|-----|---------|
+| Whiteboard | App Links | Universal Links | `app://whiteboard/board/123` → opens board |
+| Workflow | App Links | Universal Links | `app://workflow/approval/456` → opens approval |
+| 3D Asset | Unity Deep Link | Unity Deep Link | `app://asset3d/asset/789` → opens 3D viewer |
+
+### OTA Updates (Over-the-Air)
+
+| Project | Tech | What It Updates |
+|---------|------|----------------|
+| Whiteboard | Expo Updates (React Native) | JS bundle — no app store release needed |
+| Workflow | — (native apps) | Relies on Remote Config for dynamic changes |
+| 3D Asset | Unity Addressables | Scene configs, shader patches |
+
+### Crash Reporting
+
+All mobile apps use **Sentry** (self-hosted via Docker, or free tier) for crash reporting and performance monitoring.
+
+| Metric | What It Tracks |
+|--------|---------------|
+| Crash-free rate | % of sessions without crashes |
+| App startup time | Cold start / warm start duration |
+| Frame rate | UI jank detection (< 60fps) |
+| ANR (Android) | Application Not Responding events |
+
+---
+
+## API Versioning
+
+| Project | API Style | Versioning Strategy |
+|---------|----------|-------------------|
+| Whiteboard | REST | URL path: `/api/v1/boards`, `/api/v2/boards` |
+| Workflow | GraphQL | Schema evolution — deprecate fields, add new ones. No version in URL |
+| 3D Asset | gRPC | Package versioning: `asset.v1.AssetService`, `asset.v2.AssetService` |
+
+> Staff-level interview signal: "How do you handle breaking API changes without disrupting clients?"
+
+---
+
+## API Documentation
+
+| Project | API Style | Documentation Tool |
+|---------|----------|-------------------|
+| Whiteboard | REST | OpenAPI 3.0 (Swagger UI at `/api/docs`) |
+| Workflow | GraphQL | GraphQL Playground + auto-generated schema docs |
+| 3D Asset | gRPC + REST | Protobuf `.proto` files + Buf documentation. REST via OpenAPI |
+
+---
+
+## Internationalization (i18n)
+
+| Layer | Approach | Project |
+|-------|----------|---------|
+| Web (React) | `react-i18next` — JSON translation files | Whiteboard, 3D Asset |
+| Web (Vue) | `vue-i18n` — JSON translation files | Workflow |
+| Mobile (RN) | `react-i18next` (shared with web) | Whiteboard |
+| Mobile (Native) | Android `strings.xml` + iOS `Localizable.strings` | Workflow |
+| Mobile (Unity) | Unity Localization package | 3D Asset |
+| Backend | Error messages and email templates | All |
+
+**Supported locales:** `en`, `zh-TW` (minimum). Extensible to more.
+
+> Translation files stored in each project's repo. Backend returns error codes, frontend maps to localized strings.
+
+---
+
+## Accessibility (a11y)
+
+| Standard | Implementation | Project |
+|----------|---------------|---------|
+| WCAG 2.1 AA | Semantic HTML, ARIA labels, keyboard navigation | All web |
+| Color contrast | Minimum 4.5:1 ratio, checked in Design System | All web |
+| Screen reader | VoiceOver (iOS) / TalkBack (Android) tested | All mobile |
+| Focus management | Logical tab order, visible focus indicators | All web |
+| Reduced motion | `prefers-reduced-motion` media query respected | Whiteboard (animations) |
+
+> Staff-level interview signal: "How do you ensure your app is accessible?"
+
+---
+
+## Design System
+
+Each project has its own component library, built on a shared design token foundation.
+
+| Project | Framework | Component Library | Tokens |
+|---------|----------|------------------|--------|
+| Whiteboard | React | Custom components (canvas-focused) | CSS variables |
+| Workflow | Vue 3 | Element Plus (extended) | CSS variables |
+| 3D Asset | React | Custom components (3D viewer widgets) | CSS variables |
+
+**Shared design tokens** (colors, spacing, typography) are defined in a `tokens/` directory and consumed by all frontends:
+
+```
+tokens/
+├─ colors.json       ← brand colors, semantic colors
+├─ spacing.json      ← 4px grid system
+├─ typography.json   ← font families, sizes, weights
+└─ breakpoints.json  ← responsive breakpoints
+```
+
+> Tokens support white-label / brand switching via Remote Config.
+
+---
+
+## Rate Limiting
+
+| Layer | Tech | Strategy |
+|-------|------|----------|
+| API Gateway level | Nginx / Express middleware | Token bucket per IP |
+| Per-user | Redis sliding window | X requests per minute per user |
+| Per-tenant (SaaS) | Redis + Unleash | Plan-based limits (Free: 100/min, Pro: 1000/min) |
+
+| Project | Limits |
+|---------|--------|
+| Whiteboard | 100 API calls/min (free), 1000/min (pro) |
+| Workflow | 500 API calls/min (enterprise) |
+| 3D Asset | 50 uploads/hour, 200 API calls/min |
+
+---
+
+## Pagination
+
+| Project | API Style | Pagination Strategy | Why |
+|---------|----------|--------------------|----|
+| Whiteboard | REST | Cursor-based (`?cursor=abc&limit=20`) | Realtime data — offset breaks when items are added/removed |
+| Workflow | GraphQL | Relay-style connections (`first`, `after`) | GraphQL standard, cursor-based |
+| 3D Asset | REST + gRPC | Offset-based (`?page=1&size=20`) for REST, token-based for gRPC stream | Asset list is relatively stable |
+
+> Staff-level interview signal: "When do you use cursor vs offset pagination?"
+
+---
+
+## Error Handling Strategy
+
+All backends return a consistent error response format:
+
+```json
+{
+  "error": {
+    "code": "APPROVAL_NOT_FOUND",
+    "message": "Approval with ID 456 not found",
+    "details": {},
+    "request_id": "uuid",
+    "timestamp": "2026-03-19T10:00:00Z"
+  }
+}
+```
+
+| Concern | Approach |
+|---------|----------|
+| Error codes | Domain-specific enum (not HTTP status alone) |
+| Request tracing | `request_id` in every response for debugging |
+| Client display | Frontend maps `error.code` → localized user message (i18n) |
+| Logging | All errors logged with `request_id` + stack trace |
+| Sensitive data | Never expose internal details (DB errors, stack traces) in production |
+
+---
+
 ## Tech Diversity Overview
 
 | Dimension         | Whiteboard              | Workflow                    | 3D Asset                  |
@@ -393,6 +573,8 @@ Each major technical choice is documented as an ADR in project docs.
 | Language (FE)     | TypeScript (React)      | TypeScript (Vue 3)          | TypeScript (React)        |
 | Language (Mobile) | TypeScript (RN)         | Kotlin + Swift              | C# (Unity)                |
 | API Style         | REST + WebSocket        | GraphQL                     | gRPC + REST               |
+| API Versioning    | URL path (`/v1/`)       | Schema evolution             | Proto package version     |
+| API Docs          | OpenAPI / Swagger       | GraphQL Playground          | Protobuf + Buf            |
 | Auth              | JWT + Guest             | Keycloak OAuth2/SSO         | API Key + JWT + ACL       |
 | Realtime          | Socket.IO + CRDT        | Temporal                    | SignalR + MQTT            |
 | Messaging         | Redis Stream            | Kafka                       | MQTT → Kafka              |
@@ -400,6 +582,14 @@ Each major technical choice is documented as an ADR in project docs.
 | Feature Flags     | Unleash                 | Unleash + Admin UI          | Unleash                   |
 | Remote Config     | Theme + AI toggle       | White-label branding        | Unity scene defaults      |
 | Analytics         | Kafka events            | Kafka events + Admin        | Kafka events              |
+| Offline-first     | CRDT auto-merge         | SQLite cache + queue        | Metadata cache + deferred upload |
+| Push Notifications| FCM + APNs              | FCM + APNs                  | FCM + APNs (via Unity)    |
+| OTA Updates       | Expo Updates            | Remote Config               | Unity Addressables        |
+| i18n              | react-i18next           | vue-i18n                    | Unity Localization        |
+| a11y              | WCAG 2.1 AA             | WCAG 2.1 AA                 | WCAG 2.1 AA              |
+| Design System     | Custom (canvas)         | Element Plus (extended)     | Custom (3D widgets)       |
+| Pagination        | Cursor-based            | Relay connections           | Offset-based              |
+| Rate Limiting     | Plan-based (SaaS)       | Enterprise fixed            | Upload + API limits       |
 | Resilience        | Retry + Graceful        | Circuit Breaker + Bulkhead  | Retry + Backoff           |
 | Testing           | Jest + Playwright       | JUnit + Testcontainers      | xUnit + k6                |
 | Logging           | Pino                    | Logback                     | Serilog                   |
