@@ -6,24 +6,26 @@ Each project follows the same document lifecycle. Phases are sequential for init
 
 ### Initial Development (v0 → v1)
 
-| Phase | Document | Purpose |
-|-------|----------|---------|
-| 1 | `conops.md` | Concept of Operations — product vision, target users, high-level scenarios |
-| 2 | `prd.md` | Product Requirements — features, user stories, acceptance criteria |
-| 3 | `system_architecture.md` | System design — components, data flow, infrastructure |
-| 4 | `technical_design.md` | Implementation detail — APIs, DB schema, algorithms |
-| 5 | `ui_ux_design.md` | UI/UX — wireframes, Figma links, design system |
-| 6 | `development_roadmap.md` | Timeline — milestones, priorities, dependencies |
-| 7 | `testing_strategy.md` | Test plan — unit, integration, E2E, load |
+| Phase | Document | ADR? | Purpose |
+|-------|----------|------|---------|
+| 1 | `conops.md` | ✅ | Concept of Operations — product vision, target users, high-level scenarios |
+| 2 | `prd.md` | — | Product Requirements — features, user stories, acceptance criteria |
+| 3 | `system_architecture.md` | ✅ | System design — components, data flow, infrastructure |
+| 4 | `technical_design.md` | ✅ | Implementation detail — APIs, DB schema, algorithms |
+| 5 | `ui_ux_design.md` | — | UI/UX — wireframes, Figma links, design system |
+| 6 | `development_roadmap.md` | — | Timeline — milestones, priorities, dependencies |
+| 7 | `testing_strategy.md` | — | Test plan — unit, integration, E2E, load |
+
+> ADRs are written during initial development too — whenever a major tech decision is made (e.g. "Why Kafka over RabbitMQ?", "Why Yjs over OT?").
 
 ### Feature Iteration (v1+)
 
 For new features after initial release, don't rewrite docs. Follow this flow:
 
-1. Write RFC (`rfcs/RFC-XXX-feature-name.md`)
+1. Write RFC (`rfcs/RFC-NNNN-feature-name.md`)
 2. Update `prd.md` (add feature section)
 3. Update `system_architecture.md` (if architecture changes)
-4. Write ADR (`adrs/ADR-XXX-decision.md`) for major tech decisions
+4. Write ADR (`adrs/ADR-NNNN-decision-title.md`) for major tech decisions
 5. Update `technical_design.md` (add feature detail)
 6. Update `ui_ux_design.md` (new Figma screens)
 7. Update `testing_strategy.md` (add test plan for feature)
@@ -31,17 +33,19 @@ For new features after initial release, don't rewrite docs. Follow this flow:
 
 ### Document Update Frequency
 
-| Document | When to Update |
-|----------|---------------|
-| `conops.md` | Rarely — only when product direction changes |
-| `prd.md` | Per major feature — append section, don't rewrite |
-| `system_architecture.md` | Major architecture changes only |
-| `technical_design.md` | Per feature — add implementation detail |
-| `ui_ux_design.md` | Per feature — link new Figma screens |
-| `development_roadmap.md` | Per milestone — update timeline |
-| `testing_strategy.md` | Per feature — add test plan |
-| `adrs/` | Append only — one file per major decision, never edit old ADRs |
-| `rfcs/` | Per major feature — write before development, mark status when done |
+| Document | When to Update | Version? |
+|----------|---------------|----------|
+| `conops.md` | Rarely — only when product direction changes | No — use git history |
+| `prd.md` | Per major feature — append section, don't rewrite | No — use git history |
+| `system_architecture.md` | Major architecture changes only | No — use git history |
+| `technical_design.md` | Per feature — add implementation detail | No — use git history |
+| `ui_ux_design.md` | Per feature — link new Figma screens | No — Figma has its own version history |
+| `development_roadmap.md` | Per milestone — update timeline | No — use git history |
+| `testing_strategy.md` | Per feature — add test plan | No — use git history |
+| `adrs/` | Append only — one file per major decision, never edit old ADRs | No — sequential number |
+| `rfcs/` | Per major feature — write before development, update status field | No — sequential number |
+
+> **No document uses version numbers.** Git history is the single source of truth for document versioning. Use `git log -- docs/prd.md` to see the full history of any document.
 
 ### ADR (Architecture Decision Record)
 
@@ -50,14 +54,20 @@ Records **why** a technical decision was made. Written after making a tech choic
 | Property | Description |
 |---|---|
 | **Answers** | Why did we choose A over B? |
-| **When** | After making a technical choice |
+| **When** | During initial development (phases 1, 3, 4) or feature iteration |
 | **Size** | Short — one decision per file |
 | **Editable** | No — append only. New ADR supersedes old one |
 
-File: `adrs/ADR-XXX-short-name.md`
+**Naming convention:** `ADR-NNNN-kebab-case-title.md`
+- 4-digit sequential number (0001, 0002, ...)
+- kebab-case title describing the decision
+- No version numbers — sequential only
+- To supersede: create new ADR referencing old one (e.g. `ADR-0005-supersede-0001-switch-to-rabbitmq.md`)
+
+File: `adrs/ADR-0001-why-temporal-over-bull.md`
 
 ```markdown
-# ADR-001: Why Temporal over Bull for workflow engine
+# ADR-0001: Why Temporal over Bull for workflow engine
 
 ## Status
 Accepted
@@ -85,14 +95,20 @@ A **proposal** written before developing a major feature. Describes the problem,
 | Property | Description |
 |---|---|
 | **Answers** | How should we implement this feature? |
-| **When** | Before starting development of a major feature |
+| **When** | Before starting development of a major feature (v1+ iteration) |
 | **Size** | Detailed — full proposal with alternatives |
-| **Editable** | Yes — update status (Draft → Approved → Implemented) |
+| **Editable** | Yes — update status field only (Draft → Approved → Implemented → Superseded) |
 
-File: `rfcs/RFC-XXX-short-name.md`
+**Naming convention:** `RFC-NNNN-kebab-case-title.md`
+- 4-digit sequential number (0001, 0002, ...)
+- kebab-case title describing the feature
+- No version numbers — sequential only
+- Status is updated in-place (the only field that changes)
+
+File: `rfcs/RFC-0001-realtime-cursor-sync.md`
 
 ```markdown
-# RFC-001: Realtime Cursor Sync
+# RFC-0001: Realtime Cursor Sync
 
 ## Status
 Implemented (whiteboard/v0.3.0)
