@@ -8,7 +8,7 @@ Each project follows the same document lifecycle. Phases are sequential for init
 
 | Phase | Document | ADR? | Purpose |
 |-------|----------|------|---------|
-| 1 | `conops.md` | ✅ | Concept of Operations — product vision, target users, high-level scenarios |
+| 1 | `conops.md` | ✅ | Concept of Operations — see ConOps Required Sections below |
 | 2 | `prd.md` | — | Product Requirements — features, user stories, acceptance criteria |
 | 3 | `system_architecture.md` | ✅ | System design — components, data flow, infrastructure |
 | 4 | `technical_design.md` | ✅ | Implementation detail — APIs, DB schema, algorithms |
@@ -17,6 +17,36 @@ Each project follows the same document lifecycle. Phases are sequential for init
 | 7 | `testing_strategy.md` | — | Test plan — unit, integration, E2E, load |
 
 > ADRs are written during initial development too — whenever a major tech decision is made (e.g. "Why Kafka over RabbitMQ?", "Why Yjs over OT?").
+
+### ConOps Required Sections
+
+Every project's `conops.md` must include:
+
+| Section | Description |
+|---------|-------------|
+| Product Vision | One-sentence product definition |
+| Target Users | Who uses this and why |
+| Industry Context | Which industry this serves (SaaS / Semiconductor / Media) |
+| High-level Scenarios | 3-5 core user flows |
+| OKR / Success Metrics | Measurable goals — examples below |
+| Risk Register | Technical, timeline, and dependency risks |
+
+**OKR / Success Metrics examples:**
+
+| Metric | Whiteboard (SaaS) | Workflow (Semiconductor) | 3D Asset (Media) |
+|--------|-------------------|--------------------------|-------------------|
+| DAU | Active users per day | Active approvers per day | Active uploaders per day |
+| Retention | D7 / D30 retention | — (enterprise, always on) | Monthly active teams |
+| Conversion | Free → Pro upgrade rate | — | Free tier → paid storage |
+| Task completion | Boards created per user | Avg approval turnaround time | Assets uploaded per session |
+| Performance | p99 latency < 200ms | SLA uptime 99.95% | Upload success rate > 99.5% |
+
+**Risk Register template:**
+
+| Risk | Impact | Likelihood | Mitigation |
+|------|--------|-----------|------------|
+| e.g. CRDT sync conflict edge case | High | Medium | Fuzz testing + fallback to server state |
+| e.g. Kafka consumer lag spikes | Medium | Low | Monitor consumer lag, auto-scale workers |
 
 ### Feature Iteration (v1+)
 
@@ -284,6 +314,161 @@ Target rules:
 - **CD**: None — all local development, no cloud deployment
 - **Auto Review**: Claude Code reviews PRs with architecture mermaid diagrams
 - **Auto Tag**: `release-please` creates tags on `stable` merges
+
+---
+
+## Coding Standards
+
+### General Rules
+
+| Rule | Standard |
+|------|----------|
+| Language | English for all code, comments, commit messages, docs |
+| File naming | `kebab-case` for files, `PascalCase` for classes/components |
+| Max file length | 300 lines — split if larger |
+| Max function length | 40 lines — extract if larger |
+| PR size | < 400 lines changed — split if larger |
+| No magic numbers | Use named constants |
+| No commented-out code | Delete it, git has history |
+
+### Per-project Style
+
+| Project | Language | Linter | Formatter |
+|---------|---------|--------|-----------|
+| Whiteboard | TypeScript | ESLint (strict) | Prettier |
+| Workflow | Kotlin | ktlint | ktfmt |
+| 3D Asset | C# | .NET Analyzers | dotnet format |
+
+### Naming Conventions
+
+| Context | Convention | Example |
+|---------|-----------|---------|
+| Variables / functions | camelCase (TS/Kotlin), camelCase (C#) | `getUserById` |
+| Classes / interfaces | PascalCase | `WorkflowService` |
+| Constants | UPPER_SNAKE_CASE | `MAX_UPLOAD_SIZE` |
+| Database tables | snake_case | `approval_step` |
+| API endpoints | kebab-case | `/api/v1/approval-steps` |
+| Kafka topics | dot-separated | `workflow.approval-events` |
+| Feature flags | dot-separated | `workflow.new-approval-ui` |
+
+---
+
+## Incident Response / Runbook
+
+### Severity Levels
+
+| Level | Definition | Response Time | Example |
+|-------|-----------|---------------|---------|
+| **P0** | System down, all users affected | < 15 min | DB connection lost, API 500 for all requests |
+| **P1** | Major feature broken, many users affected | < 1 hour | Kafka consumer lag > 10min, file upload failing |
+| **P2** | Minor feature broken, workaround exists | < 4 hours | Push notifications delayed, search slow |
+| **P3** | Cosmetic / non-urgent | Next business day | UI misalignment, typo in notification |
+
+### Incident Workflow
+
+```
+1. Detect — Sentry alert / user report / health check failure
+2. Assess — Determine severity (P0-P3)
+3. Mitigate — Feature flag kill switch / rollback / restart service
+4. Communicate — Update status (GitHub issue)
+5. Fix — Root cause fix on feature branch
+6. Review — Post-mortem (what happened, why, how to prevent)
+```
+
+### Runbook: Common Issues
+
+| Issue | Check | Fix |
+|-------|-------|-----|
+| API 500 | `docker compose ps` — is DB up? | `docker compose restart postgres` |
+| Kafka consumer lag | Check consumer group lag | Restart consumer, check for poison message |
+| MinIO upload fails | Check disk space on `minio_data` volume | `docker compose exec minio mc admin info local` |
+| Keycloak login fails | Check Keycloak logs | `docker compose logs keycloak` — usually realm config issue |
+| WebSocket disconnect | Check Redis Pub/Sub | `redis-cli monitor` — check if pub/sub messages flowing |
+
+### Rollback Procedure
+
+```bash
+# 1. Identify the bad commit
+git log --oneline dev
+
+# 2. Revert via PR (never force push)
+git revert <bad-commit>
+git push origin fix/#XX-rollback
+
+# 3. Or use feature flag kill switch
+# Toggle off the feature in Unleash UI (http://localhost:4242)
+```
+
+---
+
+## Tech Debt Tracking
+
+### How to Track
+
+- Label GitHub issues with `tech-debt`
+- Include in project board under "Tech Debt" column
+- Each tech debt issue must have: **Impact** (what breaks if not fixed) and **Cost** (effort to fix)
+
+### Tech Debt Categories
+
+| Category | Example | Priority |
+|----------|---------|----------|
+| **Code quality** | Duplicated logic, god class | Low — fix during related feature work |
+| **Test coverage** | Missing integration tests | Medium — fix before next release |
+| **Dependency** | Outdated package with known CVE | High — fix immediately |
+| **Architecture** | Tight coupling between modules | Medium — plan dedicated refactor |
+| **Performance** | N+1 queries, missing indexes | High — fix when SLO at risk |
+
+### Paydown Strategy
+
+- Allocate ~20% of each milestone for tech debt
+- Critical (CVE, SLO at risk) — fix immediately
+- Non-critical — batch into dedicated tech debt PRs
+
+---
+
+## Dependency Management
+
+### Tools
+
+| Project | Tool | Config |
+|---------|------|--------|
+| Whiteboard | Dependabot (GitHub native) | `.github/dependabot.yml` |
+| Workflow | Dependabot | `.github/dependabot.yml` |
+| 3D Asset | Dependabot | `.github/dependabot.yml` |
+
+### Policy
+
+| Rule | Standard |
+|------|----------|
+| Patch updates | Auto-merge if CI passes |
+| Minor updates | Review changelog, merge within 1 week |
+| Major updates | Create issue, assess breaking changes, plan migration |
+| Security alerts | Fix within 48 hours (P1) |
+
+### Dependabot Config
+
+```yaml
+# .github/dependabot.yml
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /realtime_ai_whiteboard/backend
+    schedule:
+      interval: weekly
+  - package-ecosystem: gradle
+    directory: /enterprise_workflow_system/backend
+    schedule:
+      interval: weekly
+  - package-ecosystem: nuget
+    directory: /3d_asset_collaboration/backend
+    schedule:
+      interval: weekly
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+```
 
 ---
 

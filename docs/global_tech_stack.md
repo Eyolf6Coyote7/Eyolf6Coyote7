@@ -644,6 +644,73 @@ All mobile apps use **Sentry** (self-hosted via Docker, or free tier) for crash 
 | Frame rate | UI jank detection (< 60fps) |
 | ANR (Android) | Application Not Responding events |
 
+### Mobile Performance Budgets
+
+| Metric | Target | How to Measure |
+|--------|--------|---------------|
+| Cold start | < 2s | Sentry App Start span |
+| Warm start | < 500ms | Sentry App Start span |
+| Frame rate | 60fps (no jank) | Sentry frame tracking |
+| JS bundle (RN) | < 2MB | `npx react-native-bundle-visualizer` |
+| APK size | < 30MB | Android Studio APK Analyzer |
+| IPA size | < 40MB | Xcode App Thinning report |
+| Memory (idle) | < 100MB | Xcode Instruments / Android Profiler |
+| TTI (Time to Interactive) | < 3s | Lighthouse (web) / custom span (mobile) |
+
+> Performance budgets are enforced in CI — build fails if bundle size exceeds limit.
+
+### CI/CD for Mobile
+
+| Project | Platform | Build Tool | Distribution |
+|---------|---------|-----------|-------------|
+| Whiteboard | React Native | **Fastlane** + Expo EAS | TestFlight (iOS), Play Console Internal Track (Android) |
+| Workflow | Native | **Fastlane** | TestFlight (iOS), Play Console Internal Track (Android) |
+| 3D Asset | Unity | Unity Cloud Build or local `BuildPipeline` | TestFlight (iOS), Play Console Internal Track (Android) |
+
+```
+Fastlane workflow:
+1. fastlane match (code signing / provisioning)
+2. fastlane build (archive IPA / APK)
+3. fastlane pilot (upload to TestFlight) / fastlane supply (upload to Play Console)
+```
+
+> Local dev: Fastlane runs on Mac. CI: GitHub Actions self-hosted runner (for code signing keychain access).
+
+---
+
+## SLA / SLO / SLI
+
+Service Level definitions for each project — demonstrates production-readiness thinking.
+
+| Term | Definition |
+|------|-----------|
+| **SLI** (Indicator) | The metric you measure (e.g. request latency) |
+| **SLO** (Objective) | The target for that metric (e.g. p99 latency < 200ms) |
+| **SLA** (Agreement) | The business promise (e.g. 99.9% uptime or credits issued) |
+
+### Per-project SLOs
+
+| SLI | Whiteboard SLO | Workflow SLO | 3D Asset SLO |
+|-----|---------------|-------------|-------------|
+| API latency (p99) | < 200ms | < 300ms | < 500ms (large file ops excluded) |
+| Availability | 99.9% | 99.95% (enterprise) | 99.9% |
+| Error rate | < 0.5% | < 0.1% (compliance) | < 0.5% |
+| WebSocket reconnect | < 3s | — | < 3s (SignalR) |
+| File upload success | > 99% | > 99% | > 99.5% (chunked resume) |
+| Push notification delivery | — | < 30s from event | < 60s from alert |
+
+### How to Monitor (Production Knowledge)
+
+| SLI | How to Measure |
+|-----|---------------|
+| Latency | Structured log timestamps / OpenTelemetry spans |
+| Availability | Health check endpoint (`/health`) + uptime probe |
+| Error rate | Count 5xx responses / total responses |
+| Burn rate | Remaining error budget consumption rate |
+
+> In local development, SLOs are not enforced. These define the production targets to design for.
+> Staff-level interview signal: "How do you define and monitor SLOs? What happens when you burn your error budget?"
+
 ---
 
 ## API Versioning
