@@ -219,6 +219,86 @@ Not part of local Docker setup, but each project uses structured logging for deb
 
 ---
 
+## Architecture Patterns
+
+Each project uses a different architecture pattern at every layer to demonstrate breadth.
+
+### Frontend Architecture
+
+| Project | Pattern | State Management | Why |
+|---------|---------|-----------------|-----|
+| Whiteboard | Feature-based + Flux | Zustand | Canvas-heavy, feature modules, unidirectional data flow |
+| Workflow | MVVM | Pinia | Vue 3 is naturally MVVM, Pinia as ViewModel layer |
+| 3D Asset | Clean Architecture (3 layers) | Zustand | Presentation → Domain → Data, complex 3D scene logic needs clear separation |
+
+```
+Frontend Clean Architecture (3D Asset):
+┌─────────────────────┐
+│  Presentation Layer  │  ← React components, Three.js views
+├─────────────────────┤
+│    Domain Layer      │  ← Business logic, entities, use cases
+├─────────────────────┤
+│     Data Layer       │  ← API clients (gRPC/REST), local cache
+└─────────────────────┘
+```
+
+### Backend Architecture
+
+| Project | Pattern | Layers | Why |
+|---------|---------|--------|-----|
+| Whiteboard | Modular Monolith | NestJS Modules (board, auth, ai, storage) | Single service, module-isolated. No microservice overhead needed |
+| Workflow | Clean Architecture + DDD + CQRS | Controller → UseCase → Domain → Infrastructure | Enterprise-grade, domain logic decoupled from framework. Read/write separation for complex queries |
+| 3D Asset | Hexagonal (Ports & Adapters) | Core ← Ports (interfaces) ← Adapters (gRPC, REST, MQTT, MinIO) | Multiple I/O adapters (gRPC, REST, MQTT), core logic unchanged |
+
+```
+Backend Clean Architecture (Workflow):
+┌──────────────────────┐
+│   Controller Layer    │  ← GraphQL resolvers, REST endpoints
+├──────────────────────┤
+│   Application Layer   │  ← Use cases, command/query handlers (CQRS)
+├──────────────────────┤
+│     Domain Layer      │  ← Entities, Aggregate Roots, Value Objects, Domain Events (DDD)
+├──────────────────────┤
+│  Infrastructure Layer │  ← Repositories, Kafka producer, Keycloak client, Temporal client
+└──────────────────────┘
+```
+
+```
+Hexagonal Architecture (3D Asset):
+              ┌─────────────────┐
+  gRPC ──────►│                 │
+  REST ──────►│   Core Logic    │──────► MinIO (storage)
+  MQTT ──────►│  (Ports/Ifaces) │──────► PostgreSQL (data)
+  SignalR ───►│                 │──────► Kafka (events)
+              └─────────────────┘
+```
+
+### System Architecture
+
+| Pattern | Project | Implementation |
+|---------|---------|---------------|
+| **BFF (Backend for Frontend)** | Whiteboard | Separate API surface for Web (`/api/web/`) and Mobile (`/api/mobile/`) — different payload shapes, pagination, and auth flows |
+| **EDA (Event-Driven Architecture)** | Workflow, 3D Asset | Kafka event bus — services communicate via events, not direct API calls |
+| **CQRS** | Workflow | Write: Temporal workflows + Kafka events. Read: dedicated read model (materialized view) for GraphQL queries |
+| **Saga Pattern** | Workflow | Multi-step approval as distributed transaction — orchestrated by Temporal with compensation logic |
+| **DDD (Domain-Driven Design)** | Workflow | Bounded Contexts: Approval, User, Notification. Aggregate Roots: Workflow, Step. Domain Events: StepApproved, WorkflowCompleted |
+| **Repository Pattern** | All | Abstract DB access behind interfaces — enables testing with in-memory repositories |
+| **API Gateway** | All | Single entry point routes to 3 backends, handles rate limiting and auth token validation |
+
+### Architecture Summary
+
+| Layer | Whiteboard | Workflow | 3D Asset |
+|-------|-----------|----------|----------|
+| **Frontend** | Feature-based + Flux | MVVM | Clean Architecture |
+| **Backend** | Modular Monolith | Clean Arch + DDD + CQRS | Hexagonal |
+| **System** | BFF | EDA + Saga | EDA |
+| **State** | Zustand | Pinia | Zustand |
+| **Data Access** | Repository (TypeORM) | Repository (Exposed) | Repository (EF Core) |
+
+> Staff-level interview signal: "Why did you choose this architecture? What are the trade-offs?"
+
+---
+
 ## API Design Strategy
 
 Each project uses a different API style to demonstrate breadth.
@@ -569,9 +649,13 @@ All backends return a consistent error response format:
 | Dimension         | Whiteboard              | Workflow                    | 3D Asset                  |
 | ----------------- | ----------------------- | --------------------------- | ------------------------- |
 | **Industry**      | SaaS                    | Semiconductor / Mfg         | Media / Advertising       |
+| FE Architecture   | Feature-based + Flux    | MVVM                        | Clean Architecture        |
+| BE Architecture   | Modular Monolith        | Clean Arch + DDD + CQRS     | Hexagonal (Ports & Adapters) |
+| System Pattern    | BFF                     | EDA + Saga                  | EDA                       |
 | Language (BE)     | TypeScript              | Kotlin                      | C#                        |
 | Language (FE)     | TypeScript (React)      | TypeScript (Vue 3)          | TypeScript (React)        |
 | Language (Mobile) | TypeScript (RN)         | Kotlin + Swift              | C# (Unity)                |
+| State Management  | Zustand                 | Pinia                       | Zustand                   |
 | API Style         | REST + WebSocket        | GraphQL                     | gRPC + REST               |
 | API Versioning    | URL path (`/v1/`)       | Schema evolution             | Proto package version     |
 | API Docs          | OpenAPI / Swagger       | GraphQL Playground          | Protobuf + Buf            |
@@ -590,6 +674,7 @@ All backends return a consistent error response format:
 | Design System     | Custom (canvas)         | Element Plus (extended)     | Custom (3D widgets)       |
 | Pagination        | Cursor-based            | Relay connections           | Offset-based              |
 | Rate Limiting     | Plan-based (SaaS)       | Enterprise fixed            | Upload + API limits       |
+| Data Access       | Repository (TypeORM)    | Repository (Exposed)        | Repository (EF Core)      |
 | Resilience        | Retry + Graceful        | Circuit Breaker + Bulkhead  | Retry + Backoff           |
 | Testing           | Jest + Playwright       | JUnit + Testcontainers      | xUnit + k6                |
 | Logging           | Pino                    | Logback                     | Serilog                   |
