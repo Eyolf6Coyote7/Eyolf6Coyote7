@@ -243,6 +243,9 @@ Each project uses a different Redis DB index to avoid key collisions.
 | `workflow.notifications` | Workflow | Async email/push notifications | 3 (by `recipient_id`) |
 | `asset3d.iot-sensor-data` | 3D Asset | IoT sensor readings (from MQTT bridge) | 6 (by `device_id`) |
 | `asset3d.asset-events` | 3D Asset | Asset upload, version, delete events | 3 (by `asset_id`) |
+| `analytics.whiteboard-events` | Whiteboard | board_created, drawing_started, ai_prompt_sent, export_pdf | 3 (by `user_id`) |
+| `analytics.workflow-events` | Workflow | workflow_created, step_approved, step_rejected, document_uploaded | 3 (by `user_id`) |
+| `analytics.asset3d-events` | 3D Asset | asset_uploaded, asset_viewed_3d, iot_alert_triggered | 3 (by `user_id`) |
 
 ### Kafka Design Patterns
 
@@ -321,14 +324,7 @@ GET /api/config/mobile
 ## Event Tracking / Analytics
 
 User behavior events are written to Kafka for analysis. No third-party analytics required.
-
-### Kafka Analytics Topics
-
-| Topic | Project | Events |
-|-------|---------|--------|
-| `analytics.whiteboard-events` | Whiteboard | board_created, drawing_started, ai_prompt_sent, export_pdf |
-| `analytics.workflow-events` | Workflow | workflow_created, step_approved, step_rejected, document_uploaded |
-| `analytics.asset3d-events` | 3D Asset | asset_uploaded, asset_viewed_3d, iot_alert_triggered |
+Topics are listed in the unified Kafka Topics table above.
 
 ### Event Schema
 
@@ -507,7 +503,7 @@ mc version enable local/3d-assets
 | Langfuse | ~0.3 GB | Low |
 | **Total (infra)** | **~3.1 GB** | |
 
-With all 3 backends + Ollama (7B, 4-bit) + Storybook: ~18 GB total. Fits in 32 GB.
+With all 3 backends (~1.5 GB) + Ollama 7B 4-bit (~5 GB) + Storybook (~0.5 GB): ~10 GB total. Fits comfortably in 32 GB.
 
 ---
 

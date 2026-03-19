@@ -100,7 +100,7 @@ Download: Client ← presigned URL ← Backend API ← MinIO
 | Workflow   | Form attachments, approval docs, reports    | `workflow-documents`|
 | 3D Asset   | GLB / FBX models, textures, scene files     | `3d-assets`         |
 
-> 3D Asset uses **chunked upload** for large files (50MB+) and **versioned buckets** for asset history.
+> 3D Asset uses **gRPC bidirectional streaming** for large files (50MB+) and **versioned buckets** for asset history.
 
 ---
 
@@ -326,20 +326,20 @@ graph TD
 
 **Industry:** Semiconductor / Manufacturing — approval and compliance system (think Jira + custom workflow engine)
 
-| Layer           | Tech                                     |
-| --------------- | ---------------------------------------- |
-| Web             | Vue 3 + Pinia + Element Plus             |
-| Admin Panel     | Vue 3 (user mgmt, config, analytics)    |
-| Mobile          | Kotlin (Android) + Swift (iOS) + WebView |
-| Backend         | Kotlin + Spring Boot                     |
-| API             | GraphQL                                  |
+| Layer           | Tech                                      |
+| --------------- | ----------------------------------------- |
+| Web             | Vue 3 + Pinia + Element Plus              |
+| Admin Panel     | Vue 3 (user mgmt, config, analytics)      |
+| Mobile          | Kotlin (Android) + Swift (iOS) + WebView  |
+| Backend         | Kotlin + Spring Boot                      |
+| API             | GraphQL                                   |
 | Workflow Engine | Temporal                                  |
 | Event Streaming | Kafka (KRaft)                             |
-| DB              | PostgreSQL                               |
-| Cache           | Redis                                    |
-| Storage         | MinIO                                    |
-| Auth            | Keycloak (OAuth2/OIDC + SSO + RBAC)     |
-| Feature Flags   | Unleash + Admin UI                       |
+| DB              | PostgreSQL                                |
+| Cache           | Redis                                     |
+| Storage         | MinIO                                     |
+| Auth            | Keycloak (OAuth2/OIDC + SSO + RBAC)      |
+| Feature Flags   | Unleash + Admin UI                        |
 
 **Key technical decisions:**
 
