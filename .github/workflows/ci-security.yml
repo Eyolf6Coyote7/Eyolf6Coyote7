@@ -1,0 +1,47 @@
+name: CI — Security
+
+on:
+  pull_request:
+    branches: [dev, stable]
+
+jobs:
+  sast:
+    name: SAST (Semgrep)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # TODO: Enable when projects have code
+      # - uses: returntocorp/semgrep-action@v1
+      #   with:
+      #     config: >-
+      #       p/owasp-top-ten
+      #       p/cwe-top-25
+      #       p/security-audit
+      - name: Semgrep (placeholder)
+        run: echo "Skipped — no application code yet"
+
+  sca:
+    name: SCA (Trivy)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # TODO: Enable when projects have lockfiles
+      # - uses: aquasecurity/trivy-action@master
+      #   with:
+      #     scan-type: fs
+      #     scan-ref: .
+      #     severity: CRITICAL,HIGH
+      #     exit-code: 1
+      - name: Trivy (placeholder)
+        run: echo "Skipped — no lockfiles yet"
+
+  secrets:
+    name: Secret Scan (gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

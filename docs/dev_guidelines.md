@@ -353,6 +353,69 @@ Target rules:
 
 ---
 
+## Security Scanning
+
+### Terminology
+
+| Term | Full Name | What It Is |
+|------|-----------|-----------|
+| **OWASP** | Open Web Application Security Project | Top 10 web vulnerability categories (Injection, XSS, etc.) |
+| **CWE** | Common Weakness Enumeration | Catalog of software weakness types (e.g. CWE-89: SQL Injection) |
+| **CVE** | Common Vulnerabilities and Exposures | Known vulnerability in a specific package version (e.g. CVE-2024-xxxxx) |
+| **CVSS** | Common Vulnerability Scoring System | Severity score 0-10 for a CVE (Critical ≥ 9.0, High ≥ 7.0, Medium ≥ 4.0, Low < 4.0) |
+| **SAST** | Static Application Security Testing | Scan source code for vulnerabilities (CWE) without running it |
+| **SCA** | Software Composition Analysis | Scan dependencies for known CVEs |
+| **DAST** | Dynamic Application Security Testing | Scan running application for vulnerabilities |
+
+### Scanning Layers
+
+| Layer | Tool | What It Finds | When |
+|-------|------|--------------|------|
+| **SAST** | Semgrep | Code vulnerabilities (CWE), OWASP patterns | Every PR (CI) |
+| **SCA** | Trivy | Dependency CVEs, license violations | Every PR (CI) + weekly |
+| **Secret Scan** | gitleaks | Hardcoded API keys, passwords, tokens | Every PR (CI) + pre-commit hook |
+| **Container Scan** | Trivy | Docker image CVEs | On image build |
+| **Quality** | Semgrep | Code smell, complexity, anti-patterns | Every PR (CI) |
+| **Perf** | k6 / Lighthouse | Performance regression | Before release |
+| **DAST** | OWASP ZAP | Runtime vulnerabilities | Before release (manual) |
+| **Claude Code Review** | Claude (local) | OWASP checklist, architecture risks, CWE patterns | Every PR (manual) |
+
+### CVSS-based Fix Priority
+
+| CVSS Score | Severity | Fix Deadline |
+|-----------|----------|-------------|
+| 9.0 - 10.0 | Critical | < 24 hours |
+| 7.0 - 8.9 | High | < 48 hours |
+| 4.0 - 6.9 | Medium | < 1 week |
+| 0.1 - 3.9 | Low | Next sprint |
+
+### CI Security Workflow
+
+```
+PR opened → GitHub Actions (ubuntu-latest):
+├─ Semgrep (SAST)        — scan changed files for CWE patterns
+├─ Trivy (SCA)           — scan lockfiles for dependency CVEs
+├─ gitleaks (secrets)    — scan diff for leaked credentials
+└─ Claude Code Review    — OWASP checklist + architecture risk (via gh pr comment)
+```
+
+### Claude Security Review Checklist
+
+When reviewing a PR, Claude also checks:
+
+| Category | Check |
+|----------|-------|
+| OWASP Injection | Parameterized queries? No string concatenation in SQL/NoSQL? |
+| OWASP Auth | Token validation? Expiry check? No hardcoded secrets? |
+| OWASP XSS | User input escaped? CSP headers? |
+| OWASP Access Control | Authorization check on every endpoint? Resource-level ACL? |
+| CWE-798 | No hardcoded credentials in code? |
+| CWE-327 | Using strong cryptography? No MD5/SHA1 for passwords? |
+| CWE-400 | Rate limiting on public endpoints? |
+| Data exposure | No sensitive data in logs? No PII in error responses? |
+
+---
+
 ## Incident Response / Runbook
 
 ### Severity Levels
