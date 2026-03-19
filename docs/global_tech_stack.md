@@ -426,7 +426,7 @@ Hexagonal Architecture (3D Asset):
 | **Backend** | Modular Monolith | Clean Arch + DDD + CQRS | Hexagonal |
 | **System** | BFF | EDA + Saga | EDA |
 | **State** | Zustand | Pinia | Zustand |
-| **Data Access** | Repository (TypeORM) | Repository (Exposed) | Repository (EF Core) |
+| **Data Access** | Repository (Prisma) | Repository (Exposed) | Repository (EF Core) |
 
 > Staff-level interview signal: "Why did you choose this architecture? What are the trade-offs?"
 
@@ -513,7 +513,7 @@ Demonstrates understanding of SOC 2 / ISO 27001 controls without formal certific
 
 | Risk                  | Mitigation                                | Project    |
 | --------------------- | ----------------------------------------- | ---------- |
-| Injection (SQL/NoSQL) | Parameterized queries, ORM (TypeORM / Exposed / EF Core) | All |
+| Injection (SQL/NoSQL) | Parameterized queries, ORM (Prisma / Exposed / EF Core) | All |
 | Broken Auth           | Keycloak (OAuth2), JWT validation, token expiry | All |
 | Sensitive Data Exposure | TLS in transit, MinIO encryption at rest | All |
 | XXE                   | Disable external entity parsing           | Workflow   |
@@ -543,12 +543,12 @@ Demonstrates understanding of SOC 2 / ISO 27001 controls without formal certific
 
 | Pattern              | Tech / Approach                          | Project    |
 | -------------------- | ---------------------------------------- | ---------- |
-| Migration            | TypeORM migrations                       | Whiteboard |
+| Migration            | Prisma Migrate                           | Whiteboard |
 | Migration            | Flyway                                   | Workflow   |
 | Migration            | EF Core migrations                       | 3D Asset   |
 | Indexing strategy     | Composite indexes on hot query paths     | All        |
 | Query optimization   | EXPLAIN ANALYZE, N+1 detection           | All        |
-| Connection pooling   | HikariCP / Npgsql / pg pool              | All        |
+| Connection pooling   | Prisma pool / HikariCP / Npgsql          | All        |
 | Soft delete          | `deleted_at` timestamp                   | Workflow   |
 | Optimistic locking   | Version column for concurrent edits      | 3D Asset   |
 
@@ -588,7 +588,7 @@ Each major technical choice is documented as an ADR in project docs.
 | Concern              | Approach                                  | Project    |
 | -------------------- | ----------------------------------------- | ---------- |
 | N+1 query detection  | DataLoader (GraphQL), eager loading       | Workflow   |
-| Connection pooling   | HikariCP / Npgsql / pg pool              | All        |
+| Connection pooling   | Prisma pool / HikariCP / Npgsql          | All        |
 | Throttling           | Cursor sync throttled to 60fps max       | Whiteboard |
 | Lazy loading         | Three.js progressive LOD for 3D models   | 3D Asset   |
 | Bundle size          | Code splitting, tree shaking             | All (web)  |
@@ -766,6 +766,55 @@ Service Level definitions for each project — demonstrates production-readiness
 
 ---
 
+## Build Pipeline / Toolchain
+
+| Project | Bundler | Runtime | Package Manager | Config |
+|---------|---------|---------|----------------|--------|
+| Whiteboard (Web) | Vite | Node.js 20 | pnpm | `vite.config.ts` |
+| Whiteboard (Mobile) | Metro (Expo) | Node.js 20 | pnpm | `metro.config.js` |
+| Workflow (Web) | Vite | Node.js 20 | pnpm | `vite.config.ts` |
+| Workflow (Backend) | Gradle (Kotlin) | JVM 21 | Gradle | `build.gradle.kts` |
+| 3D Asset (Web) | Vite | Node.js 20 | pnpm | `vite.config.ts` |
+| 3D Asset (Backend) | .NET SDK | .NET 8 | NuGet | `*.csproj` |
+| 3D Asset (Client) | Unity | Unity 2022 LTS | Unity Package Manager | `Packages/manifest.json` |
+
+### Why Vite
+
+| vs Webpack | Vite Advantage |
+|-----------|---------------|
+| Dev server startup | Instant (native ESM) vs slow (full bundle) |
+| HMR | < 50ms vs seconds |
+| Build | Rollup-based, tree-shaking |
+| Config | Minimal vs verbose |
+
+> All web frontends use **Vite**. Webpack is not used anywhere — Vite is the modern standard.
+
+### Monorepo Tooling
+
+```
+fullstack_ai_workspace/
+├─ packages/
+│   └─ shared/                  ← cross-project shared library
+│       ├─ src/
+│       │   ├─ validation/      ← input validation schemas (Zod)
+│       │   ├─ types/           ← shared TypeScript types
+│       │   ├─ utils/           ← date formatting, error helpers
+│       │   └─ constants/       ← shared constants, error codes
+│       ├─ package.json
+│       └─ tsconfig.json
+├─ realtime_ai_whiteboard/
+├─ enterprise_workflow_system/
+└─ 3d_asset_collaboration/
+```
+
+| Shared Library | What's Inside | Used By |
+|---------------|--------------|---------|
+| `@workspace/shared` | Zod schemas, TS types, error codes, date utils | Whiteboard (FE+BE), 3D Asset (FE) |
+
+> Workflow (Kotlin/Vue) can't use the TS shared lib directly — it defines its own Kotlin equivalents. But the **API contract types** (error codes, enum values) are kept in sync.
+
+---
+
 ## Design System
 
 Each project has its own component library, built on a shared design token foundation.
@@ -855,7 +904,7 @@ All backends return a consistent error response format:
 | Language (BE)     | TypeScript              | Kotlin                      | C#                        |
 | Language (FE)     | TypeScript (React)      | TypeScript (Vue 3)          | TypeScript (React)        |
 | Language (Mobile) | TypeScript (RN)         | Kotlin + Swift              | C# (Unity)                |
-| State Management  | Zustand                 | Pinia                       | Zustand                   |
+| State Management  | Zustand                 | Pinia                       | Redux Toolkit (RTK)       |
 | API Style         | REST + WebSocket        | GraphQL                     | gRPC + REST               |
 | API Versioning    | URL path (`/v1/`)       | Schema evolution             | Proto package version     |
 | API Docs          | OpenAPI / Swagger       | GraphQL Playground          | Protobuf + Buf            |
@@ -874,11 +923,14 @@ All backends return a consistent error response format:
 | Design System     | Custom (canvas)         | Element Plus (extended)     | Custom (3D widgets)       |
 | Pagination        | Cursor-based            | Relay connections           | Offset-based              |
 | Rate Limiting     | Plan-based (SaaS)       | Enterprise fixed            | Upload + API limits       |
-| Data Access       | Repository (TypeORM)    | Repository (Exposed)        | Repository (EF Core)      |
+| Data Access       | Repository (Prisma)     | Repository (Exposed)        | Repository (EF Core)      |
 | Resilience        | Retry + Graceful        | Circuit Breaker + Bulkhead  | Retry + Backoff           |
 | Testing           | Jest + Playwright       | JUnit + Testcontainers      | xUnit + k6                |
 | Logging           | Pino                    | Logback                     | Serilog                   |
-| DB Migration      | TypeORM                 | Flyway                      | EF Core                   |
+| ORM / DB Access   | Prisma                  | Exposed                     | EF Core                   |
+| DB Migration      | Prisma Migrate          | Flyway                      | EF Core Migrations        |
+| Bundler           | Vite                    | Vite + Gradle               | Vite + .NET SDK           |
+| Shared Library    | `@workspace/shared`     | Kotlin equivalents          | `@workspace/shared`       |
 
 > Every dimension uses a different approach across the three projects — maximum breadth for portfolio demonstration.
 > Each project targets a different industry to demonstrate domain adaptability.
