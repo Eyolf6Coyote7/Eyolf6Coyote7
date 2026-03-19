@@ -16,6 +16,7 @@ graph TD
     MQ[(Mosquitto<br/>:1883)]
     KF[(Kafka<br/>:9092)]
     UL[(Unleash<br/>:4242)]
+    MH[(MailHog<br/>:1025 / :8025)]
   end
 
   subgraph "Backend Services (host)"
@@ -35,6 +36,7 @@ graph TD
   WF --> KC
   WF --> KF
   WF --> UL
+  WF -->|send email| MH
   TD --> PG
   TD --> RD
   TD --> MIO
@@ -94,6 +96,8 @@ docker compose -f docker-compose.yml -f docker-compose.whiteboard.yml up -d
 | Kafka | 9092 | 9092 | — |
 | Kafka (controller) | 9093 | 9093 | — |
 | Unleash | 4242 | 4242 | http://localhost:4242 |
+| MailHog (SMTP) | 1025 | 1025 | — |
+| MailHog (Web UI) | 8025 | 8025 | http://localhost:8025 |
 
 ### Backend Services (run on host, not Docker)
 
@@ -155,6 +159,10 @@ KAFKA_CLUSTER_ID=local-workspace-cluster
 # Unleash
 UNLEASH_URL=http://localhost:4242/api
 UNLEASH_ADMIN_TOKEN=default:development.unleash-insecure-api-token
+
+# MailHog (local SMTP)
+SMTP_HOST=localhost
+SMTP_PORT=1025
 ```
 
 > **All passwords are for local development only.** Never use these in production.
@@ -171,6 +179,7 @@ UNLEASH_ADMIN_TOKEN=default:development.unleash-insecure-api-token
 | `MQTT_URL` | — | — | `mqtt://localhost:1883` |
 | `KAFKA_BOOTSTRAP_SERVERS` | — | `localhost:9092` | `localhost:9092` |
 | `UNLEASH_URL` | `http://localhost:4242/api` | `http://localhost:4242/api` | `http://localhost:4242/api` |
+| `SMTP_HOST` | — | `localhost:1025` | `localhost:1025` |
 | `PORT` | `4001` | `4002` | `4003` |
 
 ---
@@ -337,6 +346,49 @@ The Workflow project includes an admin dashboard for managing the system.
 
 ---
 
+## Email (MailHog)
+
+MailHog intercepts all outgoing SMTP email locally — no real emails are sent.
+
+| Feature | How |
+|---------|-----|
+| View emails | Web UI at http://localhost:8025 |
+| SMTP server | `localhost:1025` — all backends point here |
+| API | `GET http://localhost:8025/api/v2/messages` |
+
+### Email Use Cases
+
+| Project | Email Type | Trigger |
+|---------|-----------|---------|
+| Workflow | Approval notification | Kafka notification worker → SMTP → MailHog |
+| Workflow | 2FA verification code | Keycloak → SMTP → MailHog |
+| 3D Asset | Asset shared notification | Backend → SMTP → MailHog |
+
+---
+
+## Two-Factor Authentication (2FA)
+
+| Method | Tech | Project |
+|--------|------|---------|
+| **TOTP** (Time-based One-Time Password) | Keycloak built-in | Workflow (all users) |
+| **Email OTP** | Keycloak → MailHog | Workflow (fallback) |
+| **SMS Mock** | Log to console (no real SMS) | — (optional) |
+
+### How It Works
+
+```
+1. User enables 2FA in profile settings
+2. Keycloak shows QR code (TOTP secret)
+3. User scans with Google Authenticator / Authy
+4. On next login: password + 6-digit TOTP code
+5. Fallback: email OTP sent via MailHog
+```
+
+> TOTP is the industry standard for 2FA. Compatible with Google Authenticator, Authy, 1Password.
+> Keycloak handles the entire 2FA flow — no custom implementation needed.
+
+---
+
 ## MinIO Buckets
 
 | Bucket | Project | Versioned |
@@ -367,9 +419,10 @@ mc version enable local/3d-assets
 | Mosquitto | ~0.1 GB | Low |
 | Kafka (KRaft) | ~0.5 GB | Medium |
 | Unleash | ~0.3 GB | Low |
-| **Total (infra)** | **~2.4 GB** | |
+| MailHog | ~0.1 GB | Low |
+| **Total (infra)** | **~2.5 GB** | |
 
-With all 3 backends + Ollama (7B model): ~14 GB total. Fits comfortably in 32 GB.
+With all 3 backends + Ollama (7B model) + Storybook: ~15 GB total. Fits comfortably in 32 GB.
 
 ---
 

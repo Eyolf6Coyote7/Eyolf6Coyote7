@@ -40,6 +40,8 @@ All three projects connect to the same local services via Docker Compose.
 | Event Streaming| Kafka (KRaft mode)        | Event bus for Workflow + 3D Asset        |
 | IoT Broker     | Mosquitto (MQTT)          | IoT sensor ingestion (3D Asset project)  |
 | Feature Flags  | Unleash                   | Feature toggles, A/B testing, kill switch|
+| Email (local)  | MailHog                   | Local SMTP server — intercepts all emails|
+| 2FA            | Keycloak (TOTP)           | Two-factor auth via Google Authenticator |
 | Container      | Docker Compose            | One command to start everything          |
 
 ---
@@ -102,7 +104,23 @@ Download: Client ← presigned URL ← Backend API ← MinIO
 
 ---
 
-## System Overview (14 Systems)
+## System Overview (16 Systems)
+
+### Shared — 1 System
+
+```mermaid
+graph LR
+  CLIENT[Web / Mobile / Unity] --> GW[API Gateway<br/>Go]
+  GW -->|:4001| WB[Whiteboard API]
+  GW -->|:4002| WF[Workflow API]
+  GW -->|:4003| TDA[3D Asset API]
+```
+
+| System | Tech | Purpose |
+|--------|------|---------|
+| API Gateway | **Go** (net/http + middleware) | Unified entry point, routing, rate limiting, auth token validation, request logging |
+
+> Go is chosen for the gateway because of its low latency, small memory footprint, and excellent concurrency model — ideal for a proxy layer.
 
 ### Whiteboard — 4 Systems
 
@@ -191,6 +209,7 @@ graph TD
 
   subgraph "Backend"
     AAPI[Asset API<br/>ASP.NET Core]
+    AI_SVC[AI Inference Service<br/>Python + ONNX]
     IOT_C[IoT Consumer<br/>Kafka consumer]
   end
 
@@ -216,6 +235,7 @@ graph TD
   AAPI --> MIO
   AAPI --> KF
   AAPI --> UL
+  AAPI -->|inference request| AI_SVC
   DEVICES[IoT Devices] -->|MQTT| MQTT
   MQTT --> IOT_B
   IOT_B -->|produce| KF
@@ -230,8 +250,9 @@ graph TD
 |---------|------------|---------|---------------|-------|
 | Whiteboard | 2 (Web, Mobile) | 1 (BFF + API) | 1 (AI Worker) | **4** |
 | Workflow | 3 (Employee, Admin, Mobile) | 1 (Workflow API) | 1 (Notification Worker) | **5** |
-| 3D Asset | 2 (Portal, Unity) | 1 (Asset API) | 2 (IoT Ingestion, IoT Consumer) | **5** |
-| **Total** | **7** | **3** | **4** | **14** |
+| 3D Asset | 2 (Portal, Unity) | 1 (Asset API) | 3 (AI Service, IoT Ingestion, IoT Consumer) | **6** |
+| Shared | — | 1 (API Gateway) | — | **1** |
+| **Total** | **7** | **4** | **5** | **16** |
 
 ---
 
@@ -320,7 +341,7 @@ graph TD
 | Storage         | MinIO (versioned)            |
 | Auth            | API Key + JWT + Resource ACL |
 | Feature Flags   | Unleash                      |
-| AI (opt)        | Python + ONNX Runtime        |
+| AI Service      | Python + FastAPI + ONNX Runtime |
 
 **Key technical decisions:**
 
@@ -817,13 +838,34 @@ fullstack_ai_workspace/
 
 ## Design System
 
-Each project has its own component library, built on a shared design token foundation.
+Each project has its own component library with Storybook for documentation and visual testing.
 
-| Project | Framework | Component Library | Tokens |
-|---------|----------|------------------|--------|
-| Whiteboard | React | Custom components (canvas-focused) | CSS variables |
-| Workflow | Vue 3 | Element Plus (extended) | CSS variables |
-| 3D Asset | React | Custom components (3D viewer widgets) | CSS variables |
+| Project | Framework | Component Library | Storybook | Tokens |
+|---------|----------|------------------|-----------|--------|
+| Whiteboard | React | Custom components (canvas-focused) | ✅ `localhost:6006` | CSS variables |
+| Workflow | Vue 3 | Element Plus (extended) | ✅ `localhost:6007` | CSS variables |
+| 3D Asset | React | Custom components (3D viewer widgets) | ✅ `localhost:6008` | CSS variables |
+
+### Storybook
+
+Each project runs its own Storybook instance for component development and documentation.
+
+```bash
+# Start Storybook per project
+cd realtime_ai_whiteboard/web && npm run storybook    # :6006
+cd enterprise_workflow_system/web && npm run storybook # :6007
+cd 3d_asset_collaboration/web && npm run storybook     # :6008
+```
+
+| Feature | What It Does |
+|---------|-------------|
+| Component catalog | Browse all UI components in isolation |
+| Visual testing | Chromatic or Percy for visual regression (optional) |
+| Interaction testing | `@storybook/test` for component-level tests |
+| Docs | Auto-generated props/API documentation |
+| Accessibility | `@storybook/addon-a11y` for WCAG checks per component |
+
+> Staff-level interview signal: "How do you maintain UI consistency across a large codebase?"
 
 **Shared design tokens** (colors, spacing, typography) are defined in a `tokens/` directory and consumed by all frontends:
 
@@ -901,7 +943,7 @@ All backends return a consistent error response format:
 | FE Architecture   | Feature-based + Flux    | MVVM                        | Clean Architecture        |
 | BE Architecture   | Modular Monolith        | Clean Arch + DDD + CQRS     | Hexagonal (Ports & Adapters) |
 | System Pattern    | BFF                     | EDA + Saga                  | EDA                       |
-| Language (BE)     | TypeScript              | Kotlin                      | C#                        |
+| Language (BE)     | TypeScript              | Kotlin                      | C# + Python (AI) + Go (Gateway) |
 | Language (FE)     | TypeScript (React)      | TypeScript (Vue 3)          | TypeScript (React)        |
 | Language (Mobile) | TypeScript (RN)         | Kotlin + Swift              | C# (Unity)                |
 | State Management  | Zustand                 | Pinia                       | Redux Toolkit (RTK)       |
@@ -921,6 +963,8 @@ All backends return a consistent error response format:
 | i18n              | react-i18next           | vue-i18n                    | Unity Localization        |
 | a11y              | WCAG 2.1 AA             | WCAG 2.1 AA                 | WCAG 2.1 AA              |
 | Design System     | Custom (canvas)         | Element Plus (extended)     | Custom (3D widgets)       |
+| Storybook         | ✅ :6006                | ✅ :6007                    | ✅ :6008                  |
+| Email / 2FA       | —                       | MailHog + Keycloak TOTP     | MailHog                   |
 | Pagination        | Cursor-based            | Relay connections           | Offset-based              |
 | Rate Limiting     | Plan-based (SaaS)       | Enterprise fixed            | Upload + API limits       |
 | Data Access       | Repository (Prisma)     | Repository (Exposed)        | Repository (EF Core)      |
