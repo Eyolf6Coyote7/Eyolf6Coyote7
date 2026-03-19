@@ -250,6 +250,10 @@ gh pr create \
 
 - <file/module>: <what changed>
 
+## Design
+
+<Figma link if UI changes, or "N/A">
+
 ## Test Plan
 
 <How to test, or "N/A">
