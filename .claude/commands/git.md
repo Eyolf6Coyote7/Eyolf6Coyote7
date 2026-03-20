@@ -51,6 +51,7 @@ git config user.email "mickey985ha@gmail.com"
 > Feature branches always branch from `dev` and PR back to `dev`.
 > Claude must ALWAYS review after creating a PR — never skip.
 > After fixing review comments, re-read Gemini comments to ensure nothing is missed.
+> **Never auto-commit.** Always ask the user before committing. Make changes → ask "要 commit 嗎？" → user confirms → then commit + push.
 
 ---
 

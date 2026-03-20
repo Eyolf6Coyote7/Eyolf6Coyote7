@@ -23,7 +23,7 @@ Three full-stack projects targeting different industries, each with a different 
 | **Feature Flags**| Unleash                   | Unleash + Admin UI         | Unleash                  |
 | **Remote Config**| Theme + AI toggle         | White-label branding       | Unity scene defaults     |
 | **Analytics**    | Kafka events              | Kafka events + Admin       | Kafka events             |
-| **AI**           | Ollama + LangChain        | —                          | ONNX Runtime (opt)       |
+| **AI**           | LangGraph Agent + RAG + MCP | —                        | Python + ONNX Runtime    |
 
 ---
 
@@ -136,11 +136,13 @@ graph TD
     AIS[AI Service<br/>LangChain + MCP]
   end
 
-  subgraph "AI Pipeline"
+  subgraph "AI Agent (LangGraph State Machine)"
     IC[Intent Classifier]
+    PLAN[Plan - ReAct]
     RAG[RAG Assembler]
     LLM[Ollama<br/>Quantized LLM]
     MCP_S[MCP Server]
+    REFLECT[Reflect + Retry]
     FT[Fine-tune Pipeline<br/>LoRA + HuggingFace]
   end
 
@@ -163,15 +165,18 @@ graph TD
   BFF -->|enqueue AI task| RD
   AIS -->|consume stream| RD
   AIS --> IC
-  IC -->|info retrieval| RAG
-  IC -->|action needed| MCP_S
+  IC --> PLAN
+  PLAN -->|info retrieval| RAG
+  PLAN -->|action needed| MCP_S
   RAG --> EMB
   EMB --> VDB
   RAG --> LLM
   MCP_S -->|User Tool| PG
   MCP_S -->|Data Tool| PG
   MCP_S -->|Task Tool| BFF
-  LLM --> LF
+  LLM --> REFLECT
+  REFLECT -->|retry| PLAN
+  REFLECT -->|done| LF
   FT -->|update weights| LLM
   AIS -->|store result| PG
 ```
@@ -296,12 +301,59 @@ graph TD
 | Storage      | MinIO                        |
 | Auth         | JWT + Anonymous Guest        |
 | Feature Flags| Unleash                      |
+| AI Agent     | LangGraph (state machine for agents) |
 | AI / LLM     | Ollama (quantized) + LangChain |
 | RAG          | Embedding → ChromaDB → RAG Assembler |
 | MCP          | MCP Server (User / Data / Task tools) |
+| Agent Memory | Redis (short-term) + ChromaDB (long-term) |
 | Fine-tuning  | HuggingFace + LoRA           |
+| AI Streaming | SSE / WebSocket (typing effect) |
 | LLM Observability | Langfuse                |
 | Vector DB    | ChromaDB                     |
+
+**AI Stack Relationship:**
+
+```
+LangGraph (agent state machine — controls flow)
+  └─ LangChain (foundation — LLM calls, tools, RAG chains)
+       └─ Ollama (local LLM runtime — serves quantized models)
+       └─ ChromaDB (vector DB — RAG retrieval)
+       └─ MCP Server (tool execution)
+  └─ Langfuse (observability — traces every state transition, LLM call, tool use)
+```
+
+> LangGraph builds on top of LangChain. Langfuse is independent but hooks into LangChain callbacks to trace everything.
+
+**AI Agent State Machine (LangGraph):**
+
+```
+┌─────────┐
+│  Idle   │ ← waiting for user input
+└────┬────┘
+     │ user message
+┌────▼─────┐
+│Understand│ ← intent classification + context analysis
+└────┬─────┘
+     │
+┌────▼────┐
+│  Plan   │ ← decompose into steps (ReAct pattern)
+└────┬────┘
+     │
+┌────▼────┐     ┌───────────┐
+│ Execute │────►│ Tool Call │ (MCP: create board, search, export)
+└────┬────┘     └───────────┘
+     │
+┌────▼────┐
+│ Reflect │ ← evaluate result quality, retry if needed
+└────┬────┘
+     │ retry → back to Plan
+     │ done ↓
+┌────▼────┐
+│ Respond │ ← generate final response, stream via SSE
+└─────────┘
+```
+
+Each state transition is traced in Langfuse for observability.
 
 **Key technical decisions:**
 
@@ -310,10 +362,14 @@ graph TD
 | Multi-user editing conflicts | CRDT (Yjs) — conflict-free, no central lock    |
 | Scale to multiple servers  | Redis Pub/Sub bridges WebSocket instances        |
 | AI without cloud API costs | Ollama runs quantized LLM locally               |
-| AI context awareness       | RAG — embed board content into ChromaDB, retrieve relevant context for prompts |
-| AI tool execution          | MCP Server — LLM decides when to call tools (create board, search, export) |
+| AI is stateless chatbot    | LangGraph state machine — agent can plan, execute, reflect, retry |
+| AI multi-step reasoning    | ReAct pattern — interleave reasoning + action in a loop |
+| AI context awareness       | RAG — embed board content into ChromaDB, retrieve relevant context |
+| AI tool execution          | MCP Server — agent decides when to call tools (create board, search, export) |
+| AI conversation memory     | Redis (short-term chat history) + ChromaDB (long-term user preferences) |
 | AI quality improvement     | LoRA fine-tuning on user feedback via HuggingFace pipeline |
-| AI observability           | Langfuse traces every LLM call (latency, tokens, cost, quality) |
+| AI response UX             | SSE streaming — token-by-token typing effect, not wait-for-full-response |
+| AI observability           | Langfuse traces every state transition (latency, tokens, quality) |
 | Intent routing             | Classifier routes to info retrieval (RAG) or action execution (MCP) |
 | One codebase, two platforms| React + React Native shared business logic       |
 | Multi-tenancy (SaaS)      | Schema-per-tenant in PostgreSQL — data isolation |
