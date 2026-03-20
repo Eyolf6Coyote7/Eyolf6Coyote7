@@ -311,6 +311,19 @@ graph TD
 | LLM Observability | Langfuse                |
 | Vector DB    | ChromaDB                     |
 
+**AI Stack Relationship:**
+
+```
+LangGraph (agent state machine — controls flow)
+  └─ LangChain (foundation — LLM calls, tools, RAG chains)
+       └─ Ollama (local LLM runtime — serves quantized models)
+       └─ ChromaDB (vector DB — RAG retrieval)
+       └─ MCP Server (tool execution)
+  └─ Langfuse (observability — traces every state transition, LLM call, tool use)
+```
+
+> LangGraph builds on top of LangChain. Langfuse is independent but hooks into LangChain callbacks to trace everything.
+
 **AI Agent State Machine (LangGraph):**
 
 ```
