@@ -357,6 +357,19 @@ graph LR
 |------|----------|---------|
 | `file:line` | ⚠️ warning / 💡 suggestion / ✅ good | description |
 
+### Security Scan
+| Check | Status | Detail |
+|-------|--------|--------|
+| OWASP Injection | ✅ / ⚠️ | (parameterized queries, no string concat in SQL) |
+| OWASP Auth | ✅ / ⚠️ | (token validation, expiry, no hardcoded secrets) |
+| OWASP XSS | ✅ / ⚠️ | (input escaped, CSP headers) |
+| OWASP Access Control | ✅ / ⚠️ | (authz on every endpoint, resource ACL) |
+| CWE-798 Hardcoded Creds | ✅ / ⚠️ | (no secrets in code) |
+| CWE-400 Resource Limits | ✅ / ⚠️ | (rate limiting, input size limits) |
+| Data Exposure | ✅ / ⚠️ | (no PII in logs or error responses) |
+
+(Skip security scan section for docs-only PRs)
+
 ### Risk Level
 🟢 Low / 🟡 Medium / 🔴 High — with one-line reasoning
 ```
