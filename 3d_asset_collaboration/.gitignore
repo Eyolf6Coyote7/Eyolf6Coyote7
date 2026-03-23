@@ -1,0 +1,47 @@
+# .NET / C#
+bin/
+obj/
+*.user
+*.suo
+*.csproj.user
+packages/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+
+# Unity
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+UserSettings/
+MemoryCaptures/
+Recording/
+*.cginc
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+sysinfo.txt
+
+# Node (web frontend)
+node_modules/
+dist/
+
+# Storybook
+storybook-static/
+
+# Testing
+coverage/
+TestResults/
+
+# Environment
+.env
+.env.local
