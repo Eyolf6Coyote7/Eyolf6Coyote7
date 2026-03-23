@@ -137,6 +137,177 @@ graph TD
   CTRL_DASH --> PG
 ```
 
+### Level 3: Component Diagram (Employee Portal — Vue 3)
+
+```mermaid
+graph TD
+  subgraph "Employee Portal (Vue 3 + Element Plus)"
+    ROUTER_E[Vue Router<br/>Pages + Guards]
+    STORE_E[Pinia Stores<br/>auth, requests, approvals, ui]
+    GQL_CLIENT[GraphQL Client<br/>Apollo or urql]
+    FORM[Dynamic Form Renderer<br/>JSON Schema → Vue components]
+    TIMELINE[Status Timeline<br/>Approval chain visualization]
+    NOTIF[Notification Center<br/>Toast + badge]
+    I18N_E[i18n<br/>vue-i18n]
+    API_E[API Client<br/>Real / Mock switching]
+  end
+
+  ROUTER_E --> STORE_E
+  ROUTER_E --> FORM
+  ROUTER_E --> TIMELINE
+  STORE_E --> API_E
+  API_E --> GQL_CLIENT
+  GQL_CLIENT -->|GraphQL| WF_API[Workflow API]
+  NOTIF --> STORE_E
+```
+
+#### Employee Portal — Key Modules
+
+| Module | Responsibility | Key Libraries |
+|--------|---------------|---------------|
+| Router | Page routing, auth guards (Keycloak redirect) | Vue Router v4 |
+| Stores | Global state (auth, requests, approvals, UI) | Pinia |
+| GraphQL Client | Query/mutation/subscription to Workflow API | Apollo Client or urql |
+| Dynamic Form | Render form from template JSON schema | VeeValidate + Zod |
+| Status Timeline | Visual approval chain (dots + lines + status) | Custom component |
+| Notification Center | Toast messages + unread badge count | Element Plus ElNotification |
+| i18n | Multi-language (en, zh-TW) | vue-i18n |
+| API Client | Real/mock switching by env | Wrapper for GraphQL client; Axios for file uploads only |
+
+#### Employee Portal — Route Structure
+
+| Route | Page | Auth |
+|-------|------|------|
+| `/auth` | Keycloak SSO redirect | Public |
+| `/` | Dashboard (stats + my requests) | JWT (Keycloak) |
+| `/request/new` | New Request (template selector + form) | JWT |
+| `/request/:id` | Request Detail (timeline + attachments) | JWT |
+| `/approvals` | Approval Queue (filterable list) | JWT (manager+) |
+| `/history` | My History (past requests) | JWT |
+| `/profile` | Profile + 2FA settings | JWT |
+
+### Level 3: Component Diagram (Admin Dashboard — Vue 3)
+
+```mermaid
+graph TD
+  subgraph "Admin Dashboard (Vue 3 + Element Plus)"
+    ROUTER_A[Vue Router<br/>Admin pages + role guard]
+    STORE_A[Pinia Stores<br/>users, templates, audit, config]
+    TMPL_EDITOR[Template Editor<br/>Drag-and-drop step builder]
+    AUDIT_VIEWER[Audit Log Viewer<br/>Filterable table + export]
+    KPI_DASH[KPI Dashboard<br/>ECharts charts]
+    USER_MGMT[User Management<br/>CRUD table + role editor]
+    CONFIG_EDITOR[Config Editor<br/>Branding + notification templates]
+    API_A[API Client<br/>REST to Admin API (Laravel)]
+  end
+
+  ROUTER_A --> STORE_A
+  ROUTER_A --> TMPL_EDITOR
+  ROUTER_A --> AUDIT_VIEWER
+  ROUTER_A --> KPI_DASH
+  ROUTER_A --> USER_MGMT
+  ROUTER_A --> CONFIG_EDITOR
+  API_A -->|REST| ADM_API[Admin API - Laravel]
+```
+
+#### Admin Dashboard — Key Modules
+
+| Module | Responsibility | Key Libraries |
+|--------|---------------|---------------|
+| Router | Admin pages, role-based guard (admin only) | Vue Router v4 |
+| Stores | Admin state (users, templates, audit, config) | Pinia |
+| Template Editor | Drag-and-drop workflow step builder | vuedraggable + custom |
+| Audit Log Viewer | Filterable table, date range, export CSV/PDF | Element Plus ElTable |
+| KPI Dashboard | Charts (turnaround time, volume, escalation rate) | ECharts |
+| User Management | CRUD table, role badges, invite | Element Plus ElTable + ElDialog |
+| Config Editor | Branding (colors, logo), notification templates | Custom form |
+| API Client | REST calls to Laravel Admin API | Axios |
+
+#### Admin Dashboard — Route Structure
+
+| Route | Page | Auth |
+|-------|------|------|
+| `/admin` | KPI Dashboard | JWT (admin) |
+| `/admin/users` | User Management | JWT (admin) |
+| `/admin/templates` | Workflow Templates List | JWT (admin) |
+| `/admin/templates/:id` | Template Editor | JWT (admin) |
+| `/admin/audit` | Audit Log Viewer | JWT (admin) |
+| `/admin/features` | Feature Toggle Management | JWT (admin) |
+| `/admin/config` | Remote Config Editor | JWT (admin) |
+
+### Level 3: Component Diagram (Mobile App — Kotlin + Swift)
+
+```mermaid
+graph TD
+  subgraph "Mobile App"
+    subgraph "Shared Architecture (MVVM)"
+      VM_AUTH[AuthViewModel<br/>Keycloak SSO + 2FA]
+      VM_QUEUE[ApprovalQueueViewModel<br/>Pending items]
+      VM_DETAIL[RequestDetailViewModel<br/>Steps + attachments]
+      VM_REQUESTS[MyRequestsViewModel<br/>History]
+      REPO_M[Repository Layer<br/>API + Local Cache]
+    end
+
+    subgraph "Android (Kotlin)"
+      NAV_A[Jetpack Navigation<br/>Bottom nav + stack]
+      UI_A[Jetpack Compose<br/>Material 3]
+      OFFLINE_A[Room DB<br/>Offline queue]
+      PUSH_A[FCM<br/>Firebase Messaging]
+    end
+
+    subgraph "iOS (Swift)"
+      NAV_I[UIKit Navigation<br/>Tab bar + stack]
+      UI_I[SwiftUI<br/>Views]
+      OFFLINE_I[Core Data<br/>Offline queue]
+      PUSH_I[APNs<br/>Push Notifications]
+    end
+  end
+
+  VM_QUEUE --> REPO_M
+  VM_DETAIL --> REPO_M
+  REPO_M -->|GraphQL| API[Workflow API]
+  REPO_M --> OFFLINE_A
+  REPO_M --> OFFLINE_I
+```
+
+#### Mobile App — Key Modules
+
+| Module | Android (Kotlin) | iOS (Swift) |
+|--------|-----------------|-------------|
+| Architecture | MVVM + Repository | MVVM + Repository |
+| UI Framework | Jetpack Compose + Material 3 | SwiftUI |
+| Navigation | Jetpack Navigation (bottom nav + stack) | UIKit TabBarController + NavigationController |
+| GraphQL | Apollo Kotlin | Apollo iOS |
+| Offline Cache | Room DB (SQLite) | Core Data |
+| Push | FCM (Firebase Cloud Messaging) | APNs |
+| Auth | Keycloak AppAuth (OAuth2 PKCE) | Keycloak AppAuth |
+| Swipe Actions | `SwipeToDismiss` composable | `UISwipeActionsConfiguration` |
+| Haptics | `HapticFeedbackConstants` | `UIImpactFeedbackGenerator` |
+
+#### Mobile App — Navigation Structure
+
+| Tab | Screens | Auth |
+|-----|---------|------|
+| Home | Dashboard → Request Detail | JWT (Keycloak) |
+| Approvals | Approval Queue → Request Detail → Approve/Reject | JWT (manager+) |
+| My Requests | Request List → Request Detail | JWT |
+| Profile | Profile + 2FA + Notification Settings | JWT |
+
+#### Mobile App — Offline Strategy
+
+```
+Online:
+  GraphQL query → API → display
+
+Offline:
+  Data request → Room/CoreData cache → display
+  Approve action → queue in local DB
+
+Reconnect:
+  Sync queued approvals → API
+  Refresh cache from API
+```
+
 ## Component Overview
 
 | Component | Tech | System | Responsibility |
