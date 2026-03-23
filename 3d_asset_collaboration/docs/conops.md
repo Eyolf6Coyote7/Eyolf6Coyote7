@@ -166,8 +166,8 @@ Flow:
 
 ## ADRs Created
 
-- ADR-0001: Why gRPC over REST for large file transfer
-- ADR-0002: Why Three.js over embedded Unity for browser 3D preview
-- ADR-0003: Why MQTT → Kafka bridge instead of direct Kafka from IoT devices
-- ADR-0004: Why Elasticsearch over PostgreSQL full-text search for asset discovery
-- ADR-0005: Why TimescaleDB over plain PostgreSQL for IoT time-series data
+- [ADR-0001: Why gRPC over REST for large file transfer](adrs/ADR-0001-why-grpc-for-file-transfer.md)
+- [ADR-0002: Why Three.js over embedded Unity for browser 3D preview](adrs/ADR-0002-why-threejs-over-unity-web.md)
+- [ADR-0003: Why MQTT → Kafka bridge instead of direct Kafka from IoT devices](adrs/ADR-0003-why-mqtt-kafka-bridge.md)
+- [ADR-0004: Why Elasticsearch over PostgreSQL full-text search for asset discovery](adrs/ADR-0004-why-elasticsearch-over-pg-search.md)
+- [ADR-0005: Why TimescaleDB over plain PostgreSQL for IoT time-series data](adrs/ADR-0005-why-timescaledb-for-iot.md)
