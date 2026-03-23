@@ -147,6 +147,6 @@ Flow:
 
 ## ADRs Created
 
-- ADR-0001: Why Yjs (CRDT) over Operational Transform for collaborative editing
-- ADR-0002: Why Ollama over cloud LLM APIs for AI inference
-- ADR-0003: Why schema-per-tenant over row-level for multi-tenancy
+- [ADR-0001: Why Yjs (CRDT) over Operational Transform for collaborative editing](adrs/ADR-0001-why-yjs-over-ot.md)
+- [ADR-0002: Why Ollama over cloud LLM APIs for AI inference](adrs/ADR-0002-why-ollama-over-cloud-llm.md)
+- [ADR-0003: Why schema-per-tenant over row-level for multi-tenancy](adrs/ADR-0003-why-schema-per-tenant.md)
