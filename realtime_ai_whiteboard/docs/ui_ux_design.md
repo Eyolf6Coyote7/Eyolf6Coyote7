@@ -68,7 +68,7 @@ Every screen must have these states designed in Figma:
 | Toolbar | Left side, vertical, icon-only with tooltip on hover |
 | AI Panel | Right side drawer, toggleable. 350px width. |
 | Canvas zoom | Scroll wheel + pinch. Zoom controls bottom-left. |
-| Keyboard shortcuts | `V` select, `R` rectangle, `T` text, `Space` pan, `Cmd+Z` undo |
+| Keyboard shortcuts | `V` select, `R` rectangle, `T` text, `Space` pan, `Cmd+Z` undo, `Cmd+Shift+Z` redo |
 | Drag & drop | HTML5 DnD for image upload onto canvas |
 | Multi-select | Click + drag to marquee select, Shift+click to add |
 
@@ -112,6 +112,8 @@ Every screen must have these states designed in Figma:
 | Back | Swipe from left edge | System back button |
 | Pull to refresh | UIRefreshControl on board list | SwipeRefreshLayout |
 | Haptics | Light haptic on tool selection | HapticFeedbackConstants |
+| Selection | Tap element to select, long-press for context menu | Same |
+| Image upload | Tap image tool → camera or gallery picker | Same |
 
 ### Mobile Layout
 
@@ -127,9 +129,11 @@ Every screen must have these states designed in Figma:
 │                          │
 │                          │
 ├──────────────────────────┤
-│ ○ □ △ ─ T 📝 ✏️ AI     │  ← Floating toolbar
+│[Select][Rect][Circle][Line]│
+│[Arrow][Text][Sticky][Draw]│  ← Floating toolbar
+│         [AI]              │
 ├──────────────────────────┤
-│ 🏠  🔍  ➕  ⚙️          │  ← Tab bar
+│[Home] [Search] [+] [Settings]│  ← Tab bar
 └──────────────────────────┘
 ```
 
