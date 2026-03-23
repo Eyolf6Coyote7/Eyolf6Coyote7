@@ -417,10 +417,10 @@ import { IndexeddbPersistence } from 'y-indexeddb'
 
 const doc = new Y.Doc()
 const elementsMap = doc.getMap('elements')  // Shared CRDT map
-const awareness = provider.awareness        // Cursor presence
 
 // WebSocket sync (realtime)
 const wsProvider = new WebsocketProvider(WS_URL, boardId, doc)
+const awareness = wsProvider.awareness      // Cursor presence
 
 // IndexedDB persistence (offline)
 const idbProvider = new IndexeddbPersistence(boardId, doc)
@@ -441,12 +441,20 @@ export function streamAIResponse(taskId: string, onToken: (text: string) => void
   const source = new EventSource(`/api/web/ai/stream/${taskId}`)
 
   source.addEventListener('token', (e) => {
-    onToken(JSON.parse(e.data).text)
+    try {
+      onToken(JSON.parse(e.data).text)
+    } catch (error) {
+      console.error('Error parsing token event:', error)
+    }
   })
 
   source.addEventListener('tool_call', (e) => {
-    const { tool, args } = JSON.parse(e.data)
-    // Handle MCP tool execution result on canvas
+    try {
+      const { tool, args } = JSON.parse(e.data)
+      // Handle MCP tool execution result on canvas
+    } catch (error) {
+      console.error('Error parsing tool_call event:', error)
+    }
   })
 
   source.addEventListener('done', () => {
@@ -549,16 +557,27 @@ function RootNavigator() {
 ```typescript
 // src/notifications/push.ts
 import * as Notifications from 'expo-notifications'
+import { api } from '../api'
 
-// Register device token
-const token = (await Notifications.getExpoPushTokenAsync()).data
-await api.registerPushToken(token)
+export async function registerForPushNotificationsAsync() {
+  try {
+    const token = (await Notifications.getExpoPushTokenAsync()).data
+    await api.registerPushToken(token)
+  } catch (error) {
+    console.error('Failed to register for push notifications', error)
+  }
+}
 
-// Handle incoming notification
-Notifications.addNotificationResponseReceivedListener(response => {
-  const { boardId } = response.notification.request.content.data
-  navigation.navigate('Board', { id: boardId })
-})
+// Call in root navigation component where navigation is available
+export function setupNotificationListener(navigation) {
+  const subscription = Notifications.addNotificationResponseReceivedListener(response => {
+    const boardId = response.notification.request.content.data?.boardId
+    if (boardId) {
+      navigation.navigate('Board', { id: boardId })
+    }
+  })
+  return () => subscription.remove() // Cleanup
+}
 ```
 
 ### Offline Strategy
