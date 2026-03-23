@@ -101,11 +101,11 @@ Defines **what** to build — features, user stories, acceptance criteria.
 | Return | [why they come back] | Push / Email | Satisfied | |
 
 ## Feature List
-| # | Feature | Priority | Status | Analytics Event |
-|---|---------|----------|--------|----------------|
-| F1 | [name] | P0 (must-have) | Planned | [event_name] |
-| F2 | [name] | P1 (should-have) | Planned | [event_name] |
-| F3 | [name] | P2 (nice-to-have) | Planned | [event_name] |
+| # | Feature | Priority | Platform | System | Status | Analytics Event |
+|---|---------|----------|----------|--------|--------|----------------|
+| F1 | [name] | P0 | Web + Mobile | BFF + API | Planned | [event_name] |
+| F2 | [name] | P1 | Web (Admin) | Admin API | Planned | [event_name] |
+| F3 | [name] | P2 | Mobile only | Mobile App | Planned | [event_name] |
 
 ## Feature Details
 
@@ -199,13 +199,62 @@ Defines **how it looks and feels** — Figma as single source of truth, design s
 10. Storybook             → Each component matches Figma 1:1
 ```
 
-## Screen Inventory
+## Web UI
 
+### Screen Inventory (Web)
 | Screen | Route | System | Figma Page | Status |
 |--------|-------|--------|-----------|--------|
 | | | | | Draft / Review / Final |
 
-### Screen States (every screen must define all states)
+### Web-specific Patterns
+| Pattern | Implementation |
+|---------|---------------|
+| Navigation | Top nav + side panel |
+| Layout | CSS Grid / Flexbox, responsive |
+| Keyboard shortcuts | Define per feature |
+| Drag & drop | HTML5 DnD API |
+
+## Mobile UI (iOS + Android)
+
+### Screen Inventory (Mobile)
+| Screen | Route | Platform | Figma Page | Status |
+|--------|-------|----------|-----------|--------|
+| | | iOS + Android / iOS only / Android only | | Draft / Review / Final |
+
+### Mobile-specific Patterns
+| Pattern | iOS | Android |
+|---------|-----|---------|
+| Navigation | Tab bar (bottom) | Bottom navigation |
+| Back | Swipe from left edge | System back button |
+| Pull to refresh | UIRefreshControl | SwipeRefreshLayout |
+| Gestures | Swipe, pinch, long press | Same |
+| Safe area | iOS notch / Dynamic Island | Status bar + nav bar |
+| Haptics | UIImpactFeedbackGenerator | HapticFeedbackConstants |
+
+### Platform-specific Screens
+<!-- Screens that differ between iOS and Android -->
+| Screen | iOS Difference | Android Difference |
+|--------|---------------|-------------------|
+| Settings | iOS Settings style | Material Design style |
+| Share | UIActivityViewController | Android Share sheet |
+| Permissions | iOS permission dialog | Android runtime permission |
+
+## Admin UI (if applicable)
+
+### Screen Inventory (Admin)
+| Screen | Route | Figma Page | Status |
+|--------|-------|-----------|--------|
+| | | | Draft / Review / Final |
+
+### Admin-specific Patterns
+| Pattern | Implementation |
+|---------|---------------|
+| Data tables | Sortable, filterable, paginated |
+| Forms | Validation, error states, multi-step |
+| Dashboard | Charts, KPIs, real-time updates |
+| RBAC | Show/hide based on admin role |
+
+## Screen States (every screen on every platform must define all states)
 | State | Description | Required? |
 |-------|------------|-----------|
 | Default | Normal loaded state | ✅ Always |
@@ -214,9 +263,12 @@ Defines **how it looks and feels** — Figma as single source of truth, design s
 | Error | API failure / network error | ✅ Always |
 | Partial | Some data loaded, some failed | When applicable |
 | Disabled | Feature behind feature flag or paywall | When applicable |
+| Offline | No network (mobile) | ✅ Mobile always |
 
 ## User Flows
-<!-- Mermaid flowchart for key user journeys -->
+<!-- Mermaid flowchart for key user journeys, one per platform if different -->
+
+### Web Flow
 ```mermaid
 graph LR
   A[Landing] --> B[Sign Up]
@@ -224,14 +276,31 @@ graph LR
   C --> D[Create Board]
 ```
 
+### Mobile Flow
+```mermaid
+graph LR
+  A[Splash] --> B[Login / Sign Up]
+  B --> C[Home Tab]
+  C --> D[Create Board]
+```
+
 ## Interaction Specification
 
+### Web Interactions
 | Element | Trigger | Action | Animation | Duration |
 |---------|---------|--------|-----------|----------|
 | Button | Hover | Background color change | ease-in-out | 150ms |
 | Modal | Open | Fade in + scale up | ease-out | 200ms |
 | Toast | Show | Slide in from top | ease-out | 300ms |
 | Page transition | Navigate | Fade | ease-in-out | 200ms |
+
+### Mobile Interactions
+| Element | Trigger | Action | Animation | Duration |
+|---------|---------|--------|-----------|----------|
+| Button | Tap | Ripple / highlight | native | 100ms |
+| Bottom sheet | Swipe up | Slide up from bottom | spring | 300ms |
+| Toast | Show | Slide in from bottom | ease-out | 300ms |
+| Screen transition | Navigate | Push from right (iOS) / Fade (Android) | native | 300ms |
 
 ## Component Library
 
@@ -575,10 +644,10 @@ A feature is "Done" when:
 **Goal:** [one sentence]
 **Duration:** [X weeks]
 
-| Feature | Priority | Size | Dependency | Status |
-|---------|----------|------|-----------|--------|
-| [feature] | P0 | M | — | Not started |
-| [feature] | P0 | L | [depends on] | Not started |
+| Feature | Priority | Size | Platform | System | Dependency | Status |
+|---------|----------|------|----------|--------|-----------|--------|
+| [feature] | P0 | M | Web + Mobile | API + Web + Mobile | — | Not started |
+| [feature] | P0 | L | Web (Admin) | Admin API | [depends on] | Not started |
 
 **Risks for this milestone:**
 | Risk | Impact | Mitigation |
@@ -638,8 +707,16 @@ Defines **how** to verify quality — test layers, tools, coverage targets.
 |------|-------------|-------------|
 
 ### E2E Tests
-| Scenario | Steps | Expected Result |
-|----------|-------|----------------|
+| Scenario | Platform | Steps | Expected Result |
+|----------|----------|-------|----------------|
+
+### Platform-specific Tests
+| Platform | Tool | What to Test |
+|----------|------|-------------|
+| Web | Playwright | Cross-browser (Chrome, Firefox, Safari), responsive layouts |
+| iOS | XCTest / Detox | Native gestures, push notifications, deep links, offline mode |
+| Android | Espresso / Detox | Back button, intent handling, push notifications, offline mode |
+| Unity | Unity Test Framework | 3D rendering, input handling, scene loading |
 
 ### Load Tests
 | Scenario | Target | Threshold |
