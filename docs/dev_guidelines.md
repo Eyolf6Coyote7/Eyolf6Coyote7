@@ -8,11 +8,11 @@ Each project follows the same document lifecycle. Phases are sequential for init
 
 | Phase | Document | ADR? | Purpose |
 |-------|----------|------|---------|
-| 1 | `conops.md` | ✅ | Concept of Operations — see ConOps Required Sections below |
+| 1 | `conops.md` | ✅ | Concept of Operations — product vision, personas, scenarios |
 | 2 | `prd.md` | — | Product Requirements — features, user stories, acceptance criteria |
-| 3 | `system_architecture.md` | ✅ | System design — components, data flow, infrastructure |
-| 4 | `technical_design.md` | ✅ | Implementation detail — APIs, DB schema, algorithms |
-| 5 | `ui_ux_design.md` | — | UI/UX — wireframes, Figma links, design system |
+| 3 | `ui_ux_design.md` | — | UI/UX — Figma wireframes, design system, interaction spec |
+| 4 | `system_architecture.md` | ✅ | System design — C4 model, data flow, deployment |
+| 5 | `technical_design.md` | ✅ | Implementation detail — APIs, DB schema, algorithms |
 | 6 | `development_roadmap.md` | — | Timeline — milestones, priorities, dependencies |
 | 7 | `testing_strategy.md` | — | Test plan — unit, integration, E2E, load |
 
@@ -153,8 +153,140 @@ Defines **what** to build — features, user stories, acceptance criteria.
 ```
 
 ---
+#### 3. UI/UX Design — `ui_ux_design.md`
 
-#### 3. System Architecture — `system_architecture.md`
+Defines **how it looks and feels** — Figma as single source of truth, design system, interaction specs.
+
+```markdown
+# UI/UX Design: [Project Name]
+
+## Design Principles
+<!-- 3-5 guiding principles for this product's UX -->
+1. [principle]
+2. [principle]
+
+## Figma Project Structure
+
+### Figma File Organization
+| File | Content | Link |
+|------|---------|------|
+| [Project] — Design System | Shared components, tokens, icons | [Figma URL] |
+| [Project] — Wireframes | Low-fi wireframes for all screens | [Figma URL] |
+| [Project] — UI Design | High-fi mockups (final) | [Figma URL] |
+| [Project] — Prototype | Interactive prototype with transitions | [Figma URL] |
+
+### Figma Pages (within each file)
+| Page | Content |
+|------|---------|
+| Cover | Project name, status, last updated |
+| Components | Reusable component library |
+| Screens — [Feature] | All screens for a feature |
+| Flows — [User Journey] | Connected prototype flow |
+| Archive | Deprecated designs (don't delete, archive) |
+
+## Figma Workflow
+
+```
+1. Define requirements    → PRD feature + acceptance criteria
+2. Write UI spec          → Claude generates component list, layout, interactions
+3. Wireframe (low-fi)     → Figma wireframe, grayscale, no styling
+4. Review wireframe       → Validate flow with PRD acceptance criteria
+5. UI design (high-fi)    → Apply design tokens, real content, final styling
+6. Interaction spec       → Define hover, click, transition, animation, loading states
+7. Prototype              → Link screens in Figma for clickable walkthrough
+8. Design review          → Final approval, mark page as "✅ Final"
+9. Handoff                → Dev implements from Figma Dev Mode
+10. Storybook             → Each component matches Figma 1:1
+```
+
+## Screen Inventory
+
+| Screen | Route | System | Figma Page | Status |
+|--------|-------|--------|-----------|--------|
+| | | | | Draft / Review / Final |
+
+### Screen States (every screen must define all states)
+| State | Description | Required? |
+|-------|------------|-----------|
+| Default | Normal loaded state | ✅ Always |
+| Loading | Skeleton / spinner while fetching | ✅ Always |
+| Empty | No data yet (first-time user) | ✅ Always |
+| Error | API failure / network error | ✅ Always |
+| Partial | Some data loaded, some failed | When applicable |
+| Disabled | Feature behind feature flag or paywall | When applicable |
+
+## User Flows
+<!-- Mermaid flowchart for key user journeys -->
+```mermaid
+graph LR
+  A[Landing] --> B[Sign Up]
+  B --> C[Dashboard]
+  C --> D[Create Board]
+```
+
+## Interaction Specification
+
+| Element | Trigger | Action | Animation | Duration |
+|---------|---------|--------|-----------|----------|
+| Button | Hover | Background color change | ease-in-out | 150ms |
+| Modal | Open | Fade in + scale up | ease-out | 200ms |
+| Toast | Show | Slide in from top | ease-out | 300ms |
+| Page transition | Navigate | Fade | ease-in-out | 200ms |
+
+## Component Library
+
+| Component | Props | Variants | States | Storybook |
+|-----------|-------|----------|--------|-----------|
+| Button | size, variant, disabled | primary, secondary, ghost | default, hover, active, disabled, loading | ✅ |
+| Input | label, error, placeholder | text, password, search | default, focus, error, disabled | ✅ |
+
+> Every component in Figma must have a matching Storybook story.
+
+## Design Tokens
+<!-- Reference to shared tokens/ directory — single source of truth -->
+| Token | File | Example |
+|-------|------|---------|
+| Colors | `tokens/colors.json` | `--color-primary: #1976D2` |
+| Spacing | `tokens/spacing.json` | `--space-4: 16px` (4px grid) |
+| Typography | `tokens/typography.json` | `--font-body: 14px/1.5 Inter` |
+| Shadows | `tokens/shadows.json` | `--shadow-md: 0 4px 6px rgba(...)` |
+| Border radius | `tokens/radius.json` | `--radius-md: 8px` |
+
+> Tokens are defined in code, imported into Figma via Tokens Studio plugin.
+
+## Responsive Breakpoints
+| Breakpoint | Width | Layout | Figma Frame |
+|-----------|-------|--------|-------------|
+| Mobile | < 768px | Single column, bottom nav | 375 x 812 |
+| Tablet | 768-1024px | Two column, side nav | 768 x 1024 |
+| Desktop | > 1024px | Full layout, top nav + side panel | 1440 x 900 |
+
+## Handoff Notes (Figma → Developer)
+
+| Item | Where to Find |
+|------|--------------|
+| Spacing & sizing | Figma Dev Mode → Inspect panel |
+| Colors | Design tokens (not hardcoded hex) |
+| Assets (icons, images) | Figma → Export as SVG / PNG |
+| Interaction specs | This doc → Interaction Specification table |
+| Responsive behavior | This doc → Responsive Breakpoints table |
+| Component props | Storybook → Component docs |
+
+## Accessibility (a11y) Checklist
+- [ ] Color contrast ≥ 4.5:1 (use Figma a11y plugin to verify)
+- [ ] All images have alt text defined in Figma layer names
+- [ ] Focus order documented (tab sequence)
+- [ ] Keyboard shortcuts defined for key actions
+- [ ] Touch targets ≥ 44x44px (mobile)
+- [ ] Screen reader tested (VoiceOver / TalkBack)
+- [ ] Reduced motion alternatives for all animations
+- [ ] Error messages are descriptive (not just "Error")
+```
+
+---
+
+
+#### 4. System Architecture — `system_architecture.md`
 
 Defines **how** the system is structured — components, data flow, infrastructure.
 
@@ -305,7 +437,7 @@ graph LR
 
 ---
 
-#### 4. Technical Design — `technical_design.md`
+#### 5. Technical Design — `technical_design.md`
 
 Defines **implementation details** — API specs, DB schema, algorithms. One doc per project, **sectioned by system**.
 
@@ -403,138 +535,6 @@ sequenceDiagram
 ```
 
 > **Note:** One doc per project, not per system. Use `## System: [name]` headers to separate each system's specs within the same doc.
-
----
-
-#### 5. UI/UX Design — `ui_ux_design.md`
-
-Defines **how it looks and feels** — Figma as single source of truth, design system, interaction specs.
-
-```markdown
-# UI/UX Design: [Project Name]
-
-## Design Principles
-<!-- 3-5 guiding principles for this product's UX -->
-1. [principle]
-2. [principle]
-
-## Figma Project Structure
-
-### Figma File Organization
-| File | Content | Link |
-|------|---------|------|
-| [Project] — Design System | Shared components, tokens, icons | [Figma URL] |
-| [Project] — Wireframes | Low-fi wireframes for all screens | [Figma URL] |
-| [Project] — UI Design | High-fi mockups (final) | [Figma URL] |
-| [Project] — Prototype | Interactive prototype with transitions | [Figma URL] |
-
-### Figma Pages (within each file)
-| Page | Content |
-|------|---------|
-| Cover | Project name, status, last updated |
-| Components | Reusable component library |
-| Screens — [Feature] | All screens for a feature |
-| Flows — [User Journey] | Connected prototype flow |
-| Archive | Deprecated designs (don't delete, archive) |
-
-## Figma Workflow
-
-```
-1. Define requirements    → PRD feature + acceptance criteria
-2. Write UI spec          → Claude generates component list, layout, interactions
-3. Wireframe (low-fi)     → Figma wireframe, grayscale, no styling
-4. Review wireframe       → Validate flow with PRD acceptance criteria
-5. UI design (high-fi)    → Apply design tokens, real content, final styling
-6. Interaction spec       → Define hover, click, transition, animation, loading states
-7. Prototype              → Link screens in Figma for clickable walkthrough
-8. Design review          → Final approval, mark page as "✅ Final"
-9. Handoff                → Dev implements from Figma Dev Mode
-10. Storybook             → Each component matches Figma 1:1
-```
-
-## Screen Inventory
-
-| Screen | Route | System | Figma Page | Status |
-|--------|-------|--------|-----------|--------|
-| | | | | Draft / Review / Final |
-
-### Screen States (every screen must define all states)
-| State | Description | Required? |
-|-------|------------|-----------|
-| Default | Normal loaded state | ✅ Always |
-| Loading | Skeleton / spinner while fetching | ✅ Always |
-| Empty | No data yet (first-time user) | ✅ Always |
-| Error | API failure / network error | ✅ Always |
-| Partial | Some data loaded, some failed | When applicable |
-| Disabled | Feature behind feature flag or paywall | When applicable |
-
-## User Flows
-<!-- Mermaid flowchart for key user journeys -->
-```mermaid
-graph LR
-  A[Landing] --> B[Sign Up]
-  B --> C[Dashboard]
-  C --> D[Create Board]
-```
-
-## Interaction Specification
-
-| Element | Trigger | Action | Animation | Duration |
-|---------|---------|--------|-----------|----------|
-| Button | Hover | Background color change | ease-in-out | 150ms |
-| Modal | Open | Fade in + scale up | ease-out | 200ms |
-| Toast | Show | Slide in from top | ease-out | 300ms |
-| Page transition | Navigate | Fade | ease-in-out | 200ms |
-
-## Component Library
-
-| Component | Props | Variants | States | Storybook |
-|-----------|-------|----------|--------|-----------|
-| Button | size, variant, disabled | primary, secondary, ghost | default, hover, active, disabled, loading | ✅ |
-| Input | label, error, placeholder | text, password, search | default, focus, error, disabled | ✅ |
-
-> Every component in Figma must have a matching Storybook story.
-
-## Design Tokens
-<!-- Reference to shared tokens/ directory — single source of truth -->
-| Token | File | Example |
-|-------|------|---------|
-| Colors | `tokens/colors.json` | `--color-primary: #1976D2` |
-| Spacing | `tokens/spacing.json` | `--space-4: 16px` (4px grid) |
-| Typography | `tokens/typography.json` | `--font-body: 14px/1.5 Inter` |
-| Shadows | `tokens/shadows.json` | `--shadow-md: 0 4px 6px rgba(...)` |
-| Border radius | `tokens/radius.json` | `--radius-md: 8px` |
-
-> Tokens are defined in code, imported into Figma via Tokens Studio plugin.
-
-## Responsive Breakpoints
-| Breakpoint | Width | Layout | Figma Frame |
-|-----------|-------|--------|-------------|
-| Mobile | < 768px | Single column, bottom nav | 375 x 812 |
-| Tablet | 768-1024px | Two column, side nav | 768 x 1024 |
-| Desktop | > 1024px | Full layout, top nav + side panel | 1440 x 900 |
-
-## Handoff Notes (Figma → Developer)
-
-| Item | Where to Find |
-|------|--------------|
-| Spacing & sizing | Figma Dev Mode → Inspect panel |
-| Colors | Design tokens (not hardcoded hex) |
-| Assets (icons, images) | Figma → Export as SVG / PNG |
-| Interaction specs | This doc → Interaction Specification table |
-| Responsive behavior | This doc → Responsive Breakpoints table |
-| Component props | Storybook → Component docs |
-
-## Accessibility (a11y) Checklist
-- [ ] Color contrast ≥ 4.5:1 (use Figma a11y plugin to verify)
-- [ ] All images have alt text defined in Figma layer names
-- [ ] Focus order documented (tab sequence)
-- [ ] Keyboard shortcuts defined for key actions
-- [ ] Touch targets ≥ 44x44px (mobile)
-- [ ] Screen reader tested (VoiceOver / TalkBack)
-- [ ] Reduced motion alternatives for all animations
-- [ ] Error messages are descriptive (not just "Error")
-```
 
 ---
 
@@ -696,10 +696,10 @@ For new features after initial release, don't rewrite docs. Follow this flow:
 
 1. Write RFC (`rfcs/RFC-NNNN-feature-name.md`)
 2. Update `prd.md` (add feature section)
-3. Update `system_architecture.md` (if architecture changes)
-4. Write ADR (`adrs/ADR-NNNN-decision-title.md`) for major tech decisions
-5. Update `technical_design.md` (add feature detail)
-6. Update `ui_ux_design.md` (new Figma screens)
+3. Update `ui_ux_design.md` (new Figma screens)
+4. Update `system_architecture.md` (if architecture changes)
+5. Write ADR (`adrs/ADR-NNNN-decision-title.md`) for major tech decisions
+6. Update `technical_design.md` (add feature detail)
 7. Update `testing_strategy.md` (add test plan for feature)
 8. Develop
 
