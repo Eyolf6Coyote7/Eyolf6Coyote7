@@ -2,7 +2,7 @@
 
 ## Architecture Pattern
 
-**Hexagonal Architecture (Ports & Adapters) + EDA** — ASP.NET Core backend with core logic isolated from I/O adapters (gRPC, REST, MQTT, SignalR, MinIO, Elasticsearch). IoT data flows through MQTT → Kafka → TimescaleDB. Python AI service for asset auto-tagging.
+**Hexagonal Architecture (Ports & Adapters) + EDA** — ASP.NET Core backend with core logic isolated behind port interfaces. Input adapters: gRPC, REST, SignalR. Output adapters: PostgreSQL, Elasticsearch, MinIO, TimescaleDB, Kafka, Redis. IoT data flows through MQTT → Kafka → TimescaleDB. Python AI service for asset auto-tagging.
 
 ## C4 Model
 
@@ -12,7 +12,7 @@
 graph TD
   ARTIST[3D Artist<br/>Browser] --> SYS[3D Asset Platform]
   DIRECTOR[Creative Director<br/>Browser] --> SYS
-  UNITY_USER[IoT Engineer<br/>Unity Client] --> SYS
+  UNITY_USER[Unity User<br/>3D Artist / IoT Engineer] --> SYS
   IOT[IoT Devices<br/>MQTT Sensors] --> SYS
   SYS --> INFRA[Shared Infrastructure<br/>PostgreSQL, Redis, Kafka, etc.]
 ```
@@ -46,7 +46,7 @@ graph TD
     ES[(Elasticsearch<br/>Asset search)]
     TS[(TimescaleDB<br/>IoT time-series)]
     UL[Unleash<br/>Feature Flags]
-    MH[MailHog<br/>Email]
+    MH[MailHog<br/>Email - dev only]
   end
 
   PORTAL -->|REST| API
@@ -83,7 +83,7 @@ graph TD
   subgraph "Core (Ports + Domain)"
     PORT_ASSET[IAssetService<br/>Port]
     PORT_SEARCH[ISearchService<br/>Port]
-    PORT_IOT[IIoTService<br/>Port]
+    PORT_IOT[IIoTService<br/>Port - query + alerts]
     PORT_STORAGE[IStorageService<br/>Port]
     PORT_AUTH[IAuthService<br/>Port]
     DOMAIN[Domain Logic<br/>Asset, Version, Tag, ACL]
@@ -128,7 +128,7 @@ graph TD
 
   subgraph "Storage + Alerting"
     TS[(TimescaleDB)]
-    ALERT[Alert Engine]
+    ALERT[Alert Module<br/>within IoT Consumer]
     API[Asset API]
     PUSH[Push Notification]
   end
@@ -178,10 +178,11 @@ sequenceDiagram
   end
   API->>MIO: Store in versioned bucket (brand-scoped)
   MIO-->>API: version_id, etag
-  API->>API: Generate 3D thumbnail (server-side render)
-  API->>ES: Index metadata (name, format, size, brand)
   API->>KF: Produce event (asset_uploaded)
-  API->>AI: Request auto-tag (async)
+  API->>ES: Index metadata (name, format, size, brand)
+  Note over KF: Async workers consume asset_uploaded event
+  KF->>AI: Auto-tag (async via Kafka consumer)
+  KF->>API: Thumbnail generation (async worker, not main API thread)
   API-->>Portal: {asset_id, version: 1, preview_url}
   Portal-->>Maya: 3D preview loads in Three.js
 
@@ -296,7 +297,7 @@ erDiagram
     uuid brand_id FK
     uuid uploaded_by FK
     string name
-    string format "glb|fbx"
+    enum format "glb, fbx"
     int current_version
     string thumbnail_url
     timestamp created_at
@@ -320,7 +321,7 @@ erDiagram
     uuid id PK
     string device_id
     string type "temperature|vibration|pressure"
-    jsonb location_3d "x,y,z on model"
+    jsonb location_3d "{x: float, y: float, z: float}"
   }
 ```
 
@@ -373,7 +374,8 @@ graph LR
   AI --> API
   IOT_C --> KF
   IOT_C --> TS
-  MQTT --> KF
+  MQTT --> BRIDGE[MQTT-Kafka Bridge]
+  BRIDGE --> KF
 ```
 
 ## Security Architecture
