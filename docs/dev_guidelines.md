@@ -16,7 +16,15 @@ Each project follows the same document lifecycle. Phases are sequential for init
 | 6 | `development_roadmap.md` | — | Timeline — milestones, priorities, dependencies |
 | 7 | `testing_strategy.md` | — | Test plan — unit, integration, E2E, load |
 
-> ADRs are written during initial development too — whenever a major tech decision is made (e.g. "Why Kafka over RabbitMQ?", "Why Yjs over OT?").
+**When to write ADRs and RFCs:**
+
+| Document | When | During Initial Dev? |
+|----------|------|-------------------|
+| **ADRs** | During Phase 1 (ConOps), Phase 4 (System Arch), Phase 5 (Tech Design) — whenever a major tech decision is made | ✅ Yes — created alongside the phase docs |
+| **RFCs** | During Feature Iteration (v1+) — before developing a major new feature | ❌ No — only after initial development is complete |
+
+> ADR example during ConOps: deciding "Why Yjs over OT for collaboration?" → write `ADR-0001-why-yjs-over-ot.md`
+> RFC example during iteration: proposing "Add voice chat to whiteboard" → write `RFC-0001-voice-chat.md`
 
 > **One doc per project, not per system.** Each project has multiple systems (e.g. Whiteboard has BFF, AI Service, etc.). Use `## System: [name]` sections within the same doc to separate each system's details. This keeps everything in one place and avoids doc sprawl.
 
