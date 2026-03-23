@@ -5,6 +5,7 @@
 - [Test Pyramid](#test-pyramid)
 - [Test Scenarios](#test-scenarios)
 - [Platform-specific Tests](#platform-specific-tests)
+- [Load Tests](#load-tests)
 - [CI Integration](#ci-integration)
 - [Test Data Strategy](#test-data-strategy)
 - [Test Environment](#test-environment)
