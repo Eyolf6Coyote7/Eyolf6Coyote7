@@ -219,8 +219,8 @@ message DownloadChunk {
 ### Threshold Alerting Logic
 
 ```csharp
-// Simplified alert check
-var device = await deviceRepo.GetByDeviceId(reading.DeviceId);
+// Simplified alert check — device thresholds cached in-memory (refreshed every 5 min)
+var device = deviceCache.GetOrRefresh(reading.DeviceId);
 if (device.ThresholdCritical != null && reading.Value > device.ThresholdCritical)
 {
     await alertService.SendAlert(device, reading, Severity.Critical);
@@ -319,9 +319,19 @@ export async function uploadFile(
   }
 
   return new Promise((resolve, reject) => {
-    stream.on('data', (response) => resolve(response.toObject()))
+    stream.on('status', (status) => {
+      if (status.code !== 0) reject(new Error(status.details))
+    })
+    stream.on('end', () => {
+      // For client-streaming, response is returned via callback
+    })
     stream.on('error', (err) => reject(err))
-    stream.end()
+
+    // End the stream and receive the single UploadResponse
+    stream.end((err, response) => {
+      if (err) reject(err)
+      else resolve(response.toObject())
+    })
   })
 }
 ```
@@ -566,7 +576,7 @@ erDiagram
 CREATE TABLE sensor_readings (
   time        TIMESTAMPTZ NOT NULL,
   device_id   TEXT        NOT NULL,
-  value       DOUBLE PRECISION,
+  value       DOUBLE PRECISION NOT NULL,
   unit        TEXT
 );
 SELECT create_hypertable('sensor_readings', 'time');
@@ -639,9 +649,11 @@ sequenceDiagram
   Bridge->>KF: Produce (partition by device_id)
   KF->>Consumer: Consume
   Consumer->>TS: INSERT sensor_readings
+  Consumer->>API: POST /internal/iot/reading {deviceId, value, unit}
+  API->>Unity: SignalR sensorUpdate {deviceId, value, unit}
   Consumer->>Consumer: 85 > 80 threshold → WARNING
-  Consumer->>API: POST /internal/iot/alert
-  API->>Unity: SignalR sensorUpdate + alert
+  Consumer->>API: POST /internal/iot/alert {deviceId, severity: warning}
+  API->>Unity: SignalR alert {deviceId, severity, message}
   Unity->>Unity: Update marker yellow + show tooltip
 ```
 
@@ -660,7 +672,7 @@ sequenceDiagram
 |-------|-----|---------|---------|
 | JWT | 15 min | Memory | Web portal |
 | Refresh Token | 7 days | HttpOnly cookie | Web portal |
-| API Key | No expiry | iOS Keychain / Android Keystore | Unity client, IoT devices |
+| API Key | 90 days (rotatable, revocable) | iOS Keychain / Android Keystore | Unity client, IoT devices |
 | Share Token | Configurable (1h-7d) | URL parameter | External partners |
 
 ## Error Handling
@@ -694,7 +706,7 @@ sequenceDiagram
 | IoT Ingest | IoT Consumer | Kafka `asset3d.iot-sensor-data` | Sensor reading | TimescaleDB INSERT + alert check |
 | AI Auto-tag | AI Service | Kafka `asset3d.asset-events` (asset_uploaded) | Asset thumbnail | Tags → Asset API callback |
 | Thumbnail Gen | Asset API (async) | Kafka `asset3d.asset-events` (asset_uploaded) | 3D model | PNG thumbnail → MinIO |
-| ES Index Sync | IoT Consumer | Kafka `asset3d.asset-events` (tag_updated) | Asset + tags | Elasticsearch re-index |
+| ES Index Sync | Asset API (async worker) | Kafka `asset3d.asset-events` (tag_updated) | Asset + tags | Elasticsearch re-index |
 | Share Link Cleanup | Asset API (scheduled) | Cron every hour | — | Delete expired share links |
 
 ## Third-party Integrations
