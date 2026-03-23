@@ -18,35 +18,380 @@ Each project follows the same document lifecycle. Phases are sequential for init
 
 > ADRs are written during initial development too — whenever a major tech decision is made (e.g. "Why Kafka over RabbitMQ?", "Why Yjs over OT?").
 
-### ConOps Required Sections
+### Document Templates
 
-Every project's `conops.md` must include:
+---
 
-| Section | Description |
-|---------|-------------|
-| Product Vision | One-sentence product definition |
-| Target Users | Who uses this and why |
-| Industry Context | Which industry this serves (SaaS / Semiconductor / Media) |
-| High-level Scenarios | 3-5 core user flows |
-| OKR / Success Metrics | Measurable goals — examples below |
-| Risk Register | Technical, timeline, and dependency risks |
+#### 1. ConOps (Concept of Operations) — `conops.md`
 
-**OKR / Success Metrics examples:**
+Defines **what** the product is, **who** it's for, and **why** it matters.
 
-| Metric | Whiteboard (SaaS) | Workflow (Semiconductor) | 3D Asset (Media) |
-|--------|-------------------|--------------------------|-------------------|
-| DAU | Active users per day | Active approvers per day | Active uploaders per day |
-| Retention | D7 / D30 retention | — (enterprise, always on) | Monthly active teams |
-| Conversion | Free → Pro upgrade rate | — | Free tier → paid storage |
-| Task completion | Boards created per user | Avg approval turnaround time | Assets uploaded per session |
-| Performance | p99 latency < 200ms | SLA uptime 99.95% | Upload success rate > 99.5% |
+```markdown
+# ConOps: [Project Name]
 
-**Risk Register template:**
+## Product Vision
+<!-- One-sentence definition of the product -->
 
+## Industry Context
+<!-- Which industry (SaaS / Semiconductor / Media), market landscape, competitors -->
+
+## Target Users
+<!-- User personas with role, goals, pain points -->
+| Persona | Role | Goal | Pain Point |
+|---------|------|------|------------|
+
+## Core Scenarios
+<!-- 3-5 primary user flows, written as user stories -->
+### Scenario 1: [Name]
+**As a** [persona], **I want to** [action], **so that** [outcome].
+Flow: step 1 → step 2 → step 3
+
+## OKR / Success Metrics
+| Objective | Key Result | Target |
+|-----------|-----------|--------|
+
+## Risk Register
 | Risk | Impact | Likelihood | Mitigation |
 |------|--------|-----------|------------|
-| e.g. CRDT sync conflict edge case | High | Medium | Fuzz testing + fallback to server state |
-| e.g. Kafka consumer lag spikes | Medium | Low | Monitor consumer lag, auto-scale workers |
+
+## ADRs Created
+<!-- List ADRs written during this phase -->
+- ADR-NNNN: [title]
+```
+
+---
+
+#### 2. PRD (Product Requirements Document) — `prd.md`
+
+Defines **what** to build — features, user stories, acceptance criteria.
+
+```markdown
+# PRD: [Project Name]
+
+## Overview
+<!-- 2-3 sentence product summary, link back to ConOps -->
+
+## Feature List
+| # | Feature | Priority | Status |
+|---|---------|----------|--------|
+| F1 | [name] | P0 (must-have) | Planned |
+| F2 | [name] | P1 (should-have) | Planned |
+| F3 | [name] | P2 (nice-to-have) | Planned |
+
+## Feature Details
+
+### F1: [Feature Name]
+**User Story:** As a [persona], I want to [action], so that [outcome].
+
+**Acceptance Criteria:**
+- [ ] Given [context], when [action], then [result]
+- [ ] Given [context], when [action], then [result]
+
+**Edge Cases:**
+- What happens when [edge case]?
+
+**Out of Scope:**
+- [explicitly excluded items]
+
+<!-- Repeat for each feature -->
+
+## Non-functional Requirements
+| Requirement | Target |
+|-------------|--------|
+| Performance | p99 latency < [X]ms |
+| Availability | [X]% uptime |
+| Security | [OWASP, auth, encryption] |
+| Scalability | [concurrent users, data volume] |
+| i18n | [supported locales] |
+| a11y | WCAG 2.1 AA |
+
+## Dependencies
+<!-- External systems, APIs, shared infra -->
+```
+
+---
+
+#### 3. System Architecture — `system_architecture.md`
+
+Defines **how** the system is structured — components, data flow, infrastructure.
+
+```markdown
+# System Architecture: [Project Name]
+
+## Architecture Pattern
+<!-- e.g. Modular Monolith, Clean Architecture, Hexagonal -->
+
+## System Diagram
+<!-- Mermaid diagram showing all systems and their connections -->
+```mermaid
+graph TD
+  subgraph "Frontend"
+  end
+  subgraph "Backend"
+  end
+  subgraph "Infrastructure"
+  end
+```
+
+## Component Overview
+| Component | Tech | Responsibility |
+|-----------|------|---------------|
+
+## Data Flow
+<!-- Describe how data moves through the system for key scenarios -->
+### Flow 1: [Scenario Name]
+```
+User → Frontend → API → DB → Response
+```
+
+## API Contracts
+| Endpoint / Topic | Protocol | Direction | Description |
+|-----------------|----------|-----------|-------------|
+
+## Database Schema (High-level)
+<!-- ER diagram or table list — detail goes in technical_design -->
+```mermaid
+erDiagram
+  USER ||--o{ BOARD : creates
+```
+
+## Infrastructure Dependencies
+<!-- Which shared services does this project use -->
+| Service | Purpose |
+|---------|---------|
+
+## Scalability Considerations
+<!-- How would this scale? Horizontal, vertical, caching, CDN -->
+
+## ADRs Created
+- ADR-NNNN: [title]
+```
+
+---
+
+#### 4. Technical Design — `technical_design.md`
+
+Defines **implementation details** — API specs, DB schema, algorithms.
+
+```markdown
+# Technical Design: [Project Name]
+
+## API Specification
+
+### REST / GraphQL / gRPC
+<!-- Detailed endpoint definitions -->
+| Method | Path | Request | Response | Auth |
+|--------|------|---------|----------|------|
+
+### WebSocket / SignalR Events
+| Event | Direction | Payload | Description |
+|-------|-----------|---------|-------------|
+
+## Database Schema (Detailed)
+<!-- Full table definitions with types, constraints, indexes -->
+### Table: [name]
+| Column | Type | Constraints | Description |
+|--------|------|------------|-------------|
+
+### Indexes
+| Table | Columns | Type | Purpose |
+|-------|---------|------|---------|
+
+### Migrations
+<!-- Migration strategy and naming convention -->
+
+## Authentication & Authorization
+<!-- Token flow, role mapping, permission matrix -->
+| Role | Permissions |
+|------|------------|
+
+## Error Handling
+<!-- Error codes, response format, retry strategy -->
+
+## Caching Strategy
+<!-- What to cache, TTL, invalidation -->
+| Key Pattern | TTL | Invalidation |
+|-------------|-----|-------------|
+
+## Background Jobs / Workers
+<!-- Kafka consumers, Redis Stream workers, scheduled tasks -->
+| Job | Trigger | Input | Output |
+|-----|---------|-------|--------|
+
+## Third-party Integrations
+<!-- External APIs, SDKs -->
+
+## ADRs Created
+- ADR-NNNN: [title]
+```
+
+---
+
+#### 5. UI/UX Design — `ui_ux_design.md`
+
+Defines **how it looks and feels** — wireframes, Figma links, design system.
+
+```markdown
+# UI/UX Design: [Project Name]
+
+## Design Principles
+<!-- 3-5 guiding principles for this product's UX -->
+1. [principle]
+2. [principle]
+
+## Figma Links
+| Screen / Flow | Figma Link | Status |
+|--------------|-----------|--------|
+| Home | [Figma URL] | Draft / Review / Final |
+| [Feature] | [Figma URL] | Draft / Review / Final |
+
+## Figma Workflow
+```
+1. Claude writes UI spec (component list, layout, interactions)
+2. Designer/developer creates wireframes in Figma
+3. Review and iterate
+4. Mark as "Final" when approved
+5. Developer implements from Figma specs
+6. Storybook components match Figma 1:1
+```
+
+## Screen Inventory
+| Screen | Route | Components | Notes |
+|--------|-------|-----------|-------|
+
+## User Flows
+<!-- Mermaid flowchart for key user journeys -->
+```mermaid
+graph LR
+  A[Landing] --> B[Sign Up]
+  B --> C[Dashboard]
+  C --> D[Create Board]
+```
+
+## Component Library
+| Component | Props | Variants | Storybook |
+|-----------|-------|----------|-----------|
+
+## Design Tokens
+<!-- Reference to shared tokens/ directory -->
+- Colors: `tokens/colors.json`
+- Spacing: `tokens/spacing.json`
+- Typography: `tokens/typography.json`
+
+## Responsive Breakpoints
+| Breakpoint | Width | Layout |
+|-----------|-------|--------|
+| Mobile | < 768px | Single column |
+| Tablet | 768-1024px | Two column |
+| Desktop | > 1024px | Full layout |
+
+## Accessibility (a11y)
+<!-- WCAG 2.1 AA checklist for this project -->
+- [ ] Color contrast ≥ 4.5:1
+- [ ] All images have alt text
+- [ ] Keyboard navigable
+- [ ] Screen reader tested
+```
+
+---
+
+#### 6. Development Roadmap — `development_roadmap.md`
+
+Defines **when** to build what — milestones, priorities, dependencies.
+
+```markdown
+# Development Roadmap: [Project Name]
+
+## Milestones
+
+### M1: [Milestone Name] — [Target Tag]
+**Goal:** [one sentence]
+**Duration:** [X weeks]
+
+| Feature | Priority | Dependency | Status |
+|---------|----------|-----------|--------|
+| [feature] | P0 | — | Not started |
+| [feature] | P0 | [depends on] | Not started |
+
+### M2: [Milestone Name] — [Target Tag]
+...
+
+## Dependency Graph
+```mermaid
+gantt
+  title Development Timeline
+  section M1
+    Feature A: a1, 2026-04-01, 2w
+    Feature B: a2, after a1, 1w
+  section M2
+    Feature C: a3, after a2, 2w
+```
+
+## Release Plan
+| Tag | Milestone | Branch | What's Included |
+|-----|-----------|--------|----------------|
+| project/v0.1.0-rc.1 | M1 | dev | [features] |
+| project/v0.1.0 | M1 | stable | [features] |
+
+## Tech Debt Planned
+| Item | When | Priority |
+|------|------|----------|
+```
+
+---
+
+#### 7. Testing Strategy — `testing_strategy.md`
+
+Defines **how** to verify quality — test layers, tools, coverage targets.
+
+```markdown
+# Testing Strategy: [Project Name]
+
+## Test Pyramid
+| Layer | Tool | Target Coverage | What It Tests |
+|-------|------|----------------|--------------|
+| Unit | [Jest/JUnit/xUnit] | > 80% | Services, utils, domain logic |
+| Integration | [Testcontainers/Supertest] | Key paths | DB queries, API contracts |
+| E2E | [Playwright/Detox] | Critical flows | User journeys end-to-end |
+| Load | [k6] | SLO thresholds | Performance under stress |
+
+## Test Scenarios
+
+### Unit Tests
+| Module | What to Test | Priority |
+|--------|-------------|----------|
+
+### Integration Tests
+| Flow | What to Test | Dependencies |
+|------|-------------|-------------|
+
+### E2E Tests
+| Scenario | Steps | Expected Result |
+|----------|-------|----------------|
+
+### Load Tests
+| Scenario | Target | Threshold |
+|----------|--------|----------|
+| [scenario] | p99 < [X]ms | [concurrent users] |
+
+## CI Integration
+<!-- Which tests run in CI, which are manual -->
+| Test Type | CI? | When |
+|-----------|-----|------|
+| Unit | ✅ | Every PR |
+| Integration | ✅ | Every PR |
+| E2E | ✅ | Before release |
+| Load | ❌ Manual | Before release |
+
+## Quality Gates
+<!-- PR cannot merge if these fail -->
+- [ ] All unit tests pass
+- [ ] No lint errors
+- [ ] No security scan findings (SAST/SCA)
+- [ ] Coverage does not decrease
+```
+
+---
 
 ### Feature Iteration (v1+)
 
