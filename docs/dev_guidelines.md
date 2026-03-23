@@ -1044,6 +1044,71 @@ Target rules:
 
 ---
 
+## API Layer Pattern (Real vs Mock)
+
+Every frontend must support switching between real backend and mock data via environment variable. This enables:
+- **Local development** — `npm run dev` hits real backend
+- **GitHub Pages demo** — `npm run build:demo` uses mock data (no server needed)
+- **Testing** — mock client for unit/integration tests without backend
+
+### File Structure
+
+```
+src/api/
+├─ client.interface.ts    ← abstract API interface (TypeScript interface)
+├─ real-client.ts         ← implements interface, fetches from real backend
+├─ mock-client.ts         ← implements interface, returns mock JSON
+├─ index.ts               ← factory — selects client based on env
+└─ mocks/
+    ├─ boards.json        ← mock data files
+    └─ users.json
+```
+
+### Environment Switching
+
+```typescript
+// src/api/index.ts
+import type { ApiClient } from './client.interface'
+import { RealClient } from './real-client'
+import { MockClient } from './mock-client'
+
+const apiUrl = import.meta.env.VITE_API_URL
+
+export const api: ApiClient = apiUrl
+  ? new RealClient(apiUrl)
+  : new MockClient()
+```
+
+### Scripts
+
+```json
+{
+  "dev": "vite --mode local",
+  "dev:mock": "vite --mode mock",
+  "build": "vite build --mode local",
+  "build:demo": "vite build --mode mock"
+}
+```
+
+### Environment Files
+
+```bash
+# .env.local — real backend
+VITE_API_URL=http://localhost:4001
+
+# .env.mock — mock data (no value = MockClient)
+# VITE_API_URL is intentionally not set
+```
+
+### Rules
+
+- Every API call must go through `ApiClient` interface — never call `fetch` directly
+- Mock client must return realistic data (same shape as real API)
+- Mock data lives in `src/api/mocks/` as JSON files
+- New API endpoints must be added to both real and mock clients simultaneously
+
+---
+
 ## Coding Standards
 
 ### General Rules
