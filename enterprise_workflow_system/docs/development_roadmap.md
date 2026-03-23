@@ -38,6 +38,7 @@ Using **T-shirt sizing** (same as workspace-wide convention).
 | API Layer pattern (real + mock) — both frontends | P0 | M | Web | Portal + Admin | Vue scaffold | Not started |
 | Storybook setup (Element Plus extended) | P1 | S | Web | Portal + Admin | Vue scaffold | Not started |
 | CI workflow (ktlint + Jest placeholder) | P1 | S | — | CI | — | Not started |
+| Security scan in CI (Semgrep + Trivy) | P1 | M | — | CI | — | Not started |
 
 **Risks:**
 | Risk | Impact | Mitigation |
@@ -64,6 +65,8 @@ Using **T-shirt sizing** (same as workspace-wide convention).
 | Status timeline component | P1 | M | Web | Portal | Submit + Approve | Not started |
 | Dashboard (my requests + stats) | P1 | M | Web | Portal | Submit | Not started |
 | GraphQL subscriptions (realtime status) | P1 | L | Web | Workflow API + Portal | GraphQL | Not started |
+| DataLoader for GraphQL N+1 prevention | P0 | M | — | Workflow API | GraphQL | Not started |
+| Integration tests (Testcontainers — Temporal + Kafka) | P1 | L | — | CI | Temporal + Kafka | Not started |
 
 **Risks:**
 | Risk | Impact | Mitigation |
@@ -90,6 +93,7 @@ Using **T-shirt sizing** (same as workspace-wide convention).
 | Auto-escalation (Temporal timeout activity) | P1 | L | — | Workflow API + Temporal | Temporal | Not started |
 | Audit log viewer + export (CSV/PDF) | P1 | M | Web | Admin Dashboard + Admin API | CQRS read model | Not started |
 | Remote config (branding, notification templates) | P2 | M | Web | Admin Dashboard + Admin API | — | Not started |
+| Integration tests for parallel approval edge cases | P1 | M | — | CI | Parallel approval | Not started |
 
 **Risks:**
 | Risk | Impact | Mitigation |
@@ -132,13 +136,13 @@ Using **T-shirt sizing** (same as workspace-wide convention).
 
 | Feature | Priority | Size | Platform | System | Dependency | Status |
 |---------|----------|------|----------|--------|-----------|--------|
-| E2E tests (Playwright — submit → approve flow) | P1 | L | Web | CI | All features | Not started |
-| Integration tests (Testcontainers — Temporal + Kafka) | P1 | L | — | CI | All features | Not started |
-| Performance optimization (GraphQL N+1, caching) | P1 | M | — | Workflow API | DataLoader | Not started |
-| Security scan (Semgrep + Trivy) | P1 | M | — | CI | — | Not started |
+| E2E tests (Playwright — full submit → approve → export flow) | P1 | L | Web | CI | All features | Not started |
+| Performance profiling + caching optimization | P1 | M | — | Workflow API | All features | Not started |
 | Static demo build (mock mode → GitHub Pages) | P2 | M | Web | Portal + Admin | API Layer | Not started |
 | Demo video recording | P2 | S | — | — | All features | Not started |
 | GitHub Pages deploy | P2 | M | Web | CI | Static demo | Not started |
+
+> Security scans (Semgrep + Trivy) are in CI from M1. Integration tests (Testcontainers) are in M2. Parallel approval tests are in M3. DataLoader is in M2.
 
 ## Dependency Graph
 
@@ -182,7 +186,5 @@ gantt
 | Item | When | Priority |
 |------|------|----------|
 | Refactor Temporal workflow definition for reusability | After M2 | Medium |
-| Add DataLoader for GraphQL N+1 prevention | M5 | High |
 | Optimize Kafka consumer lag monitoring | After M3 | Medium |
-| Add integration tests for parallel approval edge cases | After M3 | High |
 | Bundle size optimization (Vue code splitting) | M5 | Medium |
