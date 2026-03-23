@@ -35,12 +35,30 @@ Defines **what** the product is, **who** it's for, and **why** it matters.
 <!-- One-sentence definition of the product -->
 
 ## Industry Context
-<!-- Which industry (SaaS / Semiconductor / Media), market landscape, competitors -->
+<!-- Which industry (SaaS / Semiconductor / Media), market landscape -->
+
+## Competitive Analysis
+| Competitor | Strengths | Weaknesses | Our Differentiator |
+|-----------|-----------|------------|-------------------|
+
+## Stakeholder Map
+| Stakeholder | Role | Interest | Influence |
+|-------------|------|----------|-----------|
+| End User | Daily user | High | Low |
+| Admin | System manager | High | Medium |
+| Product Owner | Decision maker | High | High |
 
 ## Target Users
 <!-- User personas with role, goals, pain points -->
 | Persona | Role | Goal | Pain Point |
 |---------|------|------|------------|
+
+## Assumptions & Constraints
+| Type | Description |
+|------|-------------|
+| Assumption | [e.g. Users have stable internet for initial sync] |
+| Constraint | [e.g. All infra must run locally, no cloud] |
+| Dependency | [e.g. Ollama must support the target LLM model] |
 
 ## Core Scenarios
 <!-- 3-5 primary user flows, written as user stories -->
@@ -57,7 +75,6 @@ Flow: step 1 → step 2 → step 3
 |------|--------|-----------|------------|
 
 ## ADRs Created
-<!-- List ADRs written during this phase -->
 - ADR-NNNN: [title]
 ```
 
@@ -73,12 +90,22 @@ Defines **what** to build — features, user stories, acceptance criteria.
 ## Overview
 <!-- 2-3 sentence product summary, link back to ConOps -->
 
+## User Journey Map
+<!-- High-level end-to-end journey for each persona -->
+### [Persona Name] Journey
+| Stage | Action | Touchpoint | Emotion | Opportunity |
+|-------|--------|-----------|---------|-------------|
+| Discover | [how they find the product] | Web / referral | Curious | |
+| Onboard | [first-time experience] | App | Excited / Confused | |
+| Use | [daily workflow] | App | Productive | |
+| Return | [why they come back] | Push / Email | Satisfied | |
+
 ## Feature List
-| # | Feature | Priority | Status |
-|---|---------|----------|--------|
-| F1 | [name] | P0 (must-have) | Planned |
-| F2 | [name] | P1 (should-have) | Planned |
-| F3 | [name] | P2 (nice-to-have) | Planned |
+| # | Feature | Priority | Status | Analytics Event |
+|---|---------|----------|--------|----------------|
+| F1 | [name] | P0 (must-have) | Planned | [event_name] |
+| F2 | [name] | P1 (should-have) | Planned | [event_name] |
+| F3 | [name] | P2 (nice-to-have) | Planned | [event_name] |
 
 ## Feature Details
 
@@ -95,6 +122,11 @@ Defines **what** to build — features, user stories, acceptance criteria.
 **Out of Scope:**
 - [explicitly excluded items]
 
+**Analytics:**
+- Event: `[event_name]`
+- Properties: `{ key: value }`
+- Success metric: [what to measure]
+
 <!-- Repeat for each feature -->
 
 ## Non-functional Requirements
@@ -106,6 +138,15 @@ Defines **what** to build — features, user stories, acceptance criteria.
 | Scalability | [concurrent users, data volume] |
 | i18n | [supported locales] |
 | a11y | WCAG 2.1 AA |
+
+## Release Criteria
+<!-- All must be true before marking a milestone as done -->
+- [ ] All P0 features implemented and tested
+- [ ] No P0/P1 bugs open
+- [ ] Performance meets SLO targets
+- [ ] Security scan passes (SAST/SCA)
+- [ ] UI matches Figma (Final status)
+- [ ] Storybook components up to date
 
 ## Dependencies
 <!-- External systems, APIs, shared infra -->
@@ -123,47 +164,140 @@ Defines **how** the system is structured — components, data flow, infrastructu
 ## Architecture Pattern
 <!-- e.g. Modular Monolith, Clean Architecture, Hexagonal -->
 
-## System Diagram
-<!-- Mermaid diagram showing all systems and their connections -->
+## C4 Model
+
+### Level 1: System Context
+<!-- Who uses the system? What external systems does it interact with? -->
+```mermaid
+graph TD
+  U[User] --> SYS[This System]
+  SYS --> EXT1[External System 1]
+  SYS --> EXT2[Shared Infra]
+```
+
+### Level 2: Container Diagram
+<!-- Frontend, backend, DB, queue — how are they separated? -->
 ```mermaid
 graph TD
   subgraph "Frontend"
+    WEB[Web App]
+    MOB[Mobile App]
   end
   subgraph "Backend"
+    API[API Server]
+    WORKER[Async Worker]
   end
-  subgraph "Infrastructure"
+  subgraph "Data"
+    DB[(PostgreSQL)]
+    CACHE[(Redis)]
+    QUEUE[(Kafka)]
+  end
+  WEB --> API
+  MOB --> API
+  API --> DB
+  API --> CACHE
+  WORKER --> QUEUE
+```
+
+### Level 3: Component Diagram (per system)
+<!-- Internal modules/services within each container -->
+```mermaid
+graph TD
+  subgraph "API Server"
+    AUTH[Auth Module]
+    BOARD[Board Module]
+    STORAGE[Storage Module]
   end
 ```
+
+> Level 4 (Code) is not drawn — use code itself as documentation.
 
 ## Component Overview
-| Component | Tech | Responsibility |
-|-----------|------|---------------|
+| Component | Tech | System | Responsibility |
+|-----------|------|--------|---------------|
 
-## Data Flow
-<!-- Describe how data moves through the system for key scenarios -->
+## Data Flow (Sequence Diagrams)
+<!-- Sequence diagram for each key scenario -->
+
 ### Flow 1: [Scenario Name]
-```
-User → Frontend → API → DB → Response
+```mermaid
+sequenceDiagram
+  actor User
+  User->>Frontend: action
+  Frontend->>API: request
+  API->>DB: query
+  DB-->>API: result
+  API-->>Frontend: response
+  Frontend-->>User: display
 ```
 
-## API Contracts
+### Flow 2: [Async Scenario]
+```mermaid
+sequenceDiagram
+  actor User
+  User->>API: trigger action
+  API->>Kafka: produce event
+  API-->>User: 202 Accepted
+  Kafka->>Worker: consume event
+  Worker->>DB: process + store
+  Worker->>User: push notification
+```
+
+## API Contracts (High-level)
+<!-- Detail goes in technical_design.md -->
 | Endpoint / Topic | Protocol | Direction | Description |
 |-----------------|----------|-----------|-------------|
 
 ## Database Schema (High-level)
-<!-- ER diagram or table list — detail goes in technical_design -->
+<!-- ER diagram — detail goes in technical_design -->
 ```mermaid
 erDiagram
   USER ||--o{ BOARD : creates
 ```
 
+## Deployment Diagram
+<!-- How are services deployed locally? -->
+```mermaid
+graph LR
+  subgraph "Docker Compose"
+    DB[(PostgreSQL)]
+    REDIS[(Redis)]
+    KAFKA[(Kafka)]
+  end
+  subgraph "Host (local)"
+    API[Backend API]
+    WEB[Frontend Dev Server]
+  end
+  API --> DB
+  API --> REDIS
+  API --> KAFKA
+```
+
+## Security Architecture
+| Layer | Measure |
+|-------|---------|
+| Network | Docker network isolation, no exposed ports except mapped |
+| Auth | [JWT / OAuth2 / API Key] — per project |
+| Authorization | [RBAC / ACL] — per project |
+| Data in transit | TLS (HTTPS, WSS, gRPCs) |
+| Data at rest | MinIO SSE, PostgreSQL encryption |
+| Secrets | `.env` files, Docker secrets, never in code |
+| Input validation | DTO validation at API boundary |
+| Dependencies | SAST/SCA scanning in CI |
+
 ## Infrastructure Dependencies
-<!-- Which shared services does this project use -->
 | Service | Purpose |
 |---------|---------|
 
 ## Scalability Considerations
-<!-- How would this scale? Horizontal, vertical, caching, CDN -->
+<!-- How would this scale? Interview-ready answer -->
+| Concern | Current (local) | Production Strategy |
+|---------|-----------------|-------------------|
+| Users | Single instance | Horizontal scaling behind load balancer |
+| DB | Single PostgreSQL | Read replicas, connection pooling |
+| Cache | Single Redis | Redis Cluster |
+| Messaging | Single Kafka | Multi-broker Kafka cluster |
+| Storage | Single MinIO | S3 in cloud |
 
 ## ADRs Created
 - ADR-NNNN: [title]
@@ -209,8 +343,42 @@ Defines **implementation details** — API specs, DB schema, algorithms. One doc
 <!-- Shared sections below apply to all systems -->
 
 ## Database Schema (Full)
+
+### ER Diagram
+```mermaid
+erDiagram
+  TABLE_A ||--o{ TABLE_B : has
+```
+
 ### Migrations
-<!-- Migration strategy and naming convention -->
+<!-- Migration tool, naming convention, rollback strategy -->
+| Item | Standard |
+|------|---------|
+| Tool | [Prisma Migrate / Flyway / EF Core] |
+| Naming | `YYYYMMDDHHMMSS_description` |
+| Rollback | Every migration must have a `down` migration |
+
+### Data Migration Strategy
+<!-- How to handle schema changes on existing data -->
+| Scenario | Strategy |
+|----------|---------|
+| Add column | Add with default value, backfill async |
+| Rename column | Add new → copy data → remove old (across 2 releases) |
+| Remove column | Stop reading first → remove in next release |
+
+## Sequence Diagrams (Key Flows)
+<!-- One sequence diagram per critical flow -->
+
+### Flow: [Critical Flow Name]
+```mermaid
+sequenceDiagram
+  actor User
+  User->>Frontend: action
+  Frontend->>API: request
+  API->>DB: query
+  DB-->>API: result
+  API-->>Frontend: response
+```
 
 ## Authentication & Authorization
 <!-- Token flow, role mapping, permission matrix -->
@@ -377,16 +545,45 @@ Defines **when** to build what — milestones, priorities, dependencies.
 ```markdown
 # Development Roadmap: [Project Name]
 
+## Effort Estimation Method
+
+Using **T-shirt sizing** (no story points):
+
+| Size | Effort | Example |
+|------|--------|---------|
+| XS | < 2 hours | Fix typo, update config |
+| S | 2-4 hours | Add API endpoint, simple UI component |
+| M | 1-2 days | New feature with DB + API + UI |
+| L | 3-5 days | Complex feature across multiple systems |
+| XL | 1-2 weeks | New system, major refactor |
+
+## Definition of Done
+
+A feature is "Done" when:
+- [ ] Code reviewed and merged to `dev`
+- [ ] Unit tests written and passing
+- [ ] API documented (OpenAPI / GraphQL schema / proto)
+- [ ] UI matches Figma (if applicable)
+- [ ] Storybook story added (if UI component)
+- [ ] Feature flag configured in Unleash (if gradual rollout)
+- [ ] Analytics event implemented (if user-facing)
+- [ ] No lint or security scan errors
+
 ## Milestones
 
 ### M1: [Milestone Name] — [Target Tag]
 **Goal:** [one sentence]
 **Duration:** [X weeks]
 
-| Feature | Priority | Dependency | Status |
-|---------|----------|-----------|--------|
-| [feature] | P0 | — | Not started |
-| [feature] | P0 | [depends on] | Not started |
+| Feature | Priority | Size | Dependency | Status |
+|---------|----------|------|-----------|--------|
+| [feature] | P0 | M | — | Not started |
+| [feature] | P0 | L | [depends on] | Not started |
+
+**Risks for this milestone:**
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| [risk] | [impact] | [plan] |
 
 ### M2: [Milestone Name] — [Target Tag]
 ...
@@ -458,12 +655,37 @@ Defines **how** to verify quality — test layers, tools, coverage targets.
 | E2E | ✅ | Before release |
 | Load | ❌ Manual | Before release |
 
+## Test Data Strategy
+| Environment | Data Source | Reset |
+|-------------|-----------|-------|
+| Unit tests | In-memory mocks / fixtures | Every test run |
+| Integration | Testcontainers (ephemeral DB) | Every test run |
+| E2E | Seed script (`seed.ts` / `seed.sql`) | Before test suite |
+| Load | Generated via k6 scripts | Before test run |
+
+> Never use production data for testing. Always use generated/seeded data.
+
+## Test Environment
+| Environment | Purpose | How to Run |
+|-------------|---------|-----------|
+| Local | Developer machine | `docker compose up` + `npm test` |
+| CI | GitHub Actions | Automated on every PR |
+| Staging | Pre-release validation | `docker compose -f docker-compose.yml -f docker-compose.[project].yml up` |
+
+## Regression Strategy
+| Trigger | What Runs | Purpose |
+|---------|----------|---------|
+| Every PR | Unit + Integration + SAST/SCA | Catch regressions early |
+| Before release (dev → stable) | Unit + Integration + E2E | Full regression |
+| Weekly (scheduled) | Full suite + dependency scan | Catch env drift |
+
 ## Quality Gates
 <!-- PR cannot merge if these fail -->
 - [ ] All unit tests pass
 - [ ] No lint errors
 - [ ] No security scan findings (SAST/SCA)
 - [ ] Coverage does not decrease
+- [ ] No P0/P1 bugs open for this feature
 ```
 
 ---
