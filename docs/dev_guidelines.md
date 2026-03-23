@@ -8,45 +8,772 @@ Each project follows the same document lifecycle. Phases are sequential for init
 
 | Phase | Document | ADR? | Purpose |
 |-------|----------|------|---------|
-| 1 | `conops.md` | ✅ | Concept of Operations — see ConOps Required Sections below |
+| 1 | `conops.md` | ✅ | Concept of Operations — product vision, personas, scenarios |
 | 2 | `prd.md` | — | Product Requirements — features, user stories, acceptance criteria |
-| 3 | `system_architecture.md` | ✅ | System design — components, data flow, infrastructure |
-| 4 | `technical_design.md` | ✅ | Implementation detail — APIs, DB schema, algorithms |
-| 5 | `ui_ux_design.md` | — | UI/UX — wireframes, Figma links, design system |
+| 3 | `ui_ux_design.md` | — | UI/UX — Figma wireframes, design system, interaction spec |
+| 4 | `system_architecture.md` | ✅ | System design — C4 model, data flow, deployment |
+| 5 | `technical_design.md` | ✅ | Implementation detail — APIs, DB schema, algorithms |
 | 6 | `development_roadmap.md` | — | Timeline — milestones, priorities, dependencies |
 | 7 | `testing_strategy.md` | — | Test plan — unit, integration, E2E, load |
 
-> ADRs are written during initial development too — whenever a major tech decision is made (e.g. "Why Kafka over RabbitMQ?", "Why Yjs over OT?").
+**When to write ADRs and RFCs:**
 
-### ConOps Required Sections
+| Document | When | During Initial Dev? |
+|----------|------|-------------------|
+| **ADRs** | During Phase 1 (ConOps), Phase 4 (System Arch), Phase 5 (Tech Design) — whenever a major tech decision is made | ✅ Yes — created alongside the phase docs |
+| **RFCs** | During Feature Iteration (v1+) — before developing a major new feature | ❌ No — only after initial development is complete |
 
-Every project's `conops.md` must include:
+> ADR example during ConOps: deciding "Why Yjs over OT for collaboration?" → write `ADR-0001-why-yjs-over-ot.md`
+> RFC example during iteration: proposing "Add voice chat to whiteboard" → write `RFC-0001-voice-chat.md`
 
-| Section | Description |
-|---------|-------------|
-| Product Vision | One-sentence product definition |
-| Target Users | Who uses this and why |
-| Industry Context | Which industry this serves (SaaS / Semiconductor / Media) |
-| High-level Scenarios | 3-5 core user flows |
-| OKR / Success Metrics | Measurable goals — examples below |
-| Risk Register | Technical, timeline, and dependency risks |
+> **One doc per project, not per system.** Each project has multiple systems (e.g. Whiteboard has BFF, AI Service, etc.). Use `## System: [name]` sections within the same doc to separate each system's details. This keeps everything in one place and avoids doc sprawl.
 
-**OKR / Success Metrics examples:**
+### Document Templates
 
-| Metric | Whiteboard (SaaS) | Workflow (Semiconductor) | 3D Asset (Media) |
-|--------|-------------------|--------------------------|-------------------|
-| DAU | Active users per day | Active approvers per day | Active uploaders per day |
-| Retention | D7 / D30 retention | — (enterprise, always on) | Monthly active teams |
-| Conversion | Free → Pro upgrade rate | — | Free tier → paid storage |
-| Task completion | Boards created per user | Avg approval turnaround time | Assets uploaded per session |
-| Performance | p99 latency < 200ms | SLA uptime 99.95% | Upload success rate > 99.5% |
+---
 
-**Risk Register template:**
+#### 1. ConOps (Concept of Operations) — `conops.md`
 
+Defines **what** the product is, **who** it's for, and **why** it matters.
+
+```markdown
+# ConOps: [Project Name]
+
+## Product Vision
+<!-- One-sentence definition of the product -->
+
+## Industry Context
+<!-- Which industry (SaaS / Semiconductor / Media), market landscape -->
+
+## Competitive Analysis
+| Competitor | Strengths | Weaknesses | Our Differentiator |
+|-----------|-----------|------------|-------------------|
+
+## Stakeholder Map
+| Stakeholder | Role | Interest | Influence |
+|-------------|------|----------|-----------|
+| End User | Daily user | High | Low |
+| Admin | System manager | High | Medium |
+| Product Owner | Decision maker | High | High |
+
+## Target Users
+<!-- User personas with role, goals, pain points -->
+| Persona | Role | Goal | Pain Point |
+|---------|------|------|------------|
+
+## Assumptions & Constraints
+| Type | Description |
+|------|-------------|
+| Assumption | [e.g. Users have stable internet for initial sync] |
+| Constraint | [e.g. All infra must run locally, no cloud] |
+| Dependency | [e.g. Ollama must support the target LLM model] |
+
+## Core Scenarios
+<!-- 3-5 primary user flows, written as user stories -->
+### Scenario 1: [Name]
+**As a** [persona], **I want to** [action], **so that** [outcome].
+Flow: step 1 → step 2 → step 3
+
+## OKR / Success Metrics
+| Objective | Key Result | Target |
+|-----------|-----------|--------|
+
+## Risk Register
 | Risk | Impact | Likelihood | Mitigation |
 |------|--------|-----------|------------|
-| e.g. CRDT sync conflict edge case | High | Medium | Fuzz testing + fallback to server state |
-| e.g. Kafka consumer lag spikes | Medium | Low | Monitor consumer lag, auto-scale workers |
+
+## ADRs Created
+- ADR-NNNN: [title]
+```
+
+---
+
+#### 2. PRD (Product Requirements Document) — `prd.md`
+
+Defines **what** to build — features, user stories, acceptance criteria.
+
+```markdown
+# PRD: [Project Name]
+
+## Overview
+<!-- 2-3 sentence product summary, link back to ConOps -->
+
+## User Journey Map
+<!-- High-level end-to-end journey for each persona -->
+### [Persona Name] Journey
+| Stage | Action | Touchpoint | Emotion | Opportunity |
+|-------|--------|-----------|---------|-------------|
+| Discover | [how they find the product] | Web / referral | Curious | |
+| Onboard | [first-time experience] | App | Excited / Confused | |
+| Use | [daily workflow] | App | Productive | |
+| Return | [why they come back] | Push / Email | Satisfied | |
+
+## Feature List
+| # | Feature | Priority | Platform | System | Status | Analytics Event |
+|---|---------|----------|----------|--------|--------|----------------|
+| F1 | [name] | P0 | Web + Mobile | BFF + API | Planned | [event_name] |
+| F2 | [name] | P1 | Web (Admin) | Admin API | Planned | [event_name] |
+| F3 | [name] | P2 | Mobile only | Mobile App | Planned | [event_name] |
+
+## Feature Details
+
+### F1: [Feature Name]
+**User Story:** As a [persona], I want to [action], so that [outcome].
+
+**Acceptance Criteria:**
+- [ ] Given [context], when [action], then [result]
+- [ ] Given [context], when [action], then [result]
+
+**Edge Cases:**
+- What happens when [edge case]?
+
+**Out of Scope:**
+- [explicitly excluded items]
+
+**Analytics:**
+- Event: `[event_name]`
+- Properties: `{ key: value }`
+- Success metric: [what to measure]
+
+<!-- Repeat for each feature -->
+
+## Non-functional Requirements
+| Requirement | Target |
+|-------------|--------|
+| Performance | p99 latency < [X]ms |
+| Availability | [X]% uptime |
+| Security | [OWASP, auth, encryption] |
+| Scalability | [concurrent users, data volume] |
+| i18n | [supported locales] |
+| a11y | WCAG 2.1 AA |
+
+## Release Criteria
+<!-- All must be true before marking a milestone as done -->
+- [ ] All P0 features implemented and tested
+- [ ] No P0/P1 bugs open
+- [ ] Performance meets SLO targets
+- [ ] Security scan passes (SAST/SCA)
+- [ ] UI matches Figma (Final status)
+- [ ] Storybook components up to date
+
+## Dependencies
+<!-- External systems, APIs, shared infra -->
+```
+
+---
+#### 3. UI/UX Design — `ui_ux_design.md`
+
+Defines **how it looks and feels** — Figma as single source of truth, design system, interaction specs.
+
+```markdown
+# UI/UX Design: [Project Name]
+
+## Design Principles
+<!-- 3-5 guiding principles for this product's UX -->
+1. [principle]
+2. [principle]
+
+## Figma Project Structure
+
+### Figma File Organization
+| File | Content | Link |
+|------|---------|------|
+| [Project] — Design System | Shared components, tokens, icons | [Figma URL] |
+| [Project] — Wireframes | Low-fi wireframes for all screens | [Figma URL] |
+| [Project] — UI Design | High-fi mockups (final) | [Figma URL] |
+| [Project] — Prototype | Interactive prototype with transitions | [Figma URL] |
+
+### Figma Pages (within each file)
+| Page | Content |
+|------|---------|
+| Cover | Project name, status, last updated |
+| Components | Reusable component library |
+| Screens — [Feature] | All screens for a feature |
+| Flows — [User Journey] | Connected prototype flow |
+| Archive | Deprecated designs (don't delete, archive) |
+
+## Figma Workflow
+
+```
+1. Define requirements    → PRD feature + acceptance criteria
+2. Write UI spec          → Claude generates component list, layout, interactions
+3. Wireframe (low-fi)     → Figma wireframe, grayscale, no styling
+4. Review wireframe       → Validate flow with PRD acceptance criteria
+5. UI design (high-fi)    → Apply design tokens, real content, final styling
+6. Interaction spec       → Define hover, click, transition, animation, loading states
+7. Prototype              → Link screens in Figma for clickable walkthrough
+8. Design review          → Final approval, mark page as "✅ Final"
+9. Handoff                → Dev implements from Figma Dev Mode
+10. Storybook             → Each component matches Figma 1:1
+```
+
+## Web UI
+
+### Screen Inventory (Web)
+| Screen | Route | System | Figma Page | Status |
+|--------|-------|--------|-----------|--------|
+| | | | | Draft / Review / Final |
+
+### Web-specific Patterns
+| Pattern | Implementation |
+|---------|---------------|
+| Navigation | Top nav + side panel |
+| Layout | CSS Grid / Flexbox, responsive |
+| Keyboard shortcuts | Define per feature |
+| Drag & drop | HTML5 DnD API |
+
+## Mobile UI (iOS + Android)
+
+### Screen Inventory (Mobile)
+| Screen | Route | Platform | Figma Page | Status |
+|--------|-------|----------|-----------|--------|
+| | | iOS + Android / iOS only / Android only | | Draft / Review / Final |
+
+### Mobile-specific Patterns
+| Pattern | iOS | Android |
+|---------|-----|---------|
+| Navigation | Tab bar (bottom) | Bottom navigation |
+| Back | Swipe from left edge | System back button |
+| Pull to refresh | UIRefreshControl | SwipeRefreshLayout |
+| Gestures | Swipe, pinch, long press | Same |
+| Safe area | iOS notch / Dynamic Island | Status bar + nav bar |
+| Haptics | UIImpactFeedbackGenerator | HapticFeedbackConstants |
+
+### Platform-specific Screens
+<!-- Screens that differ between iOS and Android -->
+| Screen | iOS Difference | Android Difference |
+|--------|---------------|-------------------|
+| Settings | iOS Settings style | Material Design style |
+| Share | UIActivityViewController | Android Share sheet |
+| Permissions | iOS permission dialog | Android runtime permission |
+
+## Admin UI (if applicable)
+
+### Screen Inventory (Admin)
+| Screen | Route | Figma Page | Status |
+|--------|-------|-----------|--------|
+| | | | Draft / Review / Final |
+
+### Admin-specific Patterns
+| Pattern | Implementation |
+|---------|---------------|
+| Data tables | Sortable, filterable, paginated |
+| Forms | Validation, error states, multi-step |
+| Dashboard | Charts, KPIs, real-time updates |
+| RBAC | Show/hide based on admin role |
+
+## Screen States (every screen on every platform must define all states)
+| State | Description | Required? |
+|-------|------------|-----------|
+| Default | Normal loaded state | ✅ Always |
+| Loading | Skeleton / spinner while fetching | ✅ Always |
+| Empty | No data yet (first-time user) | ✅ Always |
+| Error | API failure / network error | ✅ Always |
+| Partial | Some data loaded, some failed | When applicable |
+| Disabled | Feature behind feature flag or paywall | When applicable |
+| Offline | No network (mobile) | ✅ Mobile always |
+
+## User Flows
+<!-- Mermaid flowchart for key user journeys, one per platform if different -->
+
+### Web Flow
+```mermaid
+graph LR
+  A[Landing] --> B[Sign Up]
+  B --> C[Dashboard]
+  C --> D[Create Board]
+```
+
+### Mobile Flow
+```mermaid
+graph LR
+  A[Splash] --> B[Login / Sign Up]
+  B --> C[Home Tab]
+  C --> D[Create Board]
+```
+
+## Interaction Specification
+
+### Web Interactions
+| Element | Trigger | Action | Animation | Duration |
+|---------|---------|--------|-----------|----------|
+| Button | Hover | Background color change | ease-in-out | 150ms |
+| Modal | Open | Fade in + scale up | ease-out | 200ms |
+| Toast | Show | Slide in from top | ease-out | 300ms |
+| Page transition | Navigate | Fade | ease-in-out | 200ms |
+
+### Mobile Interactions
+| Element | Trigger | Action | Animation | Duration |
+|---------|---------|--------|-----------|----------|
+| Button | Tap | Ripple / highlight | native | 100ms |
+| Bottom sheet | Swipe up | Slide up from bottom | spring | 300ms |
+| Toast | Show | Slide in from bottom | ease-out | 300ms |
+| Screen transition | Navigate | Push from right (iOS) / Fade (Android) | native | 300ms |
+
+## Component Library
+
+| Component | Props | Variants | States | Storybook |
+|-----------|-------|----------|--------|-----------|
+| Button | size, variant, disabled | primary, secondary, ghost | default, hover, active, disabled, loading | ✅ |
+| Input | label, error, placeholder | text, password, search | default, focus, error, disabled | ✅ |
+
+> Every component in Figma must have a matching Storybook story.
+
+## Design Tokens
+<!-- Reference to shared tokens/ directory — single source of truth -->
+| Token | File | Example |
+|-------|------|---------|
+| Colors | `tokens/colors.json` | `--color-primary: #1976D2` |
+| Spacing | `tokens/spacing.json` | `--space-4: 16px` (4px grid) |
+| Typography | `tokens/typography.json` | `--font-body: 14px/1.5 Inter` |
+| Shadows | `tokens/shadows.json` | `--shadow-md: 0 4px 6px rgba(...)` |
+| Border radius | `tokens/radius.json` | `--radius-md: 8px` |
+
+> Tokens are defined in code, imported into Figma via Tokens Studio plugin.
+
+## Responsive Breakpoints
+| Breakpoint | Width | Layout | Figma Frame |
+|-----------|-------|--------|-------------|
+| Mobile | < 768px | Single column, bottom nav | 375 x 812 |
+| Tablet | 768-1024px | Two column, side nav | 768 x 1024 |
+| Desktop | > 1024px | Full layout, top nav + side panel | 1440 x 900 |
+
+## Handoff Notes (Figma → Developer)
+
+| Item | Where to Find |
+|------|--------------|
+| Spacing & sizing | Figma Dev Mode → Inspect panel |
+| Colors | Design tokens (not hardcoded hex) |
+| Assets (icons, images) | Figma → Export as SVG / PNG |
+| Interaction specs | This doc → Interaction Specification table |
+| Responsive behavior | This doc → Responsive Breakpoints table |
+| Component props | Storybook → Component docs |
+
+## Accessibility (a11y) Checklist
+- [ ] Color contrast ≥ 4.5:1 (use Figma a11y plugin to verify)
+- [ ] All images have alt text defined in Figma layer names
+- [ ] Focus order documented (tab sequence)
+- [ ] Keyboard shortcuts defined for key actions
+- [ ] Touch targets ≥ 44x44px (mobile)
+- [ ] Screen reader tested (VoiceOver / TalkBack)
+- [ ] Reduced motion alternatives for all animations
+- [ ] Error messages are descriptive (not just "Error")
+```
+
+---
+
+
+#### 4. System Architecture — `system_architecture.md`
+
+Defines **how** the system is structured — components, data flow, infrastructure.
+
+```markdown
+# System Architecture: [Project Name]
+
+## Architecture Pattern
+<!-- e.g. Modular Monolith, Clean Architecture, Hexagonal -->
+
+## C4 Model
+
+### Level 1: System Context
+<!-- Who uses the system? What external systems does it interact with? -->
+```mermaid
+graph TD
+  U[User] --> SYS[This System]
+  SYS --> EXT1[External System 1]
+  SYS --> EXT2[Shared Infra]
+```
+
+### Level 2: Container Diagram
+<!-- Frontend, backend, DB, queue — how are they separated? -->
+```mermaid
+graph TD
+  subgraph "Frontend"
+    WEB[Web App]
+    MOB[Mobile App]
+  end
+  subgraph "Backend"
+    API[API Server]
+    WORKER[Async Worker]
+  end
+  subgraph "Data"
+    DB[(PostgreSQL)]
+    CACHE[(Redis)]
+    QUEUE[(Kafka)]
+  end
+  WEB --> API
+  MOB --> API
+  API --> DB
+  API --> CACHE
+  WORKER --> QUEUE
+```
+
+### Level 3: Component Diagram (per system)
+<!-- Internal modules/services within each container -->
+```mermaid
+graph TD
+  subgraph "API Server"
+    AUTH[Auth Module]
+    BOARD[Board Module]
+    STORAGE[Storage Module]
+  end
+```
+
+> Level 4 (Code) is not drawn — use code itself as documentation.
+
+## Component Overview
+| Component | Tech | System | Responsibility |
+|-----------|------|--------|---------------|
+
+## Data Flow (Sequence Diagrams)
+<!-- Sequence diagram for each key scenario -->
+
+### Flow 1: [Scenario Name]
+```mermaid
+sequenceDiagram
+  actor User
+  User->>Frontend: action
+  Frontend->>API: request
+  API->>DB: query
+  DB-->>API: result
+  API-->>Frontend: response
+  Frontend-->>User: display
+```
+
+### Flow 2: [Async Scenario]
+```mermaid
+sequenceDiagram
+  actor User
+  User->>API: trigger action
+  API->>Kafka: produce event
+  API-->>User: 202 Accepted
+  Kafka->>Worker: consume event
+  Worker->>DB: process + store
+  Worker->>User: push notification
+```
+
+## API Contracts (High-level)
+<!-- Detail goes in technical_design.md -->
+| Endpoint / Topic | Protocol | Direction | Description |
+|-----------------|----------|-----------|-------------|
+
+## Database Schema (High-level)
+<!-- ER diagram — detail goes in technical_design -->
+```mermaid
+erDiagram
+  USER ||--o{ BOARD : creates
+```
+
+## Deployment Diagram
+<!-- How are services deployed locally? -->
+```mermaid
+graph LR
+  subgraph "Docker Compose"
+    DB[(PostgreSQL)]
+    REDIS[(Redis)]
+    KAFKA[(Kafka)]
+  end
+  subgraph "Host (local)"
+    API[Backend API]
+    WEB[Frontend Dev Server]
+  end
+  API --> DB
+  API --> REDIS
+  API --> KAFKA
+```
+
+## Security Architecture
+| Layer | Measure |
+|-------|---------|
+| Network | Docker network isolation, no exposed ports except mapped |
+| Auth | [JWT / OAuth2 / API Key] — per project |
+| Authorization | [RBAC / ACL] — per project |
+| Data in transit | TLS (HTTPS, WSS, gRPCs) |
+| Data at rest | MinIO SSE, PostgreSQL encryption |
+| Secrets | `.env` files, Docker secrets, never in code |
+| Input validation | DTO validation at API boundary |
+| Dependencies | SAST/SCA scanning in CI |
+
+## Infrastructure Dependencies
+| Service | Purpose |
+|---------|---------|
+
+## Scalability Considerations
+<!-- How would this scale? Interview-ready answer -->
+| Concern | Current (local) | Production Strategy |
+|---------|-----------------|-------------------|
+| Users | Single instance | Horizontal scaling behind load balancer |
+| DB | Single PostgreSQL | Read replicas, connection pooling |
+| Cache | Single Redis | Redis Cluster |
+| Messaging | Single Kafka | Multi-broker Kafka cluster |
+| Storage | Single MinIO | S3 in cloud |
+
+## ADRs Created
+- ADR-NNNN: [title]
+```
+
+---
+
+#### 5. Technical Design — `technical_design.md`
+
+Defines **implementation details** — API specs, DB schema, algorithms. One doc per project, **sectioned by system**.
+
+```markdown
+# Technical Design: [Project Name]
+
+<!-- One section per system within this project -->
+
+## System: [System Name, e.g. "BFF + API (NestJS)"]
+
+### API Specification
+<!-- Detailed endpoint definitions for this system -->
+| Method | Path | Request | Response | Auth |
+|--------|------|---------|----------|------|
+
+### WebSocket / SignalR / gRPC Events
+| Event | Direction | Payload | Description |
+|-------|-----------|---------|-------------|
+
+### Database Tables (owned by this system)
+| Column | Type | Constraints | Description |
+|--------|------|------------|-------------|
+
+### Indexes
+| Table | Columns | Type | Purpose |
+|-------|---------|------|---------|
+
+## System: [Next System, e.g. "AI Service (LangGraph)"]
+### Pipeline Specification
+...
+
+<!-- Repeat for each system -->
+
+---
+<!-- Shared sections below apply to all systems -->
+
+## Database Schema (Full)
+
+### ER Diagram
+```mermaid
+erDiagram
+  TABLE_A ||--o{ TABLE_B : has
+```
+
+### Migrations
+<!-- Migration tool, naming convention, rollback strategy -->
+| Item | Standard |
+|------|---------|
+| Tool | [Prisma Migrate / Flyway / EF Core] |
+| Naming | `YYYYMMDDHHMMSS_description` |
+| Rollback | Every migration must have a `down` migration |
+
+### Data Migration Strategy
+<!-- How to handle schema changes on existing data -->
+| Scenario | Strategy |
+|----------|---------|
+| Add column | Add with default value, backfill async |
+| Rename column | Add new → copy data → remove old (across 2 releases) |
+| Remove column | Stop reading first → remove in next release |
+
+## Sequence Diagrams (Key Flows)
+<!-- One sequence diagram per critical flow -->
+
+### Flow: [Critical Flow Name]
+```mermaid
+sequenceDiagram
+  actor User
+  User->>Frontend: action
+  Frontend->>API: request
+  API->>DB: query
+  DB-->>API: result
+  API-->>Frontend: response
+```
+
+## Authentication & Authorization
+<!-- Token flow, role mapping, permission matrix -->
+| Role | Permissions |
+|------|------------|
+
+## Error Handling
+<!-- Error codes, response format, retry strategy -->
+
+## Caching Strategy
+| Key Pattern | TTL | Invalidation |
+|-------------|-----|-------------|
+
+## Background Jobs / Workers
+| Job | System | Trigger | Input | Output |
+|-----|--------|---------|-------|--------|
+
+## Third-party Integrations
+
+## ADRs Created
+- ADR-NNNN: [title]
+```
+
+> **Note:** One doc per project, not per system. Use `## System: [name]` headers to separate each system's specs within the same doc.
+
+---
+
+#### 6. Development Roadmap — `development_roadmap.md`
+
+Defines **when** to build what — milestones, priorities, dependencies.
+
+```markdown
+# Development Roadmap: [Project Name]
+
+## Effort Estimation Method
+
+Using **T-shirt sizing** (no story points):
+
+| Size | Effort | Example |
+|------|--------|---------|
+| XS | < 2 hours | Fix typo, update config |
+| S | 2-4 hours | Add API endpoint, simple UI component |
+| M | 1-2 days | New feature with DB + API + UI |
+| L | 3-5 days | Complex feature across multiple systems |
+| XL | 1-2 weeks | New system, major refactor |
+
+## Definition of Done
+
+A feature is "Done" when:
+- [ ] Code reviewed and merged to `dev`
+- [ ] Unit tests written and passing
+- [ ] API documented (OpenAPI / GraphQL schema / proto)
+- [ ] UI matches Figma (if applicable)
+- [ ] Storybook story added (if UI component)
+- [ ] Feature flag configured in Unleash (if gradual rollout)
+- [ ] Analytics event implemented (if user-facing)
+- [ ] No lint or security scan errors
+
+## Milestones
+
+### M1: [Milestone Name] — [Target Tag]
+**Goal:** [one sentence]
+**Duration:** [X weeks]
+
+| Feature | Priority | Size | Platform | System | Dependency | Status |
+|---------|----------|------|----------|--------|-----------|--------|
+| [feature] | P0 | M | Web + Mobile | API + Web + Mobile | — | Not started |
+| [feature] | P0 | L | Web (Admin) | Admin API | [depends on] | Not started |
+
+**Risks for this milestone:**
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| [risk] | [impact] | [plan] |
+
+### M2: [Milestone Name] — [Target Tag]
+...
+
+## Dependency Graph
+```mermaid
+gantt
+  title Development Timeline
+  section M1
+    Feature A: a1, 2026-04-01, 2w
+    Feature B: a2, after a1, 1w
+  section M2
+    Feature C: a3, after a2, 2w
+```
+
+## Release Plan
+| Tag | Milestone | Branch | What's Included |
+|-----|-----------|--------|----------------|
+| project/v0.1.0-rc.1 | M1 | dev | [features] |
+| project/v0.1.0 | M1 | stable | [features] |
+
+## Tech Debt Planned
+| Item | When | Priority |
+|------|------|----------|
+```
+
+---
+
+#### 7. Testing Strategy — `testing_strategy.md`
+
+Defines **how** to verify quality — test layers, tools, coverage targets.
+
+```markdown
+# Testing Strategy: [Project Name]
+
+## Test Pyramid
+| Layer | Tool | Target Coverage | What It Tests |
+|-------|------|----------------|--------------|
+| Unit | [Jest/JUnit/xUnit] | > 80% | Services, utils, domain logic |
+| Integration | [Testcontainers/Supertest] | Key paths | DB queries, API contracts |
+| E2E | [Playwright/Detox] | Critical flows | User journeys end-to-end |
+| Load | [k6] | SLO thresholds | Performance under stress |
+
+## Test Scenarios
+
+### Unit Tests
+| Module | What to Test | Priority |
+|--------|-------------|----------|
+
+### Integration Tests
+| Flow | What to Test | Dependencies |
+|------|-------------|-------------|
+
+### E2E Tests
+| Scenario | Platform | Steps | Expected Result |
+|----------|----------|-------|----------------|
+
+### Platform-specific Tests
+| Platform | Tool | What to Test |
+|----------|------|-------------|
+| Web | Playwright | Cross-browser (Chrome, Firefox, Safari), responsive layouts |
+| iOS | XCTest / Detox | Native gestures, push notifications, deep links, offline mode |
+| Android | Espresso / Detox | Back button, intent handling, push notifications, offline mode |
+| Unity | Unity Test Framework | 3D rendering, input handling, scene loading |
+
+### Load Tests
+| Scenario | Target | Threshold |
+|----------|--------|----------|
+| [scenario] | p99 < [X]ms | [concurrent users] |
+
+## CI Integration
+<!-- Which tests run in CI, which are manual -->
+| Test Type | CI? | When |
+|-----------|-----|------|
+| Unit | ✅ | Every PR |
+| Integration | ✅ | Every PR |
+| E2E | ✅ | Before release |
+| Load | ❌ Manual | Before release |
+
+## Test Data Strategy
+| Environment | Data Source | Reset |
+|-------------|-----------|-------|
+| Unit tests | In-memory mocks / fixtures | Every test run |
+| Integration | Testcontainers (ephemeral DB) | Every test run |
+| E2E | Seed script (`seed.ts` / `seed.sql`) | Before test suite |
+| Load | Generated via k6 scripts | Before test run |
+
+> Never use production data for testing. Always use generated/seeded data.
+
+## Test Environment
+| Environment | Purpose | How to Run |
+|-------------|---------|-----------|
+| Local | Developer machine | `docker compose up` + `npm test` |
+| CI | GitHub Actions | Automated on every PR |
+| Staging | Pre-release validation | `docker compose -f docker-compose.yml -f docker-compose.[project].yml up` |
+
+## Regression Strategy
+| Trigger | What Runs | Purpose |
+|---------|----------|---------|
+| Every PR | Unit + Integration + SAST/SCA | Catch regressions early |
+| Before release (dev → stable) | Unit + Integration + E2E | Full regression |
+| Weekly (scheduled) | Full suite + dependency scan | Catch env drift |
+
+## Quality Gates
+<!-- PR cannot merge if these fail -->
+- [ ] All unit tests pass
+- [ ] No lint errors
+- [ ] No security scan findings (SAST/SCA)
+- [ ] Coverage does not decrease
+- [ ] No P0/P1 bugs open for this feature
+```
+
+---
 
 ### Feature Iteration (v1+)
 
@@ -54,10 +781,10 @@ For new features after initial release, don't rewrite docs. Follow this flow:
 
 1. Write RFC (`rfcs/RFC-NNNN-feature-name.md`)
 2. Update `prd.md` (add feature section)
-3. Update `system_architecture.md` (if architecture changes)
-4. Write ADR (`adrs/ADR-NNNN-decision-title.md`) for major tech decisions
-5. Update `technical_design.md` (add feature detail)
-6. Update `ui_ux_design.md` (new Figma screens)
+3. Update `ui_ux_design.md` (new Figma screens)
+4. Update `system_architecture.md` (if architecture changes)
+5. Write ADR (`adrs/ADR-NNNN-decision-title.md`) for major tech decisions
+6. Update `technical_design.md` (add feature detail)
 7. Update `testing_strategy.md` (add test plan for feature)
 8. Develop
 
