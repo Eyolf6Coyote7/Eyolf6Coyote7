@@ -13,7 +13,6 @@ graph TD
   U_WEB[Web User<br/>Browser] --> SYS[Realtime AI Whiteboard]
   U_MOB[Mobile User<br/>iOS / Android] --> SYS
   U_GUEST[Guest User<br/>Anonymous] --> SYS
-  SYS --> GW[API Gateway<br/>Go]
   SYS --> OLLAMA[Ollama<br/>Local LLM]
   SYS --> INFRA[Shared Infrastructure<br/>PostgreSQL, Redis, MinIO, etc.]
 ```
@@ -58,8 +57,7 @@ graph TD
   AIS --> OLLAMA
   AIS --> CHROMA
   AIS --> LF
-  AIS -->|MCP tools| BFF
-  AIS -->|store result| PG
+  AIS -->|MCP tools + store result| BFF
 ```
 
 ### Level 3: Component Diagram (BFF + API)
@@ -377,5 +375,5 @@ graph LR
 - [ADR-0001: Why Yjs (CRDT) over OT](adrs/ADR-0001-why-yjs-over-ot.md)
 - [ADR-0002: Why Ollama over cloud LLM](adrs/ADR-0002-why-ollama-over-cloud-llm.md)
 - [ADR-0003: Why schema-per-tenant](adrs/ADR-0003-why-schema-per-tenant.md)
-- ADR-0004: Why NestJS Modular Monolith over microservices (created during this phase)
-- ADR-0005: Why Redis Stream over Kafka for AI task queue (created during this phase)
+- [ADR-0004: Why NestJS Modular Monolith over microservices](adrs/ADR-0004-why-modular-monolith.md)
+- [ADR-0005: Why Redis Stream over Kafka for AI task queue](adrs/ADR-0005-why-redis-stream-over-kafka.md)

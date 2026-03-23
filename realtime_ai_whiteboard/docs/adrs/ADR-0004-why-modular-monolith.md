@@ -21,4 +21,4 @@ Use **NestJS Modular Monolith** — one NestJS application with feature-isolated
 ## Consequences
 - All features share one process — a bug in one module can crash the whole server
 - Need discipline to keep module boundaries clean (no cross-module imports except through interfaces)
-- Vertical scaling only (bigger machine, not more instances) until Redis Pub/Sub is added for horizontal
+- Vertical scaling only (bigger machine, not more instances) until Redis Pub/Sub is added for horizontal scaling
