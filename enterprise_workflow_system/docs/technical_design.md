@@ -165,8 +165,8 @@ enum StepStatus { PENDING, APPROVED, REJECTED, ESCALATED }
 | Column | Type | Constraints | Description |
 |--------|------|------------|-------------|
 | id | uuid | PK | |
-| workflow_id | uuid | FK → workflows.id | |
-| uploaded_by | uuid | FK → users.id | |
+| workflow_id | uuid | FK → workflows.id, NULL | Nullable — set after workflow created (pre-upload flow) |
+| uploaded_by | uuid | FK → users.id, NOT NULL | |
 | filename | varchar(255) | NOT NULL | Original filename |
 | minio_key | varchar(500) | NOT NULL | MinIO object key |
 | size_bytes | bigint | NOT NULL | |
@@ -182,7 +182,7 @@ enum StepStatus { PENDING, APPROVED, REJECTED, ESCALATED }
 | workflow_id | uuid | NULL | |
 | step_id | uuid | NULL | |
 | actor_id | uuid | NOT NULL | Who performed the action |
-| action | varchar(50) | NOT NULL | request_submitted / step_approved / step_rejected / step_escalated |
+| action | varchar(50) | NOT NULL | request_submitted / step_approved / step_rejected / step_escalated / parallel_step_completed |
 | detail | jsonb | NULL | Additional context |
 | kafka_offset | bigint | NOT NULL | For replay tracking |
 | timestamp | timestamptz | NOT NULL | Event timestamp |
@@ -225,6 +225,7 @@ enum StepStatus { PENDING, APPROVED, REJECTED, ESCALATED }
 | Topic | Consumer Group | Action |
 |-------|---------------|--------|
 | `workflow.notifications` | `notification-worker` | Send push (FCM/APNs) + email (MailHog) |
+| `workflow.audit-log` | `audit-materializer` | Materialize events into audit_read_model table |
 
 ### Notification Types
 
@@ -272,9 +273,11 @@ erDiagram
     uuid id PK
     uuid org_id FK
     varchar name
+    text description
     jsonb step_definitions
     boolean published
     int version
+    uuid created_by FK
     timestamptz created_at
     timestamptz updated_at
   }
