@@ -4,6 +4,25 @@
 
 Each project follows the same document lifecycle. Phases are sequential for initial development.
 
+### Execution Strategy: Plan in Parallel, Build in Series
+
+```
+Phase A — Planning (all 3 projects in parallel, by phase):
+  Round 1: Whiteboard ConOps → Workflow ConOps → 3D Asset ConOps
+  Round 2: Whiteboard PRD    → Workflow PRD    → 3D Asset PRD
+  Round 3: Whiteboard UI/UX  → Workflow UI/UX  → 3D Asset UI/UX
+  ...
+  Round 7: All planning complete
+
+Phase B — Development (one project at a time, in series):
+  Project 1: Whiteboard (full implementation)
+  Project 2: Workflow (full implementation)
+  Project 3: 3D Asset (full implementation)
+```
+
+> **Why parallel planning?** Three projects share infra and must have tech diversity. Planning together ensures no conflicts and no duplication.
+> **Why serial development?** Writing code requires focus. One project at a time, fully tested before moving on.
+
 ### Initial Development (v0 → v1)
 
 | Phase | Document | ADR? | Purpose |
