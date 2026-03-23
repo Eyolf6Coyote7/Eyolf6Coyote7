@@ -176,7 +176,7 @@ graph TD
     NAV[React Navigation<br/>Tab + Stack]
     STORE_M[Zustand Store<br/>boards, user, ui]
     CANVAS_M[Canvas Module<br/>react-native-canvas / Skia]
-    YJS_M[Yjs Client<br/>CRDT + IndexedDB]
+    YJS_M[Yjs Client<br/>CRDT + AsyncStorage]
     WS_M[WebSocket Client<br/>Socket.IO]
     AI_M[AI Chat Screen<br/>Full-screen overlay]
     API_M[API Client<br/>Mobile BFF endpoints]
@@ -192,6 +192,7 @@ graph TD
   YJS_M --> WS_M
   AI_M --> API_M
   API_M -->|REST| BFF[BFF + API]
+  AI_M -->|SSE| BFF
   WS_M -->|WebSocket| BFF
   PUSH -->|FCM / APNs| CLOUD[Push Service]
   OFFLINE --> API_M
@@ -204,7 +205,7 @@ graph TD
 | Navigation | Tab bar + stack navigation | React Navigation v6 |
 | Store | Global state (shared with web via Zustand) | Zustand |
 | Canvas | Touch drawing, pinch zoom, pan | react-native-canvas or Skia |
-| Yjs Client | CRDT sync, same as web | Yjs, y-websocket |
+| Yjs Client | CRDT sync, offline persistence via AsyncStorage | Yjs, y-websocket, y-async-storage |
 | WebSocket Client | Connection, auto-reconnect | Socket.IO client |
 | AI Chat | Full-screen chat overlay | Custom screen |
 | API Client | Mobile BFF REST calls | Axios |
