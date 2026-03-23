@@ -451,6 +451,266 @@ sequenceDiagram
 | MailHog | Email (dev only) | Spring Mail → SMTP localhost:1025 |
 | FCM / APNs | Push notifications | Firebase Admin SDK / APNs HTTP/2 |
 
+## System: Employee Portal (Vue 3)
+
+### State Management (Pinia)
+
+| Store | State | Actions | Getters |
+|-------|-------|---------|---------|
+| `authStore` | `user, token, isAuthenticated` | `login(), logout(), refresh()` | `isManager, isAdmin` |
+| `requestStore` | `requests[], current, loading` | `fetchMyRequests(), fetchDetail(), submit()` | `pendingCount` |
+| `approvalStore` | `queue[], loading` | `fetchQueue(), approve(), reject()` | `pendingApprovals` |
+| `uiStore` | `locale, sidebarOpen, toasts[]` | `setLocale(), addToast(), dismissToast()` | — |
+
+### Route Definitions
+
+| Route | Component | Guard | Lazy Load |
+|-------|-----------|-------|-----------|
+| `/auth` | `AuthPage` | Public (redirect if logged in) | No |
+| `/` | `DashboardPage` | `requireAuth` | Yes |
+| `/request/new` | `NewRequestPage` | `requireAuth` | Yes |
+| `/request/:id` | `RequestDetailPage` | `requireAuth` | Yes |
+| `/approvals` | `ApprovalQueuePage` | `requireAuth + requireManager` | Yes |
+| `/history` | `HistoryPage` | `requireAuth` | Yes |
+| `/profile` | `ProfilePage` | `requireAuth` | Yes |
+
+### Component Architecture
+
+| Type | Examples | Convention |
+|------|---------|-----------|
+| Pages | `DashboardPage`, `RequestDetailPage` | One per route, orchestrates layout |
+| Containers | `RequestListContainer`, `ApprovalQueueContainer` | Connects to store, passes data to presentational |
+| Presentational | `RequestCard`, `StatusTimeline`, `ApprovalButton` | Pure UI, props only, no store access |
+| Shared | `AppHeader`, `Sidebar`, `Toast`, `SkeletonLoader` | Reusable across pages |
+
+### GraphQL Client Setup
+
+```typescript
+// src/api/graphql-client.ts
+import { createClient } from '@urql/vue'
+import { useAuthStore } from '@/stores/auth'
+
+export const client = createClient({
+  url: import.meta.env.VITE_API_URL || '/mock/graphql',
+  fetchOptions: () => {
+    const authStore = useAuthStore()
+    return {
+      headers: { Authorization: `Bearer ${authStore.token}` }
+    }
+  }
+})
+```
+
+### API Client (Real vs Mock)
+
+```
+src/api/
+├─ client.interface.ts     ← abstract interface
+├─ graphql-client.ts       ← real: urql → Workflow API
+├─ mock-client.ts          ← mock: return JSON fixtures
+├─ index.ts                ← factory: select by VITE_API_URL env
+└─ mocks/
+    ├─ requests.json
+    └─ templates.json
+```
+
+### Key Component Specs
+
+#### Dynamic Form Renderer
+
+Renders form fields from workflow template JSON schema:
+
+```typescript
+// Template step_definitions example
+{
+  "fields": [
+    { "name": "item", "type": "text", "label": "Item Name", "required": true },
+    { "name": "cost", "type": "number", "label": "Estimated Cost", "required": true },
+    { "name": "justification", "type": "textarea", "label": "Justification" },
+    { "name": "priority", "type": "select", "options": ["low", "medium", "high"] }
+  ]
+}
+```
+
+| Field Type | Vue Component | Validation |
+|-----------|--------------|------------|
+| text | `ElInput` | Zod `z.string().min(1)` |
+| number | `ElInputNumber` | Zod `z.number().positive()` |
+| textarea | `ElInput type="textarea"` | Zod `z.string()` |
+| select | `ElSelect` | Zod `z.enum([...])` |
+| date | `ElDatePicker` | Zod `z.date()` |
+| file | Custom upload component | Max 50MB, allowed types |
+
+---
+
+## System: Admin Dashboard (Vue 3)
+
+### State Management (Pinia)
+
+| Store | State | Actions | Getters |
+|-------|-------|---------|---------|
+| `userMgmtStore` | `users[], loading, search` | `fetchUsers(), createUser(), updateRole(), deleteUser()` | `filteredUsers` |
+| `templateStore` | `templates[], currentTemplate` | `fetchTemplates(), createTemplate(), publishTemplate()` | `publishedTemplates` |
+| `auditStore` | `events[], filters, loading` | `fetchAudit(), exportCSV()` | `filteredEvents` |
+| `configStore` | `branding, notificationTemplates` | `fetchConfig(), updateConfig()` | — |
+| `kpiStore` | `kpis, dateRange, loading` | `fetchKPIs()` | — |
+
+### Route Definitions
+
+| Route | Component | Guard | Lazy Load |
+|-------|-----------|-------|-----------|
+| `/admin` | `AdminDashboardPage` | `requireAdmin` | Yes |
+| `/admin/users` | `UserManagementPage` | `requireAdmin` | Yes |
+| `/admin/templates` | `TemplateListPage` | `requireAdmin` | Yes |
+| `/admin/templates/:id` | `TemplateEditorPage` | `requireAdmin` | Yes |
+| `/admin/audit` | `AuditLogPage` | `requireAdmin` | Yes |
+| `/admin/features` | `FeatureTogglesPage` | `requireAdmin` | Yes |
+| `/admin/config` | `ConfigEditorPage` | `requireAdmin` | Yes |
+
+### Template Editor — Drag-and-Drop
+
+```typescript
+// Step definition structure
+interface StepDefinition {
+  id: string
+  name: string
+  type: 'sequential' | 'parallel'
+  assigneeRule: 'by_role' | 'by_department' | 'specific_user'
+  assigneeValue: string
+  deadlineHours: number
+  escalationEnabled: boolean
+  escalationTargetRule: string
+}
+```
+
+| Interaction | Implementation |
+|-------------|---------------|
+| Drag step to reorder | `vuedraggable` library |
+| Add parallel branch | Click "Add parallel" → splits into A + B |
+| Configure step | Click step → side panel with form |
+| Preview flow | Mermaid diagram auto-generated from steps |
+| Publish | Validation → confirm dialog → POST to Admin API |
+
+### API Client (REST to Laravel)
+
+```
+src/api/
+├─ admin-client.interface.ts
+├─ admin-real-client.ts     ← Axios → Laravel Admin API
+├─ admin-mock-client.ts     ← mock JSON
+├─ index.ts                 ← factory
+└─ mocks/
+    ├─ users.json
+    ├─ templates.json
+    └─ audit.json
+```
+
+---
+
+## System: Mobile App (Kotlin + Swift)
+
+### Architecture — MVVM + Repository
+
+```
+┌─────────────┐
+│    View      │  ← Compose (Android) / SwiftUI (iOS)
+├─────────────┤
+│  ViewModel   │  ← Business logic, UI state
+├─────────────┤
+│  Repository  │  ← Data access (API + local cache)
+├─────────────┤
+│  Data Layer  │  ← GraphQL client + Room/CoreData
+└─────────────┘
+```
+
+### ViewModels
+
+| ViewModel | State | Actions |
+|-----------|-------|---------|
+| `AuthViewModel` | `isLoggedIn, user, is2FARequired` | `loginViaKeycloak(), complete2FA(), logout()` |
+| `ApprovalQueueViewModel` | `queue[], isLoading, isRefreshing` | `fetchQueue(), approve(id, comment), reject(id, reason)` |
+| `RequestDetailViewModel` | `request, steps[], attachments[]` | `fetchDetail(id)` |
+| `MyRequestsViewModel` | `requests[], isLoading` | `fetchMyRequests()` |
+| `NotificationsViewModel` | `notifications[], unreadCount` | `fetchNotifications(), markRead(id)` |
+
+### Offline Approval Queue
+
+```kotlin
+// Android — Room entity
+@Entity(tableName = "pending_approvals")
+data class PendingApproval(
+  @PrimaryKey val stepId: String,
+  val action: String, // "approve" | "reject"
+  val comment: String?,
+  val createdAt: Long
+)
+
+// Sync on reconnect
+class ApprovalSyncWorker : CoroutineWorker {
+  override suspend fun doWork(): Result {
+    val pending = db.pendingApprovalDao().getAll()
+    for (approval in pending) {
+      try {
+        val successful = if (approval.action == "approve") {
+          api.approveStep(approval.stepId, approval.comment).isSuccessful
+        } else {
+          api.rejectStep(approval.stepId, approval.comment ?: "Rejected offline").isSuccessful
+        }
+        if (successful) {
+          db.pendingApprovalDao().delete(approval)
+        } else {
+          return Result.retry() // API failed, retry later
+        }
+      } catch (e: Exception) {
+        return Result.retry() // Network error, retry later
+      }
+    }
+    return Result.success()
+  }
+}
+```
+
+### Push Notification Handling
+
+| Platform | Registration | Handler |
+|----------|-------------|---------|
+| Android | `FirebaseMessagingService.onNewToken()` → send to API | `onMessageReceived()` → navigate to request detail |
+| iOS | `UNUserNotificationCenter` delegate → `didRegisterForRemoteNotifications` | `userNotificationCenter(_:didReceive:)` → deep link |
+
+### GraphQL Client
+
+| Platform | Library | Config |
+|----------|---------|--------|
+| Android | Apollo Kotlin | `ApolloClient.Builder().serverUrl(apiUrl).addHttpHeader("Authorization", token)` |
+| iOS | Apollo iOS | `ApolloClient(url: apiUrl, interceptorProvider: TokenInterceptor)` |
+
+### Navigation (per platform)
+
+**Android (Jetpack Compose):**
+```kotlin
+sealed class Screen(val route: String) {
+  object Home : Screen("home")
+  object ApprovalQueue : Screen("approvals")
+  object RequestDetail : Screen("request/{id}")
+  object MyRequests : Screen("my-requests")
+  object Profile : Screen("profile")
+}
+```
+
+**iOS (SwiftUI):**
+```swift
+enum Tab: Hashable {
+  case home, approvals, requests, profile
+}
+
+enum Route: Hashable {
+  case requestDetail(id: String)
+  case approve(stepId: String)
+}
+```
+
+---
+
 ## ADRs Created
 
 - [ADR-0001: Why Temporal over Bull for workflow orchestration](adrs/ADR-0001-why-temporal-over-bull.md)
