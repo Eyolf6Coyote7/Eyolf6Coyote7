@@ -21,7 +21,6 @@
 
 ---
 
-
 This project is built with **Claude Code (Opus 4.6)** as an AI pair programmer and **Gemini Code Review** as an automated reviewer. This document describes the AI co-work methodology, tools, and conventions.
 
 ## AI Tools Used

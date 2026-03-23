@@ -22,10 +22,14 @@ See [docs/](docs/) for all project documentation.
 ```bash
 # Start shared infra (includes Elasticsearch, TimescaleDB, Mosquitto)
 docker compose up -d
+```
 
-# Start backend
+**Terminal 1 (backend):**
+```bash
 cd asset-api && dotnet run
+```
 
-# Start frontend
+**Terminal 2 (frontend):**
+```bash
 cd asset-portal && npm install && npm run dev
 ```

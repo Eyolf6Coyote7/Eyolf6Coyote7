@@ -27,7 +27,6 @@
 
 ---
 
-
 ## Architecture Pattern
 
 **Clean Architecture + DDD + CQRS + EDA** — Spring Boot backend with domain-driven layering, command/query separation (write via Temporal + Kafka, read via dedicated read model), and event-driven communication. Admin Panel is a separate Laravel service.

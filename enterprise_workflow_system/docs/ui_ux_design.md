@@ -32,7 +32,6 @@
 
 ---
 
-
 ## Design Principles
 
 1. **Clarity over decoration** — approval workflows must be unambiguous. Status, assignee, deadline must be instantly visible.

@@ -49,7 +49,6 @@
 
 ---
 
-
 ## System: Asset API (ASP.NET Core — Hexagonal)
 
 ### API Specification — REST

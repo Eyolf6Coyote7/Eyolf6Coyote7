@@ -22,10 +22,14 @@ See [docs/](docs/) for all project documentation.
 ```bash
 # Start shared infra (includes Temporal + Keycloak)
 docker compose up -d
+```
 
-# Start backend
+**Terminal 1 (backend):**
+```bash
 cd workflow-api && ./gradlew bootRun
+```
 
-# Start frontend
+**Terminal 2 (frontend):**
+```bash
 cd employee-portal && npm install && npm run dev
 ```

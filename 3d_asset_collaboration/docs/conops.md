@@ -20,7 +20,6 @@
 
 ---
 
-
 ## Product Vision
 
 A Digital Asset Management (DAM) platform for 3D content with real-time IoT data overlay and AI-powered asset classification — think Figma for 3D assets + IoT dashboard, built for media and advertising teams who manage large volumes of 3D creative assets.

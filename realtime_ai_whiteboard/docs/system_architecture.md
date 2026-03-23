@@ -26,7 +26,6 @@
 
 ---
 
-
 ## Architecture Pattern
 
 **Modular Monolith + BFF** — a single NestJS backend organized by feature modules, with a BFF layer that serves different API surfaces for Web and Mobile clients. AI runs as a separate service (LangGraph) consuming from Redis Stream.

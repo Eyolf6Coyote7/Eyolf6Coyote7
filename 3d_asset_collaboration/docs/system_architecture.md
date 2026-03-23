@@ -27,7 +27,6 @@
 
 ---
 
-
 ## Architecture Pattern
 
 **Hexagonal Architecture (Ports & Adapters) + EDA** — ASP.NET Core backend with core logic isolated behind port interfaces. Input adapters: gRPC, REST, SignalR. Output adapters: PostgreSQL, Elasticsearch, MinIO, TimescaleDB, Kafka, Redis. IoT data flows through MQTT → Kafka → TimescaleDB. Python AI service for asset auto-tagging.

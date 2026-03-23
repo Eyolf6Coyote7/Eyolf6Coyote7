@@ -20,7 +20,6 @@
 
 ---
 
-
 ## Product Vision
 
 A collaborative whiteboard platform with an AI agent that helps users brainstorm, organize ideas, and create visual content — think Miro meets ChatGPT, running entirely on local infrastructure.

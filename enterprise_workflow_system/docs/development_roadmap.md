@@ -16,7 +16,6 @@
 
 ---
 
-
 ## Effort Estimation Method
 
 Using **T-shirt sizing** (same as workspace-wide convention).

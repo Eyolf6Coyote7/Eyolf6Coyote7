@@ -19,7 +19,6 @@
 
 ---
 
-
 ## Overview
 
 A Digital Asset Management (DAM) platform for 3D content with browser-based preview, version control, IoT digital twin overlay, and AI-powered asset classification — built for media and advertising teams. See [ConOps](conops.md) for product vision and user personas.

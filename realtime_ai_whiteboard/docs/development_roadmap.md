@@ -17,7 +17,6 @@
 
 ---
 
-
 ## Effort Estimation Method
 
 Using **T-shirt sizing**:

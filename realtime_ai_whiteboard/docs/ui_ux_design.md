@@ -29,7 +29,6 @@
 
 ---
 
-
 ## Design Principles
 
 1. **Canvas-first** — the board IS the product. Minimize chrome, maximize canvas space.

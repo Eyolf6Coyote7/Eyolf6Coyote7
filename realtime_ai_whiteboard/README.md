@@ -20,10 +20,14 @@ See [docs/](docs/) for all project documentation (ConOps, PRD, UI/UX, Architectu
 ```bash
 # Start shared infra
 docker compose up -d
+```
 
-# Start backend
+**Terminal 1 (backend):**
+```bash
 cd bff-api && npm install && npm run dev
+```
 
-# Start frontend
+**Terminal 2 (frontend):**
+```bash
 cd web-app && npm install && npm run dev
 ```

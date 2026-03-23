@@ -18,7 +18,6 @@
 
 ---
 
-
 ## Overview
 
 A multi-step approval and task management system for semiconductor manufacturing with configurable workflow templates, compliance-grade audit logging, and mobile approval capability. See [ConOps](conops.md) for product vision and user personas.

@@ -38,7 +38,6 @@
 
 ---
 
-
 > All services run **locally** via Docker Compose. No cloud dependencies.
 
 ---

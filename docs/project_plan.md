@@ -21,7 +21,6 @@
 
 ---
 
-
 ## Execution Strategy
 
 - **Phase A (Planning):** All 3 projects in parallel, by phase — ensures tech diversity and shared infra alignment

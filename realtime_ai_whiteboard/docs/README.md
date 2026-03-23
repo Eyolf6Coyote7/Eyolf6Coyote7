@@ -12,8 +12,8 @@
 
 ### ADRs
 
-See [adrs/](adrs/) for Architecture Decision Records.
+See [adrs/](adrs/) for all Architecture Decision Records related to this project.
 
 ### Screenshots
 
-See [screenshots/](screenshots/) for Figma exports (added per milestone).
+See [screenshots/](screenshots/) for UI mockups and Figma exports (added per milestone).

@@ -18,7 +18,6 @@
 
 ---
 
-
 ## Overview
 
 A SaaS collaborative whiteboard with AI-powered content generation, realtime multi-user editing via CRDT, and privacy-first local AI inference. See [ConOps](conops.md) for product vision and user personas.

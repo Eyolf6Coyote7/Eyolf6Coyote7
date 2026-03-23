@@ -172,7 +172,6 @@
 
 ---
 
-
 ## Development Phases
 
 Each project follows the same document lifecycle. Phases are sequential for initial development.
@@ -621,7 +620,6 @@ graph LR
 ```
 
 ---
-
 
 #### 4. System Architecture — `system_architecture.md`
 

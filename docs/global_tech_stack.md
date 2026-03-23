@@ -59,7 +59,6 @@
 
 ---
 
-
 > All infrastructure runs **locally** — no cloud services. Docker Compose for orchestration.
 
 ---

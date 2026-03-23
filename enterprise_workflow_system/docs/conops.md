@@ -20,7 +20,6 @@
 
 ---
 
-
 ## Product Vision
 
 A multi-step approval and task management system for semiconductor manufacturing — enabling configurable approval chains, compliance audit trails, and role-based access control, powered by a durable workflow engine (Temporal) and event-driven architecture (Kafka).

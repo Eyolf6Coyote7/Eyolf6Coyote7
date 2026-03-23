@@ -36,7 +36,6 @@
 
 ---
 
-
 ## Design Principles
 
 1. **3D is the hero** — the 3D viewer is the center of the experience. Maximize viewport, minimize UI noise.

@@ -47,7 +47,6 @@
 
 ---
 
-
 ## System: Workflow API (Spring Boot + GraphQL)
 
 ### API Specification — GraphQL
