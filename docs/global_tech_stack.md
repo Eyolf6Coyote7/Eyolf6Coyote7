@@ -40,6 +40,7 @@ All three projects connect to the same local services via Docker Compose.
 | Event Streaming| Kafka (KRaft mode)        | Event bus for Workflow + 3D Asset        |
 | IoT Broker     | Mosquitto (MQTT)          | IoT sensor ingestion (3D Asset project)  |
 | Search         | Elasticsearch             | Full-text asset search (3D Asset project)|
+| Time-series DB | TimescaleDB               | IoT sensor data storage (3D Asset project)|
 | Feature Flags  | Unleash                   | Feature toggles, A/B testing, kill switch|
 | Email (local)  | MailHog                   | Local SMTP server — intercepts all emails|
 | 2FA            | Keycloak (TOTP)           | Two-factor auth via Google Authenticator |
@@ -431,6 +432,7 @@ Each state transition is traced in Langfuse for observability.
 | Storage         | MinIO (versioned)            |
 | Auth            | API Key + JWT + Resource ACL |
 | Search          | Elasticsearch                |
+| Time-series DB  | TimescaleDB                  |
 | Feature Flags   | Unleash                      |
 | AI Service      | Python + FastAPI + ONNX Runtime |
 
@@ -441,6 +443,7 @@ Each state transition is traced in Langfuse for observability.
 | Large 3D files (50MB+)        | gRPC bidirectional stream + versioned MinIO      |
 | DAM asset library              | Tagging, search, preview, version tree per asset |
 | Full-text asset search         | Elasticsearch — search by name, tag, description. 100x faster than SQL LIKE |
+| IoT time-series storage        | TimescaleDB — optimized for time-bucketed queries (avg temp last 24h, anomaly detection) |
 | Cross-brand asset sharing      | Tenant-scoped buckets + resource-level ACL       |
 | IoT sensor data ingestion     | MQTT (Mosquitto) → Kafka bridge → consumer processing |
 | IoT data ordering             | Kafka partitioning by `device_id` — ordered per device, parallel across devices |
@@ -1045,6 +1048,7 @@ All backends return a consistent error response format:
 | Auth              | JWT + Guest             | Keycloak OAuth2/SSO         | API Key + JWT + ACL       |
 | Realtime          | Socket.IO + CRDT + WebRTC | Temporal                  | SignalR + MQTT            |
 | Search            | —                       | —                           | Elasticsearch             |
+| Time-series DB    | —                       | —                           | TimescaleDB               |
 | Messaging         | Redis Stream            | Kafka                       | MQTT → Kafka              |
 | Multi-tenancy     | Schema-per-tenant       | Row-level (org_id)          | Bucket-per-tenant         |
 | Feature Flags     | Unleash                 | Unleash + Admin UI          | Unleash                   |

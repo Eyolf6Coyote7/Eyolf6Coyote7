@@ -19,6 +19,7 @@ graph TD
     MH[(MailHog<br/>:1025 / :8025)]
     CHR[(ChromaDB<br/>:8000)]
     ES[(Elasticsearch<br/>:9200)]
+    TS[(TimescaleDB<br/>:5433)]
     LF[(Langfuse<br/>:3100)]
   end
 
@@ -48,6 +49,8 @@ graph TD
   TD --> KF
   TD --> UL
   TD --> ES
+  TD --> TS
+  IOT_C -->|write sensor data| TS
   UL --> PG
   UL --> PG
 ```
@@ -105,6 +108,7 @@ docker compose -f docker-compose.yml -f docker-compose.whiteboard.yml up -d
 | MailHog (Web UI) | 8025 | 8025 | http://localhost:8025 |
 | ChromaDB | 8000 | 8000 | — |
 | Elasticsearch | 9200 | 9200 | — |
+| TimescaleDB | 5432 | 5433 | — |
 | Langfuse | 3100 | 3100 | http://localhost:3100 |
 
 ### Backend Services (run on host, not Docker)
@@ -130,6 +134,7 @@ docker compose -f docker-compose.yml -f docker-compose.whiteboard.yml up -d
 | Unleash | — | Uses PostgreSQL | Feature toggle config (stored in `workspace` DB) |
 | ChromaDB | `chroma_data` | `/chroma/chroma` | Vector embeddings |
 | Elasticsearch | `es_data` | `/usr/share/elasticsearch/data` | Search indexes |
+| TimescaleDB | `tsdb_data` | `/var/lib/postgresql/data` | IoT time-series data |
 | Langfuse | — | Uses PostgreSQL | LLM traces and metrics (stored in `workspace` DB) |
 
 Reset all data:
@@ -182,6 +187,9 @@ CHROMA_PORT=8000
 # Elasticsearch
 ELASTICSEARCH_URL=http://localhost:9200
 
+# TimescaleDB (separate from main PostgreSQL)
+TIMESCALEDB_URL=postgresql://workspace:workspace_local@localhost:5433/iot_timeseries
+
 # Langfuse
 LANGFUSE_HOST=http://localhost:3100
 LANGFUSE_PUBLIC_KEY=pk-local
@@ -207,6 +215,7 @@ LANGFUSE_SECRET_KEY=sk-local
 | `LANGFUSE_HOST` | `http://localhost:3100` | — | — |
 | `OLLAMA_URL` | `http://localhost:11434` | — | — |
 | `ELASTICSEARCH_URL` | — | — | `http://localhost:9200` |
+| `TIMESCALEDB_URL` | — | — | `postgresql://...@localhost:5433/iot_timeseries` |
 | `PORT` | `4001` | `4002` | `4003` |
 
 ---
@@ -511,7 +520,8 @@ mc version enable local/3d-assets
 | ChromaDB | ~0.3 GB | Low |
 | Langfuse | ~0.3 GB | Low |
 | Elasticsearch | ~0.5 GB | Medium |
-| **Total (infra)** | **~3.6 GB** | |
+| TimescaleDB | ~0.3 GB | Low |
+| **Total (infra)** | **~3.9 GB** | |
 
 With all 3 backends (~1.5 GB) + Ollama 7B 4-bit (~5 GB) + Storybook (~0.5 GB): ~11 GB total. Fits comfortably in 32 GB.
 
