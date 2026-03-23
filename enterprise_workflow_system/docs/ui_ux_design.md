@@ -28,7 +28,7 @@
 | New Request | `/request/new` | Template selector, Dynamic form, File upload | Screens — New Request | Draft |
 | Request Detail | `/request/:id` | Status timeline, Approver chain, Attachments, Comments | Screens — Request Detail | Draft |
 | Approval Queue | `/approvals` | Filterable list, Status badges, Quick actions | Screens — Approval Queue | Draft |
-| Approve/Reject Modal | `/approvals/:id` | Request summary, Comment input, Approve/Reject buttons | Screens — Approval Modal | Draft |
+| Approve/Reject Modal | (overlay on `/approvals` or `/request/:id`) | Request summary, Comment input, Approve/Reject buttons | Screens — Approval Modal | Draft |
 | My History | `/history` | Past requests with filters (date, status, type) | Screens — History | Draft |
 | Profile | `/profile` | User info, 2FA settings, Notification preferences | Screens — Profile | Draft |
 
@@ -136,8 +136,8 @@
 | Pattern | iOS | Android |
 |---------|-----|---------|
 | Navigation | Tab bar (bottom): Home, Queue, Requests, Profile | Bottom navigation: same |
-| Approve action | Swipe right on request card → Approve | Same |
-| Reject action | Swipe left on request card → Reject (requires comment) | Same |
+| Approve action | Swipe right on request card → Reveals "Approve" action button | Same |
+| Reject action | Swipe left on request card → Reveals "Reject" action button (requires comment) | Same |
 | Push notification | Tap notification → opens Request Detail | Same |
 | Offline | Queue approvals locally, sync when online | Same |
 | Back | Swipe from left edge | System back button |
@@ -236,7 +236,7 @@ graph TD
 
 | Component | Variants | States | Notes |
 |-----------|----------|--------|-------|
-| Request Card | compact (list), expanded (detail) | pending, approved, rejected, escalated | Yellow/green/red/orange border accent |
+| Request Card | compact (list), expanded (detail) | pending, in-progress, approved, rejected, escalated | Yellow/blue/green/red/orange border accent |
 | Status Badge | pending, in-progress, approved, rejected, escalated | — | Color-coded pill |
 | Status Timeline | horizontal (detail), vertical (mobile) | completed, current, upcoming | Connected dots |
 | Approval Button | approve (green), reject (red) | default, hover, loading, disabled | Icon + text |
@@ -252,7 +252,7 @@ graph TD
 |-------|------|---------|
 | Colors | `tokens/colors.json` | Primary: `#409EFF` (Element Plus blue), Success: `#67C23A`, Warning: `#E6A23C`, Danger: `#F56C6C` |
 | Spacing | `tokens/spacing.json` | 4px grid. Card padding: 16px. Side nav width: 220px. |
-| Typography | `tokens/typography.json` | Body: 14px/1.5 PingFang SC. Heading: 18px/1.3 PingFang SC Bold. |
+| Typography | `tokens/typography.json` | Body: 14px/1.5 'PingFang SC', 'Helvetica Neue', 'Microsoft YaHei', Arial, sans-serif. Heading: 18px/1.3 Bold. |
 | Shadows | `tokens/shadows.json` | Card: `0 2px 12px rgba(0,0,0,0.1)`. |
 | Border radius | `tokens/radius.json` | Button: 4px. Card: 8px. Badge: 10px (pill). |
 
