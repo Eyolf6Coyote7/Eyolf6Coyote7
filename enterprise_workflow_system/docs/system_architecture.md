@@ -155,8 +155,9 @@ graph TD
   ROUTER_E --> STORE_E
   ROUTER_E --> FORM
   ROUTER_E --> TIMELINE
-  GQL_CLIENT --> STORE_E
-  API_E -->|GraphQL| WF_API[Workflow API]
+  STORE_E --> API_E
+  API_E --> GQL_CLIENT
+  GQL_CLIENT -->|GraphQL| WF_API[Workflow API]
   NOTIF --> STORE_E
 ```
 
@@ -171,7 +172,7 @@ graph TD
 | Status Timeline | Visual approval chain (dots + lines + status) | Custom component |
 | Notification Center | Toast messages + unread badge count | Element Plus ElNotification |
 | i18n | Multi-language (en, zh-TW) | vue-i18n |
-| API Client | Real/mock switching by env | Axios + API Layer pattern |
+| API Client | Real/mock switching by env | Wrapper for GraphQL client; Axios for file uploads only |
 
 #### Employee Portal — Route Structure
 
@@ -299,7 +300,7 @@ Online:
   GraphQL query → API → display
 
 Offline:
-  GraphQL query → Room/CoreData cache → display
+  Data request → Room/CoreData cache → display
   Approve action → queue in local DB
 
 Reconnect:
