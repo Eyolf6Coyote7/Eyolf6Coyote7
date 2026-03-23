@@ -246,3 +246,27 @@ graph TD
 - [ ] Touch targets ≥ 44x44px on mobile
 - [ ] Reduced motion: disable canvas animations when `prefers-reduced-motion` is set
 - [ ] Empty state illustrations have alt text
+
+## Figma Version History
+
+| Version | Git Tag | Date | Figma Page | What Changed |
+|---------|---------|------|-----------|-------------|
+| — | — | — | — | No designs yet — UI spec complete, ready to start Figma |
+
+> See [dev_guidelines.md](../../docs/dev_guidelines.md#figma--stitch-version-control) for Figma operation guide.
+
+## Screenshots
+
+Screenshots are exported from Figma on every milestone and stored in `docs/screenshots/`:
+
+```
+realtime_ai_whiteboard/docs/screenshots/
+├─ v0.1.0/
+│   ├─ dashboard.png
+│   ├─ canvas.png
+│   └─ ai-chat.png
+└─ v0.2.0/
+    └─ ...
+```
+
+> No screenshots yet — will be added when Figma designs are created.

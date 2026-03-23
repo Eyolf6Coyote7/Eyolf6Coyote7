@@ -216,6 +216,84 @@ Defines **how it looks and feels** — Figma as single source of truth, design s
 11. Storybook             → Each component matches Figma 1:1
 ```
 
+## Figma + Stitch Version Control
+
+Figma free version has no branch feature. Use **page naming + repo screenshots** to align with git versions.
+
+### Figma Side — How to Operate
+
+**Step 1: Create Figma file per project**
+```
+Figma → New File → Name: "[Project] — Design"
+Example: "Whiteboard — Design"
+```
+
+**Step 2: Organize pages by version**
+```
+Pages in Figma:
+├─ Components          ← shared components, no version number, always latest
+├─ v0.1.0 — Wireframes ← low-fi wireframes for milestone 1
+├─ v0.2.0 — High-fi    ← high-fi mockups for milestone 2
+├─ ...                  ← new page per milestone
+└─ Archive              ← deprecated designs, moved here (never delete)
+```
+
+**Step 3: When starting a new milestone**
+```
+1. Duplicate the latest versioned page
+2. Rename to new version: "v0.x.0 — [description]"
+3. Make changes on the new page
+4. Keep old page untouched (it's your history)
+```
+
+**Step 4: Using Google Stitch**
+```
+1. Open stitch.withgoogle.com
+2. Describe the screen layout you need (from UI spec)
+3. Stitch generates layout options
+4. Pick the best one → screenshot or recreate in Figma
+5. Stitch is for exploration only — Figma is the source of truth
+```
+
+### Repo Side — How to Sync with Git
+
+**On every git tag (milestone complete):**
+```bash
+# 1. Export key screens from Figma as PNG
+#    Figma → Select frame → Export → PNG 2x
+
+# 2. Save to repo
+mkdir -p [project]/docs/screenshots/v0.x.0/
+# Copy exported PNGs here
+
+# 3. Update ui_ux_design.md changelog
+# Add entry to Figma Version History table
+
+# 4. Commit with the tag
+git add [project]/docs/screenshots/
+git commit -m "📘docs: add Figma screenshots for v0.x.0"
+```
+
+**In `ui_ux_design.md` — Figma Version History table:**
+```markdown
+## Figma Version History
+
+| Version | Git Tag | Date | Figma Page | What Changed |
+|---------|---------|------|-----------|-------------|
+| v0.1.0 | whiteboard/v0.1.0 | 2026-04-xx | v0.1.0 — Wireframes | Initial wireframes for all screens |
+| v0.2.0 | whiteboard/v0.2.0 | 2026-05-xx | v0.2.0 — High-fi | Applied design tokens, real content |
+```
+
+### Summary
+
+| Where | What | When |
+|-------|------|------|
+| Figma | New page per version | Every milestone |
+| Google Stitch | Layout exploration | During wireframe phase |
+| Repo `screenshots/` | Exported PNGs | Every git tag |
+| Repo `ui_ux_design.md` | Figma link + changelog | Every milestone |
+| Storybook | Component matches Figma | During development |
+
 ## Web UI
 
 ### Screen Inventory (Web)
