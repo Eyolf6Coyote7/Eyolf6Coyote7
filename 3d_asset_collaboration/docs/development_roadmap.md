@@ -99,7 +99,7 @@ Using **T-shirt sizing** (same as workspace-wide convention).
 | Risk | Impact | Mitigation |
 |------|--------|------------|
 | MQTT → Kafka bridge message loss | Medium | Use QoS 1 + Kafka acks, dead letter queue |
-| ONNX model accuracy for 3D assets | Medium | Start with pretrained ImageNet, fine-tune later |
+| ONNX model accuracy for 3D assets | Medium | Generate multi-angle thumbnails for 2D classification. Future: explore 3D-native models (PointNet/DGCNN) for mesh-based tagging |
 
 ---
 
