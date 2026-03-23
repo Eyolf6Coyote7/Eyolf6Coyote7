@@ -144,6 +144,173 @@ graph TD
   API -->|push| PUSH
 ```
 
+### Level 3: Component Diagram (Asset Portal — React + Three.js)
+
+```mermaid
+graph TD
+  subgraph "Asset Portal (React + Three.js + Vite)"
+    ROUTER_P[React Router<br/>Pages + Auth Guard]
+    STORE_P[Redux Toolkit (RTK)<br/>assets, search, ui, auth]
+    VIEWER[3D Viewer Module<br/>React Three Fiber + Drei]
+    SEARCH[Search Module<br/>Elasticsearch autocomplete]
+    UPLOAD[Upload Module<br/>gRPC-Web via Envoy + progress]
+    FILTER[Filter Sidebar<br/>Faceted filters]
+    TAG_EDITOR[Tag Editor<br/>Add/remove + AI suggestions]
+    VERSION[Version Manager<br/>Timeline + side-by-side compare]
+    API_P[API Client<br/>REST (real / mock switching)]
+    I18N_P[i18n<br/>react-i18next]
+  end
+
+  ROUTER_P --> STORE_P
+  ROUTER_P --> VIEWER
+  ROUTER_P --> SEARCH
+  ROUTER_P --> I18N_P
+  STORE_P --> API_P
+  API_P -->|REST| ASSET_API[Asset API]
+  UPLOAD -->|gRPC-Web| ASSET_API
+  SEARCH -->|autocomplete| API_P
+  SEARCH --> STORE_P
+  FILTER --> STORE_P
+  TAG_EDITOR --> API_P
+  VIEWER -->|presigned URL| API_P
+  VERSION --> VIEWER
+  VERSION --> STORE_P
+```
+
+#### Asset Portal — Key Modules
+
+| Module | Responsibility | Key Libraries |
+|--------|---------------|---------------|
+| Router | Page routing, JWT auth guard | React Router v6 |
+| Store | Global state (assets, search results, filters, auth) | Redux Toolkit (RTK) |
+| 3D Viewer | GLB rendering, orbit controls, material inspection | React Three Fiber, @react-three/drei |
+| Search | Elasticsearch autocomplete, debounced input, result ranking | Custom + Axios |
+| Upload | gRPC-Web chunked upload, progress bar, resume | gRPC-Web via Envoy proxy |
+| Filter Sidebar | Faceted filters (format, brand, date, tags) | Custom components |
+| Tag Editor | Add/remove tags, AI auto-tag suggestions (dashed border) | Custom |
+| Version Manager | Version timeline, side-by-side 3D compare (synced orbit) | Custom + React Three Fiber |
+| API Client | REST calls, real/mock switching by env | Axios + API Layer pattern |
+| i18n | Multi-language (en, zh-TW) | react-i18next |
+
+#### Asset Portal — Route Structure
+
+| Route | Page | Auth |
+|-------|------|------|
+| `/auth` | Login (JWT + API Key) | Public |
+| `/` | Asset Library (grid + filter sidebar) | JWT |
+| `/asset/:id` | Asset Detail (3D viewer + metadata + versions) | JWT |
+| `/asset/:id/compare` | Version Compare (side-by-side 3D) | JWT |
+| `/upload` | Upload (drag-and-drop + metadata form) | JWT |
+| `/search` | Search Results (faceted) | JWT |
+| `/iot` | IoT Dashboard (time-series charts) | JWT |
+| `/admin/brand` | Brand Settings (ACL editor) | JWT (brand owner) |
+| `/settings` | Account (profile, API keys) | JWT |
+
+### Level 3: Component Diagram (Unity Client — C#)
+
+```mermaid
+graph TD
+  subgraph "Unity Client (C# + Unity 2022 LTS)"
+    SCENE[Scene Manager<br/>Load/switch 3D scenes]
+    ASSET_BROWSER[Asset Browser<br/>Grid view + search]
+    VIEWPORT[3D Viewport<br/>Camera controls (WASD + mouse)]
+    IOT_OVERLAY[IoT Overlay<br/>3D billboard markers]
+    SIGNALR_C[SignalR Client<br/>Realtime sensor updates]
+    GRPC_C[gRPC Client<br/>File upload/download]
+    INSPECTOR[Asset Inspector<br/>Metadata + versions + download]
+    AUTH_C[Auth Module<br/>API Key via Keychain/Keystore]
+    CACHE[Local Cache<br/>Asset metadata + last sensor values]
+    ALERT[Alert Handler<br/>Visual + audio alerts]
+  end
+
+  SCENE --> VIEWPORT
+  VIEWPORT --> IOT_OVERLAY
+  SIGNALR_C -->|realtime data| IOT_OVERLAY
+  SIGNALR_C -->|realtime data| CACHE
+  SIGNALR_C -->|threshold check| ALERT
+  SIGNALR_C -->|SignalR| ASSET_API[Asset API]
+  GRPC_C -->|gRPC| ASSET_API
+  GRPC_C --> CACHE
+  CACHE -->|read| IOT_OVERLAY
+  ASSET_BROWSER --> GRPC_C
+  INSPECTOR --> GRPC_C
+  AUTH_C --> GRPC_C
+  AUTH_C --> SIGNALR_C
+```
+
+#### Unity Client — Key Modules
+
+| Module | Responsibility | Key Tech |
+|--------|---------------|----------|
+| Scene Manager | Load factory floor models, switch between scenes | Unity SceneManager |
+| Asset Browser | Browse and search 3D assets (in-Unity) | Unity UI Toolkit |
+| 3D Viewport | Camera movement (WASD), orbit, zoom | Cinemachine |
+| IoT Overlay | 3D billboard markers on model coordinates, color-coded | Custom shader + Billboard |
+| SignalR Client | Realtime sensor data subscription | Microsoft.AspNetCore.SignalR.Client |
+| gRPC Client | Upload/download 3D assets (chunked stream) | Grpc.Net.Client |
+| Asset Inspector | View metadata, versions, trigger download | Unity UI Toolkit |
+| Auth Module | Store + send API Key for M2M auth | iOS Keychain / Android Keystore (via Unity plugin) |
+| Local Cache | Cache asset metadata + last known sensor values | Unity JsonUtility + local file |
+| Alert Handler | Red flash border + sound when threshold exceeded | Custom UI + AudioSource |
+
+#### Unity Client — Scene Structure
+
+| Scene | Content | When Loaded |
+|-------|---------|-------------|
+| Login | API Key input, connection test | App launch |
+| Asset Browser | Grid of 3D assets, search bar | After login |
+| 3D Viewport | Factory floor model + IoT overlays | When user opens a scene |
+| Asset Inspector | Side panel overlay on 3D Viewport | When user clicks an asset |
+
+### Level 3: Component Diagram (Mobile App — Lightweight)
+
+```mermaid
+graph TD
+  subgraph "Mobile App (React — Lightweight)"
+    NAV_M[React Navigation<br/>Tab bar + stack]
+    STORE_M[Redux Toolkit<br/>assets, notifications]
+    LIST[Asset List<br/>2D thumbnails only]
+    DETAIL[Asset Detail<br/>Metadata + version list, no 3D]
+    NOTIF_M[Notifications<br/>Push handler + list]
+    API_M[API Client<br/>REST to Asset API]
+    PUSH_M[Push<br/>Expo Notifications]
+  end
+
+  NAV_M --> STORE_M
+  NAV_M --> LIST
+  NAV_M --> DETAIL
+  NAV_M --> NOTIF_M
+  LIST --> STORE_M
+  DETAIL --> STORE_M
+  NOTIF_M --> STORE_M
+  PUSH_M -->|incoming push| NOTIF_M
+  STORE_M --> API_M
+  API_M -->|REST| ASSET_API[Asset API]
+  PUSH_M -->|FCM / APNs| CLOUD[Push Service]
+```
+
+#### Mobile App — Key Modules
+
+| Module | Responsibility | Key Libraries |
+|--------|---------------|---------------|
+| Navigation | Tab bar (Assets, Search, Notifications, Profile) | React Navigation v6 |
+| Store | Asset list, notification state | Redux Toolkit |
+| Asset List | 2D thumbnail grid (no 3D preview) | FlatList |
+| Asset Detail | Metadata, version list, download link (no 3D viewer) | Custom screen |
+| Notifications | Push notification handler + notification list | Expo Notifications |
+| API Client | REST calls to Asset API | Axios |
+
+> Mobile is **not** a primary platform. No 3D preview, no upload. Browse + notifications only.
+
+#### Mobile App — Navigation Structure
+
+| Tab | Screens | Auth |
+|-----|---------|------|
+| Assets | Asset List → Asset Detail | JWT |
+| Search | Search → Asset Detail | JWT |
+| Notifications | Notification List | JWT |
+| Profile | Account, API Keys | JWT |
+
 ## Component Overview
 
 | Component | Tech | System | Responsibility |
