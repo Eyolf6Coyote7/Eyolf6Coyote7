@@ -21,7 +21,7 @@ This project is built with **Claude Code (Opus 4.6)** as an AI pair programmer a
 4. Claude writes code / docs
 5. Claude commits + pushes
 6. Claude creates PR (with --assignee, --label, --project)
-7. Claude posts Code Review comment (architecture + security checklist)
+7. Claude posts Code Review comment (see format below for details)
 8. Gemini posts automated review
 9. Claude reads Gemini review + fixes all comments
 10. Claude replies to Gemini with fix summary
@@ -95,12 +95,12 @@ How to instruct Claude effectively:
 
 | You say | Claude does |
 |---------|-------------|
-| "寫 Whiteboard ConOps" | Create issue → branch → write doc → PR → review |
-| "幫我改 XXX" | Same workflow (issue → branch → PR) |
+| "寫 Whiteboard ConOps" (Write Whiteboard ConOps) | Create issue → branch → write doc → PR → review |
+| "幫我改 XXX" (Help me fix XXX) | Same workflow (issue → branch → PR) |
 | "fix Gemini review" | Read comments → fix → commit → reply |
-| "開始" | Start next task in todo list |
+| "開始" (Start) | Start next task in todo list |
 | "merged" | Move to next task |
-| "review 一下" | Claude re-reads and evaluates quality |
+| "review 一下" (Review this) | Claude re-reads and evaluates quality |
 
 ## What Claude Cannot Do
 
