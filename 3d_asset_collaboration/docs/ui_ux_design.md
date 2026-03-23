@@ -32,6 +32,7 @@
 - [Handoff Notes](#handoff-notes)
 - [Accessibility (a11y) Checklist](#accessibility-a11y-checklist)
 - [Figma Version History](#figma-version-history)
+- [Stitch Prompts](#stitch-prompts)
 - [Screenshots](#screenshots)
 
 ---
@@ -389,6 +390,36 @@ graph TD
 | — | — | — | — | No designs yet — UI spec complete, ready to start Figma |
 
 > See [dev_guidelines.md](../../docs/dev_guidelines.md#figma--stitch-version-control) for Figma operation guide.
+
+## Stitch Prompts
+
+Each screen has a dedicated Stitch prompt file in `docs/design/stitch_prompts/`. These contain detailed natural-language descriptions ready to paste into [Google Stitch](https://stitch.withgoogle.com) for rapid layout generation, plus design tokens, states to generate, and acceptance criteria.
+
+**Workflow**: Copy the "Stitch Prompt" section → paste into Stitch → pick best layout → recreate/refine in Figma.
+
+| # | Screen | Prompt File | Platform |
+|---|--------|------------|----------|
+| 01 | Login | [01_login.md](design/stitch_prompts/01_login.md) | Web |
+| 02 | Asset Library | [02_asset_library.md](design/stitch_prompts/02_asset_library.md) | Web |
+| 03 | Asset Detail | [03_asset_detail.md](design/stitch_prompts/03_asset_detail.md) | Web |
+| 04 | Version Compare | [04_version_compare.md](design/stitch_prompts/04_version_compare.md) | Web |
+| 05 | Upload | [05_upload.md](design/stitch_prompts/05_upload.md) | Web |
+| 06 | Search Results | [06_search_results.md](design/stitch_prompts/06_search_results.md) | Web |
+| 07 | IoT Dashboard | [07_iot_dashboard.md](design/stitch_prompts/07_iot_dashboard.md) | Web |
+| 08 | Brand Settings | [08_brand_settings.md](design/stitch_prompts/08_brand_settings.md) | Web |
+| 09 | Account Settings | [09_account.md](design/stitch_prompts/09_account.md) | Web |
+| 10 | Unity Login | [10_unity_login.md](design/stitch_prompts/10_unity_login.md) | Unity |
+| 11 | Unity Asset Browser | [11_unity_asset_browser.md](design/stitch_prompts/11_unity_asset_browser.md) | Unity |
+| 12 | Unity 3D Viewport | [12_unity_3d_viewport.md](design/stitch_prompts/12_unity_3d_viewport.md) | Unity |
+| 13 | Unity IoT Overlay | [13_unity_iot_overlay.md](design/stitch_prompts/13_unity_iot_overlay.md) | Unity |
+| 14 | Unity Asset Inspector | [14_unity_asset_inspector.md](design/stitch_prompts/14_unity_asset_inspector.md) | Unity |
+| 15 | Mobile Login | [15_mobile_login.md](design/stitch_prompts/15_mobile_login.md) | iOS + Android |
+| 16 | Mobile Asset List | [16_mobile_asset_list.md](design/stitch_prompts/16_mobile_asset_list.md) | iOS + Android |
+| 17 | Mobile Asset Detail | [17_mobile_asset_detail.md](design/stitch_prompts/17_mobile_asset_detail.md) | iOS + Android |
+| 18 | Mobile Notifications | [18_mobile_notifications.md](design/stitch_prompts/18_mobile_notifications.md) | iOS + Android |
+| 19 | Mobile Profile | [19_mobile_profile.md](design/stitch_prompts/19_mobile_profile.md) | iOS + Android |
+
+> See [dev_guidelines.md](../../docs/dev_guidelines.md#figma-workflow) for the full Claude → Stitch → Figma workflow.
 
 ## Screenshots
 
