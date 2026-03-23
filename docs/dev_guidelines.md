@@ -192,19 +192,28 @@ Defines **how it looks and feels** — Figma as single source of truth, design s
 | Flows — [User Journey] | Connected prototype flow |
 | Archive | Deprecated designs (don't delete, archive) |
 
+## Design Tools
+
+| Tool | Purpose | Cost |
+|------|---------|------|
+| **Figma** (free version) | Wireframes, high-fi mockups, design system, component library | Free |
+| **Google Stitch** (stitch.withgoogle.com) | AI-assisted layout generation, rapid prototyping | Free |
+| **Storybook** | Component documentation, visual testing, a11y checking | Free |
+
 ## Figma Workflow
 
 ```
 1. Define requirements    → PRD feature + acceptance criteria
 2. Write UI spec          → Claude generates component list, layout, interactions
-3. Wireframe (low-fi)     → Figma wireframe, grayscale, no styling
-4. Review wireframe       → Validate flow with PRD acceptance criteria
-5. UI design (high-fi)    → Apply design tokens, real content, final styling
-6. Interaction spec       → Define hover, click, transition, animation, loading states
-7. Prototype              → Link screens in Figma for clickable walkthrough
-8. Design review          → Final approval, mark page as "✅ Final"
-9. Handoff                → Dev implements from Figma Dev Mode
-10. Storybook             → Each component matches Figma 1:1
+3. Generate layouts       → Use Google Stitch for rapid layout exploration
+4. Wireframe (low-fi)     → Figma wireframe, grayscale, no styling
+5. Review wireframe       → Validate flow with PRD acceptance criteria
+6. UI design (high-fi)    → Apply design tokens, real content, final styling
+7. Interaction spec       → Define hover, click, transition, animation, loading states
+8. Prototype              → Link screens in Figma for clickable walkthrough
+9. Design review          → Final approval, mark page as "✅ Final"
+10. Handoff               → Dev implements from Figma Dev Mode
+11. Storybook             → Each component matches Figma 1:1
 ```
 
 ## Web UI
