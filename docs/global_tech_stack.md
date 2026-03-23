@@ -39,6 +39,8 @@ All three projects connect to the same local services via Docker Compose.
 | Identity       | Keycloak                  | OAuth2 / OIDC provider (Workflow project)|
 | Event Streaming| Kafka (KRaft mode)        | Event bus for Workflow + 3D Asset        |
 | IoT Broker     | Mosquitto (MQTT)          | IoT sensor ingestion (3D Asset project)  |
+| Search         | Elasticsearch             | Full-text asset search (3D Asset project)|
+| Time-series DB | TimescaleDB               | IoT sensor data storage (3D Asset project)|
 | Feature Flags  | Unleash                   | Feature toggles, A/B testing, kill switch|
 | Email (local)  | MailHog                   | Local SMTP server — intercepts all emails|
 | 2FA            | Keycloak (TOTP)           | Two-factor auth via Google Authenticator |
@@ -181,7 +183,7 @@ graph TD
   AIS -->|store result| PG
 ```
 
-### Workflow — 5 Systems
+### Workflow — 6 Systems
 
 ```mermaid
 graph TD
@@ -193,6 +195,7 @@ graph TD
 
   subgraph "Backend"
     API[Workflow API<br/>Spring Boot + GraphQL]
+    ADM_API[Admin API<br/>Laravel PHP]
     NW[Notification Worker<br/>Kafka consumer]
   end
 
@@ -210,7 +213,10 @@ graph TD
   end
 
   EMP -->|GraphQL| API
-  ADM -->|GraphQL + REST| API
+  ADM -->|REST| ADM_API
+  ADM_API --> PG
+  ADM_API --> KC
+  ADM_API --> UL
   WMOB -->|GraphQL| API
   API --> TMP
   API --> PG
@@ -275,10 +281,10 @@ graph TD
 | Project | User-facing | Backend | Async Workers | Total |
 |---------|------------|---------|---------------|-------|
 | Whiteboard | 2 (Web, Mobile) | 1 (BFF + API) | 2 (AI Service, Fine-tune Pipeline) | **5** |
-| Workflow | 3 (Employee, Admin, Mobile) | 1 (Workflow API) | 1 (Notification Worker) | **5** |
+| Workflow | 3 (Employee, Admin, Mobile) | 2 (Workflow API, Admin API) | 1 (Notification Worker) | **6** |
 | 3D Asset | 2 (Portal, Unity) | 1 (Asset API) | 3 (AI Service, IoT Ingestion, IoT Consumer) | **6** |
 | Shared | — | 1 (API Gateway) | — | **1** |
-| **Total** | **7** | **4** | **6** | **17** |
+| **Total** | **7** | **5** | **6** | **18** |
 
 ---
 
@@ -295,6 +301,7 @@ graph TD
 | Backend      | Node.js (NestJS)             |
 | API          | REST + WebSocket             |
 | Realtime     | WebSocket (Socket.IO)        |
+| Voice/Video  | WebRTC (P2P)                 |
 | State Sync   | Yjs (CRDT)                   |
 | DB           | PostgreSQL (schema-per-tenant)|
 | Cache/Queue  | Redis (Pub/Sub + Stream)     |
@@ -371,6 +378,7 @@ Each state transition is traced in Langfuse for observability.
 | AI response UX             | SSE streaming — token-by-token typing effect, not wait-for-full-response |
 | AI observability           | Langfuse traces every state transition (latency, tokens, quality) |
 | Intent routing             | Classifier routes to info retrieval (RAG) or action execution (MCP) |
+| Voice/video collaboration  | WebRTC P2P — low latency, no media server needed for small groups |
 | One codebase, two platforms| React + React Native shared business logic       |
 | Multi-tenancy (SaaS)      | Schema-per-tenant in PostgreSQL — data isolation |
 | Usage metering             | Track API calls + storage per tenant → Kafka     |
@@ -385,7 +393,8 @@ Each state transition is traced in Langfuse for observability.
 | Layer           | Tech                                      |
 | --------------- | ----------------------------------------- |
 | Web             | Vue 3 + Pinia + Element Plus              |
-| Admin Panel     | Vue 3 (user mgmt, config, analytics)      |
+| Admin Panel (FE)| Vue 3 (user mgmt, config, analytics)      |
+| Admin Panel (BE)| PHP (Laravel) — CMS, config, reports      |
 | Mobile          | Kotlin (Android) + Swift (iOS) + WebView  |
 | Backend         | Kotlin + Spring Boot                      |
 | API             | GraphQL                                   |
@@ -427,6 +436,8 @@ Each state transition is traced in Langfuse for observability.
 | Cache           | Redis (Pub/Sub)              |
 | Storage         | MinIO (versioned)            |
 | Auth            | API Key + JWT + Resource ACL |
+| Search          | Elasticsearch                |
+| Time-series DB  | TimescaleDB                  |
 | Feature Flags   | Unleash                      |
 | AI Service      | Python + FastAPI + ONNX Runtime |
 
@@ -436,6 +447,8 @@ Each state transition is traced in Langfuse for observability.
 | ------------------------------ | ----------------------------------------------- |
 | Large 3D files (50MB+)        | gRPC bidirectional stream + versioned MinIO      |
 | DAM asset library              | Tagging, search, preview, version tree per asset |
+| Full-text asset search         | Elasticsearch — search by name, tag, description. 100x faster than SQL LIKE |
+| IoT time-series storage        | TimescaleDB — optimized for time-bucketed queries (avg temp last 24h, anomaly detection) |
 | Cross-brand asset sharing      | Tenant-scoped buckets + resource-level ACL       |
 | IoT sensor data ingestion     | MQTT (Mosquitto) → Kafka bridge → consumer processing |
 | IoT data ordering             | Kafka partitioning by `device_id` — ordered per device, parallel across devices |
@@ -1030,7 +1043,7 @@ All backends return a consistent error response format:
 | FE Architecture   | Feature-based + Flux    | MVVM                        | Clean Architecture        |
 | BE Architecture   | Modular Monolith        | Clean Arch + DDD + CQRS     | Hexagonal (Ports & Adapters) |
 | System Pattern    | BFF                     | EDA + Saga                  | EDA                       |
-| Language (BE)     | TypeScript              | Kotlin                      | C# + Python (AI) + Go (Gateway) |
+| Language (BE)     | TypeScript              | Kotlin + PHP (Admin)        | C# + Python (AI) + Go (Gateway) |
 | Language (FE)     | TypeScript (React)      | TypeScript (Vue 3)          | TypeScript (React)        |
 | Language (Mobile) | TypeScript (RN)         | Kotlin + Swift              | C# (Unity)                |
 | State Management  | Zustand                 | Pinia                       | Redux Toolkit (RTK)       |
@@ -1038,7 +1051,9 @@ All backends return a consistent error response format:
 | API Versioning    | URL path (`/v1/`)       | Schema evolution             | Proto package version     |
 | API Docs          | OpenAPI / Swagger       | GraphQL Playground          | Protobuf + Buf            |
 | Auth              | JWT + Guest             | Keycloak OAuth2/SSO         | API Key + JWT + ACL       |
-| Realtime          | Socket.IO + CRDT        | Temporal                    | SignalR + MQTT            |
+| Realtime          | Socket.IO + CRDT + WebRTC | Temporal                  | SignalR + MQTT            |
+| Search            | —                       | —                           | Elasticsearch             |
+| Time-series DB    | —                       | —                           | TimescaleDB               |
 | Messaging         | Redis Stream            | Kafka                       | MQTT → Kafka              |
 | Multi-tenancy     | Schema-per-tenant       | Row-level (org_id)          | Bucket-per-tenant         |
 | Feature Flags     | Unleash                 | Unleash + Admin UI          | Unleash                   |
