@@ -167,14 +167,14 @@ sequenceDiagram
   Portal->>API: mutation submitRequest {title, fields, attachment}
   API->>MIO: Upload attachment
   MIO-->>API: file_url
-  API->>PG: INSERT workflow + first step
-  API->>TMP: Start workflow (template, assignees)
+  API->>TMP: Start workflow (template, assignees, form_data, file_url)
+  TMP->>PG: Activity: INSERT workflow + first step
+  TMP->>KF: Activity: Produce audit event (request_submitted)
+  TMP->>KF: Activity: Produce notification event (step_pending)
   TMP-->>API: workflow_run_id
-  API->>KF: Produce audit event (request_submitted)
   API-->>Portal: {request_id, status: "pending"}
   Portal-->>Wei: "Request submitted — pending Manager review"
-  
-  TMP->>KF: Produce notification event (step_pending)
+
   Note over KF: Notification Worker consumes
 ```
 
@@ -214,10 +214,9 @@ sequenceDiagram
 
   Note over TMP: 48h timeout expires
   TMP->>TMP: Escalation activity triggered
-  TMP->>API: Reassign step to manager's manager
-  API->>PG: UPDATE step assignee
-  API->>KF: Produce audit event (step_escalated)
-  API->>KF: Produce notification event (escalation)
+  TMP->>PG: Activity: UPDATE step assignee to manager's manager
+  TMP->>KF: Activity: Produce audit event (step_escalated)
+  TMP->>KF: Activity: Produce notification event (escalation)
   Note over KF: Notification Worker sends push + email
 ```
 
