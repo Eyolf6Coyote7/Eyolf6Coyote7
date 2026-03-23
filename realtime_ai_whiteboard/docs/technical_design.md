@@ -359,6 +359,280 @@ sequenceDiagram
 | Langfuse | LLM tracing | LangChain callback handler |
 | Unleash | Feature flags | Unleash SDK for Node.js |
 
+## System: Web App (React)
+
+### State Management (Zustand)
+
+| Store | State | Actions | Selectors |
+|-------|-------|---------|-----------|
+| `authStore` | `user, token, isGuest` | `login(), register(), logout(), setGuestToken()` | `isAuthenticated, plan` |
+| `boardStore` | `boards[], currentBoard, loading` | `fetchBoards(), createBoard(), deleteBoard()` | `myBoards, sharedBoards` |
+| `canvasStore` | `selectedTool, selectedElementIds[], zoom, pan` | `selectTool(), setZoom(), selectElements()` | `isDrawing` |
+| `aiStore` | `messages[], isStreaming, taskId` | `sendPrompt(), cancelStream()` | `lastMessage` |
+| `uiStore` | `sidebarOpen, aiPanelOpen, locale, theme` | `toggleSidebar(), toggleAI(), setLocale(), setTheme()` | — |
+| `presenceStore` | `cursors[], onlineUsers[]` | `updateCursor(), handlePresenceEvent()` | `otherCursors` |
+
+### Route Definitions
+
+| Route | Component | Guard | Lazy Load |
+|-------|-----------|-------|-----------|
+| `/` | `LandingPage` | Public (redirect if logged in) | No |
+| `/auth` | `AuthPage` | Public | No |
+| `/dashboard` | `DashboardPage` | `requireAuth` | Yes |
+| `/board/:id` | `BoardPage` | `requireAuth` or `requireGuest` | Yes |
+| `/board/:id/settings` | `BoardSettingsPage` | `requireAuth` (owner) | Yes |
+| `/settings` | `AccountSettingsPage` | `requireAuth` | Yes |
+| `/pricing` | `PricingPage` | Public | Yes |
+
+### Component Architecture
+
+| Type | Examples | Convention |
+|------|---------|-----------|
+| Pages | `DashboardPage`, `BoardPage` | One per route, handles layout |
+| Canvas Components | `CanvasView`, `Toolbar`, `Minimap`, `ZoomControls` | Canvas-specific, tightly coupled |
+| AI Components | `AIChatPanel`, `AIChatInput`, `AIChatMessage`, `ToolResultCard` | AI panel ecosystem |
+| Board Components | `BoardCard`, `BoardGrid`, `ShareModal` | Dashboard + sharing |
+| Shared | `AppHeader`, `SkeletonLoader`, `Toast`, `EmptyState` | Reusable across pages |
+
+### Canvas Implementation
+
+| Concern | Implementation |
+|---------|---------------|
+| Rendering engine | Fabric.js (or Konva) for 2D canvas |
+| Element types | Rectangle, Circle, Line, Arrow, Sticky, Text, Freehand, Image |
+| Selection | Click to select, Shift+click multi-select, drag marquee |
+| Resize/rotate | 8 handles (corners + edges) + rotation handle |
+| Yjs binding | Custom Yjs provider syncs canvas elements to CRDT document |
+| Undo/redo | Yjs UndoManager (local only, not cross-user) |
+| Virtual rendering | Only render elements within viewport bounds (performance) |
+| Keyboard shortcuts | `V`=select, `R`=rect, `T`=text, `Space`=pan, `Cmd+Z`=undo, `Cmd+Shift+Z`=redo |
+
+### Yjs Integration
+
+```typescript
+// src/collaboration/yjs-provider.ts
+import * as Y from 'yjs'
+import { WebsocketProvider } from 'y-websocket'
+import { IndexeddbPersistence } from 'y-indexeddb'
+
+const doc = new Y.Doc()
+const elementsMap = doc.getMap('elements')  // Shared CRDT map
+
+// WebSocket sync (realtime)
+const wsProvider = new WebsocketProvider(WS_URL, boardId, doc)
+const awareness = wsProvider.awareness      // Cursor presence
+
+// IndexedDB persistence (offline)
+const idbProvider = new IndexeddbPersistence(boardId, doc)
+
+// Listen for remote changes
+elementsMap.observe(event => {
+  event.changes.keys.forEach((change, key) => {
+    // Update canvas rendering
+  })
+})
+```
+
+### AI Chat — SSE Consumer
+
+```typescript
+// src/ai/sse-consumer.ts
+export function streamAIResponse(taskId: string, onToken: (text: string) => void) {
+  const source = new EventSource(`/api/web/ai/stream/${taskId}`)
+
+  source.addEventListener('token', (e) => {
+    try {
+      onToken(JSON.parse(e.data).text)
+    } catch (error) {
+      console.error('Error parsing token event:', error)
+    }
+  })
+
+  source.addEventListener('tool_call', (e) => {
+    try {
+      const { tool, args } = JSON.parse(e.data)
+      // Handle MCP tool execution result on canvas
+    } catch (error) {
+      console.error('Error parsing tool_call event:', error)
+    }
+  })
+
+  source.addEventListener('done', () => {
+    source.close()
+  })
+
+  source.addEventListener('error', () => {
+    source.close()
+    // Show error toast
+  })
+
+  return () => source.close() // Cleanup
+}
+```
+
+### API Client (Real vs Mock)
+
+```
+src/api/
+├─ client.interface.ts      ← ApiClient interface
+├─ real-client.ts            ← Axios → BFF REST API
+├─ mock-client.ts            ← Return mock JSON
+├─ index.ts                  ← Factory: select by VITE_API_URL
+└─ mocks/
+    ├─ boards.json
+    ├─ user.json
+    └─ ai-responses.json
+```
+
+```typescript
+// src/api/index.ts
+import type { ApiClient } from './client.interface'
+import { RealClient } from './real-client'
+import { MockClient } from './mock-client'
+
+const apiUrl = import.meta.env.VITE_API_URL
+
+export const api: ApiClient = apiUrl
+  ? new RealClient(apiUrl)
+  : new MockClient()
+```
+
+---
+
+## System: Mobile App (React Native)
+
+### State Management (Zustand — shared with Web)
+
+| Store | State | Actions | Notes |
+|-------|-------|---------|-------|
+| `authStore` | Same as web | Same | Shared code |
+| `boardStore` | Same as web | Same | Shared code |
+| `canvasStore` | `selectedTool, zoom` | `selectTool(), setZoom()` | Subset of web (no marquee select) |
+| `aiStore` | Same as web | Same | Shared code |
+| `offlineStore` | `isOnline, pendingActions[]` | `queueAction(), syncAll()` | Mobile-only |
+
+### Navigation (React Navigation)
+
+```typescript
+// src/navigation/index.tsx
+const Tab = createBottomTabNavigator()
+const Stack = createNativeStackNavigator()
+
+function HomeTabs() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="Home" component={BoardListScreen} />
+      <Tab.Screen name="Search" component={SearchScreen} />
+      <Tab.Screen name="Create" component={CreateBoardScreen} />
+      <Tab.Screen name="Settings" component={SettingsScreen} />
+    </Tab.Navigator>
+  )
+}
+
+function RootNavigator() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Auth" component={AuthScreen} />
+      <Stack.Screen name="Main" component={HomeTabs} />
+      <Stack.Screen name="Board" component={BoardScreen} />
+      <Stack.Screen name="AIChat" component={AIChatScreen} />
+    </Stack.Navigator>
+  )
+}
+```
+
+### Canvas (Mobile-specific)
+
+| Concern | Implementation |
+|---------|---------------|
+| Rendering | `react-native-skia` or `react-native-canvas` |
+| Touch drawing | One-finger draw with selected tool |
+| Zoom/pan | Pinch to zoom, two-finger pan |
+| Selection | Tap to select, long-press for context menu |
+| Yjs binding | Same as web (shared Yjs code) |
+| Offline | `y-async-storage` for Yjs persistence |
+
+### Push Notifications
+
+```typescript
+// src/notifications/push.ts
+import * as Notifications from 'expo-notifications'
+import { api } from '../api'
+
+export async function registerForPushNotificationsAsync() {
+  try {
+    const token = (await Notifications.getExpoPushTokenAsync()).data
+    await api.registerPushToken(token)
+  } catch (error) {
+    console.error('Failed to register for push notifications', error)
+  }
+}
+
+// Call in root navigation component where navigation is available
+export function setupNotificationListener(navigation) {
+  const subscription = Notifications.addNotificationResponseReceivedListener(response => {
+    const boardId = response.notification.request.content.data?.boardId
+    if (boardId) {
+      navigation.navigate('Board', { id: boardId })
+    }
+  })
+  return () => subscription.remove() // Cleanup
+}
+```
+
+### Offline Strategy
+
+```
+Online:
+  API call → response → update Zustand store
+  Yjs sync via WebSocket
+
+Offline (detected via NetInfo):
+  Yjs edits stored in AsyncStorage (y-async-storage)
+  API calls queued in offlineStore.pendingActions[]
+
+Reconnect:
+  Yjs auto-merges (CRDT conflict-free)
+  offlineStore.syncAll() → replay queued API calls
+```
+
+---
+
+## System: Fine-tune Pipeline
+
+### Pipeline Overview
+
+| Step | Input | Output | Tool | When |
+|------|-------|--------|------|------|
+| 1. Collect feedback | User accepts/rejects AI suggestions | Training dataset (JSONL) | Custom script | Continuous |
+| 2. Prepare dataset | Raw feedback JSONL | Cleaned training pairs | Python script | Before training |
+| 3. Fine-tune | Base model + dataset | LoRA adapter weights | HuggingFace + PEFT | Weekly/on-demand |
+| 4. Quantize | LoRA weights | GGUF quantized model | llama.cpp | After training |
+| 5. Deploy | GGUF model | Running model in Ollama | `ollama create` | After quantization |
+
+### Dataset Format
+
+```jsonl
+{"prompt": "Create a user flow for checkout", "completion": "1. Cart → 2. Address → 3. Payment → 4. Confirmation", "accepted": true}
+{"prompt": "Summarize this board", "completion": "...", "accepted": false, "feedback": "Too generic"}
+```
+
+### Deployment
+
+```bash
+# Create custom model in Ollama
+ollama create whiteboard-ai -f Modelfile
+
+# Modelfile
+FROM llama3:7b
+ADAPTER ./lora-adapter.gguf
+SYSTEM "You are a whiteboard AI assistant..."
+```
+
+> Fine-tuning runs offline on schedule. Not part of the realtime pipeline. Tracked in Langfuse.
+
+---
+
 ## ADRs Created
 
 - [ADR-0001: Why Yjs (CRDT) over OT](adrs/ADR-0001-why-yjs-over-ot.md)
