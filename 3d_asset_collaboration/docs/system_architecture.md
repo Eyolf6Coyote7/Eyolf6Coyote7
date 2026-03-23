@@ -164,12 +164,17 @@ graph TD
   ROUTER_P --> STORE_P
   ROUTER_P --> VIEWER
   ROUTER_P --> SEARCH
+  ROUTER_P --> I18N_P
   STORE_P --> API_P
   API_P -->|REST| ASSET_API[Asset API]
   UPLOAD -->|gRPC-Web| ASSET_API
   SEARCH -->|autocomplete| API_P
+  SEARCH --> STORE_P
+  FILTER --> STORE_P
+  TAG_EDITOR --> API_P
   VIEWER -->|presigned URL| API_P
   VERSION --> VIEWER
+  VERSION --> STORE_P
 ```
 
 #### Asset Portal — Key Modules
@@ -213,22 +218,24 @@ graph TD
     SIGNALR_C[SignalR Client<br/>Realtime sensor updates]
     GRPC_C[gRPC Client<br/>File upload/download]
     INSPECTOR[Asset Inspector<br/>Metadata + versions + download]
-    AUTH_C[Auth Module<br/>API Key storage]
+    AUTH_C[Auth Module<br/>API Key via Keychain/Keystore]
     CACHE[Local Cache<br/>Asset metadata + last sensor values]
     ALERT[Alert Handler<br/>Visual + audio alerts]
   end
 
   SCENE --> VIEWPORT
   VIEWPORT --> IOT_OVERLAY
-  IOT_OVERLAY --> SIGNALR_C
+  SIGNALR_C -->|realtime data| IOT_OVERLAY
+  SIGNALR_C -->|realtime data| CACHE
+  SIGNALR_C -->|threshold check| ALERT
   SIGNALR_C -->|SignalR| ASSET_API[Asset API]
   GRPC_C -->|gRPC| ASSET_API
+  GRPC_C --> CACHE
+  CACHE -->|read| IOT_OVERLAY
   ASSET_BROWSER --> GRPC_C
   INSPECTOR --> GRPC_C
   AUTH_C --> GRPC_C
   AUTH_C --> SIGNALR_C
-  IOT_OVERLAY --> CACHE
-  ALERT --> IOT_OVERLAY
 ```
 
 #### Unity Client — Key Modules
@@ -242,7 +249,7 @@ graph TD
 | SignalR Client | Realtime sensor data subscription | Microsoft.AspNetCore.SignalR.Client |
 | gRPC Client | Upload/download 3D assets (chunked stream) | Grpc.Net.Client |
 | Asset Inspector | View metadata, versions, trigger download | Unity UI Toolkit |
-| Auth Module | Store + send API Key for M2M auth | PlayerPrefs (encrypted) |
+| Auth Module | Store + send API Key for M2M auth | iOS Keychain / Android Keystore (via Unity plugin) |
 | Local Cache | Cache asset metadata + last known sensor values | Unity JsonUtility + local file |
 | Alert Handler | Red flash border + sound when threshold exceeded | Custom UI + AudioSource |
 
@@ -273,6 +280,10 @@ graph TD
   NAV_M --> LIST
   NAV_M --> DETAIL
   NAV_M --> NOTIF_M
+  LIST --> STORE_M
+  DETAIL --> STORE_M
+  NOTIF_M --> STORE_M
+  PUSH_M -->|incoming push| NOTIF_M
   STORE_M --> API_M
   API_M -->|REST| ASSET_API[Asset API]
   PUSH_M -->|FCM / APNs| CLOUD[Push Service]
