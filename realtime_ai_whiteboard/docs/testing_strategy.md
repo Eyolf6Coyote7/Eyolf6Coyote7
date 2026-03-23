@@ -58,7 +58,7 @@
 | Scenario | Steps | Expected Result |
 |----------|-------|----------------|
 | Sign up + create board | Register → Login → New Board → Verify canvas | Board visible with empty canvas |
-| Realtime collaboration | User A creates element → User B sees it | Element appears within 500ms |
+| Realtime collaboration | User A creates element → User B sees it | Element appears for User B |
 | AI chat | Open AI panel → Send prompt → Verify response stream | Tokens stream, shapes appear on canvas |
 | Guest access | Owner shares link → Guest opens → Verify read-only | Guest sees board, cannot edit |
 | Offline → online sync | Edit offline → Reconnect → Verify merge | No data loss, CRDT merge |
@@ -119,14 +119,14 @@
 |---------|----------|---------|
 | Every PR | Unit + Integration + SAST/SCA + gitleaks | Catch regressions early |
 | Before release (dev → stable) | Unit + Integration + E2E | Full regression |
-| Weekly (scheduled) | Full suite + dependency scan | Catch env drift |
+| Weekly (scheduled) | Unit + Integration + E2E + dependency scan | Catch env drift |
 
 ## Quality Gates
 
-PR cannot merge if:
-- [ ] All unit tests pass
-- [ ] All integration tests pass
-- [ ] No lint errors (ESLint + Prettier)
-- [ ] No security scan findings (Semgrep + Trivy + gitleaks)
-- [ ] Coverage does not decrease
-- [ ] No P0/P1 bugs open for this feature
+PR cannot merge if any of the following conditions are not met:
+- All unit tests pass
+- All integration tests pass
+- No lint errors (ESLint + Prettier)
+- No security scan findings (Semgrep + Trivy + gitleaks)
+- Coverage does not decrease
+- No P0/P1 bugs open for this feature
