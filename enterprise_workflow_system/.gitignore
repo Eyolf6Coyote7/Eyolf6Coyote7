@@ -1,0 +1,33 @@
+# Kotlin / Gradle
+build/
+.gradle/
+out/
+*.class
+*.jar
+
+# IntelliJ
+.idea/
+*.iml
+
+# PHP / Laravel
+vendor/
+storage/logs/
+storage/framework/cache/
+storage/framework/sessions/
+storage/framework/views/
+bootstrap/cache/
+.phpunit.result.cache
+
+# Vue.js / Node
+node_modules/
+dist/
+
+# Storybook
+storybook-static/
+
+# Testing
+coverage/
+
+# Environment
+.env
+.env.local

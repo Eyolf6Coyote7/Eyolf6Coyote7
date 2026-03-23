@@ -1,0 +1,25 @@
+# Node.js
+node_modules/
+dist/
+build/
+.turbo/
+
+# Vite
+*.local
+
+# React Native
+.expo/
+ios/Pods/
+android/.gradle/
+android/app/build/
+android/build/
+
+# Testing
+coverage/
+
+# Storybook
+storybook-static/
+
+# Environment
+.env
+.env.local
