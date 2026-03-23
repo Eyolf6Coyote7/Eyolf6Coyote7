@@ -153,7 +153,7 @@ Flow:
 
 ## ADRs Created
 
-- ADR-0001: Why Temporal over Bull/BullMQ for workflow orchestration
-- ADR-0002: Why GraphQL over REST for the Workflow API
-- ADR-0003: Why Kafka event sourcing for audit log (exactly-once guarantee)
-- ADR-0004: Why Laravel for Admin Panel instead of Spring Boot
+- [ADR-0001: Why Temporal over Bull/BullMQ for workflow orchestration](adrs/ADR-0001-why-temporal-over-bull.md)
+- [ADR-0002: Why GraphQL over REST for the Workflow API](adrs/ADR-0002-why-graphql-over-rest.md)
+- [ADR-0003: Why Kafka event sourcing for audit log (exactly-once guarantee)](adrs/ADR-0003-why-kafka-event-sourcing-audit.md)
+- [ADR-0004: Why Laravel for Admin Panel instead of Spring Boot](adrs/ADR-0004-why-laravel-for-admin.md)
