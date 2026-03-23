@@ -1,5 +1,25 @@
 # ConOps: 3D Asset Collaboration
 
+## Table of Contents
+
+- [Product Vision](#product-vision)
+- [Industry Context](#industry-context)
+- [Competitive Analysis](#competitive-analysis)
+- [Stakeholder Map](#stakeholder-map)
+- [Target Users](#target-users)
+- [Assumptions & Constraints](#assumptions-constraints)
+- [Core Scenarios](#core-scenarios)
+  - [Scenario 1: Upload and Preview a 3D Asset](#scenario-1-upload-and-preview-a-3d-asset)
+  - [Scenario 2: Search and Browse Assets Across Brands](#scenario-2-search-and-browse-assets-across-brands)
+  - [Scenario 3: IoT Digital Twin Overlay](#scenario-3-iot-digital-twin-overlay)
+  - [Scenario 4: Asset Version Management](#scenario-4-asset-version-management)
+  - [Scenario 5: Brand-Scoped Access Control](#scenario-5-brand-scoped-access-control)
+- [OKR / Success Metrics](#okr-success-metrics)
+- [Risk Register](#risk-register)
+- [ADRs Created](#adrs-created)
+
+---
+
 ## Product Vision
 
 A Digital Asset Management (DAM) platform for 3D content with real-time IoT data overlay and AI-powered asset classification — think Figma for 3D assets + IoT dashboard, built for media and advertising teams who manage large volumes of 3D creative assets.

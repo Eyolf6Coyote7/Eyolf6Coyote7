@@ -1,5 +1,23 @@
 # PRD: Realtime AI Whiteboard
 
+## Table of Contents
+
+- [Overview](#overview)
+- [User Journey Map](#user-journey-map)
+  - [Alex (Product Manager) Journey](#alex-product-manager-journey)
+- [Feature List](#feature-list)
+- [Feature Details](#feature-details)
+  - [F1: Canvas with Drawing Tools](#f1-canvas-with-drawing-tools)
+  - [F2: Realtime Multi-user Sync (CRDT)](#f2-realtime-multi-user-sync-crdt)
+  - [F4: AI Chat Assistant](#f4-ai-chat-assistant)
+  - [F8: Guest Access via Shared Link](#f8-guest-access-via-shared-link)
+  - [F9: Offline Editing with Auto-Sync](#f9-offline-editing-with-auto-sync)
+- [Non-functional Requirements](#non-functional-requirements)
+- [Release Criteria](#release-criteria)
+- [Dependencies](#dependencies)
+
+---
+
 ## Overview
 
 A SaaS collaborative whiteboard with AI-powered content generation, realtime multi-user editing via CRDT, and privacy-first local AI inference. See [ConOps](conops.md) for product vision and user personas.

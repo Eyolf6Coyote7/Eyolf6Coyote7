@@ -1,5 +1,34 @@
 # UI/UX Design: Realtime AI Whiteboard
 
+## Table of Contents
+
+- [Design Principles](#design-principles)
+- [Figma Project Structure](#figma-project-structure)
+- [Web UI](#web-ui)
+  - [Screen Inventory (Web)](#screen-inventory-web)
+  - [Screen States](#screen-states)
+  - [Web Layout](#web-layout)
+  - [Web-specific Patterns](#web-specific-patterns)
+  - [Key Components (Web)](#key-components-web)
+- [Mobile UI (iOS + Android)](#mobile-ui-ios-android)
+  - [Screen Inventory (Mobile)](#screen-inventory-mobile)
+  - [Mobile-specific Patterns](#mobile-specific-patterns)
+  - [Mobile Layout](#mobile-layout)
+- [User Flows](#user-flows)
+  - [Web Flow: Create Board + Collaborate](#web-flow-create-board-collaborate)
+  - [Mobile Flow: Quick Board Access](#mobile-flow-quick-board-access)
+- [Interaction Specification](#interaction-specification)
+  - [Web Interactions](#web-interactions)
+  - [Mobile Interactions](#mobile-interactions)
+- [Design Tokens](#design-tokens)
+- [Responsive Breakpoints](#responsive-breakpoints)
+- [Handoff Notes (Figma → Developer)](#handoff-notes-figma-developer)
+- [Accessibility (a11y) Checklist](#accessibility-a11y-checklist)
+- [Figma Version History](#figma-version-history)
+- [Screenshots](#screenshots)
+
+---
+
 ## Design Principles
 
 1. **Canvas-first** — the board IS the product. Minimize chrome, maximize canvas space.

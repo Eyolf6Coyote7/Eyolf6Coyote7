@@ -1,5 +1,50 @@
 # Technical Design: Realtime AI Whiteboard
 
+## Table of Contents
+
+- [System: BFF + API (NestJS)](#system-bff-api-nestjs)
+  - [API Specification](#api-specification)
+  - [Database Tables (owned by BFF + API)](#database-tables-owned-by-bff-api)
+  - [Indexes](#indexes)
+- [System: AI Service (LangGraph)](#system-ai-service-langgraph)
+  - [Pipeline Specification](#pipeline-specification)
+  - [MCP Tools](#mcp-tools)
+  - [ChromaDB Collections](#chromadb-collections)
+- [Database Schema (Full)](#database-schema-full)
+  - [ER Diagram](#er-diagram)
+  - [Migrations](#migrations)
+  - [Data Migration Strategy](#data-migration-strategy)
+- [Sequence Diagrams (Key Flows)](#sequence-diagrams-key-flows)
+  - [Flow: Board Creation with Template](#flow-board-creation-with-template)
+  - [Flow: Multi-tenant Schema Switching](#flow-multi-tenant-schema-switching)
+- [Authentication & Authorization](#authentication-authorization)
+  - [JWT Token Structure](#jwt-token-structure)
+- [Error Handling](#error-handling)
+- [Caching Strategy](#caching-strategy)
+- [Background Jobs / Workers](#background-jobs-workers)
+- [Third-party Integrations](#third-party-integrations)
+- [System: Web App (React)](#system-web-app-react)
+  - [State Management (Zustand)](#state-management-zustand)
+  - [Route Definitions](#route-definitions)
+  - [Component Architecture](#component-architecture)
+  - [Canvas Implementation](#canvas-implementation)
+  - [Yjs Integration](#yjs-integration)
+  - [AI Chat — SSE Consumer](#ai-chat-sse-consumer)
+  - [API Client (Real vs Mock)](#api-client-real-vs-mock)
+- [System: Mobile App (React Native)](#system-mobile-app-react-native)
+  - [State Management (Zustand — shared with Web)](#state-management-zustand-shared-with-web)
+  - [Navigation (React Navigation)](#navigation-react-navigation)
+  - [Canvas (Mobile-specific)](#canvas-mobile-specific)
+  - [Push Notifications](#push-notifications)
+  - [Offline Strategy](#offline-strategy)
+- [System: Fine-tune Pipeline](#system-fine-tune-pipeline)
+  - [Pipeline Overview](#pipeline-overview)
+  - [Dataset Format](#dataset-format)
+  - [Deployment](#deployment)
+- [ADRs Created](#adrs-created)
+
+---
+
 ## System: BFF + API (NestJS)
 
 ### API Specification

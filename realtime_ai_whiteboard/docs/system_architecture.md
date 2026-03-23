@@ -1,5 +1,31 @@
 # System Architecture: Realtime AI Whiteboard
 
+## Table of Contents
+
+- [Architecture Pattern](#architecture-pattern)
+- [C4 Model](#c4-model)
+  - [Level 1: System Context](#level-1-system-context)
+  - [Level 2: Container Diagram](#level-2-container-diagram)
+  - [Level 3: Component Diagram (BFF + API)](#level-3-component-diagram-bff-api)
+  - [Level 3: Component Diagram (AI Service)](#level-3-component-diagram-ai-service)
+  - [Level 3: Component Diagram (Web App — React)](#level-3-component-diagram-web-app-react)
+  - [Level 3: Component Diagram (Mobile App — React Native)](#level-3-component-diagram-mobile-app-react-native)
+- [Component Overview](#component-overview)
+- [Data Flow (Sequence Diagrams)](#data-flow-sequence-diagrams)
+  - [Flow 1: Create Board and Start Collaborating](#flow-1-create-board-and-start-collaborating)
+  - [Flow 2: AI Content Generation](#flow-2-ai-content-generation)
+  - [Flow 3: Guest Access](#flow-3-guest-access)
+  - [Flow 4: Offline → Online Sync](#flow-4-offline-online-sync)
+- [API Contracts (High-level)](#api-contracts-high-level)
+- [Database Schema (High-level)](#database-schema-high-level)
+- [Deployment Diagram](#deployment-diagram)
+- [Security Architecture](#security-architecture)
+- [Infrastructure Dependencies](#infrastructure-dependencies)
+- [Scalability Considerations](#scalability-considerations)
+- [ADRs Created](#adrs-created)
+
+---
+
 ## Architecture Pattern
 
 **Modular Monolith + BFF** — a single NestJS backend organized by feature modules, with a BFF layer that serves different API surfaces for Web and Mobile clients. AI runs as a separate service (LangGraph) consuming from Redis Stream.

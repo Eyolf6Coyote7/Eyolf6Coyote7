@@ -1,5 +1,22 @@
 # Development Roadmap: Realtime AI Whiteboard
 
+## Table of Contents
+
+- [Effort Estimation Method](#effort-estimation-method)
+- [Definition of Done](#definition-of-done)
+- [Milestones](#milestones)
+  - [M1: Foundation — `whiteboard/v0.1.0`](#m1-foundation-whiteboardv010)
+  - [M2: Canvas + Realtime — `whiteboard/v0.2.0`](#m2-canvas-realtime-whiteboardv020)
+  - [M3: AI Agent — `whiteboard/v0.3.0`](#m3-ai-agent-whiteboardv030)
+  - [M4: SaaS Features — `whiteboard/v0.4.0`](#m4-saas-features-whiteboardv040)
+  - [M5: Mobile + Polish — `whiteboard/v0.5.0`](#m5-mobile-polish-whiteboardv050)
+  - [M6: Fine-tune + Release — `whiteboard/v1.0.0`](#m6-fine-tune-release-whiteboardv100)
+- [Dependency Graph](#dependency-graph)
+- [Release Plan](#release-plan)
+- [Tech Debt Planned](#tech-debt-planned)
+
+---
+
 ## Effort Estimation Method
 
 Using **T-shirt sizing**:

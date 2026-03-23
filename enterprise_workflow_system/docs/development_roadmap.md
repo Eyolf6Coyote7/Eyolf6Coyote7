@@ -1,5 +1,21 @@
 # Development Roadmap: Enterprise Workflow System
 
+## Table of Contents
+
+- [Effort Estimation Method](#effort-estimation-method)
+- [Definition of Done](#definition-of-done)
+- [Milestones](#milestones)
+  - [M1: Foundation — `workflow/v0.1.0`](#m1-foundation-workflowv010)
+  - [M2: Core Workflow — `workflow/v0.2.0`](#m2-core-workflow-workflowv020)
+  - [M3: Admin + Notifications — `workflow/v0.3.0`](#m3-admin-notifications-workflowv030)
+  - [M4: Mobile App — `workflow/v0.4.0`](#m4-mobile-app-workflowv040)
+  - [M5: Polish + Release — `workflow/v1.0.0`](#m5-polish-release-workflowv100)
+- [Dependency Graph](#dependency-graph)
+- [Release Plan](#release-plan)
+- [Tech Debt Planned](#tech-debt-planned)
+
+---
+
 ## Effort Estimation Method
 
 Using **T-shirt sizing** (same as workspace-wide convention).

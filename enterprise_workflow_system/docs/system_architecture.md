@@ -1,5 +1,32 @@
 # System Architecture: Enterprise Workflow System
 
+## Table of Contents
+
+- [Architecture Pattern](#architecture-pattern)
+- [C4 Model](#c4-model)
+  - [Level 1: System Context](#level-1-system-context)
+  - [Level 2: Container Diagram](#level-2-container-diagram)
+  - [Level 3: Component Diagram (Workflow API — Clean Architecture)](#level-3-component-diagram-workflow-api-clean-architecture)
+  - [Level 3: Component Diagram (Admin API — Laravel)](#level-3-component-diagram-admin-api-laravel)
+  - [Level 3: Component Diagram (Employee Portal — Vue 3)](#level-3-component-diagram-employee-portal-vue-3)
+  - [Level 3: Component Diagram (Admin Dashboard — Vue 3)](#level-3-component-diagram-admin-dashboard-vue-3)
+  - [Level 3: Component Diagram (Mobile App — Kotlin + Swift)](#level-3-component-diagram-mobile-app-kotlin-swift)
+- [Component Overview](#component-overview)
+- [Data Flow (Sequence Diagrams)](#data-flow-sequence-diagrams)
+  - [Flow 1: Submit Approval Request](#flow-1-submit-approval-request)
+  - [Flow 2: Mobile Approval](#flow-2-mobile-approval)
+  - [Flow 3: Auto-Escalation](#flow-3-auto-escalation)
+  - [Flow 4: Compliance Audit Report](#flow-4-compliance-audit-report)
+- [API Contracts (High-level)](#api-contracts-high-level)
+- [Database Schema (High-level)](#database-schema-high-level)
+- [Deployment Diagram](#deployment-diagram)
+- [Security Architecture](#security-architecture)
+- [Infrastructure Dependencies](#infrastructure-dependencies)
+- [Scalability Considerations](#scalability-considerations)
+- [ADRs Created](#adrs-created)
+
+---
+
 ## Architecture Pattern
 
 **Clean Architecture + DDD + CQRS + EDA** — Spring Boot backend with domain-driven layering, command/query separation (write via Temporal + Kafka, read via dedicated read model), and event-driven communication. Admin Panel is a separate Laravel service.

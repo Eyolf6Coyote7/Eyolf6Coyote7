@@ -1,5 +1,52 @@
 # Technical Design: Enterprise Workflow System
 
+## Table of Contents
+
+- [System: Workflow API (Spring Boot + GraphQL)](#system-workflow-api-spring-boot-graphql)
+  - [API Specification — GraphQL](#api-specification-graphql)
+  - [Database Tables (owned by Workflow API)](#database-tables-owned-by-workflow-api)
+  - [Indexes](#indexes)
+- [System: Admin API (Laravel)](#system-admin-api-laravel)
+  - [API Specification — REST](#api-specification-rest)
+- [System: Notification Worker (Kafka Consumer)](#system-notification-worker-kafka-consumer)
+  - [Consumed Topics](#consumed-topics)
+  - [Notification Types](#notification-types)
+- [Database Schema (Full)](#database-schema-full)
+  - [ER Diagram](#er-diagram)
+  - [Migrations](#migrations)
+  - [Data Migration Strategy](#data-migration-strategy)
+- [Sequence Diagrams (Key Flows)](#sequence-diagrams-key-flows)
+  - [Flow: Parallel Approval (A AND B must both approve)](#flow-parallel-approval-a-and-b-must-both-approve)
+  - [Flow: Keycloak SSO + 2FA Login](#flow-keycloak-sso-2fa-login)
+- [Authentication & Authorization](#authentication-authorization)
+  - [Token Flow](#token-flow)
+- [Error Handling](#error-handling)
+- [Caching Strategy](#caching-strategy)
+- [Background Jobs / Workers](#background-jobs-workers)
+- [Third-party Integrations](#third-party-integrations)
+- [System: Employee Portal (Vue 3)](#system-employee-portal-vue-3)
+  - [State Management (Pinia)](#state-management-pinia)
+  - [Route Definitions](#route-definitions)
+  - [Component Architecture](#component-architecture)
+  - [GraphQL Client Setup](#graphql-client-setup)
+  - [API Client (Real vs Mock)](#api-client-real-vs-mock)
+  - [Key Component Specs](#key-component-specs)
+- [System: Admin Dashboard (Vue 3)](#system-admin-dashboard-vue-3)
+  - [State Management (Pinia)](#state-management-pinia)
+  - [Route Definitions](#route-definitions)
+  - [Template Editor — Drag-and-Drop](#template-editor-drag-and-drop)
+  - [API Client (REST to Laravel)](#api-client-rest-to-laravel)
+- [System: Mobile App (Kotlin + Swift)](#system-mobile-app-kotlin-swift)
+  - [Architecture — MVVM + Repository](#architecture-mvvm-repository)
+  - [ViewModels](#viewmodels)
+  - [Offline Approval Queue](#offline-approval-queue)
+  - [Push Notification Handling](#push-notification-handling)
+  - [GraphQL Client](#graphql-client)
+  - [Navigation (per platform)](#navigation-per-platform)
+- [ADRs Created](#adrs-created)
+
+---
+
 ## System: Workflow API (Spring Boot + GraphQL)
 
 ### API Specification — GraphQL
