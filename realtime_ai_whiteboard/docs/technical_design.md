@@ -150,7 +150,7 @@
 | `data.getBoardContent` | GET | `{boardId}` | `{elements[], title}` | None |
 | `task.createShape` | POST | `{boardId, type, x, y, text}` | `{elementId}` | Creates element on board |
 | `task.createConnector` | POST | `{boardId, fromId, toId}` | `{connectorId}` | Creates connector |
-| `task.updateElement` | PATCH | `{boardId, elementId, props}` | `{updated}` | Modifies element |
+| `task.updateElement` | PATCH | `{boardId, elementId, props}` | `{element}` | Modifies element, returns updated element |
 | `task.exportBoard` | POST | `{boardId, format}` | `{downloadUrl}` | Generates export file |
 
 ### ChromaDB Collections
@@ -178,12 +178,16 @@ erDiagram
     varchar name
     varchar schema_name UK
     varchar plan
+    timestamptz created_at
   }
   USER {
     uuid id PK
     varchar email UK
+    varchar password_hash
     varchar display_name
     varchar role
+    varchar locale
+    timestamptz created_at
   }
   BOARD {
     uuid id PK
@@ -191,12 +195,17 @@ erDiagram
     varchar title
     varchar template_id
     boolean guest_editable
+    varchar guest_token UK
     bytea yjs_state
+    varchar thumbnail_url
+    timestamptz created_at
+    timestamptz updated_at
   }
   AI_CONVERSATION {
     uuid id PK
     uuid board_id FK
     uuid user_id FK
+    timestamptz created_at
   }
   AI_MESSAGE {
     uuid id PK
@@ -204,6 +213,9 @@ erDiagram
     varchar role
     text content
     jsonb tool_calls
+    int tokens_used
+    int latency_ms
+    timestamptz created_at
   }
 ```
 
@@ -213,7 +225,7 @@ erDiagram
 |------|---------|
 | Tool | Prisma Migrate |
 | Naming | `YYYYMMDDHHMMSS_description` (e.g. `20260401120000_create_boards`) |
-| Rollback | Every migration has `down` migration via `prisma migrate reset` |
+| Rollback | Revert with a new migration. `prisma migrate reset` is for dev only — never use in production. |
 | Tenant schemas | Migration runs per tenant schema on deploy |
 
 ### Data Migration Strategy
@@ -294,7 +306,7 @@ sequenceDiagram
 |-------|-----|---------|
 | Access Token | 15 min | Memory (client) |
 | Refresh Token | 7 days | HttpOnly cookie |
-| Guest Token | 24 hours | URL parameter |
+| Guest Token | 1 hour (single-use) | URL parameter → exchanged for session cookie |
 
 ## Error Handling
 
@@ -335,7 +347,7 @@ sequenceDiagram
 |-----|--------|---------|-------|--------|
 | AI Task Processor | AI Service | Redis Stream `ai-tasks` | `{boardId, prompt, userId}` | AI response → SSE stream |
 | Board Thumbnail | BFF (async) | Board update event | `{boardId, yjsState}` | Thumbnail PNG → MinIO |
-| Usage Metering | BFF | Every API call | `{tenantId, endpoint}` | Counter in Redis → Kafka analytics |
+| Usage Metering | BFF | Every API call | `{tenantId, endpoint}` | Increment counter in Redis; separate worker sends aggregates to Kafka periodically (every 5 min) |
 | ChromaDB Indexer | AI Service | Board element change | `{boardId, elements}` | Updated vector embeddings |
 
 ## Third-party Integrations
@@ -353,4 +365,4 @@ sequenceDiagram
 - [ADR-0002: Why Ollama over cloud LLM](adrs/ADR-0002-why-ollama-over-cloud-llm.md)
 - [ADR-0003: Why schema-per-tenant](adrs/ADR-0003-why-schema-per-tenant.md)
 - [ADR-0004: Why NestJS Modular Monolith](adrs/ADR-0004-why-modular-monolith.md)
-- [ADR-0005: Why Redis Stream over Kafka](adrs/ADR-0005-why-redis-stream-over-kafka.md)
+- [ADR-0005: Why Redis Stream over Kafka for AI Task Queue](adrs/ADR-0005-why-redis-stream-over-kafka.md)
