@@ -183,7 +183,7 @@ graph TD
   AIS -->|store result| PG
 ```
 
-### Workflow — 5 Systems
+### Workflow — 6 Systems
 
 ```mermaid
 graph TD
@@ -195,6 +195,7 @@ graph TD
 
   subgraph "Backend"
     API[Workflow API<br/>Spring Boot + GraphQL]
+    ADM_API[Admin API<br/>Laravel PHP]
     NW[Notification Worker<br/>Kafka consumer]
   end
 
@@ -212,7 +213,10 @@ graph TD
   end
 
   EMP -->|GraphQL| API
-  ADM -->|GraphQL + REST| API
+  ADM -->|REST| ADM_API
+  ADM_API --> PG
+  ADM_API --> KC
+  ADM_API --> UL
   WMOB -->|GraphQL| API
   API --> TMP
   API --> PG
@@ -277,10 +281,10 @@ graph TD
 | Project | User-facing | Backend | Async Workers | Total |
 |---------|------------|---------|---------------|-------|
 | Whiteboard | 2 (Web, Mobile) | 1 (BFF + API) | 2 (AI Service, Fine-tune Pipeline) | **5** |
-| Workflow | 3 (Employee, Admin, Mobile) | 1 (Workflow API) | 1 (Notification Worker) | **5** |
+| Workflow | 3 (Employee, Admin, Mobile) | 2 (Workflow API, Admin API) | 1 (Notification Worker) | **6** |
 | 3D Asset | 2 (Portal, Unity) | 1 (Asset API) | 3 (AI Service, IoT Ingestion, IoT Consumer) | **6** |
 | Shared | — | 1 (API Gateway) | — | **1** |
-| **Total** | **7** | **4** | **6** | **17** |
+| **Total** | **7** | **5** | **6** | **18** |
 
 ---
 
@@ -389,7 +393,8 @@ Each state transition is traced in Langfuse for observability.
 | Layer           | Tech                                      |
 | --------------- | ----------------------------------------- |
 | Web             | Vue 3 + Pinia + Element Plus              |
-| Admin Panel     | Vue 3 (user mgmt, config, analytics)      |
+| Admin Panel (FE)| Vue 3 (user mgmt, config, analytics)      |
+| Admin Panel (BE)| PHP (Laravel) — CMS, config, reports      |
 | Mobile          | Kotlin (Android) + Swift (iOS) + WebView  |
 | Backend         | Kotlin + Spring Boot                      |
 | API             | GraphQL                                   |
@@ -1038,7 +1043,7 @@ All backends return a consistent error response format:
 | FE Architecture   | Feature-based + Flux    | MVVM                        | Clean Architecture        |
 | BE Architecture   | Modular Monolith        | Clean Arch + DDD + CQRS     | Hexagonal (Ports & Adapters) |
 | System Pattern    | BFF                     | EDA + Saga                  | EDA                       |
-| Language (BE)     | TypeScript              | Kotlin                      | C# + Python (AI) + Go (Gateway) |
+| Language (BE)     | TypeScript              | Kotlin + PHP (Admin)        | C# + Python (AI) + Go (Gateway) |
 | Language (FE)     | TypeScript (React)      | TypeScript (Vue 3)          | TypeScript (React)        |
 | Language (Mobile) | TypeScript (RN)         | Kotlin + Swift              | C# (Unity)                |
 | State Management  | Zustand                 | Pinia                       | Redux Toolkit (RTK)       |
