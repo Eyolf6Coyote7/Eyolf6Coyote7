@@ -488,12 +488,16 @@ sequenceDiagram
 ```typescript
 // src/api/graphql-client.ts
 import { createClient } from '@urql/vue'
+import { useAuthStore } from '@/stores/auth'
 
 export const client = createClient({
   url: import.meta.env.VITE_API_URL || '/mock/graphql',
-  fetchOptions: () => ({
-    headers: { Authorization: `Bearer ${authStore.token}` }
-  })
+  fetchOptions: () => {
+    const authStore = useAuthStore()
+    return {
+      headers: { Authorization: `Bearer ${authStore.token}` }
+    }
+  }
 })
 ```
 
@@ -645,9 +649,21 @@ data class PendingApproval(
 class ApprovalSyncWorker : CoroutineWorker {
   override suspend fun doWork(): Result {
     val pending = db.pendingApprovalDao().getAll()
-    pending.forEach { approval ->
-      api.approveStep(approval.stepId, approval.comment)
-      db.pendingApprovalDao().delete(approval)
+    for (approval in pending) {
+      try {
+        val successful = if (approval.action == "approve") {
+          api.approveStep(approval.stepId, approval.comment).isSuccessful
+        } else {
+          api.rejectStep(approval.stepId, approval.comment ?: "Rejected offline").isSuccessful
+        }
+        if (successful) {
+          db.pendingApprovalDao().delete(approval)
+        } else {
+          return Result.retry() // API failed, retry later
+        }
+      } catch (e: Exception) {
+        return Result.retry() // Network error, retry later
+      }
     }
     return Result.success()
   }
