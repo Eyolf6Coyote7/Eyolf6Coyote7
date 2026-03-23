@@ -25,44 +25,43 @@
 
 ## Architecture Overview
 
+### Whiteboard — SaaS
+
 ```mermaid
-graph TD
-  subgraph "Whiteboard — SaaS"
-    WB_WEB[React Web]
-    WB_MOB[React Native]
-    WB_API[NestJS + BFF]
-    WB_AI[AI Agent - LangGraph]
-  end
+graph LR
+  WEB[React Web] --> BFF[NestJS BFF]
+  MOB[React Native] --> BFF
+  BFF --> AI[AI Agent<br/>LangGraph + RAG + MCP]
+  AI --> OLLAMA[Ollama LLM]
+  AI --> CHROMA[(ChromaDB)]
+  BFF --> PG[(PostgreSQL)]
+  BFF --> RD[(Redis)]
+```
 
-  subgraph "Workflow — Semiconductor"
-    WF_WEB[Vue 3 Portal]
-    WF_ADM[Vue 3 Admin]
-    WF_MOB[Kotlin + Swift]
-    WF_API[Spring Boot + GraphQL]
-    WF_ADM_API[Laravel Admin API]
-    WF_TMP[Temporal]
-  end
+### Workflow — Semiconductor
 
-  subgraph "3D Asset — Media"
-    TD_WEB[React + Three.js]
-    TD_UNITY[Unity Client]
-    TD_API[ASP.NET Core + gRPC]
-    TD_AI[Python + ONNX]
-    TD_IOT[MQTT → Kafka]
-  end
+```mermaid
+graph LR
+  PORTAL[Vue 3 Portal] -->|GraphQL| API[Spring Boot API]
+  ADMIN[Vue 3 Admin] -->|REST| LARAVEL[Laravel Admin]
+  MOBILE[Kotlin + Swift] -->|GraphQL| API
+  API --> TEMPORAL[Temporal]
+  API --> KF[(Kafka)]
+  API --> KC[Keycloak SSO]
+```
 
-  subgraph "Shared Infrastructure"
-    GW[Go API Gateway]
-    PG[(PostgreSQL)]
-    RD[(Redis)]
-    KF[(Kafka)]
-    MIO[(MinIO)]
-    ES[(Elasticsearch)]
-  end
+### 3D Asset — Media / Advertising
 
-  GW --> WB_API
-  GW --> WF_API
-  GW --> TD_API
+```mermaid
+graph LR
+  WEB[React + Three.js] -->|REST| API[ASP.NET Core]
+  UNITY[Unity Client] -->|gRPC + SignalR| API
+  IOT[IoT Devices] -->|MQTT| BRIDGE[Kafka Bridge]
+  BRIDGE --> KF[(Kafka)]
+  KF --> CONSUMER[IoT Consumer]
+  CONSUMER --> TS[(TimescaleDB)]
+  API --> ES[(Elasticsearch)]
+  API --> MIO[(MinIO)]
 ```
 
 ## Projects
@@ -96,6 +95,7 @@ graph TD
 | [Infrastructure](docs/global_infra.md) | Docker services, ports, networking, Kafka topics |
 | [Dev Guidelines](docs/dev_guidelines.md) | Workflow, templates, coding standards, security scanning |
 | [Project Plan](docs/project_plan.md) | Execution plan and progress tracking |
+| [AI-Assisted Development](docs/ai_assisted_development.md) | Claude Code + Gemini co-work methodology |
 
 ## Quick Start
 
