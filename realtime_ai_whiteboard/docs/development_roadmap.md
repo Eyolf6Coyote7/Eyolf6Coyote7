@@ -28,17 +28,19 @@ A feature is "Done" when:
 
 ### M1: Foundation — `whiteboard/v0.1.0`
 
-**Goal:** Project scaffold, auth, basic board CRUD, Docker infra.
-**Duration:** 2 weeks
+**Goal:** Project scaffold, auth, multi-tenancy, basic board CRUD, Docker infra, feature flags.
+**Duration:** 3 weeks
 
 | Feature | Priority | Size | Platform | System | Dependency | Status |
 |---------|----------|------|----------|--------|-----------|--------|
 | Docker Compose (PG, Redis, MinIO, Unleash) | P0 | M | — | Infra | — | Not started |
 | NestJS project scaffold + module structure | P0 | M | — | BFF + API | Docker | Not started |
 | React project scaffold (Vite + Zustand + Router) | P0 | M | Web | Web App | — | Not started |
-| User auth (register, login, JWT) | P0 | L | Web | BFF + API | NestJS scaffold | Not started |
+| Multi-tenancy (schema-per-tenant + middleware) | P0 | XL | — | BFF + API | Prisma + Docker PG | Not started |
+| User auth (register, login, JWT with tenantId) | P0 | L | Web | BFF + API | Multi-tenancy | Not started |
 | Board CRUD (create, list, delete) | P0 | M | Web | BFF + API + Web App | Auth | Not started |
-| Prisma schema + migrations | P0 | M | — | BFF + API | Docker PG | Not started |
+| Prisma schema + migrations (per-tenant) | P0 | L | — | BFF + API | Multi-tenancy | Not started |
+| Feature flags (Unleash integration) | P0 | S | All | All | Unleash Docker | Not started |
 | API Layer pattern (real + mock client) | P0 | S | Web | Web App | React scaffold | Not started |
 | Storybook setup | P1 | S | Web | Web App | React scaffold | Not started |
 | CI workflow (ESLint + Jest placeholder) | P1 | S | — | CI | — | Not started |
@@ -46,7 +48,7 @@ A feature is "Done" when:
 **Risks:**
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| Prisma schema-per-tenant complexity | High | Prototype tenant switching early |
+| Schema-per-tenant migration complexity | High | Implement in M1 to avoid later refactor |
 
 ---
 
@@ -108,17 +110,15 @@ A feature is "Done" when:
 
 | Feature | Priority | Size | Platform | System | Dependency | Status |
 |---------|----------|------|----------|--------|-----------|--------|
-| Multi-tenancy (schema-per-tenant) | P1 | XL | — | BFF + API | Prisma | Not started |
 | Guest access via shared link | P1 | L | Web | BFF + API + Web App | Auth | Not started |
 | Export (PNG, PDF) | P1 | M | Web | BFF + Web App | Canvas | Not started |
-| Subscription plans (Free / Pro) | P2 | L | Web | BFF + API + Web App + Unleash | Multi-tenancy | Not started |
+| Subscription plans (Free / Pro) | P2 | L | Web | BFF + API + Web App + Unleash | Multi-tenancy (M1) | Not started |
 | Usage metering (Redis counter → Kafka) | P2 | M | — | BFF + API | Kafka | Not started |
-| Feature flags (Unleash integration) | P1 | S | All | All | Unleash Docker | Not started |
 
 **Risks:**
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| Schema-per-tenant migration complexity | High | Test with 3+ tenants in dev |
+| Subscription plan gating complexity | Medium | Use Unleash feature flags (already in M1) |
 
 ---
 
@@ -134,7 +134,7 @@ A feature is "Done" when:
 | Mobile AI chat (full-screen overlay) | P1 | M | Mobile | Mobile App | SSE | Not started |
 | Push notifications (Expo + FCM/APNs) | P2 | M | Mobile | Mobile App + BFF | Kafka | Not started |
 | Offline editing (y-async-storage) | P1 | M | Mobile | Mobile App | Yjs | Not started |
-| WebRTC voice/video (P2P) | P2 | XL | Web | Web App | — | Not started |
+| WebRTC voice/video (P2P, max 4-6 users) | P2 | XL | Web | Web App | — | Not started |
 | i18n (en + zh-TW) | P2 | M | Web + Mobile | All frontends | — | Not started |
 | Dark mode | P2 | M | Web + Mobile | All frontends | Design tokens | Not started |
 | Static demo build (mock mode → GitHub Pages) | P2 | M | Web | Web App | API Layer | Not started |
@@ -144,6 +144,7 @@ A feature is "Done" when:
 |------|--------|------------|
 | React Native canvas performance | Medium | Use Skia if Fabric.js is too slow |
 | WebRTC NAT traversal | Medium | Use STUN server, fallback to relay |
+| WebRTC P2P limited to 4-6 users | Low | Future: add SFU (Mediasoup/LiveKit) for larger groups |
 
 ---
 
@@ -169,8 +170,8 @@ gantt
   dateFormat YYYY-MM-DD
   section M1: Foundation
     Docker + Scaffold       :m1a, 2026-04-01, 3d
-    Auth + Board CRUD       :m1b, after m1a, 5d
-    API Layer + Storybook   :m1c, after m1a, 3d
+    Multi-tenancy + Auth    :m1b, after m1a, 7d
+    Board CRUD + Unleash    :m1c, after m1b, 5d
   section M2: Canvas + Realtime
     Canvas rendering        :m2a, after m1b, 5d
     Drawing tools           :m2b, after m2a, 5d
