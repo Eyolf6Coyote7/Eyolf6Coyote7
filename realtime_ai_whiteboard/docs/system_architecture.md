@@ -115,6 +115,114 @@ graph TD
   STREAM -->|SSE| CLIENT[Web / Mobile]
 ```
 
+### Level 3: Component Diagram (Web App — React)
+
+```mermaid
+graph TD
+  subgraph "Web App (React + Vite)"
+    ROUTER[React Router<br/>Pages + Layouts]
+    STORE[Zustand Store<br/>boards, user, ui, ai]
+    CANVAS[Canvas Module<br/>Fabric.js or Konva]
+    YJS_CLIENT[Yjs Client<br/>CRDT sync + offline]
+    WS_CLIENT[WebSocket Client<br/>Socket.IO]
+    AI_PANEL[AI Chat Panel<br/>SSE consumer]
+    API_CLIENT[API Client<br/>Real / Mock switching]
+    I18N[i18n<br/>react-i18next]
+    THEME[Theme Provider<br/>Design tokens + dark mode]
+  end
+
+  ROUTER --> STORE
+  ROUTER --> CANVAS
+  ROUTER --> AI_PANEL
+  CANVAS --> YJS_CLIENT
+  YJS_CLIENT --> WS_CLIENT
+  AI_PANEL --> API_CLIENT
+  API_CLIENT -->|REST| BFF[BFF + API]
+  WS_CLIENT -->|WebSocket| BFF
+  AI_PANEL -->|SSE| BFF
+```
+
+#### Web App — Key Modules
+
+| Module | Responsibility | Key Libraries |
+|--------|---------------|---------------|
+| Router | Page routing, layout, auth guards | React Router v6 |
+| Store | Global state (boards, user, UI, AI chat) | Zustand |
+| Canvas | Drawing surface, element rendering, selection | Fabric.js or Konva |
+| Yjs Client | CRDT document, offline persistence, sync | Yjs, y-websocket, y-indexeddb |
+| WebSocket Client | Connection management, reconnect, presence | Socket.IO client |
+| AI Chat Panel | Prompt input, SSE stream consumer, tool results | EventSource API |
+| API Client | REST calls, real/mock switching by env | Axios + API Layer pattern |
+| i18n | Multi-language (en, zh-TW) | react-i18next |
+| Theme | Design tokens, dark mode toggle, CSS variables | CSS custom properties |
+
+#### Web App — Route Structure
+
+| Route | Page | Auth |
+|-------|------|------|
+| `/` | Landing Page | Public |
+| `/auth` | Login / Sign Up | Public |
+| `/dashboard` | Board Grid | JWT |
+| `/board/:id` | Canvas + AI Panel | JWT / Guest |
+| `/board/:id/settings` | Board Settings | JWT (owner) |
+| `/settings` | Account Settings | JWT |
+| `/pricing` | Plan Comparison | Public |
+
+### Level 3: Component Diagram (Mobile App — React Native)
+
+```mermaid
+graph TD
+  subgraph "Mobile App (React Native + Expo)"
+    NAV[React Navigation<br/>Tab + Stack]
+    STORE_M[Zustand Store<br/>boards, user, ui]
+    CANVAS_M[Canvas Module<br/>react-native-canvas / Skia]
+    YJS_M[Yjs Client<br/>CRDT + AsyncStorage]
+    WS_M[WebSocket Client<br/>Socket.IO]
+    AI_M[AI Chat Screen<br/>Full-screen overlay]
+    API_M[API Client<br/>Mobile BFF endpoints]
+    PUSH[Push Notifications<br/>Expo Notifications]
+    OFFLINE[Offline Manager<br/>NetInfo + queue]
+    I18N_M[i18n<br/>react-i18next]
+  end
+
+  NAV --> STORE_M
+  NAV --> CANVAS_M
+  NAV --> AI_M
+  CANVAS_M --> YJS_M
+  YJS_M --> WS_M
+  AI_M --> API_M
+  API_M -->|REST| BFF[BFF + API]
+  AI_M -->|SSE| BFF
+  WS_M -->|WebSocket| BFF
+  PUSH -->|FCM / APNs| CLOUD[Push Service]
+  OFFLINE --> API_M
+```
+
+#### Mobile App — Key Modules
+
+| Module | Responsibility | Key Libraries |
+|--------|---------------|---------------|
+| Navigation | Tab bar + stack navigation | React Navigation v6 |
+| Store | Global state (shared with web via Zustand) | Zustand |
+| Canvas | Touch drawing, pinch zoom, pan | react-native-canvas or Skia |
+| Yjs Client | CRDT sync, offline persistence via AsyncStorage | Yjs, y-websocket, y-async-storage |
+| WebSocket Client | Connection, auto-reconnect | Socket.IO client |
+| AI Chat | Full-screen chat overlay | Custom screen |
+| API Client | Mobile BFF REST calls | Axios |
+| Push | Register device token, handle notifications | Expo Notifications |
+| Offline Manager | Detect network state, queue actions | @react-native-community/netinfo |
+| i18n | Multi-language | react-i18next (shared config with web) |
+
+#### Mobile App — Navigation Structure
+
+| Tab | Stack Screens | Auth |
+|-----|--------------|------|
+| Home | Board List → Board Canvas | JWT |
+| Search | Search → Board Canvas | JWT |
+| Create | New Board → Board Canvas | JWT |
+| Settings | Account, Profile | JWT |
+| (Overlay) | AI Chat (full screen) | JWT |
+
 ## Component Overview
 
 | Component | Tech | System | Responsibility |
