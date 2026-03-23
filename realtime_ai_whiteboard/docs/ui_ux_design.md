@@ -26,6 +26,7 @@
 - [Accessibility (a11y) Checklist](#accessibility-a11y-checklist)
 - [Figma Version History](#figma-version-history)
 - [Screenshots](#screenshots)
+- [Stitch Prompts](#stitch-prompts)
 
 ---
 
@@ -303,3 +304,29 @@ realtime_ai_whiteboard/docs/screenshots/
 ```
 
 > No screenshots yet — will be added when Figma designs are created.
+
+## Stitch Prompts
+
+Each screen has a dedicated Stitch prompt file in `docs/design/stitch_prompts/`. These contain detailed natural-language descriptions ready to paste into [Google Stitch](https://stitch.withgoogle.com) for rapid layout generation, plus design tokens, states to generate, and acceptance criteria.
+
+**Workflow**: Copy the "Stitch Prompt" section → paste into Stitch → pick best layout → recreate/refine in Figma.
+
+| # | Screen | Prompt File | Platform |
+|---|--------|------------|----------|
+| 01 | Landing Page | [01_landing.md](design/stitch_prompts/01_landing.md) | Web |
+| 02 | Sign Up / Login | [02_auth.md](design/stitch_prompts/02_auth.md) | Web |
+| 03 | Dashboard | [03_dashboard.md](design/stitch_prompts/03_dashboard.md) | Web |
+| 04 | Board Canvas | [04_canvas.md](design/stitch_prompts/04_canvas.md) | Web |
+| 05 | AI Chat Panel | [05_ai_chat_panel.md](design/stitch_prompts/05_ai_chat_panel.md) | Web |
+| 06 | Board Settings | [06_board_settings.md](design/stitch_prompts/06_board_settings.md) | Web |
+| 07 | Account Settings | [07_account_settings.md](design/stitch_prompts/07_account_settings.md) | Web |
+| 08 | Pricing | [08_pricing.md](design/stitch_prompts/08_pricing.md) | Web |
+| 09 | Mobile Home | [09_mobile_home.md](design/stitch_prompts/09_mobile_home.md) | iOS + Android |
+| 10 | Mobile Canvas | [10_mobile_canvas.md](design/stitch_prompts/10_mobile_canvas.md) | iOS + Android |
+| 11 | Mobile AI Chat | [11_mobile_ai_chat.md](design/stitch_prompts/11_mobile_ai_chat.md) | iOS + Android |
+| 12 | Mobile Splash | [12_mobile_splash.md](design/stitch_prompts/12_mobile_splash.md) | iOS + Android |
+| 13 | Mobile Sign Up / Login | [13_mobile_auth.md](design/stitch_prompts/13_mobile_auth.md) | iOS + Android |
+| 14 | Mobile Board Settings | [14_mobile_board_settings.md](design/stitch_prompts/14_mobile_board_settings.md) | iOS + Android |
+| 15 | Mobile Account | [15_mobile_account.md](design/stitch_prompts/15_mobile_account.md) | iOS + Android |
+
+> See [dev_guidelines.md](../../docs/dev_guidelines.md#figma-workflow) for the full Claude → Stitch → Figma workflow.
