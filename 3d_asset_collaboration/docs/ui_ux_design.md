@@ -46,7 +46,7 @@
 │ Format:  │     │thumb│ │thumb│ │thumb│        │
 │ □ GLB    │     │     │ │     │ │     │        │
 │ □ FBX    │     │name │ │name │ │name │        │
-│          │     │v3·Nike│v1·Adid│v2·Nike│       │
+│          │     │v3·Nike│v1·Adidas│v2·Nike│       │
 │ Brand:   │     └─────┘ └─────┘ └─────┘        │
 │ □ Nike   │                                      │
 │ □ Adidas │     ┌─────┐ ┌─────┐ ┌─────┐        │
@@ -70,8 +70,9 @@
 │     (Three.js)              │ Format: GLB       │
 │                             │ Size: 52 MB       │
 │     [rotate] [zoom]         │ Brand: Nike       │
-│     [fullscreen]            │ Tags: car, hero   │
-│                             │ Created: 2026-04  │
+│     [fullscreen]            │ Tags: car, hero,  │
+│   campaign-2026    │
+│                             │ Created: 2026-03  │
 │                             │ By: Maya          │
 │                             │                   │
 │                             │ ── Versions ──    │
