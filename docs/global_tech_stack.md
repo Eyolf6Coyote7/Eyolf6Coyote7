@@ -39,6 +39,7 @@ All three projects connect to the same local services via Docker Compose.
 | Identity       | Keycloak                  | OAuth2 / OIDC provider (Workflow project)|
 | Event Streaming| Kafka (KRaft mode)        | Event bus for Workflow + 3D Asset        |
 | IoT Broker     | Mosquitto (MQTT)          | IoT sensor ingestion (3D Asset project)  |
+| Search         | Elasticsearch             | Full-text asset search (3D Asset project)|
 | Feature Flags  | Unleash                   | Feature toggles, A/B testing, kill switch|
 | Email (local)  | MailHog                   | Local SMTP server — intercepts all emails|
 | 2FA            | Keycloak (TOTP)           | Two-factor auth via Google Authenticator |
@@ -295,6 +296,7 @@ graph TD
 | Backend      | Node.js (NestJS)             |
 | API          | REST + WebSocket             |
 | Realtime     | WebSocket (Socket.IO)        |
+| Voice/Video  | WebRTC (P2P)                 |
 | State Sync   | Yjs (CRDT)                   |
 | DB           | PostgreSQL (schema-per-tenant)|
 | Cache/Queue  | Redis (Pub/Sub + Stream)     |
@@ -371,6 +373,7 @@ Each state transition is traced in Langfuse for observability.
 | AI response UX             | SSE streaming — token-by-token typing effect, not wait-for-full-response |
 | AI observability           | Langfuse traces every state transition (latency, tokens, quality) |
 | Intent routing             | Classifier routes to info retrieval (RAG) or action execution (MCP) |
+| Voice/video collaboration  | WebRTC P2P — low latency, no media server needed for small groups |
 | One codebase, two platforms| React + React Native shared business logic       |
 | Multi-tenancy (SaaS)      | Schema-per-tenant in PostgreSQL — data isolation |
 | Usage metering             | Track API calls + storage per tenant → Kafka     |
@@ -427,6 +430,7 @@ Each state transition is traced in Langfuse for observability.
 | Cache           | Redis (Pub/Sub)              |
 | Storage         | MinIO (versioned)            |
 | Auth            | API Key + JWT + Resource ACL |
+| Search          | Elasticsearch                |
 | Feature Flags   | Unleash                      |
 | AI Service      | Python + FastAPI + ONNX Runtime |
 
@@ -436,6 +440,7 @@ Each state transition is traced in Langfuse for observability.
 | ------------------------------ | ----------------------------------------------- |
 | Large 3D files (50MB+)        | gRPC bidirectional stream + versioned MinIO      |
 | DAM asset library              | Tagging, search, preview, version tree per asset |
+| Full-text asset search         | Elasticsearch — search by name, tag, description. 100x faster than SQL LIKE |
 | Cross-brand asset sharing      | Tenant-scoped buckets + resource-level ACL       |
 | IoT sensor data ingestion     | MQTT (Mosquitto) → Kafka bridge → consumer processing |
 | IoT data ordering             | Kafka partitioning by `device_id` — ordered per device, parallel across devices |
@@ -1038,7 +1043,8 @@ All backends return a consistent error response format:
 | API Versioning    | URL path (`/v1/`)       | Schema evolution             | Proto package version     |
 | API Docs          | OpenAPI / Swagger       | GraphQL Playground          | Protobuf + Buf            |
 | Auth              | JWT + Guest             | Keycloak OAuth2/SSO         | API Key + JWT + ACL       |
-| Realtime          | Socket.IO + CRDT        | Temporal                    | SignalR + MQTT            |
+| Realtime          | Socket.IO + CRDT + WebRTC | Temporal                  | SignalR + MQTT            |
+| Search            | —                       | —                           | Elasticsearch             |
 | Messaging         | Redis Stream            | Kafka                       | MQTT → Kafka              |
 | Multi-tenancy     | Schema-per-tenant       | Row-level (org_id)          | Bucket-per-tenant         |
 | Feature Flags     | Unleash                 | Unleash + Admin UI          | Unleash                   |
