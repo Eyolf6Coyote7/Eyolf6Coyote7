@@ -1,5 +1,26 @@
 # ConOps: Realtime AI Whiteboard
 
+## Table of Contents
+
+- [Product Vision](#product-vision)
+- [Industry Context](#industry-context)
+- [Competitive Analysis](#competitive-analysis)
+- [Stakeholder Map](#stakeholder-map)
+- [Target Users](#target-users)
+- [Assumptions & Constraints](#assumptions-constraints)
+- [Core Scenarios](#core-scenarios)
+  - [Scenario 1: Realtime Collaborative Brainstorming](#scenario-1-realtime-collaborative-brainstorming)
+  - [Scenario 2: AI-Assisted Content Generation](#scenario-2-ai-assisted-content-generation)
+  - [Scenario 3: Guest Access via Shared Link](#scenario-3-guest-access-via-shared-link)
+  - [Scenario 4: Offline Editing with Auto-Sync](#scenario-4-offline-editing-with-auto-sync)
+  - [Scenario 5: SaaS Multi-Tenancy and Subscription](#scenario-5-saas-multi-tenancy-and-subscription)
+- [OKR / Success Metrics](#okr-success-metrics)
+- [Risk Register](#risk-register)
+- [ADRs Created](#adrs-created)
+
+---
+
+
 ## Product Vision
 
 A collaborative whiteboard platform with an AI agent that helps users brainstorm, organize ideas, and create visual content — think Miro meets ChatGPT, running entirely on local infrastructure.

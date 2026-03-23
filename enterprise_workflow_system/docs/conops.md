@@ -1,5 +1,26 @@
 # ConOps: Enterprise Workflow System
 
+## Table of Contents
+
+- [Product Vision](#product-vision)
+- [Industry Context](#industry-context)
+- [Competitive Analysis](#competitive-analysis)
+- [Stakeholder Map](#stakeholder-map)
+- [Target Users](#target-users)
+- [Assumptions & Constraints](#assumptions-constraints)
+- [Core Scenarios](#core-scenarios)
+  - [Scenario 1: Submit and Track an Approval Request](#scenario-1-submit-and-track-an-approval-request)
+  - [Scenario 2: Mobile Approval on Factory Floor](#scenario-2-mobile-approval-on-factory-floor)
+  - [Scenario 3: Configure a New Approval Workflow](#scenario-3-configure-a-new-approval-workflow)
+  - [Scenario 4: Compliance Audit Report](#scenario-4-compliance-audit-report)
+  - [Scenario 5: Notification and Escalation](#scenario-5-notification-and-escalation)
+- [OKR / Success Metrics](#okr-success-metrics)
+- [Risk Register](#risk-register)
+- [ADRs Created](#adrs-created)
+
+---
+
+
 ## Product Vision
 
 A multi-step approval and task management system for semiconductor manufacturing — enabling configurable approval chains, compliance audit trails, and role-based access control, powered by a durable workflow engine (Temporal) and event-driven architecture (Kafka).

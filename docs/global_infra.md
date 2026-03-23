@@ -1,5 +1,44 @@
 # Global Infrastructure
 
+## Table of Contents
+
+- [Network Topology](#network-topology)
+- [Messaging Patterns](#messaging-patterns)
+- [Service Definitions](#service-definitions)
+  - [Docker Compose Structure](#docker-compose-structure)
+- [Port Mapping](#port-mapping)
+  - [Backend Services (run on host, not Docker)](#backend-services-run-on-host-not-docker)
+- [Volumes & Data Persistence](#volumes-data-persistence)
+- [Environment Variables](#environment-variables)
+  - [`.env` (shared)](#env-shared)
+  - [Per-project `.env`](#per-project-env)
+- [PostgreSQL Databases](#postgresql-databases)
+- [Redis Database Index](#redis-database-index)
+- [Kafka Topics](#kafka-topics)
+  - [Kafka Design Patterns](#kafka-design-patterns)
+- [Feature Toggles (Unleash)](#feature-toggles-unleash)
+  - [Unleash SDK per Project](#unleash-sdk-per-project)
+- [Remote Config](#remote-config)
+- [Event Tracking / Analytics](#event-tracking-analytics)
+  - [Event Schema](#event-schema)
+- [Admin Panel](#admin-panel)
+- [Email (MailHog)](#email-mailhog)
+  - [Email Use Cases](#email-use-cases)
+- [Two-Factor Authentication (2FA)](#two-factor-authentication-2fa)
+  - [How It Works](#how-it-works)
+- [AI / LLM Pipeline (Whiteboard)](#ai-llm-pipeline-whiteboard)
+  - [Services](#services)
+  - [Pipeline Flow](#pipeline-flow)
+  - [MCP Tools](#mcp-tools)
+  - [Fine-tuning (Offline)](#fine-tuning-offline)
+  - [Resource Estimates (AI)](#resource-estimates-ai)
+- [MinIO Buckets](#minio-buckets)
+- [Resource Estimates](#resource-estimates)
+- [Quick Reference](#quick-reference)
+
+---
+
+
 > All services run **locally** via Docker Compose. No cloud dependencies.
 
 ---

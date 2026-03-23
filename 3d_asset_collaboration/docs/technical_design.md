@@ -1,5 +1,55 @@
 # Technical Design: 3D Asset Collaboration
 
+## Table of Contents
+
+- [System: Asset API (ASP.NET Core — Hexagonal)](#system-asset-api-aspnet-core-hexagonal)
+  - [API Specification — REST](#api-specification-rest)
+  - [API Specification — gRPC](#api-specification-grpc)
+  - [API Specification — SignalR Hubs](#api-specification-signalr-hubs)
+  - [Database Tables](#database-tables)
+  - [Indexes](#indexes)
+- [System: AI Service (Python + FastAPI + ONNX)](#system-ai-service-python-fastapi-onnx)
+  - [API Specification](#api-specification)
+  - [Classification Pipeline](#classification-pipeline)
+  - [Model](#model)
+- [System: IoT Consumer (Kafka Consumer)](#system-iot-consumer-kafka-consumer)
+  - [Consumed Topics](#consumed-topics)
+  - [Threshold Alerting Logic](#threshold-alerting-logic)
+  - [TimescaleDB Write](#timescaledb-write)
+- [System: Asset Portal (React + Three.js)](#system-asset-portal-react-threejs)
+  - [State Management (Redux Toolkit)](#state-management-redux-toolkit)
+  - [Route Definitions](#route-definitions)
+  - [3D Viewer Implementation](#3d-viewer-implementation)
+  - [gRPC-Web Upload](#grpc-web-upload)
+  - [Elasticsearch Search](#elasticsearch-search)
+  - [API Client (Real vs Mock)](#api-client-real-vs-mock)
+- [System: Unity Client (C#)](#system-unity-client-c)
+  - [Architecture — MVC with Service Layer](#architecture-mvc-with-service-layer)
+  - [Key Services](#key-services)
+  - [IoT Overlay Implementation](#iot-overlay-implementation)
+  - [SignalR Connection](#signalr-connection)
+- [System: Mobile App (React — Lightweight)](#system-mobile-app-react-lightweight)
+  - [State Management (Redux Toolkit)](#state-management-redux-toolkit)
+  - [Navigation (React Navigation)](#navigation-react-navigation)
+  - [Push Notifications](#push-notifications)
+- [Database Schema (Full)](#database-schema-full)
+  - [ER Diagram](#er-diagram)
+  - [Migrations](#migrations)
+  - [Data Migration Strategy](#data-migration-strategy)
+- [Sequence Diagrams (Key Flows)](#sequence-diagrams-key-flows)
+  - [Flow: gRPC Upload with Auto-tag](#flow-grpc-upload-with-auto-tag)
+  - [Flow: IoT Realtime → Unity](#flow-iot-realtime-unity)
+- [Authentication & Authorization](#authentication-authorization)
+  - [Token Types](#token-types)
+- [Error Handling](#error-handling)
+- [Caching Strategy](#caching-strategy)
+- [Background Jobs / Workers](#background-jobs-workers)
+- [Third-party Integrations](#third-party-integrations)
+- [ADRs Created](#adrs-created)
+
+---
+
+
 ## System: Asset API (ASP.NET Core — Hexagonal)
 
 ### API Specification — REST

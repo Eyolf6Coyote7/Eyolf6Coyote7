@@ -1,5 +1,25 @@
 # PRD: 3D Asset Collaboration
 
+## Table of Contents
+
+- [Overview](#overview)
+- [User Journey Map](#user-journey-map)
+  - [Maya (3D Artist) Journey](#maya-3d-artist-journey)
+  - [David (Creative Director) Journey](#david-creative-director-journey)
+- [Feature List](#feature-list)
+- [Feature Details](#feature-details)
+  - [F1: Upload 3D Assets (GLB, FBX)](#f1-upload-3d-assets-glb-fbx)
+  - [F2: Browser 3D Preview (Three.js)](#f2-browser-3d-preview-threejs)
+  - [F4: Full-text Asset Search](#f4-full-text-asset-search)
+  - [F8: IoT Sensor Data Overlay on 3D Model](#f8-iot-sensor-data-overlay-on-3d-model)
+  - [F3: Asset Version Management](#f3-asset-version-management)
+- [Non-functional Requirements](#non-functional-requirements)
+- [Release Criteria](#release-criteria)
+- [Dependencies](#dependencies)
+
+---
+
+
 ## Overview
 
 A Digital Asset Management (DAM) platform for 3D content with browser-based preview, version control, IoT digital twin overlay, and AI-powered asset classification — built for media and advertising teams. See [ConOps](conops.md) for product vision and user personas.

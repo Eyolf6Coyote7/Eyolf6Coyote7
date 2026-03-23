@@ -1,5 +1,42 @@
 # UI/UX Design: 3D Asset Collaboration
 
+## Table of Contents
+
+- [Design Principles](#design-principles)
+- [Figma Project Structure](#figma-project-structure)
+- [Web UI — Asset Portal](#web-ui-asset-portal)
+  - [Screen Inventory (Asset Portal)](#screen-inventory-asset-portal)
+  - [Asset Portal Layout](#asset-portal-layout)
+  - [Asset Detail Layout](#asset-detail-layout)
+  - [Web-specific Patterns](#web-specific-patterns)
+- [Web UI — IoT Dashboard](#web-ui-iot-dashboard)
+  - [IoT Dashboard Layout](#iot-dashboard-layout)
+- [Unity Client](#unity-client)
+  - [Screen Inventory (Unity)](#screen-inventory-unity)
+  - [Unity Viewport Layout](#unity-viewport-layout)
+  - [Unity-specific Patterns](#unity-specific-patterns)
+- [Mobile UI (iOS + Android)](#mobile-ui-ios-android)
+  - [Screen Inventory (Mobile)](#screen-inventory-mobile)
+  - [Mobile-specific Patterns](#mobile-specific-patterns)
+- [Screen States](#screen-states)
+- [User Flows](#user-flows)
+  - [Upload + Preview Flow](#upload-preview-flow)
+  - [IoT Digital Twin Flow](#iot-digital-twin-flow)
+  - [Search + Browse Flow](#search-browse-flow)
+- [Interaction Specification](#interaction-specification)
+  - [Web Interactions](#web-interactions)
+  - [Unity Interactions](#unity-interactions)
+- [Key Components](#key-components)
+- [Design Tokens](#design-tokens)
+- [Responsive Breakpoints](#responsive-breakpoints)
+- [Handoff Notes](#handoff-notes)
+- [Accessibility (a11y) Checklist](#accessibility-a11y-checklist)
+- [Figma Version History](#figma-version-history)
+- [Screenshots](#screenshots)
+
+---
+
+
 ## Design Principles
 
 1. **3D is the hero** — the 3D viewer is the center of the experience. Maximize viewport, minimize UI noise.

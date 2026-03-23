@@ -1,5 +1,33 @@
 # System Architecture: 3D Asset Collaboration
 
+## Table of Contents
+
+- [Architecture Pattern](#architecture-pattern)
+- [C4 Model](#c4-model)
+  - [Level 1: System Context](#level-1-system-context)
+  - [Level 2: Container Diagram](#level-2-container-diagram)
+  - [Level 3: Component Diagram (Asset API — Hexagonal)](#level-3-component-diagram-asset-api-hexagonal)
+  - [Level 3: Component Diagram (IoT Pipeline)](#level-3-component-diagram-iot-pipeline)
+  - [Level 3: Component Diagram (Asset Portal — React + Three.js)](#level-3-component-diagram-asset-portal-react-threejs)
+  - [Level 3: Component Diagram (Unity Client — C#)](#level-3-component-diagram-unity-client-c)
+  - [Level 3: Component Diagram (Mobile App — Lightweight)](#level-3-component-diagram-mobile-app-lightweight)
+- [Component Overview](#component-overview)
+- [Data Flow (Sequence Diagrams)](#data-flow-sequence-diagrams)
+  - [Flow 1: Upload 3D Asset (gRPC Streaming)](#flow-1-upload-3d-asset-grpc-streaming)
+  - [Flow 2: Search Assets (Elasticsearch)](#flow-2-search-assets-elasticsearch)
+  - [Flow 3: IoT Digital Twin (MQTT → Kafka → Unity)](#flow-3-iot-digital-twin-mqtt-kafka-unity)
+  - [Flow 4: Version Compare](#flow-4-version-compare)
+- [API Contracts (High-level)](#api-contracts-high-level)
+- [Database Schema (High-level)](#database-schema-high-level)
+- [Deployment Diagram](#deployment-diagram)
+- [Security Architecture](#security-architecture)
+- [Infrastructure Dependencies](#infrastructure-dependencies)
+- [Scalability Considerations](#scalability-considerations)
+- [ADRs Created](#adrs-created)
+
+---
+
+
 ## Architecture Pattern
 
 **Hexagonal Architecture (Ports & Adapters) + EDA** — ASP.NET Core backend with core logic isolated behind port interfaces. Input adapters: gRPC, REST, SignalR. Output adapters: PostgreSQL, Elasticsearch, MinIO, TimescaleDB, Kafka, Redis. IoT data flows through MQTT → Kafka → TimescaleDB. Python AI service for asset auto-tagging.

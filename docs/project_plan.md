@@ -1,5 +1,27 @@
 # Project Plan
 
+## Table of Contents
+
+- [Execution Strategy](#execution-strategy)
+- [Phase A — Planning (21 Documents, Parallel)](#phase-a-planning-21-documents-parallel)
+  - [Round 1: ConOps + ADRs](#round-1-conops-adrs)
+  - [Round 2: PRD](#round-2-prd)
+  - [Round 3: UI/UX Design (Figma Spec)](#round-3-uiux-design-figma-spec)
+  - [Round 4: System Architecture + ADRs](#round-4-system-architecture-adrs)
+  - [Round 5: Technical Design + ADRs](#round-5-technical-design-adrs)
+  - [Round 6: Development Roadmap](#round-6-development-roadmap)
+  - [Round 7: Testing Strategy](#round-7-testing-strategy)
+- [Phase B — Development (Serial)](#phase-b-development-serial)
+  - [API Layer Pattern (Real vs Mock)](#api-layer-pattern-real-vs-mock)
+  - [Development Progress](#development-progress)
+- [Phase C — Showcase](#phase-c-showcase)
+  - [What Interviewers See](#what-interviewers-see)
+- [Workflow](#workflow)
+- [AI Co-work](#ai-co-work)
+
+---
+
+
 ## Execution Strategy
 
 - **Phase A (Planning):** All 3 projects in parallel, by phase — ensures tech diversity and shared infra alignment

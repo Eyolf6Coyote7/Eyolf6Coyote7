@@ -1,5 +1,38 @@
 # UI/UX Design: Enterprise Workflow System
 
+## Table of Contents
+
+- [Design Principles](#design-principles)
+- [Figma Project Structure](#figma-project-structure)
+- [Web UI — Employee Portal](#web-ui-employee-portal)
+  - [Screen Inventory (Employee Portal)](#screen-inventory-employee-portal)
+  - [Employee Portal Layout](#employee-portal-layout)
+- [Web UI — Admin Dashboard](#web-ui-admin-dashboard)
+  - [Screen Inventory (Admin Dashboard)](#screen-inventory-admin-dashboard)
+  - [Admin Dashboard Layout](#admin-dashboard-layout)
+- [Mobile UI (iOS + Android)](#mobile-ui-ios-android)
+  - [Screen Inventory (Mobile)](#screen-inventory-mobile)
+  - [Mobile Layout](#mobile-layout)
+  - [Mobile-specific Patterns](#mobile-specific-patterns)
+- [Screen States](#screen-states)
+- [User Flows](#user-flows)
+  - [Submit Request Flow](#submit-request-flow)
+  - [Mobile Approval Flow](#mobile-approval-flow)
+  - [Admin Template Configuration Flow](#admin-template-configuration-flow)
+- [Interaction Specification](#interaction-specification)
+  - [Web Interactions](#web-interactions)
+  - [Mobile Interactions](#mobile-interactions)
+- [Key Components](#key-components)
+- [Design Tokens](#design-tokens)
+- [Responsive Breakpoints](#responsive-breakpoints)
+- [Handoff Notes](#handoff-notes)
+- [Accessibility (a11y) Checklist](#accessibility-a11y-checklist)
+- [Figma Version History](#figma-version-history)
+- [Screenshots](#screenshots)
+
+---
+
+
 ## Design Principles
 
 1. **Clarity over decoration** — approval workflows must be unambiguous. Status, assignee, deadline must be instantly visible.
