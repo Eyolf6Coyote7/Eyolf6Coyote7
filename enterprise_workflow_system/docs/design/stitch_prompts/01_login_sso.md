@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 A professional enterprise SSO login screen for a workflow management system. The viewport is 1440x900px. The entire background is a solid light gray (#F5F7FA) with no decorative illustrations.
 
 **Center card** (440px wide, auto height, centered both horizontally and vertically, white #FFFFFF background, border-radius 8px, shadow 0 2px 12px rgba(0,0,0,0.1), padding 40px):

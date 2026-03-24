@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 An admin analytics dashboard for an enterprise workflow system. Desktop viewport 1440x900px. Standard layout with top bar (64px, includes an "Admin" badge — small pill bg #409EFF text white next to the logo, and a "Switch to Portal" text link on the right side of the top bar) and admin side nav (220px).
 
 **Admin side nav** (220px, same structure as employee nav but different items): "Dashboard" (active, blue highlight), "User Management" (users icon), "Workflow Templates" (settings icon), "Audit Log" (scroll icon), "Feature Toggles" (flag icon), "Remote Config" (sliders icon). Each item 48px height, 14px text. Active item has #ECF5FF background and #409EFF text with 4px blue left border.

@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Mobile screen, 390x844px (iPhone 14).
+
 A mobile app splash/loading screen. iPhone 14 frame (390x844px). This is the first screen users see when opening the app.
 
 **Full screen, centered content**: Solid white background. In the exact center of the screen, the app logo — a stylized whiteboard icon (a rounded rectangle with a small pen/cursor on top-right corner) in blue (#2563EB), 64px size. Below the icon (16px gap), the app name "Whiteboard AI" in bold 24px Inter font, dark gray (#111827). Below the name (8px gap), a tagline "Think together, in real time" in 14px regular Inter, medium gray (#6B7280).

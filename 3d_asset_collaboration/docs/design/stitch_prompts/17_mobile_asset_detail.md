@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Mobile screen, 390x844px (iPhone 14).
+
 The asset detail screen on mobile showing a static 2D preview image (no Three.js on mobile), metadata, and version list. iPhone 14 frame (390x844px). Light theme.
 
 **Status bar** (47px, iOS default).

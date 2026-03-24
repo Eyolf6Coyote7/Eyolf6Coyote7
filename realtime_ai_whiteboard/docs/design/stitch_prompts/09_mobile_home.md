@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Mobile screen, 390x844px (iPhone 14).
+
 A mobile app home screen showing a list of whiteboard boards. iPhone 14 frame (390x844px). Clean, native-feeling iOS design.
 
 **Status bar** (top): Standard iOS status bar with time, signal, battery.

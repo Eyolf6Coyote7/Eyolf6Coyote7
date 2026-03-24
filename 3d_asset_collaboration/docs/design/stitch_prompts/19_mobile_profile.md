@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Mobile screen, 390x844px (iPhone 14).
+
 The profile/settings screen using iOS Settings grouped-list pattern. iPhone 14 frame (390x844px). Light theme.
 
 **Status bar** (47px, iOS default).

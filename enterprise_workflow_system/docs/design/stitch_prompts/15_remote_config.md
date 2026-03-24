@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 A remote configuration page for admins covering branding and notification templates in an enterprise workflow system. Desktop viewport 1440x900px. Standard layout with top bar (64px, Admin badge) and admin side nav (220px). "Remote Config" nav item is active.
 
 **Main content area** (background #F5F7FA, padding 24px):

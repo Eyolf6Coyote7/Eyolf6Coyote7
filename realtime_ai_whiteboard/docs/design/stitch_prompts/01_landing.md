@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 A modern SaaS landing page for a realtime collaborative AI whiteboard app called "Whiteboard AI". Clean, minimal design with lots of white space.
 
 **Hero section**: Large heading "Think together, in real time" with subheading "A collaborative whiteboard powered by AI — draw, brainstorm, and let AI turn your sketches into polished visuals." Below the text, two buttons side by side: a solid blue (#2563EB) "Get Started Free" button and a white outlined "Watch Demo" button. To the right of the text, a hero illustration showing a whiteboard canvas with colorful sticky notes, shapes, and two user cursors collaborating — one blue, one green.

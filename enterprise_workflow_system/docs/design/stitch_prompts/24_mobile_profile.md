@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Mobile screen, 390x844px (iPhone 14).
+
 A mobile profile and settings screen following iOS Settings grouped-list pattern for an enterprise workflow app. iPhone 14 frame (390x844px).
 
 **Status bar** (47px, dark content).

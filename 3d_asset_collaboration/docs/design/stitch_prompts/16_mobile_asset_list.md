@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Mobile screen, 390x844px (iPhone 14).
+
 The main asset browsing screen on mobile — a vertical list of asset cards with static 2D thumbnails (no 3D viewer on mobile). iPhone 14 frame (390x844px). Light theme.
 
 **Status bar** (47px, iOS default, dark text on white).

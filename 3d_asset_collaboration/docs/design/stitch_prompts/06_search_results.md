@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 The search results page showing filtered 3D assets matching a query. Light theme, desktop 1440x900.
 
 **Top bar** (56px height, white background, border-bottom 1px #E5E7EB):

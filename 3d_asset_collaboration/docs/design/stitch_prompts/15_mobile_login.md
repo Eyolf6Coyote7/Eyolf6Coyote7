@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Mobile screen, 390x844px (iPhone 14).
+
 A full-screen mobile login page optimized for iPhone 14 (390x844px). Light theme with indigo primary.
 
 **Status bar** (top, 47px, system default): Time, signal, battery — standard iOS status bar in dark text on white.

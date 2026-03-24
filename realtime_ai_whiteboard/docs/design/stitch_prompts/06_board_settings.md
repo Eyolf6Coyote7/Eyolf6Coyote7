@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 A settings modal (or page) for a single whiteboard board. Centered modal, 560px wide, border-radius 16px, white background with overlay behind it (dark semi-transparent).
 
 **Modal header** (56px): Bold title "Board Settings" on the left, X close button on the right. Thin bottom border.

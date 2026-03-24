@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 The main asset library page for a 3D asset collaboration platform. Light theme, desktop 1440x900. This is the primary screen users see after login — a searchable, filterable grid of 3D asset thumbnails.
 
 **Top bar** (56px height, white background, border-bottom 1px #E5E7EB, full width):

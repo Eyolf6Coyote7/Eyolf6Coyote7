@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 A SaaS dashboard page showing a grid of whiteboard boards. Clean, spacious layout.
 
 **Top bar** (64px height, white, bottom border): Logo "Whiteboard AI" on the far left. In the center, a search bar (400px wide, rounded, with magnifying glass icon, placeholder "Search boards..."). On the far right, a notification bell icon, then a circular user avatar (32px) with dropdown arrow.

@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 A collaborative whiteboard canvas application interface, similar to Miro or FigJam. The canvas takes up the entire screen with minimal chrome.
 
 **Top bar** (48px height, semi-transparent white with blur backdrop): Left side has a back arrow icon and the app logo (small). Center has an editable board title "Product Brainstorm" (click to rename). Right side has: a green dot + "3 online" collaborator count, a blue "Share" button (border-radius 8px), and 3 small overlapping circular user avatars with colored borders (blue, green, orange — matching their cursor colors).

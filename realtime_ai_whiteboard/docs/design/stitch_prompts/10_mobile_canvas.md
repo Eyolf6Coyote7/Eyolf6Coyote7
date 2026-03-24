@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Mobile screen, 390x844px (iPhone 14).
+
 A mobile whiteboard canvas screen. iPhone 14 frame (390x844px). The canvas dominates the screen with minimal UI overlay.
 
 **Top bar** (44px, semi-transparent white with backdrop blur): Left has a back chevron ("<") icon. Center has the board title "Sprint Planning" (tappable to rename). Right has a blue "Share" button (small, rounded) and a small avatar stack (2 overlapping circles showing online collaborators).

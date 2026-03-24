@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 The brand administration settings page with ACL (Access Control List) editor, member management, and shared links. Light theme, desktop 1440x900.
 
 **Top bar** (56px height, white background, border-bottom 1px #E5E7EB):

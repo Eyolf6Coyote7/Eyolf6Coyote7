@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop application (Unity), 1920x1080px.
+
 A simple API key login screen for the Unity desktop client. DARK theme throughout — this matches the Unity Editor aesthetic. Desktop 1920x1080.
 
 **Full-screen background**: Solid #1A1A2E (very dark navy). Subtle gradient: slightly lighter (#1E1E3A) in the center fading to #1A1A2E at edges, creating a soft vignette effect.

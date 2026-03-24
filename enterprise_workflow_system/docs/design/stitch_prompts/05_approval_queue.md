@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 A filterable list of pending approval requests for a manager in an enterprise workflow system. Desktop viewport 1440x900px. Standard layout with top bar (64px) and side nav (220px). "Approval Queue" nav item is active (blue highlight, blue left border, badge "5" visible).
 
 **Main content area** (background #F5F7FA, padding 24px):

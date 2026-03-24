@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Mobile screen, 390x844px (iPhone 14).
+
 A mobile board settings screen for a whiteboard app. iPhone 14 frame (390x844px). Full-screen push navigation (not a modal — modals are awkward on mobile). iOS-style grouped settings list.
 
 **Status bar**: Standard iOS status bar.
