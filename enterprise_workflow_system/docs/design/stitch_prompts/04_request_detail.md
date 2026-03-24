@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 A detailed view of a single workflow request in an enterprise approval system. Desktop viewport 1440x900px. Standard layout with top bar (64px) and side nav (220px). No nav item is highlighted as active (this is a drill-down from multiple paths).
 
 **Main content area** (background #F5F7FA, padding 24px):

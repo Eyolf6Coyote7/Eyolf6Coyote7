@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 A detailed view of the AI chat side panel for a collaborative whiteboard app. This is the right-side panel shown at 350px width, designed as a standalone Figma frame for component-level detail.
 
 **Panel header** (48px height): Left side has a sparkle icon and bold text "AI Assistant". Right side has a minimize (dash) icon and close (X) icon. Thin bottom border separator.

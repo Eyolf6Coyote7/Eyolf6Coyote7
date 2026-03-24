@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Mobile screen, 390x844px (iPhone 14).
+
 A full-screen mobile confirmation view for approving or rejecting a workflow request. iPhone 14 frame (390x844px). This screen appears after tapping Approve or Reject on a request detail or card.
 
 **Status bar** (47px, dark content).

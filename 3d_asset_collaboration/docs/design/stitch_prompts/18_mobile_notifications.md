@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Mobile screen, 390x844px (iPhone 14).
+
 The notifications list screen showing asset upload events and IoT alerts with read/unread states. iPhone 14 frame (390x844px). Light theme.
 
 **Status bar** (47px, iOS default).

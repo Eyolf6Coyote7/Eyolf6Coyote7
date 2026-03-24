@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Mobile screen, 390x844px (iPhone 14).
+
 A mobile authentication screen for a whiteboard app. iPhone 14 frame (390x844px). Full-screen form, no card — content fills the screen directly.
 
 **Status bar**: Standard iOS status bar (time, signal, battery).

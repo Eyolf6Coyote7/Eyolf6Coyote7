@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 A drag-and-drop workflow template editor for admins in an enterprise approval system. Desktop viewport 1440x900px. Standard top bar (64px, Admin badge). No side nav on this screen — full-width editor layout (the side nav is replaced by the editor panels).
 
 **Editor top bar** (below main top bar, 48px height, white bg, bottom border 1px #EBEEF5, flex row): Left: back arrow icon (20px, #606266) + "Edit: Purchase Order Template" in 16px bold #303133 + status badge "Draft" (gray) or "Published" (green). Center: nothing. Right: "Save Draft" button (outline, 36px height, #606266 border) + "Publish" button (primary, bg #409EFF, 36px height) + "Preview" button (outline, #409EFF border and text).

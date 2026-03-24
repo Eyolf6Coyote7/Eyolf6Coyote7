@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 A pricing page for a SaaS whiteboard app. Clean, centered layout with plan comparison.
 
 **Top navigation** (64px): Same as landing page — logo on left, nav links (Product, Pricing, Docs) in center, "Sign Up" and "Log In" buttons on right.

@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop application (Unity), 1920x1080px.
+
 The main Unity 3D viewport showing a factory floor model with IoT sensor markers overlaid. DARK theme. Desktop 1920x1080. This is the hero screen of the Unity client — a digital twin view.
 
 **Menu bar** (28px height, #1E1E3A background, border-bottom 1px rgba(255,255,255,0.08)):

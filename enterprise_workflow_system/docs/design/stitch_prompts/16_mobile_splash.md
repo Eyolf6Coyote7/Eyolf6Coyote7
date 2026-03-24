@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Mobile screen, 390x844px (iPhone 14).
+
 A mobile splash screen for an enterprise workflow app. iPhone 14 frame (390x844px). The screen is displayed briefly while the app loads.
 
 **Full-screen layout** (390x844px):

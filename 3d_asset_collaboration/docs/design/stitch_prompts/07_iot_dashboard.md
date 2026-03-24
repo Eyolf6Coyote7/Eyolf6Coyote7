@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 The IoT sensor monitoring dashboard with time-series charts, sensor list, and alert history. Light theme, desktop 1440x900.
 
 **Top bar** (56px height, white background, border-bottom 1px #E5E7EB):

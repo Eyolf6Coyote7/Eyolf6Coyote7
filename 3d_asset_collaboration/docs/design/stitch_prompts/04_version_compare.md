@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 A side-by-side 3D model comparison view for comparing two versions of the same asset. Light theme, desktop 1440x900.
 
 **Top bar** (56px height, white background, border-bottom 1px #E5E7EB):

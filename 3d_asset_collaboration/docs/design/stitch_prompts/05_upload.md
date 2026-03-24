@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 The asset upload page with drag-and-drop zone, progress tracking, and metadata form. Light theme, desktop 1440x900.
 
 **Top bar** (56px height, white background, border-bottom 1px #E5E7EB):

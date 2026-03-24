@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 A modal overlay for confirming an approve or reject action on a workflow request. Desktop viewport 1440x900px. The background is the Approval Queue page, dimmed with a semi-transparent black overlay (rgba(0,0,0,0.5)).
 
 **Modal card** (520px wide, auto height, centered on screen, white #FFFFFF background, border-radius 8px, shadow 0 4px 24px rgba(0,0,0,0.15)):

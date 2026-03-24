@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop application (Unity), 1920x1080px.
+
 A close-up view of the Unity 3D viewport focused on IoT sensor interaction — showing a sensor marker tooltip popup with live data, sparkline, and alert flash. DARK theme. Desktop 1920x1080.
 
 **Background**: Same factory floor 3D scene as the viewport screen, but zoomed in closer to a cluster of equipment (a motor assembly and conveyor belt). The camera is at eye-level, ~3 meters from the equipment. Dark viewport background #0F0F23.

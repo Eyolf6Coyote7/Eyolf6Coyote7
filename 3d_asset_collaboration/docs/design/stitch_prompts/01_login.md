@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 A clean, modern login page for a 3D asset management platform. Light theme, desktop 1440x900.
 
 **Layout**: Centered card (480px wide, white background, border-radius 12px, shadow 0 8px 24px rgba(0,0,0,0.12)) on a very light gray (#F9FAFB) background. Subtle geometric pattern in the background — faint wireframe 3D shapes (cube, sphere outlines) in #E5E7EB at 10% opacity to hint at the 3D nature of the product.

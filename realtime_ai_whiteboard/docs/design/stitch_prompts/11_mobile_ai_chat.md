@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Mobile screen, 390x844px (iPhone 14).
+
 A full-screen AI chat view on mobile for a whiteboard app. iPhone 14 frame (390x844px). This screen slides in from the right when the user taps the AI button on the canvas toolbar.
 
 **Navigation bar** (44px): Left has a back chevron ("<") and text "Back to Board" in blue. Center has "AI Assistant" in bold. Right has a vertical "..." menu icon.

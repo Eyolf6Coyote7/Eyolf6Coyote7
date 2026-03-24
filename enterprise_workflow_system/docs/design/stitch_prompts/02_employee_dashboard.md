@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 An enterprise employee dashboard for a workflow approval system. Desktop viewport 1440x900px.
 
 **Top bar** (64px height, white #FFFFFF background, bottom border 1px #EBEEF5, full width): Left side has the logo — a 32x32px blue (#409EFF) icon and "WorkflowOS" text in 16px bold #303133, 16px from the left edge. Center has a search bar (360px wide, 36px height, border 1px #DCDFE6, border-radius 4px, placeholder "Search requests..." with a magnifying glass icon #C0C4CC on the left). Right side has: a bell icon (24px, #606266) with a red notification badge showing "3" (red circle #F56C6C, white text, 18px diameter, positioned at top-right of bell), 16px gap, a vertical divider (1px, 20px tall, #EBEEF5), 16px gap, a 32x32px circular user avatar (gray placeholder), and the name "Wei Chen" in 14px #303133, with a small down-chevron icon.

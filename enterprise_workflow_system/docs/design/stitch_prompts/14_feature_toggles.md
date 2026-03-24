@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 A feature toggle management page for admins in an enterprise workflow system. Desktop viewport 1440x900px. Standard layout with top bar (64px, Admin badge) and admin side nav (220px). "Feature Toggles" nav item is active.
 
 **Main content area** (background #F5F7FA, padding 24px):

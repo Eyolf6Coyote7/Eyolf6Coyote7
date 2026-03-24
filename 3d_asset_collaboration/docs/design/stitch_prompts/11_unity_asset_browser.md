@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop application (Unity), 1920x1080px.
+
 A grid-based 3D asset browser panel within the Unity client. DARK theme. Desktop 1920x1080. This is a panel that appears within the Unity Editor layout, similar to Unity's own Project window.
 
 **Panel frame**: Full screen, #1A1A2E background. The entire UI uses Unity-style dark theme.

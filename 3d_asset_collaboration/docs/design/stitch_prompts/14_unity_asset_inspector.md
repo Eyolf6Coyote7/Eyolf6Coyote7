@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop application (Unity), 1920x1080px.
+
 A side panel within the Unity client showing detailed asset metadata, version history, and download controls. DARK theme. Desktop 1920x1080. This panel appears docked on the right side when a user selects an asset from the browser.
 
 **Layout**: The asset browser grid is visible on the left (70% width, slightly dimmed), and the inspector panel is docked on the right (30% width, 360px min-width).

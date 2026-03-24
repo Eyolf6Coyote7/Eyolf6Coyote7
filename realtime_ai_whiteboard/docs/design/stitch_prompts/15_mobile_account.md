@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Mobile screen, 390x844px (iPhone 14).
+
 A mobile account/profile settings screen for a whiteboard app. iPhone 14 frame (390x844px). Full-screen with iOS-style grouped settings. Accessed from the "Settings" tab in the tab bar.
 
 **Status bar**: Standard iOS status bar.

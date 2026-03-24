@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Mobile screen, 390x844px (iPhone 14).
+
 A full-screen mobile login screen for an enterprise workflow app. iPhone 14 frame (390x844px).
 
 **Status bar** (47px, dark content — black icons on white/light background).

@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 A table of past requests submitted by the current user in an enterprise workflow system. Desktop viewport 1440x900px. Standard layout with top bar (64px) and side nav (220px). "My History" nav item is active.
 
 **Main content area** (background #F5F7FA, padding 24px):

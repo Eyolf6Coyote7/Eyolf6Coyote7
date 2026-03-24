@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 An account settings page for a SaaS whiteboard app. Full page layout with top navigation bar and a two-column layout below.
 
 **Top bar** (64px, same as dashboard): Logo "Whiteboard AI" on left, centered search (optional), avatar + dropdown on right.

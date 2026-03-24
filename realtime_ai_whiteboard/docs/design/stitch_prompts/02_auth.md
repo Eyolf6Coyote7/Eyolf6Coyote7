@@ -4,6 +4,8 @@
 
 ## Stitch Prompt
 
+Desktop web page, 1440px width.
+
 A clean, centered authentication page for a SaaS whiteboard app. White background with a centered card (480px wide, border-radius 16px, subtle shadow).
 
 **Card content**: App logo at top center (small, 32px icon + "Whiteboard AI" text). Below, two tabs: "Sign Up" and "Log In" — active tab has blue (#2563EB) underline.
