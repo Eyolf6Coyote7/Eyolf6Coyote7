@@ -10,11 +10,7 @@ A mobile whiteboard canvas screen. iPhone 14 frame (390x844px). The canvas domin
 
 **Canvas area** (fills most of the screen): Light gray (#FAFAFA) background with subtle dot grid. Show several elements on canvas: 2 yellow (#FEF3C7) sticky notes with short text, a blue (#DBEAFE) rectangle, connecting arrows, and some freehand pen strokes. One other user's cursor visible — a small colored dot (green) with name label "Alice" that fades. The canvas is zoomed to ~60% to show multiple elements.
 
-**Floating toolbar** (bottom, above safe area, centered horizontally): A rounded pill-shaped bar (border-radius 24px, white bg, shadow, 56px height). Contains two rows of tool icons:
-- Row 1: select (arrow), rectangle, circle, line
-- Row 2: arrow/connector, text (T), sticky note, freehand pen
-- Below rows, centered: an "AI" button with sparkle icon (slightly larger, blue tint)
-Each tool icon is 44x44px touch target. Active tool (freehand pen) has blue (#2563EB) circular background.
+**Floating toolbar** (bottom, above safe area, centered horizontally): A single-row rounded pill-shaped bar (border-radius 24px, white bg, shadow, 52px height, horizontally scrollable). Tool icons in one row: select (arrow), rectangle, circle, line, arrow/connector, text (T), sticky note, freehand pen, AI (sparkle icon, blue tint). Scrollable with fade-out on edges when overflowing. Each tool icon is 44x44px touch target. Active tool (freehand pen) has blue (#2563EB) circular background.
 
 **Zoom indicator** (top-left corner, below top bar): Small rounded pill showing "60%" in small text, semi-transparent background. Appears on pinch-zoom, fades after 2 seconds.
 

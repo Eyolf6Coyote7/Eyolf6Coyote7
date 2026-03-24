@@ -48,5 +48,5 @@ A Digital Asset Management platform for 3D content with browser preview, version
 - [ADR-0001: Why gRPC over REST for file transfer](adrs/ADR-0001-why-grpc-for-file-transfer.md)
 - [ADR-0002: Why Three.js over Unity WebGL](adrs/ADR-0002-why-threejs-over-unity-web.md)
 - [ADR-0003: Why MQTT → Kafka bridge](adrs/ADR-0003-why-mqtt-kafka-bridge.md)
-- [ADR-0004: Why Elasticsearch over PostgreSQL](adrs/ADR-0004-why-elasticsearch-over-pg-search.md)
+- [ADR-0004: Why Elasticsearch over PostgreSQL for search](adrs/ADR-0004-why-elasticsearch-over-pg-search.md)
 - [ADR-0005: Why TimescaleDB for IoT](adrs/ADR-0005-why-timescaledb-for-iot.md)

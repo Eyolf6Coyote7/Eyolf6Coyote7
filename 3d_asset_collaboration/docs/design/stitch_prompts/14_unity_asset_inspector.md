@@ -28,12 +28,15 @@ A side panel within the Unity client showing detailed asset metadata, version hi
 
 2. **Metadata section** (16px top margin, border-top 1px rgba(255,255,255,0.08), padding-top 12px):
    - Section label: "Details" bold 11px #6B7280 uppercase, letter-spacing 1px.
-   - Key-value pairs (single column, 4px row gap):
-     - Format: GLB | Vertices: 124,500
-     - Textures: 4 | Size: 52 MB
-     - Created: 2026-03-15 | Updated: 2026-03-20
+   - Key-value pairs in a two-column grid (16px column gap, 4px row gap):
+     - Format: GLB
+     - Vertices: 124,500
+     - Textures: 4
+     - Size: 52 MB
+     - Created: 2026-03-15
+     - Updated: 2026-03-20
      - By: Maya Chen
-   - Keys: 12px #6B7280. Values: 13px #E5E7EB. Arranged as two-column within the panel width.
+   - Keys: 12px #6B7280. Values: 13px #E5E7EB.
 
 3. **Tags** (16px top margin, border-top 1px rgba(255,255,255,0.08), padding-top 12px):
    - Section label: "Tags" bold 11px #6B7280 uppercase.
