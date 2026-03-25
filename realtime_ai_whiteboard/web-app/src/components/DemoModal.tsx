@@ -15,32 +15,12 @@ export function DemoModal({ isOpen, onClose, feature }: Props) {
         <span className={styles.badge}>DEMO MODE</span>
         <h3 className={styles.title}>🔒 {feature}</h3>
         <p className={styles.desc}>
-          This feature requires the full backend stack (NestJS + PostgreSQL + Redis).
+          This feature requires a running backend with real-time WebSocket connections and database.
           <br />
           <br />
-          Clone the repo and run locally to try it:
+          In the full version, you can invite collaborators, set permissions, and generate shareable
+          links.
         </p>
-        <code
-          style={{
-            background: '#F3F4F6',
-            padding: '8px 12px',
-            borderRadius: 6,
-            fontSize: 13,
-            display: 'block',
-            marginBottom: 16,
-          }}
-        >
-          ./start.sh
-        </code>
-        <a
-          className={styles.link}
-          href="https://github.com/Eyolf6Coyote7/fullstack_ai_workspace"
-          target="_blank"
-          rel="noreferrer"
-        >
-          View on GitHub →
-        </a>
-        <br />
         <button className={styles.closeBtn} onClick={onClose}>
           Got it
         </button>
