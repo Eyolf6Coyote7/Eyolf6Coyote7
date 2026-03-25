@@ -36,6 +36,21 @@ jobs:
       - run: pnpm install
       - run: pnpm lint
 
+  lint-ai:
+    name: Lint — AI Service (Python)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: realtime_ai_whiteboard/ai-service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install ruff
+      - run: ruff check src/
+      - run: ruff format --check src/
+
   test-bff:
     name: Test — BFF API
     runs-on: ubuntu-latest
