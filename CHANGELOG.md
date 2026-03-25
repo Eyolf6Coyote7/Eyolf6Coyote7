@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/workspace/v1.1.0...workspace/v1.2.0) (2026-03-25)
+
+
+### Features
+
+* **whiteboard:** add Yjs CRDT realtime sync + cursor presence ([#130](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/130)) ([9a974a0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/9a974a05d17d59b3e5b4143f8c97dcb545381aa2))
+* **whiteboard:** add Yjs CRDT realtime sync + cursor presence ([#130](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/130)) ([04acc94](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/04acc94d9c072df537c4059ec96f762008ee3170))
+
+
+### Bug Fixes
+
+* **whiteboard:** apply Gemini review fixes for Yjs ([#130](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/130)) ([5cb5a5a](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/5cb5a5afde98fc8b6b3ed65c998a0dcee99627b9))
+
 ## [1.1.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/workspace/v1.0.0...workspace/v1.1.0) (2026-03-25)
 
 
