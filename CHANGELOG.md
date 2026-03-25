@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.5.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/workspace/v1.4.0...workspace/v1.5.0) (2026-03-25)
+
+
+### Features
+
+* **whiteboard:** add multi-tenancy + guest access + export ([#138](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/138)) ([5068e59](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/5068e59962fed27d1e605c563530c86175095527))
+* **whiteboard:** add multi-tenancy + guest access + export ([#138](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/138)) ([5495899](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/5495899a752ddb175128f87d0c5874ac5a5ffb40))
+
+
+### Bug Fixes
+
+* **whiteboard:** apply Gemini review fixes — 2 critical + 4 medium ([#138](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/138)) ([a47ae0e](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/a47ae0e8a7a68fbc7dfe12f957ad621670069e39))
+
 ## [1.4.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/workspace/v1.3.0...workspace/v1.4.0) (2026-03-25)
 
 
