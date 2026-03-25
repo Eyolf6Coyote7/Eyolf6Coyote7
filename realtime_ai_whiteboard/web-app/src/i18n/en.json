@@ -1,0 +1,47 @@
+{
+  "landing": {
+    "title": "Think together, in real time",
+    "subtitle": "A collaborative whiteboard powered by AI — draw, brainstorm, and let AI turn your sketches into polished visuals.",
+    "cta": "Get Started Free"
+  },
+  "auth": {
+    "appName": "Whiteboard AI",
+    "signUp": "Sign Up",
+    "logIn": "Log In",
+    "fullName": "Full name",
+    "email": "Email",
+    "password": "Password",
+    "createAccount": "Create Account"
+  },
+  "dashboard": {
+    "title": "My Boards",
+    "newBoard": "+ New Board",
+    "loading": "Loading...",
+    "edited": "Edited {{date}}",
+    "logout": "Logout"
+  },
+  "board": {
+    "back": "← Back",
+    "share": "Share",
+    "online": "{{count}} online",
+    "ai": "✨ AI"
+  },
+  "ai": {
+    "title": "✨ AI Assistant",
+    "placeholder": "Ask AI anything...",
+    "thinking": "AI is thinking...",
+    "summarize": "Summarize",
+    "generateDiagram": "Generate diagram",
+    "organizeLayout": "Organize layout",
+    "createFlowchart": "Create flowchart"
+  },
+  "toolbar": {
+    "select": "Select",
+    "rectangle": "Rectangle",
+    "circle": "Circle",
+    "line": "Line",
+    "text": "Text",
+    "stickyNote": "Sticky Note",
+    "freehand": "Freehand"
+  }
+}
