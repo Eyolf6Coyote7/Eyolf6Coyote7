@@ -1,12 +1,19 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useBoardStore } from '../stores/board.store';
 import { useAuthStore } from '../stores/auth.store';
 
 export function DashboardPage() {
   const { boards, loading, fetchBoards, createBoard } = useBoardStore();
   const logout = useAuthStore((s) => s.logout);
+  const navigate = useNavigate();
 
   useEffect(() => { void fetchBoards(); }, [fetchBoards]);
+
+  const handleCreate = async () => {
+    const board = await createBoard('Untitled Board');
+    navigate(`/board/${board.id}`);
+  };
 
   return (
     <div style={{ minHeight: '100vh', background: '#F9FAFB', fontFamily: 'Inter, sans-serif' }}>
@@ -17,12 +24,16 @@ export function DashboardPage() {
       <main style={{ maxWidth: 1200, margin: '0 auto', padding: '40px 24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
           <h1 style={{ fontSize: 28, fontWeight: 700 }}>My Boards</h1>
-          <button onClick={() => void createBoard('Untitled Board')} style={{ padding: '12px 24px', background: '#2563EB', color: 'white', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' }}>+ New Board</button>
+          <button onClick={() => void handleCreate()} style={{ padding: '12px 24px', background: '#2563EB', color: 'white', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' }}>+ New Board</button>
         </div>
         {loading ? <p>Loading...</p> : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
             {boards.map(board => (
-              <div key={board.id} style={{ background: 'white', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)', overflow: 'hidden' }}>
+              <div
+                key={board.id}
+                onClick={() => navigate(`/board/${board.id}`)}
+                style={{ background: 'white', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)', overflow: 'hidden', cursor: 'pointer' }}
+              >
                 <div style={{ height: 160, background: '#F3F4F6' }} />
                 <div style={{ padding: 16 }}>
                   <h3 style={{ fontWeight: 600 }}>{board.title}</h3>

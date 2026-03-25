@@ -8,7 +8,7 @@
 |--------|-----------|------|------|
 | BFF + API | `bff-api/` | NestJS (TypeScript) | 4001 |
 | AI Service | `ai-service/` | LangGraph + LangChain (Python) | 4010 |
-| Web App | `web-app/` | React + Vite + Zustand | 3000 |
+| Web App | `web-app/` | React + Vite + Zustand | 5173 |
 | Mobile App | `mobile-app/` | React Native + Expo | 8081 |
 
 ## Documentation
@@ -24,10 +24,15 @@ docker compose up -d
 
 **Terminal 1 (backend):**
 ```bash
-cd bff-api && npm install && npm run dev
+cd bff-api && pnpm install && pnpm start:dev
 ```
 
 **Terminal 2 (frontend):**
 ```bash
-cd web-app && npm install && npm run dev
+cd web-app && pnpm install && pnpm dev
+```
+
+**Mock mode (no backend needed):**
+```bash
+cd web-app && cp .env.mock .env.local && pnpm dev
 ```
