@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/whiteboard/v1.3.0...whiteboard/v1.4.0) (2026-03-25)
+
+
+### Features
+
+* **whiteboard:** add AI Chat Panel UI with SSE integration ([#135](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/135)) ([ee08690](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/ee08690cf50894ce67f4e564c0eb87c2c73de076))
+
+
+### Bug Fixes
+
+* **whiteboard:** apply Gemini review fixes for AI Chat ([#135](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/135)) ([0e6ab35](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/0e6ab3533da6a46a168d27870d9b900c1de83772))
+
 ## [1.3.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/whiteboard/v1.2.0...whiteboard/v1.3.0) (2026-03-25)
 
 
