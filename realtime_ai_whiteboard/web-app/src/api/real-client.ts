@@ -1,9 +1,11 @@
-import type { ApiClient, AuthResponse, Board } from './client.interface';
+import type { ApiClient, AuthResponse, Board, AiPromptResponse } from './client.interface';
 
 const BASE = import.meta.env.VITE_API_URL || 'http://localhost:4001';
 let token = '';
 
-export function setToken(t: string) { token = t; }
+export function setToken(t: string) {
+  token = t;
+}
 
 const headers = () => ({
   'Content-Type': 'application/json',
@@ -18,15 +20,27 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const realClient: ApiClient = {
   register: (email, password, displayName) =>
-    request<AuthResponse>('/api/web/auth/register', { method: 'POST', body: JSON.stringify({ email, password, displayName }) }),
+    request<AuthResponse>('/api/web/auth/register', {
+      method: 'POST',
+      body: JSON.stringify({ email, password, displayName }),
+    }),
   login: (email, password) =>
-    request<AuthResponse>('/api/web/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
-  getBoards: (page = 1) =>
-    request<Board[]>(`/api/web/boards?page=${page}`),
+    request<AuthResponse>('/api/web/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    }),
+  getBoards: (page = 1) => request<Board[]>(`/api/web/boards?page=${page}`),
   createBoard: (title, templateId) =>
-    request<Board>('/api/web/boards', { method: 'POST', body: JSON.stringify({ title, templateId }) }),
-  getBoard: (id) =>
-    request<Board>(`/api/web/boards/${encodeURIComponent(id)}`),
+    request<Board>('/api/web/boards', {
+      method: 'POST',
+      body: JSON.stringify({ title, templateId }),
+    }),
+  getBoard: (id) => request<Board>(`/api/web/boards/${encodeURIComponent(id)}`),
   deleteBoard: (id) =>
     request<void>(`/api/web/boards/${encodeURIComponent(id)}`, { method: 'DELETE' }),
+  submitAiPrompt: (boardId, prompt) =>
+    request<AiPromptResponse>('/api/web/ai/prompt', {
+      method: 'POST',
+      body: JSON.stringify({ boardId, prompt }),
+    }),
 };
