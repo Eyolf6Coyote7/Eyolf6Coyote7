@@ -1,5 +1,11 @@
 # Fullstack AI Workspace
 
+![Workspace](https://img.shields.io/badge/workspace-v1.0.0-blue)
+![Whiteboard](https://img.shields.io/badge/whiteboard-v1.0.0-green)
+![Workflow](https://img.shields.io/badge/workflow-v0.0.0-gray)
+![3D Asset](https://img.shields.io/badge/3d--asset-v0.0.0-gray)
+
+
 **Languages**
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
