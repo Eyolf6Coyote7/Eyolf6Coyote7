@@ -12,6 +12,13 @@ services:
       - '5432:5432'
     volumes:
       - whiteboard_pg_data:/var/lib/postgresql/data
+      - /tmp/whiteboard-pg:/tmp
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /run
+      - /var/run/postgresql
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-whiteboard}']
       interval: 5s
@@ -25,6 +32,11 @@ services:
       - '6379:6379'
     volumes:
       - whiteboard_redis_data:/data
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
     healthcheck:
       test: ['CMD', 'redis-cli', 'ping']
       interval: 5s
@@ -43,6 +55,11 @@ services:
       - '9001:9001'
     volumes:
       - whiteboard_minio_data:/data
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
 
   unleash:
     image: unleashorg/unleash-server:5.12
@@ -52,6 +69,11 @@ services:
       DATABASE_SSL: 'false'
     ports:
       - '4242:4242'
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
     depends_on:
       postgres:
         condition: service_healthy
@@ -72,6 +94,11 @@ services:
       - '9094:9094'
     volumes:
       - whiteboard_kafka_data:/bitnami/kafka
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
 
   chromadb:
     image: chromadb/chroma:0.5.0
@@ -80,6 +107,11 @@ services:
       - '8000:8000'
     volumes:
       - whiteboard_chroma_data:/chroma/chroma
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
 
   langfuse:
     image: langfuse/langfuse:2.60.1
@@ -91,6 +123,12 @@ services:
       SALT: ${SALT:-langfuse-dev-salt}
     ports:
       - '3100:3000'
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
+      - /app/.next/cache
     depends_on:
       postgres:
         condition: service_healthy
