@@ -12,6 +12,7 @@
 ### Bug Fixes
 
 * **ci:** fix broken YAML in ci-whiteboard.yml ([#123](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/123)) ([5ec6f80](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/5ec6f806ecbe98a584851fe6a38645a8a25c45ee))
+* **ci:** read versions from git tags instead of version.txt ([#125](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/125)) ([fe58eb0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/fe58eb0ab822a2fd94f7f355d94d8fde3efc8611))
 * **whiteboard:** fix ESLint errors in WhiteboardCanvas ([#123](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/123)) ([8dc73fe](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/8dc73fe807791503358a91499bcad993e7cde4d6))
 
 ## 1.0.0 (2026-03-25)
