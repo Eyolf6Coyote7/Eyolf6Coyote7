@@ -32,7 +32,7 @@ cd bff-api && pnpm install && pnpm start:dev
 cd web-app && pnpm install && pnpm dev
 ```
 
-**Mock mode (no backend needed):**
+**Demo mode (no backend needed):**
 ```bash
-cd web-app && cp .env.mock .env.local && pnpm dev
+cd web-app && pnpm install && pnpm dev:mock
 ```
