@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:16.3-alpine
@@ -12,7 +10,6 @@ services:
       - '5432:5432'
     volumes:
       - whiteboard_pg_data:/var/lib/postgresql/data
-    read_only: true
     read_only: true
     security_opt:
       - no-new-privileges:true
@@ -29,10 +26,9 @@ services:
     image: redis:7.2-alpine
     container_name: whiteboard-redis
     ports:
-      - '6379:6379'
+      - '6380:6379'
     volumes:
       - whiteboard_redis_data:/data
-    read_only: true
     read_only: true
     security_opt:
       - no-new-privileges:true
@@ -57,7 +53,6 @@ services:
     volumes:
       - whiteboard_minio_data:/data
     read_only: true
-    read_only: true
     security_opt:
       - no-new-privileges:true
     tmpfs:
@@ -71,7 +66,6 @@ services:
       DATABASE_SSL: 'false'
     ports:
       - '4242:4242'
-    read_only: true
     read_only: true
     security_opt:
       - no-new-privileges:true
@@ -100,7 +94,6 @@ services:
     volumes:
       - whiteboard_kafka_data:/tmp/kraft-combined-logs
     read_only: true
-    read_only: true
     security_opt:
       - no-new-privileges:true
     tmpfs:
@@ -114,7 +107,6 @@ services:
       - '8000:8000'
     volumes:
       - whiteboard_chroma_data:/chroma/chroma
-    read_only: true
     read_only: true
     security_opt:
       - no-new-privileges:true
@@ -131,7 +123,6 @@ services:
       SALT: ${SALT:-langfuse-dev-salt}
     ports:
       - '3100:3000'
-    read_only: true
     read_only: true
     security_opt:
       - no-new-privileges:true

@@ -12,7 +12,7 @@ export class AiGatewayService implements OnModuleDestroy {
   private readonly redis: Redis;
 
   constructor(private config: ConfigService) {
-    this.redis = new Redis(this.config.get('REDIS_URL', 'redis://localhost:6379'));
+    this.redis = new Redis(this.config.get<string>('REDIS_URL') ?? 'redis://localhost:6379');
   }
 
   async onModuleDestroy() {

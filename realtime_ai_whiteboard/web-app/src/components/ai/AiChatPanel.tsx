@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import Markdown from 'react-markdown';
 import { useAiStore } from '../../stores/ai.store';
 import styles from './AiChatPanel.module.css';
 
@@ -48,7 +49,7 @@ export function AiChatPanel({ boardId }: Props) {
       <div className={styles.messages}>
         {messages.map((msg) => (
           <div key={msg.id} className={msg.role === 'user' ? styles.userMsg : styles.aiMsg}>
-            {msg.content}
+            {msg.role === 'assistant' ? <Markdown>{msg.content}</Markdown> : msg.content}
           </div>
         ))}
         {isStreaming && <div className={styles.typing}>{t('ai.thinking')}</div>}

@@ -9,7 +9,7 @@ echo ""
 echo "📦 Starting Docker services..."
 docker compose up -d
 echo "   ✅ PostgreSQL    → localhost:5432"
-echo "   ✅ Redis         → localhost:6379"
+echo "   ✅ Redis         → localhost:6380"
 echo "   ✅ MinIO         → localhost:9000 (console: 9001)"
 echo "   ✅ Unleash       → localhost:4242"
 echo "   ✅ Kafka         → localhost:9094"

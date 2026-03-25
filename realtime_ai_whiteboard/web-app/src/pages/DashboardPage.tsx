@@ -1,14 +1,22 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useBoardStore } from '../stores/board.store';
 import { useAuthStore } from '../stores/auth.store';
+import { BoardThumbnail } from '../components/BoardThumbnail';
+import { DemoTooltip } from '../components/DemoTooltip';
+
+const isMock = import.meta.env.VITE_MOCK === 'true';
 
 export function DashboardPage() {
+  const { t } = useTranslation();
   const { boards, loading, fetchBoards, createBoard } = useBoardStore();
   const logout = useAuthStore((s) => s.logout);
   const navigate = useNavigate();
 
-  useEffect(() => { void fetchBoards(); }, [fetchBoards]);
+  useEffect(() => {
+    void fetchBoards();
+  }, [fetchBoards]);
 
   const handleCreate = async () => {
     const board = await createBoard('Untitled Board');
@@ -17,27 +25,108 @@ export function DashboardPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#F9FAFB', fontFamily: 'Inter, sans-serif' }}>
-      <header style={{ height: 64, background: 'white', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px' }}>
-        <span style={{ fontWeight: 700, fontSize: 20 }}>Whiteboard AI</span>
-        <button onClick={logout} style={{ background: 'none', border: 'none', color: '#6B7280', cursor: 'pointer' }}>Logout</button>
+      <header
+        style={{
+          height: 64,
+          background: 'white',
+          borderBottom: '1px solid #E5E7EB',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0 24px',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ fontWeight: 700, fontSize: 20 }}>Whiteboard AI</span>
+          {isMock && (
+            <span
+              style={{
+                background: '#FEF3C7',
+                color: '#92400E',
+                fontSize: 11,
+                fontWeight: 600,
+                padding: '2px 8px',
+                borderRadius: 4,
+              }}
+            >
+              DEMO
+            </span>
+          )}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {isMock && (
+            <span style={{ fontSize: 12, color: '#9CA3AF' }}>
+              Static demo — clone repo for full experience
+            </span>
+          )}
+          {!isMock && (
+            <button
+              onClick={logout}
+              style={{ background: 'none', border: 'none', color: '#6B7280', cursor: 'pointer' }}
+            >
+              {t('dashboard.logout')}
+            </button>
+          )}
+        </div>
       </header>
       <main style={{ maxWidth: 1200, margin: '0 auto', padding: '40px 24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
-          <h1 style={{ fontSize: 28, fontWeight: 700 }}>My Boards</h1>
-          <button onClick={() => void handleCreate()} style={{ padding: '12px 24px', background: '#2563EB', color: 'white', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' }}>+ New Board</button>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 32,
+          }}
+        >
+          <h1 style={{ fontSize: 28, fontWeight: 700 }}>{t('dashboard.title')}</h1>
+          <DemoTooltip message="Create board requires backend">
+            <button
+              onClick={() => !isMock && void handleCreate()}
+              style={{
+                padding: '12px 24px',
+                background: isMock ? '#93C5FD' : '#2563EB',
+                color: 'white',
+                border: 'none',
+                borderRadius: 8,
+                fontWeight: 600,
+                cursor: isMock ? 'default' : 'pointer',
+              }}
+            >
+              {t('dashboard.newBoard')}
+            </button>
+          </DemoTooltip>
         </div>
-        {loading ? <p>Loading...</p> : (
+        {loading ? (
+          <p>{t('dashboard.loading')}</p>
+        ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
-            {boards.map(board => (
+            {boards.map((board) => (
               <div
                 key={board.id}
                 onClick={() => navigate(`/board/${board.id}`)}
-                style={{ background: 'white', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)', overflow: 'hidden', cursor: 'pointer' }}
+                style={{
+                  background: 'white',
+                  borderRadius: 12,
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  transition: 'box-shadow 150ms',
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)')
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)')
+                }
               >
-                <div style={{ height: 160, background: '#F3F4F6' }} />
+                <BoardThumbnail boardId={board.id} />
                 <div style={{ padding: 16 }}>
                   <h3 style={{ fontWeight: 600 }}>{board.title}</h3>
-                  <p style={{ color: '#6B7280', fontSize: 14 }}>Edited {new Date(board.updatedAt).toLocaleDateString()}</p>
+                  <p style={{ color: '#6B7280', fontSize: 14 }}>
+                    {t('dashboard.edited', {
+                      date: new Date(board.updatedAt).toLocaleDateString(),
+                    })}
+                  </p>
                 </div>
               </div>
             ))}
