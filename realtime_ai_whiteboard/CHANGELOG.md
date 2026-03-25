@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.1](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/whiteboard/v1.9.0...whiteboard/v1.9.1) (2026-03-25)
+
+
+### Bug Fixes
+
+* **whiteboard:** absolute pixel coords for mock canvas ([#158](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/158)) ([#159](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/159)) ([48886f6](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/48886f6d0d604f1193a93425acdbbe88e789b10b))
+
 ## [1.9.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/whiteboard/v1.8.0...whiteboard/v1.9.0) (2026-03-25)
 
 
