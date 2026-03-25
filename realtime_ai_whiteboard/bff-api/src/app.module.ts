@@ -4,6 +4,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { BoardModule } from './board/board.module';
 import { CollaborationModule } from './collaboration/collaboration.module';
+import { AiGatewayModule } from './ai-gateway/ai-gateway.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { CollaborationModule } from './collaboration/collaboration.module';
     AuthModule,
     BoardModule,
     CollaborationModule,
+    AiGatewayModule,
   ],
 })
 export class AppModule {}
