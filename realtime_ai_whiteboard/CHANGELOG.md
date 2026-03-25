@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/whiteboard/v1.6.0...whiteboard/v1.7.0) (2026-03-25)
+
+
+### Features
+
+* **whiteboard:** add i18n — English + Traditional Chinese ([#145](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/145)) ([0f93890](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/0f93890f3d33cb1da815e7df727b2f26659f4606))
+* **whiteboard:** add i18n with English + Traditional Chinese ([#145](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/145)) ([601e388](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/601e3887fe012845e46fdcf82e89130e0a46f4df))
+
 ## [1.6.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/whiteboard/v1.5.0...whiteboard/v1.6.0) (2026-03-25)
 
 
