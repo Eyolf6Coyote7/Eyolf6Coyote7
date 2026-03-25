@@ -16,7 +16,7 @@ interface Props {
 function loadMockElements(canvas: Canvas, boardId: string) {
   const elements = getMockContent(boardId);
   elements.forEach((el) => {
-    if (el.type === 'line' && el.x2 != null && el.y2 != null) {
+    if (el.type === 'line' && 'x2' in el && 'y2' in el) {
       canvas.add(
         new Line([el.left, el.top, el.x2, el.y2], {
           stroke: el.stroke ?? '#9CA3AF',
