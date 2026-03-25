@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { WhiteboardCanvas, type Tool } from '../components/canvas/WhiteboardCanvas';
 import { Toolbar } from '../components/canvas/Toolbar';
 import { CursorPresence } from '../components/canvas/CursorPresence';
@@ -9,6 +10,7 @@ import { useAiStore } from '../stores/ai.store';
 import styles from './BoardPage.module.css';
 
 export function BoardPage() {
+  const { t } = useTranslation();
   const { id = 'default' } = useParams<{ id: string }>();
   const [activeTool, setActiveTool] = useState<Tool>('select');
   const { connected, cursors, onlineCount, updateCursorPosition } = useYjs(id);
@@ -18,7 +20,7 @@ export function BoardPage() {
     <div className={styles.container}>
       <header className={styles.header}>
         <Link to="/dashboard" className={styles.backLink}>
-          ← Back
+          {t('board.back')}
         </Link>
         <span className={styles.title}>Board {id}</span>
         <div className={styles.headerRight}>
@@ -27,34 +29,33 @@ export function BoardPage() {
               className={styles.statusDot}
               style={{ background: connected ? '#10B981' : '#EF4444' }}
             />
-            {onlineCount} online
+            {t('board.online', { count: onlineCount })}
           </span>
           <button className={styles.shareBtn} onClick={toggleAi}>
-            ✨ AI
+            {t('board.ai')}
           </button>
-          <button className={styles.shareBtn}>Share</button>
+          <button className={styles.shareBtn}>{t('board.share')}</button>
         </div>
       </header>
 
-      <div className={styles.canvasRow}>
-        <div
-          className={styles.canvasArea}
-          onMouseMove={(e) => {
-            const rect = e.currentTarget.getBoundingClientRect();
-            updateCursorPosition(e.clientX - rect.left, e.clientY - rect.top);
-          }}
-        >
-          <div className={styles.toolbarWrapper}>
-            <Toolbar activeTool={activeTool} onToolChange={setActiveTool} />
-          </div>
-          <CursorPresence cursors={cursors} />
-          <div className={styles.canvasWrapper}>
-            <WhiteboardCanvas activeTool={activeTool} width={1200} height={700} />
-          </div>
+      <div
+        className={styles.canvasArea}
+        onMouseMove={(e) => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          updateCursorPosition(e.clientX - rect.left, e.clientY - rect.top);
+        }}
+      >
+        <div className={styles.toolbarWrapper}>
+          <Toolbar activeTool={activeTool} onToolChange={setActiveTool} />
         </div>
-
-        <AiChatPanel boardId={id} />
+        <CursorPresence cursors={cursors} />
+        <div className={styles.canvasWrapper}>
+          <WhiteboardCanvas activeTool={activeTool} width={1200} height={700} />
+        </div>
       </div>
+
+      {/* AI panel as fixed overlay — not in flex flow */}
+      <AiChatPanel boardId={id} />
 
       <footer className={styles.footer}>
         <button className={styles.zoomBtn}>−</button>
