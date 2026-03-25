@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { WhiteboardCanvas, type Tool } from '../components/canvas/WhiteboardCanvas';
@@ -9,12 +9,21 @@ import { useYjs } from '../hooks/useYjs';
 import { useAiStore } from '../stores/ai.store';
 import styles from './BoardPage.module.css';
 
+const ZOOM_MIN = 25;
+const ZOOM_MAX = 200;
+const ZOOM_STEP = 25;
+
 export function BoardPage() {
   const { t } = useTranslation();
   const { id = 'default' } = useParams<{ id: string }>();
   const [activeTool, setActiveTool] = useState<Tool>('select');
+  const [zoom, setZoom] = useState(100);
   const { connected, cursors, onlineCount, updateCursorPosition } = useYjs(id);
   const toggleAi = useAiStore((s) => s.togglePanel);
+
+  const zoomIn = useCallback(() => setZoom((z) => Math.min(z + ZOOM_STEP, ZOOM_MAX)), []);
+  const zoomOut = useCallback(() => setZoom((z) => Math.max(z - ZOOM_STEP, ZOOM_MIN)), []);
+  const zoomReset = useCallback(() => setZoom(100), []);
 
   return (
     <div className={styles.container}>
@@ -49,18 +58,30 @@ export function BoardPage() {
           <Toolbar activeTool={activeTool} onToolChange={setActiveTool} />
         </div>
         <CursorPresence cursors={cursors} />
-        <div className={styles.canvasWrapper}>
+        <div
+          className={styles.canvasWrapper}
+          style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'center center' }}
+        >
           <WhiteboardCanvas activeTool={activeTool} boardId={id} width={1200} height={700} />
         </div>
       </div>
 
-      {/* AI panel as fixed overlay — not in flex flow */}
       <AiChatPanel boardId={id} />
 
       <footer className={styles.footer}>
-        <button className={styles.zoomBtn}>−</button>
-        <span>100%</span>
-        <button className={styles.zoomBtn}>+</button>
+        <button className={styles.zoomBtn} onClick={zoomOut} disabled={zoom <= ZOOM_MIN}>
+          −
+        </button>
+        <button
+          className={styles.zoomBtn}
+          onClick={zoomReset}
+          style={{ width: 'auto', padding: '0 8px', fontSize: 13 }}
+        >
+          {zoom}%
+        </button>
+        <button className={styles.zoomBtn} onClick={zoomIn} disabled={zoom >= ZOOM_MAX}>
+          +
+        </button>
       </footer>
     </div>
   );
