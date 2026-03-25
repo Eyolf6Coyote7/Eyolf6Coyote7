@@ -1,7 +1,11 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from '../prisma/prisma.service';
-import * as bcrypt from 'bcrypt';
+import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+} from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { PrismaService } from "../prisma/prisma.service";
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class AuthService {
@@ -10,10 +14,15 @@ export class AuthService {
     private jwt: JwtService,
   ) {}
 
-  async register(email: string, password: string, displayName: string, tenantId: string) {
+  async register(
+    email: string,
+    password: string,
+    displayName: string,
+    tenantId: string,
+  ) {
     const existing = await this.prisma.user.findUnique({ where: { email } });
     if (existing) {
-      throw new ConflictException('Email already registered');
+      throw new ConflictException("Email already registered");
     }
     const passwordHash = await bcrypt.hash(password, 10);
     const user = await this.prisma.user.create({
@@ -25,13 +34,16 @@ export class AuthService {
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException("Invalid credentials");
     }
     return this.generateTokens(user);
   }
 
   private generateTokens(user: { id: string; tenantId: string; role: string }) {
     const payload = { sub: user.id, tenantId: user.tenantId, role: user.role };
-    return { accessToken: this.jwt.sign(payload), user: { id: user.id, role: user.role } };
+    return {
+      accessToken: this.jwt.sign(payload),
+      user: { id: user.id, role: user.role },
+    };
   }
 }

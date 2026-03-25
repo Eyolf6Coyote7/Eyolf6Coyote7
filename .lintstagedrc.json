@@ -1,0 +1,46 @@
+{
+  "realtime_ai_whiteboard/bff-api/**/*.ts": [
+    "prettier --write",
+    "eslint --fix"
+  ],
+  "realtime_ai_whiteboard/web-app/**/*.{ts,tsx}": [
+    "prettier --write",
+    "eslint --fix"
+  ],
+  "realtime_ai_whiteboard/ai-service/**/*.py": [
+    "ruff check --fix",
+    "ruff format"
+  ],
+  "realtime_ai_whiteboard/mobile-app/**/*.{ts,tsx}": [
+    "prettier --write",
+    "eslint --fix"
+  ],
+  "enterprise_workflow_system/workflow-api/**/*.kt": [
+    "ktlint --format"
+  ],
+  "enterprise_workflow_system/admin-api/**/*.php": [
+    "php-cs-fixer fix"
+  ],
+  "enterprise_workflow_system/employee-portal/**/*.{ts,tsx,vue}": [
+    "prettier --write",
+    "eslint --fix"
+  ],
+  "enterprise_workflow_system/admin-dashboard/**/*.{ts,tsx,vue}": [
+    "prettier --write",
+    "eslint --fix"
+  ],
+  "enterprise_workflow_system/mobile-app/**/*.kt": [
+    "ktlint --format"
+  ],
+  "3d_asset_collaboration/asset-api/**/*.cs": [
+    "dotnet format --include"
+  ],
+  "3d_asset_collaboration/asset-portal/**/*.{ts,tsx}": [
+    "prettier --write",
+    "eslint --fix"
+  ],
+  "3d_asset_collaboration/ai-service/**/*.py": [
+    "ruff check --fix",
+    "ruff format"
+  ]
+}
