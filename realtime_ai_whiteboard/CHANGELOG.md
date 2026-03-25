@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/whiteboard/v1.0.0...whiteboard/v1.1.0) (2026-03-25)
+
+
+### Features
+
+* **whiteboard:** add canvas rendering with Fabric.js ([#123](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/123)) ([81088c9](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/81088c91f38e9fd4acc95cb6ca6aa84c98ffa255))
+* **whiteboard:** add canvas rendering with Fabric.js ([#123](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/123)) ([85c3945](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/85c3945533434a838bafe1ae55792695f8be191f))
+
+
+### Bug Fixes
+
+* **whiteboard:** fix ESLint errors in WhiteboardCanvas ([#123](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/123)) ([8dc73fe](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/8dc73fe807791503358a91499bcad993e7cde4d6))
+
 ## 1.0.0 (2026-03-25)
 
 
