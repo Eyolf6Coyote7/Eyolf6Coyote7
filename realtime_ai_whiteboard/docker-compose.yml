@@ -27,7 +27,7 @@ services:
     image: redis:7.2-alpine
     container_name: whiteboard-redis
     ports:
-      - '6379:6379'
+      - '6380:6379'
     volumes:
       - whiteboard_redis_data:/data
     read_only: true
