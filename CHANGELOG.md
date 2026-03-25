@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.3.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/workspace/v1.2.0...workspace/v1.3.0) (2026-03-25)
+
+
+### Features
+
+* **whiteboard:** add AI Service scaffold + Redis Stream + SSE ([#133](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/133)) ([c83e028](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/c83e028ec3e547a665fc657926f9890bf5d119fb))
+* **whiteboard:** add AI Service scaffold + Redis Stream + SSE ([#133](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/133)) ([2d69d17](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/2d69d17e4c84e04ceeca3cb1479588c359ef5fe1))
+
+
+### Bug Fixes
+
+* **ci:** merge badge update into release-please workflow ([#133](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/133)) ([5b03960](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/5b03960fa7802e69cdb9caa5113d50813d5ba75b))
+* **ci:** restore stable branch trigger in release-please ([#133](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/133)) ([cc16ebf](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/cc16ebf1670723042ba4180916c174e4a70b5641))
+* **whiteboard:** apply Gemini review fixes for AI Service ([#133](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/133)) ([724cb70](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/724cb70f847160e9f79115e849a14355ee3ddfab))
+* **whiteboard:** fix tsconfig deprecation warnings ([#133](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/133)) ([74d7f59](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/74d7f59594b713dc0747b503813e4fe9b06cd0e7))
+
 ## [1.2.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/workspace/v1.1.0...workspace/v1.2.0) (2026-03-25)
 
 
