@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useBoardStore } from '../stores/board.store';
 import { useAuthStore } from '../stores/auth.store';
 import { useTranslation } from 'react-i18next';
+import { BoardThumbnail } from '../components/BoardThumbnail';
 
 const isMock = import.meta.env.VITE_MOCK === 'true';
 
@@ -101,7 +102,7 @@ export function DashboardPage() {
                   cursor: 'pointer',
                 }}
               >
-                <div style={{ height: 160, background: '#F3F4F6' }} />
+                <BoardThumbnail boardId={board.id} />
                 <div style={{ padding: 16 }}>
                   <h3 style={{ fontWeight: 600 }}>{board.title}</h3>
                   <p style={{ color: '#6B7280', fontSize: 14 }}>
