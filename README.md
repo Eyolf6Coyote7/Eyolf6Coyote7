@@ -148,11 +148,11 @@ graph LR
 
 ## Projects
 
-| Project | Industry | Frontend | Backend | Mobile | Live Demo |
-|---------|----------|----------|---------|--------|-----------|
-| [Realtime AI Whiteboard](realtime_ai_whiteboard/) | SaaS | React | NestJS (TypeScript) | React Native | [Demo](https://eyolf6coyote7.github.io/fullstack_ai_workspace/whiteboard/) |
-| [Enterprise Workflow System](enterprise_workflow_system/) | Semiconductor | Vue 3 | Spring Boot (Kotlin) + Laravel (PHP) | Kotlin + Swift | [Demo](https://eyolf6coyote7.github.io/fullstack_ai_workspace/workflow/) |
-| [3D Asset Collaboration](3d_asset_collaboration/) | Media / Advertising | React + Three.js | ASP.NET Core (C#) | Unity (C#) | [Demo](https://eyolf6coyote7.github.io/fullstack_ai_workspace/3d-asset/) |
+| Project | Industry | Design | Live Demo |
+|---------|----------|--------|-----------|
+| [Realtime AI Whiteboard](realtime_ai_whiteboard/) | SaaS | [Figma](https://figma.com/TODO) | [Demo](https://eyolf6coyote7.github.io/fullstack_ai_workspace/whiteboard/) |
+| [Enterprise Workflow System](enterprise_workflow_system/) | Semiconductor | [Figma](https://figma.com/TODO) | [Demo](https://eyolf6coyote7.github.io/fullstack_ai_workspace/workflow/) |
+| [3D Asset Collaboration](3d_asset_collaboration/) | Media / Advertising | [Figma](https://figma.com/TODO) | [Demo](https://eyolf6coyote7.github.io/fullstack_ai_workspace/3d-asset/) |
 
 > Demo links are static versions with mock data. For full functionality (AI, Kafka, realtime), run locally.
 
