@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Canvas, Rect, Circle, IText, Line, Path, type TPointerEventInfo } from 'fabric';
+import { useEffect, useRef, useCallback } from 'react';
+import { Canvas, Rect, Circle, IText, Line, type TPointerEventInfo } from 'fabric';
 
 export type Tool = 'select' | 'rect' | 'circle' | 'line' | 'text' | 'sticky' | 'freehand';
 
@@ -12,7 +12,6 @@ interface Props {
 export function WhiteboardCanvas({ activeTool, width = 1200, height = 800 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fabricRef = useRef<Canvas | null>(null);
-  const [isDrawing, setIsDrawing] = useState(false);
   const startPoint = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
@@ -21,14 +20,98 @@ export function WhiteboardCanvas({ activeTool, width = 1200, height = 800 }: Pro
       width,
       height,
       backgroundColor: '#FAFAFA',
-      selection: activeTool === 'select',
     });
     fabricRef.current = canvas;
-
     return () => {
       canvas.dispose();
     };
   }, [width, height]);
+
+  const addShape = useCallback(
+    (x: number, y: number, endX: number, endY: number) => {
+      const canvas = fabricRef.current;
+      if (!canvas) return;
+
+      const w = Math.abs(endX - x);
+      const h = Math.abs(endY - y);
+
+      switch (activeTool) {
+        case 'rect':
+          canvas.add(
+            new Rect({
+              left: Math.min(x, endX),
+              top: Math.min(y, endY),
+              width: Math.max(w, 40),
+              height: Math.max(h, 40),
+              fill: '#DBEAFE',
+              stroke: '#2563EB',
+              strokeWidth: 1,
+              rx: 4,
+              ry: 4,
+            }),
+          );
+          break;
+        case 'circle':
+          canvas.add(
+            new Circle({
+              left: Math.min(x, endX),
+              top: Math.min(y, endY),
+              radius: Math.max(w, h, 20) / 2,
+              fill: '#FEE2E2',
+              stroke: '#EF4444',
+              strokeWidth: 1,
+            }),
+          );
+          break;
+        case 'line':
+          canvas.add(
+            new Line([x, y, endX, endY], {
+              stroke: '#374151',
+              strokeWidth: 2,
+            }),
+          );
+          break;
+        case 'text':
+          canvas.add(
+            new IText('Type here', {
+              left: x,
+              top: y,
+              fontSize: 16,
+              fontFamily: 'Inter, sans-serif',
+              fill: '#191C1D',
+            }),
+          );
+          break;
+        case 'sticky': {
+          const stickyRect = new Rect({
+            left: x,
+            top: y,
+            width: 150,
+            height: 150,
+            fill: '#FEF3C7',
+            stroke: '#F59E0B',
+            strokeWidth: 1,
+            rx: 4,
+            ry: 4,
+          });
+          const stickyText = new IText('Note', {
+            left: x + 12,
+            top: y + 12,
+            fontSize: 14,
+            fontFamily: 'Inter, sans-serif',
+            fill: '#92400E',
+          });
+          canvas.add(stickyRect);
+          canvas.add(stickyText);
+          break;
+        }
+        default:
+          break;
+      }
+      canvas.renderAll();
+    },
+    [activeTool],
+  );
 
   useEffect(() => {
     const canvas = fabricRef.current;
@@ -42,102 +125,32 @@ export function WhiteboardCanvas({ activeTool, width = 1200, height = 800 }: Pro
       canvas.freeDrawingBrush.width = 2;
     }
 
+    const onMouseDown = (opt: TPointerEventInfo) => {
+      if (opt.target) return;
+      const pointer = canvas.getScenePoint(opt.e);
+      startPoint.current = { x: pointer.x, y: pointer.y };
+    };
+
+    const onMouseUp = (opt: TPointerEventInfo) => {
+      if (!startPoint.current) return;
+      const pointer = canvas.getScenePoint(opt.e);
+      addShape(startPoint.current.x, startPoint.current.y, pointer.x, pointer.y);
+      startPoint.current = null;
+    };
+
     canvas.off('mouse:down');
     canvas.off('mouse:up');
 
     if (['rect', 'circle', 'line', 'text', 'sticky'].includes(activeTool)) {
-      canvas.on('mouse:down', (opt: TPointerEventInfo) => {
-        if (opt.target) return;
-        const pointer = canvas.getScenePoint(opt.e);
-        startPoint.current = { x: pointer.x, y: pointer.y };
-        setIsDrawing(true);
-      });
-
-      canvas.on('mouse:up', (opt: TPointerEventInfo) => {
-        if (!startPoint.current || !isDrawing) return;
-        const pointer = canvas.getScenePoint(opt.e);
-        const { x, y } = startPoint.current;
-        const w = Math.abs(pointer.x - x);
-        const h = Math.abs(pointer.y - y);
-
-        let obj;
-        switch (activeTool) {
-          case 'rect':
-            obj = new Rect({
-              left: Math.min(x, pointer.x),
-              top: Math.min(y, pointer.y),
-              width: Math.max(w, 40),
-              height: Math.max(h, 40),
-              fill: '#DBEAFE',
-              stroke: '#2563EB',
-              strokeWidth: 1,
-              rx: 4,
-              ry: 4,
-            });
-            break;
-          case 'circle':
-            obj = new Circle({
-              left: Math.min(x, pointer.x),
-              top: Math.min(y, pointer.y),
-              radius: Math.max(w, h, 20) / 2,
-              fill: '#FEE2E2',
-              stroke: '#EF4444',
-              strokeWidth: 1,
-            });
-            break;
-          case 'line':
-            obj = new Line([x, y, pointer.x, pointer.y], {
-              stroke: '#374151',
-              strokeWidth: 2,
-            });
-            break;
-          case 'text':
-            obj = new IText('Type here', {
-              left: x,
-              top: y,
-              fontSize: 16,
-              fontFamily: 'Inter, sans-serif',
-              fill: '#191C1D',
-            });
-            break;
-          case 'sticky':
-            obj = new Rect({
-              left: x,
-              top: y,
-              width: 150,
-              height: 150,
-              fill: '#FEF3C7',
-              stroke: '#F59E0B',
-              strokeWidth: 1,
-              rx: 4,
-              ry: 4,
-            });
-            canvas.add(obj);
-            const text = new IText('Note', {
-              left: x + 12,
-              top: y + 12,
-              fontSize: 14,
-              fontFamily: 'Inter, sans-serif',
-              fill: '#92400E',
-              width: 126,
-            });
-            canvas.add(text);
-            canvas.renderAll();
-            startPoint.current = null;
-            setIsDrawing(false);
-            return;
-        }
-
-        if (obj) {
-          canvas.add(obj);
-          canvas.renderAll();
-        }
-
-        startPoint.current = null;
-        setIsDrawing(false);
-      });
+      canvas.on('mouse:down', onMouseDown);
+      canvas.on('mouse:up', onMouseUp);
     }
-  }, [activeTool, isDrawing]);
+
+    return () => {
+      canvas.off('mouse:down');
+      canvas.off('mouse:up');
+    };
+  }, [activeTool, addShape]);
 
   return (
     <div style={{ border: '1px solid #E5E7EB', borderRadius: 8, overflow: 'hidden' }}>
