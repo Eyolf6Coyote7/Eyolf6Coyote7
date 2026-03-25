@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16.3-alpine
+    container_name: whiteboard-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-whiteboard}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-whiteboard_dev}
+      POSTGRES_DB: ${POSTGRES_DB:-whiteboard}
+    ports:
+      - '5432:5432'
+    volumes:
+      - whiteboard_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-whiteboard}']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: whiteboard-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - whiteboard_redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio:RELEASE.2024-05-10T01-41-38Z
+    container_name: whiteboard-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - whiteboard_minio_data:/data
+
+  unleash:
+    image: unleashorg/unleash-server:5.12
+    container_name: whiteboard-unleash
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-whiteboard}:${POSTGRES_PASSWORD:-whiteboard_dev}@postgres:5432/${POSTGRES_DB:-whiteboard}
+      DATABASE_SSL: 'false'
+    ports:
+      - '4242:4242'
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  kafka:
+    image: bitnami/kafka:3.7.0
+    container_name: whiteboard-kafka
+    environment:
+      KAFKA_CFG_NODE_ID: 0
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
+      KAFKA_CFG_LISTENERS: INTERNAL://:9092,EXTERNAL://:9094,CONTROLLER://:9093
+      KAFKA_CFG_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:9094
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+    ports:
+      - '9094:9094'
+    volumes:
+      - whiteboard_kafka_data:/bitnami/kafka
+
+  chromadb:
+    image: chromadb/chroma:0.5.0
+    container_name: whiteboard-chromadb
+    ports:
+      - '8000:8000'
+    volumes:
+      - whiteboard_chroma_data:/chroma/chroma
+
+  langfuse:
+    image: langfuse/langfuse:2.60.1
+    container_name: whiteboard-langfuse
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-whiteboard}:${POSTGRES_PASSWORD:-whiteboard_dev}@postgres:5432/${POSTGRES_DB:-whiteboard}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-langfuse-dev-secret}
+      NEXTAUTH_URL: http://localhost:3100
+      SALT: ${SALT:-langfuse-dev-salt}
+    ports:
+      - '3100:3000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  whiteboard_pg_data:
+  whiteboard_redis_data:
+  whiteboard_minio_data:
+  whiteboard_kafka_data:
+  whiteboard_chroma_data:
