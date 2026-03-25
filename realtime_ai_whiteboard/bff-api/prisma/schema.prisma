@@ -7,11 +7,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  owner
+  member
+}
+
+enum Plan {
+  free
+  pro
+}
+
 model Tenant {
   id         String   @id @default(uuid())
   name       String
   schemaName String   @unique @map("schema_name")
-  plan       String   @default("free")
+  plan       Plan     @default(free)
   createdAt  DateTime @default(now()) @map("created_at")
   users      User[]
   boards     Board[]
@@ -24,10 +34,10 @@ model User {
   email        String           @unique
   passwordHash String           @map("password_hash")
   displayName  String           @map("display_name")
-  role         String           @default("member")
+  role         UserRole         @default(member)
   locale       String           @default("en")
   createdAt    DateTime         @default(now()) @map("created_at")
-  tenant       Tenant           @relation(fields: [tenantId], references: [id])
+  tenant       Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   boards       Board[]
   conversations AiConversation[]
   @@map("users")
@@ -45,8 +55,8 @@ model Board {
   thumbnailUrl  String?          @map("thumbnail_url")
   createdAt     DateTime         @default(now()) @map("created_at")
   updatedAt     DateTime         @updatedAt @map("updated_at")
-  tenant        Tenant           @relation(fields: [tenantId], references: [id])
-  owner         User             @relation(fields: [ownerId], references: [id])
+  tenant        Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  owner         User             @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   conversations AiConversation[]
   @@index([ownerId])
   @@index([createdAt(sort: Desc)])
@@ -58,8 +68,8 @@ model AiConversation {
   boardId   String      @map("board_id")
   userId    String      @map("user_id")
   createdAt DateTime    @default(now()) @map("created_at")
-  board     Board       @relation(fields: [boardId], references: [id])
-  user      User        @relation(fields: [userId], references: [id])
+  board     Board       @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   messages  AiMessage[]
   @@map("ai_conversations")
 }
@@ -73,7 +83,7 @@ model AiMessage {
   tokensUsed     Int?           @map("tokens_used")
   latencyMs      Int?           @map("latency_ms")
   createdAt      DateTime       @default(now()) @map("created_at")
-  conversation   AiConversation @relation(fields: [conversationId], references: [id])
+  conversation   AiConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   @@index([conversationId, createdAt])
   @@map("ai_messages")
 }

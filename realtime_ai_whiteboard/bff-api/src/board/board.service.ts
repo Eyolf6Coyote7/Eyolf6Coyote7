@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -10,23 +10,29 @@ export class BoardService {
   }
 
   findAll(tenantId: string, ownerId: string, page = 1, limit = 20) {
+    const safePage = Math.max(1, page);
+    const safeLimit = Math.min(100, Math.max(1, limit));
     return this.prisma.board.findMany({
       where: { tenantId, ownerId },
       orderBy: { createdAt: 'desc' },
-      skip: (page - 1) * limit,
-      take: limit,
+      skip: (safePage - 1) * safeLimit,
+      take: safeLimit,
     });
   }
 
-  findOne(id: string, tenantId: string) {
-    return this.prisma.board.findFirst({ where: { id, tenantId } });
+  async findOne(id: string, tenantId: string) {
+    const board = await this.prisma.board.findFirst({ where: { id, tenantId } });
+    if (!board) throw new NotFoundException('Board not found');
+    return board;
   }
 
-  update(id: string, tenantId: string, data: { title?: string; guestEditable?: boolean }) {
-    return this.prisma.board.updateMany({ where: { id, tenantId }, data });
+  async update(id: string, tenantId: string, data: { title?: string; guestEditable?: boolean }) {
+    await this.findOne(id, tenantId);
+    return this.prisma.board.update({ where: { id }, data });
   }
 
-  remove(id: string, tenantId: string) {
-    return this.prisma.board.deleteMany({ where: { id, tenantId } });
+  async remove(id: string, tenantId: string) {
+    await this.findOne(id, tenantId);
+    return this.prisma.board.delete({ where: { id } });
   }
 }

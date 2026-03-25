@@ -1,6 +1,8 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards, Request, ParseIntPipe, DefaultValuePipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { BoardService } from './board.service';
+import { CreateBoardDto } from './dto/create-board.dto';
+import { UpdateBoardDto } from './dto/update-board.dto';
 
 @Controller('api/web/boards')
 @UseGuards(AuthGuard('jwt'))
@@ -8,13 +10,17 @@ export class BoardController {
   constructor(private boardService: BoardService) {}
 
   @Post()
-  create(@Request() req, @Body() body: { title: string; templateId?: string }) {
-    return this.boardService.create(req.user.userId, req.user.tenantId, body.title, body.templateId);
+  create(@Request() req, @Body() dto: CreateBoardDto) {
+    return this.boardService.create(req.user.userId, req.user.tenantId, dto.title, dto.templateId);
   }
 
   @Get()
-  findAll(@Request() req, @Query('page') page?: string, @Query('limit') limit?: string) {
-    return this.boardService.findAll(req.user.tenantId, req.user.userId, +(page || 1), +(limit || 20));
+  findAll(
+    @Request() req,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
+  ) {
+    return this.boardService.findAll(req.user.tenantId, req.user.userId, page, limit);
   }
 
   @Get(':id')
@@ -23,8 +29,8 @@ export class BoardController {
   }
 
   @Patch(':id')
-  update(@Request() req, @Param('id') id: string, @Body() body: { title?: string; guestEditable?: boolean }) {
-    return this.boardService.update(id, req.user.tenantId, body);
+  update(@Request() req, @Param('id') id: string, @Body() dto: UpdateBoardDto) {
+    return this.boardService.update(id, req.user.tenantId, dto);
   }
 
   @Delete(':id')
