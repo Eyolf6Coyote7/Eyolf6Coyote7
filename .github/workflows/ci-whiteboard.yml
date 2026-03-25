@@ -20,9 +20,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
-          cache-dependency-path: realtime_ai_whiteboard/bff-api/pnpm-lock.yaml
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install
       - run: pnpm lint
 
   lint-web:
@@ -39,9 +37,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
-          cache-dependency-path: realtime_ai_whiteboard/web-app/pnpm-lock.yaml
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install
       - run: pnpm lint
 
   test-bff:
@@ -58,7 +54,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
-          cache-dependency-path: realtime_ai_whiteboard/bff-api/pnpm-lock.yaml
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install
       - run: pnpm test --passWithNoTests
