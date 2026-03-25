@@ -6,18 +6,59 @@ on:
       - 'realtime_ai_whiteboard/**'
 
 jobs:
-  lint:
+  lint-bff:
+    name: Lint — BFF API (NestJS)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: realtime_ai_whiteboard/bff-api
     steps:
       - uses: actions/checkout@v4
-      # TODO: setup-node + npm run lint when package.json exists
-      - name: ESLint + Prettier (placeholder)
-        run: echo "Skipped — no package.json yet"
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: realtime_ai_whiteboard/bff-api/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
 
-  test:
+  lint-web:
+    name: Lint — Web App (React)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: realtime_ai_whiteboard/web-app
     steps:
       - uses: actions/checkout@v4
-      # TODO: setup-node + npm test when tests exist
-      - name: Unit tests (placeholder)
-        run: echo "Skipped — no tests yet"
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: realtime_ai_whiteboard/web-app/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+
+  test-bff:
+    name: Test — BFF API
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: realtime_ai_whiteboard/bff-api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: realtime_ai_whiteboard/bff-api/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test --passWithNoTests
