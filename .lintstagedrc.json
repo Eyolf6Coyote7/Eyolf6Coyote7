@@ -1,0 +1,8 @@
+{
+  "realtime_ai_whiteboard/bff-api/src/**/*.ts": [
+    "cd realtime_ai_whiteboard/bff-api && npx prisma generate && eslint --fix"
+  ],
+  "realtime_ai_whiteboard/web-app/src/**/*.{ts,tsx}": [
+    "cd realtime_ai_whiteboard/web-app && eslint --fix"
+  ]
+}
