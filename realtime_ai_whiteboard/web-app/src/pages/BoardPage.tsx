@@ -36,7 +36,7 @@ export function BoardPage() {
         </div>
       </header>
 
-      <div style={{ flex: 1, display: 'flex' }}>
+      <div className={styles.canvasRow}>
         <div
           className={styles.canvasArea}
           onMouseMove={(e) => {

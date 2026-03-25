@@ -51,7 +51,12 @@ export function AiChatPanel({ boardId }: Props) {
 
       <div className={styles.chips}>
         {SUGGESTIONS.map((s) => (
-          <button key={s} className={styles.chip} onClick={() => handleChip(s)}>
+          <button
+            key={s}
+            className={styles.chip}
+            onClick={() => handleChip(s)}
+            disabled={isStreaming}
+          >
             {s}
           </button>
         ))}

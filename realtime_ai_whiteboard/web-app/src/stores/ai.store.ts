@@ -5,7 +5,6 @@ interface Message {
   id: string;
   role: 'user' | 'assistant' | 'tool';
   content: string;
-  toolResult?: { tool: string; result: string };
   timestamp: Date;
 }
 
@@ -26,7 +25,7 @@ export const useAiStore = create<AiState>((set) => ({
 
   sendPrompt: async (boardId: string, prompt: string) => {
     const userMsg: Message = {
-      id: `user-${Date.now()}`,
+      id: crypto.randomUUID(),
       role: 'user',
       content: prompt,
       timestamp: new Date(),
@@ -41,30 +40,63 @@ export const useAiStore = create<AiState>((set) => ({
       );
 
       eventSource.onmessage = (event) => {
-        const data = JSON.parse(event.data) as {
-          type: string;
-          response?: string;
-          tool_results?: unknown[];
-        };
+        try {
+          const data = JSON.parse(event.data) as {
+            type: string;
+            response?: string;
+            message?: string;
+            tool_results?: unknown[];
+          };
 
-        if (data.type === 'done') {
-          const aiMsg: Message = {
-            id: `ai-${Date.now()}`,
+          if (data.type === 'done') {
+            const aiMsg: Message = {
+              id: crypto.randomUUID(),
+              role: 'assistant',
+              content: data.response || 'Done.',
+              timestamp: new Date(),
+            };
+            set((s) => ({ messages: [...s.messages, aiMsg], isStreaming: false }));
+            eventSource.close();
+          } else if (data.type === 'error') {
+            const errorMsg: Message = {
+              id: crypto.randomUUID(),
+              role: 'assistant',
+              content: `Error: ${data.message || 'Unknown error'}`,
+              timestamp: new Date(),
+            };
+            set((s) => ({ messages: [...s.messages, errorMsg], isStreaming: false }));
+            eventSource.close();
+          }
+        } catch {
+          const errorMsg: Message = {
+            id: crypto.randomUUID(),
             role: 'assistant',
-            content: data.response || 'Done.',
+            content: 'Failed to process AI response.',
             timestamp: new Date(),
           };
-          set((s) => ({ messages: [...s.messages, aiMsg], isStreaming: false }));
+          set((s) => ({ messages: [...s.messages, errorMsg], isStreaming: false }));
           eventSource.close();
         }
       };
 
       eventSource.onerror = () => {
-        set({ isStreaming: false });
+        const errorMsg: Message = {
+          id: crypto.randomUUID(),
+          role: 'assistant',
+          content: 'Connection to AI service lost.',
+          timestamp: new Date(),
+        };
+        set((s) => ({ messages: [...s.messages, errorMsg], isStreaming: false }));
         eventSource.close();
       };
     } catch {
-      set({ isStreaming: false });
+      const errorMsg: Message = {
+        id: crypto.randomUUID(),
+        role: 'assistant',
+        content: 'Failed to send prompt.',
+        timestamp: new Date(),
+      };
+      set((s) => ({ messages: [...s.messages, errorMsg], isStreaming: false }));
     }
   },
 }));

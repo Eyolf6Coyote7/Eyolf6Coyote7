@@ -97,3 +97,8 @@
   cursor: pointer;
   font-size: 16px;
 }
+
+.canvasRow {
+  flex: 1;
+  display: flex;
+}

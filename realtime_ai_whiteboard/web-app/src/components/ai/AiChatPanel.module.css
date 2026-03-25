@@ -134,3 +134,8 @@
   background: #d1d5db;
   cursor: not-allowed;
 }
+
+.chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
