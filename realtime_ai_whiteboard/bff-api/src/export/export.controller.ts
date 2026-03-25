@@ -1,29 +1,21 @@
-import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Post, Param, Body, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { IsEnum, IsNotEmpty } from 'class-validator';
 import { ExportService } from './export.service';
-
-enum ExportFormat {
-  PNG = 'png',
-  PDF = 'pdf',
-}
-
-class ExportDto {
-  @IsNotEmpty()
-  boardId: string;
-
-  @IsEnum(ExportFormat)
-  format: ExportFormat;
-}
+import { ExportDto } from './dto/export.dto';
+import { CurrentUser, AuthUser } from '../common/auth-user.decorator';
 
 @Controller('api/web/boards')
 @UseGuards(AuthGuard('jwt'))
 export class ExportController {
   constructor(private exportService: ExportService) {}
 
-  @Post('export')
-  exportBoard(@Body() dto: ExportDto) {
-    const url = this.exportService.exportBoard(dto.boardId, dto.format);
+  @Post(':id/export')
+  async exportBoard(
+    @CurrentUser() user: AuthUser,
+    @Param('id') boardId: string,
+    @Body() dto: ExportDto,
+  ) {
+    const url = await this.exportService.exportBoard(boardId, dto.format, user.tenantId);
     return { downloadUrl: url };
   }
 }

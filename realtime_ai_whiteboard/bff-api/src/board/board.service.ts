@@ -1,6 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { randomBytes } from 'crypto';
+import { promisify } from 'util';
+import { SharePermission } from './dto/share-board.dto';
+
+const randomBytesAsync = promisify(randomBytes);
 
 @Injectable()
 export class BoardService {
@@ -43,10 +47,11 @@ export class BoardService {
     return this.prisma.board.delete({ where: { id } });
   }
 
-  async generateShareLink(id: string, tenantId: string, permission: string) {
+  async generateShareLink(id: string, tenantId: string, permission: SharePermission) {
     await this.findOne(id, tenantId);
-    const guestToken = randomBytes(32).toString('hex');
-    const guestEditable = permission === 'edit';
+    const tokenBuffer = await randomBytesAsync(32);
+    const guestToken = tokenBuffer.toString('hex');
+    const guestEditable = permission === SharePermission.EDIT;
     await this.prisma.board.update({
       where: { id },
       data: { guestToken, guestEditable },

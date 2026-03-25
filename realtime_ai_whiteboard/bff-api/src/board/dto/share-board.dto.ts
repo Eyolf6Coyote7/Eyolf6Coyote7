@@ -1,6 +1,6 @@
 import { IsEnum } from 'class-validator';
 
-enum SharePermission {
+export enum SharePermission {
   VIEW = 'view',
   EDIT = 'edit',
 }
