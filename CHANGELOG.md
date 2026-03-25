@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/workspace/v1.5.0...workspace/v1.6.0) (2026-03-25)
+
+
+### Features
+
+* **whiteboard:** add static demo build for GitHub Pages ([#141](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/141)) ([d3c830b](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/d3c830b4931fccbd372c0581a0bcfd5cdcc52847))
+
 ## [1.5.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/workspace/v1.4.0...workspace/v1.5.0) (2026-03-25)
 
 
