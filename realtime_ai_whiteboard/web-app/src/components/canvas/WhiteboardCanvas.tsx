@@ -1,18 +1,23 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { Canvas, Rect, Circle, IText, Line, type TPointerEventInfo } from 'fabric';
+import { getMockContent } from '../../api/mock-board-content';
 
 export type Tool = 'select' | 'rect' | 'circle' | 'line' | 'text' | 'sticky' | 'freehand';
 
+const isMock = import.meta.env.VITE_MOCK === 'true';
+
 interface Props {
   activeTool: Tool;
+  boardId?: string;
   width?: number;
   height?: number;
 }
 
-export function WhiteboardCanvas({ activeTool, width = 1200, height = 800 }: Props) {
+export function WhiteboardCanvas({ activeTool, boardId, width = 1200, height = 800 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fabricRef = useRef<Canvas | null>(null);
   const startPoint = useRef<{ x: number; y: number } | null>(null);
+  const initialized = useRef(false);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -22,16 +27,79 @@ export function WhiteboardCanvas({ activeTool, width = 1200, height = 800 }: Pro
       backgroundColor: '#FAFAFA',
     });
     fabricRef.current = canvas;
+
+    // Load mock content on first render
+    if (isMock && boardId && !initialized.current) {
+      initialized.current = true;
+      const elements = getMockContent(boardId);
+      elements.forEach((el) => {
+        if (el.type === 'sticky' || el.type === 'rect') {
+          const rect = new Rect({
+            left: el.left,
+            top: el.top,
+            width: el.width ?? 140,
+            height: el.height ?? 100,
+            fill: el.fill,
+            stroke: el.stroke,
+            strokeWidth: 1,
+            rx: 4,
+            ry: 4,
+          });
+          canvas.add(rect);
+          if (el.text) {
+            const text = new IText(el.text, {
+              left: el.left + 10,
+              top: el.top + 10,
+              fontSize: el.fontSize ?? 13,
+              fontFamily: 'Inter, sans-serif',
+              fill: el.fontColor ?? '#374151',
+              width: (el.width ?? 140) - 20,
+            });
+            canvas.add(text);
+          }
+        } else if (el.type === 'circle') {
+          const circle = new Circle({
+            left: el.left,
+            top: el.top,
+            radius: el.radius ?? 30,
+            fill: el.fill,
+            stroke: el.stroke,
+            strokeWidth: 1,
+          });
+          canvas.add(circle);
+          if (el.text) {
+            const text = new IText(el.text, {
+              left: el.left + (el.radius ?? 30) - 25,
+              top: el.top + (el.radius ?? 30) - 8,
+              fontSize: el.fontSize ?? 13,
+              fontFamily: 'Inter, sans-serif',
+              fill: el.fontColor ?? '#374151',
+            });
+            canvas.add(text);
+          }
+        } else if (el.type === 'text') {
+          const text = new IText(el.text ?? '', {
+            left: el.left,
+            top: el.top,
+            fontSize: el.fontSize ?? 16,
+            fontFamily: 'Inter, sans-serif',
+            fill: el.fontColor ?? '#374151',
+          });
+          canvas.add(text);
+        }
+      });
+      canvas.renderAll();
+    }
+
     return () => {
       canvas.dispose();
     };
-  }, [width, height]);
+  }, [width, height, boardId]);
 
   const addShape = useCallback(
     (x: number, y: number, endX: number, endY: number) => {
       const canvas = fabricRef.current;
       if (!canvas) return;
-
       const w = Math.abs(endX - x);
       const h = Math.abs(endY - y);
 
@@ -64,12 +132,7 @@ export function WhiteboardCanvas({ activeTool, width = 1200, height = 800 }: Pro
           );
           break;
         case 'line':
-          canvas.add(
-            new Line([x, y, endX, endY], {
-              stroke: '#374151',
-              strokeWidth: 2,
-            }),
-          );
+          canvas.add(new Line([x, y, endX, endY], { stroke: '#374151', strokeWidth: 2 }));
           break;
         case 'text':
           canvas.add(

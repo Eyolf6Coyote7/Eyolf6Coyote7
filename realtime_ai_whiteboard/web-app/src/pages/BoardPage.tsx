@@ -50,7 +50,7 @@ export function BoardPage() {
         </div>
         <CursorPresence cursors={cursors} />
         <div className={styles.canvasWrapper}>
-          <WhiteboardCanvas activeTool={activeTool} width={1200} height={700} />
+          <WhiteboardCanvas activeTool={activeTool} boardId={id} width={1200} height={700} />
         </div>
       </div>
 
