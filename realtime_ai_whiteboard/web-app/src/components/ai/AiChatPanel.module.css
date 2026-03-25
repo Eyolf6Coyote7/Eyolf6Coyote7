@@ -160,3 +160,30 @@
   background: #d1d5db;
   cursor: not-allowed;
 }
+
+.aiMsg p {
+  margin: 0 0 8px;
+}
+
+.aiMsg p:last-child {
+  margin-bottom: 0;
+}
+
+.aiMsg strong {
+  font-weight: 600;
+}
+
+.aiMsg em {
+  color: #9ca3af;
+  font-size: 12px;
+}
+
+.aiMsg ul,
+.aiMsg ol {
+  margin: 4px 0;
+  padding-left: 20px;
+}
+
+.aiMsg li {
+  margin: 2px 0;
+}
