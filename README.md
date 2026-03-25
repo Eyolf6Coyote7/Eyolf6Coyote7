@@ -1,9 +1,15 @@
 # Fullstack AI Workspace
 
-![Workspace](https://img.shields.io/badge/workspace-v1.0.0-blue)
-![Whiteboard](https://img.shields.io/badge/whiteboard-v1.0.0-green)
-![Workflow](https://img.shields.io/badge/workflow-v0.0.0-gray)
-![3D Asset](https://img.shields.io/badge/3d--asset-v0.0.0-gray)
+**Releases**
+
+| Project | Version |
+|---------|---------|
+| Workspace | ![Workspace](https://img.shields.io/badge/workspace-v1.1.0-2563EB) |
+| Whiteboard | ![Whiteboard](https://img.shields.io/badge/whiteboard-v1.1.0-6366F1) |
+| Workflow | ![Workflow](https://img.shields.io/badge/workflow-v0.0.0-0EA5E9) |
+| 3D Asset | ![3D Asset](https://img.shields.io/badge/3d--asset-v0.0.0-8B5CF6) |
+
+---
 
 
 **Languages**
