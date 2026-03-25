@@ -5,7 +5,7 @@ import { WhiteboardCanvas, type Tool } from '../components/canvas/WhiteboardCanv
 import { Toolbar } from '../components/canvas/Toolbar';
 import { CursorPresence } from '../components/canvas/CursorPresence';
 import { AiChatPanel } from '../components/ai/AiChatPanel';
-import { DemoTooltip } from '../components/DemoTooltip';
+import { DemoModal } from '../components/DemoModal';
 import { useYjs } from '../hooks/useYjs';
 import { useAiStore } from '../stores/ai.store';
 import styles from './BoardPage.module.css';
@@ -20,12 +20,19 @@ export function BoardPage() {
   const { id = 'default' } = useParams<{ id: string }>();
   const [activeTool, setActiveTool] = useState<Tool>('select');
   const [zoom, setZoom] = useState(100);
+  const [demoModal, setDemoModal] = useState('');
   const { connected, cursors, onlineCount, updateCursorPosition } = useYjs(id);
   const toggleAi = useAiStore((s) => s.togglePanel);
 
   const zoomIn = useCallback(() => setZoom((z) => Math.min(z + ZOOM_STEP, ZOOM_MAX)), []);
   const zoomOut = useCallback(() => setZoom((z) => Math.max(z - ZOOM_STEP, ZOOM_MIN)), []);
   const zoomReset = useCallback(() => setZoom(100), []);
+
+  const handleShare = () => {
+    if (isMock) {
+      setDemoModal('Share & Collaborate');
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -65,9 +72,9 @@ export function BoardPage() {
           <button className={styles.shareBtn} onClick={toggleAi}>
             {t('board.ai')}
           </button>
-          <DemoTooltip message="Share requires backend">
-            <button className={styles.shareBtn}>{t('board.share')}</button>
-          </DemoTooltip>
+          <button className={styles.shareBtn} onClick={handleShare}>
+            {t('board.share')}
+          </button>
         </div>
       </header>
 
@@ -86,11 +93,12 @@ export function BoardPage() {
           className={styles.canvasWrapper}
           style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'center center' }}
         >
-          <WhiteboardCanvas activeTool={activeTool} boardId={id} width={1200} height={700} />
+          <WhiteboardCanvas activeTool={activeTool} boardId={id} width={900} height={600} />
         </div>
       </div>
 
       <AiChatPanel boardId={id} />
+      <DemoModal isOpen={!!demoModal} onClose={() => setDemoModal('')} feature={demoModal} />
 
       <footer className={styles.footer}>
         <button className={styles.zoomBtn} onClick={zoomOut} disabled={zoom <= ZOOM_MIN}>
