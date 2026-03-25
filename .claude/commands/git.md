@@ -427,3 +427,76 @@ Issue → Branch → Commit → Push → PR
 | Create issue       | `gh issue create ...`                      |
 | List issues        | `gh issue list`                            |
 | List projects      | `gh project list`                          |
+
+---
+
+## Code Quality Self-Check
+
+Before every commit, Claude must verify:
+
+### SOLID Principles
+- [ ] **S** — Single Responsibility: each file/class does one thing
+- [ ] **O** — Open/Closed: extend via interfaces, not modifying existing code
+- [ ] **L** — Liskov Substitution: subtypes replaceable without breaking
+- [ ] **I** — Interface Segregation: no fat interfaces, split by consumer
+- [ ] **D** — Dependency Inversion: depend on abstractions, not concretions
+
+### Design Patterns
+- [ ] No god objects or mega-components (>200 lines → split)
+- [ ] Hooks extract reusable logic from components
+- [ ] Services abstract external I/O (API, DB, storage)
+- [ ] DTOs validate input at boundaries
+- [ ] Repository pattern for data access (not raw queries in controllers)
+
+### Code Review Checklist (for Claude PR comments)
+- [ ] No inline styles (use CSS modules)
+- [ ] No `any` types (use proper interfaces)
+- [ ] No hardcoded secrets or URLs (use env vars)
+- [ ] No unused imports or variables
+- [ ] Error handling: no silent catches, proper error responses
+- [ ] Auth: endpoints protected, tenant isolation verified
+- [ ] Performance: no N+1 queries, throttle high-frequency events
+- [ ] Security: input validated, SQL injection prevented, XSS prevented
+
+### DRY (Don't Repeat Yourself)
+- [ ] No duplicate code across files (extract to shared util/hook/service)
+- [ ] No copy-paste components (extract to shared component)
+- [ ] No repeated API calls (use cache or shared store)
+- [ ] No repeated styles (use CSS modules/tokens/variables)
+- [ ] No repeated validation logic (use shared DTOs/schemas)
+- [ ] Reuse existing libraries before writing custom (check pnpm list first)
+- [ ] **Optimistic Locking** — when multiple users can edit the same resource (e.g. board, asset version), use a `version` column. Read version → update WHERE version = X → if 0 rows affected, conflict error
+- [ ] **Redis Atomic Ops** — for counters (usage metering, rate limiting), use `INCR`/`DECR` not read-then-write. Prevents double-count race conditions
+- [ ] **DB Transactions** — when multiple tables must update together (e.g. create board + add owner), wrap in `prisma.$transaction()`
+- [ ] **Singleton Pattern** — DB connection pool, Redis client, WebSocket server should be single instance. In NestJS use `@Injectable({ scope: Scope.DEFAULT })` (default is singleton)
+- [ ] **Factory Pattern** — when creating different objects by condition (e.g. API client real vs mock, notification channel email vs push), use a factory function, not if/else chains
+- [ ] **Idempotent APIs** — POST endpoints that create resources should handle duplicate requests gracefully (e.g. unique constraint catch → return existing instead of error)
+- [ ] **Kafka Exactly-Once** — for audit log and event sourcing, configure `acks: all` + `enable.idempotence: true` + consumer `isolation.level: read_committed`
+
+### PR Review Comment Format
+
+Every Claude PR review MUST include this self-check section:
+
+```markdown
+## 🤖 Claude Code Review
+
+### Self-Check
+- [x] **SOLID** — Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion
+- [x] **DRY** — No duplicate code, components, styles, validation. Reused existing libraries.
+- [x] **Design Patterns** — Singleton for shared resources, Factory for conditional creation, no god objects (>200 lines)
+- [x] **Concurrency** — No race conditions, optimistic locking where needed, atomic Redis ops
+- [x] **Security** — Auth on all endpoints, tenant isolation, input validated via DTOs, no hardcoded secrets
+- [x] **Performance** — No N+1 queries, high-frequency events throttled, lazy loading where appropriate
+- [ ] **Issue found**: <describe specific problem and fix suggestion>
+
+### Review
+| File | Status | Comment |
+|------|--------|---------|
+| ... | ✅ / ⚠️ / ❌ | ... |
+
+### Risk Level
+🟢 Low / 🟡 Medium / 🔴 High — <one line reason>
+```
+
+> If all checks pass, mark all as [x]. If any check fails, mark as [ ] and describe the issue.
+> This self-check replaces the old review format. Always use this format from now on.
