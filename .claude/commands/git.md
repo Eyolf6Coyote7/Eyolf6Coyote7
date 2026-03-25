@@ -51,7 +51,7 @@ git config user.email "mickey985ha@gmail.com"
 > Feature branches always branch from `dev` and PR back to `dev`.
 > Claude must ALWAYS review after creating a PR — never skip.
 > After fixing review comments, re-read Gemini comments to ensure nothing is missed.
-> **Never auto-commit.** Always ask the user before committing. Make changes → ask "要 commit 嗎？" → user confirms → then commit + push.
+> **Auto-commit, auto-PR, auto-review — but NEVER auto-merge.** Claude can commit, push, create PR, and post review automatically. Only the user decides when to merge.
 
 ---
 
@@ -152,26 +152,25 @@ whiteboard/v1.0.0    ← feat + BREAKING CHANGE: redesign WebSocket protocol
 
 ## Commit Message
 
-### Format
+### Format (Standard Conventional Commits)
 
+Title (parsed by release-please):
 ```
-<emoji><type>#<issue-number>: <short description>
-```
-
-If no issue number, use scope instead:
-
-```
-<emoji><type>(<scope>): <short description>
+<type>(<scope>): <short description> (#<issue-number>)
 ```
 
-Body (optional):
-
+Body (optional, emoji goes here):
 ```
+<emoji> <summary of changes>
+
 - <change 1>
 - <change 2>
 
-<detailed explanation>
+Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>
 ```
+
+> **Why**: release-please requires standard Conventional Commits title to auto-tag.
+> Emoji in title breaks the parser. Put emoji in body instead.
 
 ### Types & Emoji
 
@@ -188,34 +187,44 @@ Body (optional):
 
 ### Rules
 
-1. **Emoji + Type**: always together, type lowercase
-2. **Issue number**: `#<number>` if linked to a GitHub issue
-3. **Scope**: `(<scope>)` if no issue number — e.g. `(whiteboard)`, `(ci)`, `(docs)`
+1. **Title**: `<type>(<scope>): <description> (#issue)` — no emoji in title
+2. **Scope**: `(whiteboard)`, `(workflow)`, `(3d-asset)`, `(ci)`, `(docs)` — always required
+3. **Issue**: `(#number)` at end of title if linked
 4. **Description**: English, imperative mood, no period
-5. **Body**: bullet points for main changes (optional for small commits)
-6. **Keep it concise**
+5. **Emoji**: first line of body, not title
+6. **Body**: bullet points for main changes (optional for small commits)
+7. **Co-Author**: always include Co-Authored-By line
 
 ### Examples
 
 With issue number:
 ```
-✨feat#12: add real-time cursor sync
-🐛fix#5: resolve websocket disconnect
-```
+feat(whiteboard): add real-time cursor sync (#12)
 
-With scope (no issue):
-```
-🎉init(workspace): initialize fullstack_ai_workspace folder structure
-📦chore(ci): add GitHub Actions workflow
-```
+✨ WebSocket broadcast for cursor positions
 
-Detailed:
-```
-✨feat#12: add real-time cursor sync for whiteboard
-
-- Implement WebSocket broadcast for cursor positions
+- Implement broadcast for cursor positions
 - Add throttle to reduce message frequency
-- Support multi-user color assignment
+
+Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>
+```
+
+Bug fix:
+```
+fix(whiteboard): resolve websocket disconnect (#5)
+
+🐛 Connection drops after 30s idle
+
+Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>
+```
+
+No issue:
+```
+chore(ci): add GitHub Actions workflow
+
+📦 ESLint + Semgrep + gitleaks
+
+Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>
 ```
 
 ---
@@ -238,7 +247,7 @@ git push
 
 ```bash
 gh pr create \
-  --title "<emoji><type>#<issue>: <title>" \
+  --title "<type>(<scope>): <title> (#<issue>)" \
   --assignee @me \
   --label "<label>" \
   --project "Fullstack AI Workspace" \
@@ -276,8 +285,7 @@ Always include:
 ### PR Title Format
 
 ```
-<emoji><type>#<issue>: <short description>
-<emoji><type>(<scope>): <short description>
+<type>(<scope>): <short description> (#<issue>)
 ```
 
 ---
@@ -411,7 +419,7 @@ Issue → Branch → Commit → Push → PR
 
 | Action             | Command                                    |
 | ------------------ | ------------------------------------------ |
-| Commit             | `git commit -m "<emoji><type>#<issue>: desc"` |
+| Commit             | `git commit -m "<type>(<scope>): desc (#issue)"` |
 | Push (first time)  | `git push -u origin <branch>`              |
 | Push (subsequent)  | `git push`                                 |
 | Create PR          | `gh pr create --title "..." --body "..."`  |
