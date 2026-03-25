@@ -1,5 +1,5 @@
 interface MockElement {
-  type: 'rect' | 'circle' | 'sticky' | 'text';
+  type: 'rect' | 'circle' | 'sticky' | 'text' | 'line';
   left: number; // 0-1 relative to canvas width
   top: number; // 0-1 relative to canvas height
   width?: number; // 0-1 relative to canvas width
@@ -10,6 +10,8 @@ interface MockElement {
   text?: string;
   fontSize?: number;
   fontColor?: string;
+  x2?: number; // line end x (relative)
+  y2?: number; // line end y (relative)
 }
 
 export const MOCK_BOARD_CONTENT: Record<string, MockElement[]> = {

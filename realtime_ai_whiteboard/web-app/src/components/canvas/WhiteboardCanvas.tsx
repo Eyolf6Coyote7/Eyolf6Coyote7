@@ -70,6 +70,13 @@ function loadMockElements(canvas: Canvas, boardId: string, w: number, h: number)
           }),
         );
       }
+    } else if (el.type === 'line' && el.x2 !== undefined && el.y2 !== undefined) {
+      canvas.add(
+        new Line([x, y, el.x2 * w, el.y2 * h], {
+          stroke: el.stroke ?? '#9CA3AF',
+          strokeWidth: 1.5,
+        }),
+      );
     } else if (el.type === 'text') {
       canvas.add(
         new IText(el.text ?? '', {
