@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/workspace/v1.7.0...workspace/v1.8.0) (2026-03-25)
+
+
+### Features
+
+* **whiteboard:** add Storybook + component stories ([#147](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/147)) ([734d799](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/734d7997c903db68f5bbed6837871fb77732a8a9))
+
 ## [1.7.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/workspace/v1.6.0...workspace/v1.7.0) (2026-03-25)
 
 
