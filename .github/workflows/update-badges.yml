@@ -14,21 +14,27 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: dev
+          fetch-depth: 0
 
-      - name: Read versions
-        id: versions
+      - name: Get latest tags
+        id: tags
         run: |
-          echo "workspace=$(cat version.txt)" >> "$GITHUB_OUTPUT"
-          echo "whiteboard=$(cat realtime_ai_whiteboard/version.txt)" >> "$GITHUB_OUTPUT"
-          echo "workflow=$(cat enterprise_workflow_system/version.txt)" >> "$GITHUB_OUTPUT"
-          echo "asset=$(cat 3d_asset_collaboration/version.txt)" >> "$GITHUB_OUTPUT"
+          echo "workspace=$(git tag -l 'workspace/v*' --sort=-v:refname | head -1 | sed 's|workspace/v||')" >> "$GITHUB_OUTPUT"
+          echo "whiteboard=$(git tag -l 'whiteboard/v*' --sort=-v:refname | head -1 | sed 's|whiteboard/v||')" >> "$GITHUB_OUTPUT"
+          echo "workflow=$(git tag -l 'workflow/v*' --sort=-v:refname | head -1 | sed 's|workflow/v||' || echo '0.0.0')" >> "$GITHUB_OUTPUT"
+          echo "asset=$(git tag -l '3d-asset/v*' --sort=-v:refname | head -1 | sed 's|3d-asset/v||' || echo '0.0.0')" >> "$GITHUB_OUTPUT"
 
       - name: Update README badges
         run: |
-          sed -i "s|badge/workspace-v[0-9.]*-|badge/workspace-v${{ steps.versions.outputs.workspace }}-|" README.md
-          sed -i "s|badge/whiteboard-v[0-9.]*-|badge/whiteboard-v${{ steps.versions.outputs.whiteboard }}-|" README.md
-          sed -i "s|badge/workflow-v[0-9.]*-|badge/workflow-v${{ steps.versions.outputs.workflow }}-|" README.md
-          sed -i "s|badge/3d--asset-v[0-9.]*-|badge/3d--asset-v${{ steps.versions.outputs.asset }}-|" README.md
+          WS="${{ steps.tags.outputs.workspace }}"; [ -z "$WS" ] && WS="0.0.0"
+          WB="${{ steps.tags.outputs.whiteboard }}"; [ -z "$WB" ] && WB="0.0.0"
+          WF="${{ steps.tags.outputs.workflow }}"; [ -z "$WF" ] && WF="0.0.0"
+          AS="${{ steps.tags.outputs.asset }}"; [ -z "$AS" ] && AS="0.0.0"
+          
+          sed -i "s|badge/workspace-v[0-9.]*-|badge/workspace-v${WS}-|" README.md
+          sed -i "s|badge/whiteboard-v[0-9.]*-|badge/whiteboard-v${WB}-|" README.md
+          sed -i "s|badge/workflow-v[0-9.]*-|badge/workflow-v${WF}-|" README.md
+          sed -i "s|badge/3d--asset-v[0-9.]*-|badge/3d--asset-v${AS}-|" README.md
 
       - name: Commit and push
         run: |
