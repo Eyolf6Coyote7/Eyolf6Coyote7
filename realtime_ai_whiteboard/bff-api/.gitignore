@@ -4,3 +4,6 @@ dist/
 .env.local
 coverage/
 *.log
+
+/generated/prisma
+pnpm-lock.yaml
