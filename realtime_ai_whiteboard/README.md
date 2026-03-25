@@ -17,22 +17,68 @@ See [docs/](docs/) for all project documentation (ConOps, PRD, UI/UX, Architectu
 
 ## Quick Start
 
+### Demo mode (no backend needed)
+
 ```bash
-# Start shared infra
+cd web-app && pnpm install && pnpm dev:mock
+```
+
+Open http://localhost:5173 — dashboard with 6 demo boards, AI chat, drawing tools.
+
+### Real mode (full stack)
+
+**Terminal 1 — Docker infra:**
+```bash
+./start.sh
+```
+
+Or manually:
+
+**Terminal 1 — Docker:**
+```bash
 docker compose up -d
 ```
 
-**Terminal 1 (backend):**
+**Terminal 2 — Backend:**
 ```bash
-cd bff-api && pnpm install && pnpm start:dev
+cd bff-api
+cp .env.example .env
+pnpm install
+pnpm start:dev
 ```
 
-**Terminal 2 (frontend):**
+**Terminal 3 — Frontend:**
 ```bash
-cd web-app && pnpm install && pnpm dev
+cd web-app
+pnpm install
+pnpm dev
 ```
 
-**Demo mode (no backend needed):**
+> ⚠️ `pnpm dev` runs real mode (connects to backend on :4001).
+> `pnpm dev:mock` runs demo mode (no backend needed, mock data).
+> If `.env.local` has `VITE_MOCK=true`, `pnpm dev` also runs mock mode — delete it for real mode.
+
+### Services
+
+| Service | URL |
+|---------|-----|
+| Web App | http://localhost:5173 |
+| BFF API | http://localhost:4001 |
+| Yjs WebSocket | ws://localhost:4002 |
+| AI Service | http://localhost:4010 |
+| Storybook | http://localhost:6006 |
+| Langfuse | http://localhost:3100 |
+| MinIO Console | http://localhost:9001 |
+| Unleash | http://localhost:4242 |
+| Redis | localhost:6380 |
+| PostgreSQL | localhost:5432 |
+| Kafka | localhost:9094 |
+
+### Other commands
+
 ```bash
-cd web-app && pnpm install && pnpm dev:mock
+cd web-app && pnpm storybook    # Component docs on :6006
+cd web-app && pnpm test:e2e     # Playwright E2E tests (13 tests)
+cd web-app && pnpm lint         # ESLint
+cd bff-api && pnpm lint         # ESLint + Prisma generate
 ```
