@@ -13,22 +13,24 @@ interface Props {
   height?: number;
 }
 
-function loadMockElements(canvas: Canvas, boardId: string, w: number, h: number) {
+function loadMockElements(canvas: Canvas, boardId: string) {
   const elements = getMockContent(boardId);
   elements.forEach((el) => {
-    // Convert relative (0-1) to absolute canvas coordinates
-    const x = el.left * w;
-    const y = el.top * h;
-    const elW = (el.width ?? 0.15) * w;
-    const elH = (el.height ?? 0.15) * h;
-
-    if (el.type === 'sticky' || el.type === 'rect') {
+    if (el.type === 'line' && el.x2 != null && el.y2 != null) {
+      canvas.add(
+        new Line([el.left, el.top, el.x2, el.y2], {
+          stroke: el.stroke ?? '#9CA3AF',
+          strokeWidth: 1.5,
+          selectable: false,
+        }),
+      );
+    } else if (el.type === 'sticky' || el.type === 'rect') {
       canvas.add(
         new Rect({
-          left: x,
-          top: y,
-          width: elW,
-          height: elH,
+          left: el.left,
+          top: el.top,
+          width: el.width ?? 120,
+          height: el.height ?? 60,
           fill: el.fill,
           stroke: el.stroke,
           strokeWidth: 1,
@@ -39,20 +41,20 @@ function loadMockElements(canvas: Canvas, boardId: string, w: number, h: number)
       if (el.text) {
         canvas.add(
           new IText(el.text, {
-            left: x + 10,
-            top: y + 10,
-            fontSize: el.fontSize ?? 13,
+            left: el.left + 10,
+            top: el.top + 10,
+            fontSize: el.fontSize ?? 12,
             fontFamily: 'Inter, sans-serif',
             fill: el.fontColor ?? '#374151',
           }),
         );
       }
     } else if (el.type === 'circle') {
-      const r = (el.radius ?? 0.05) * Math.min(w, h);
+      const r = el.radius ?? 20;
       canvas.add(
         new Circle({
-          left: x,
-          top: y,
+          left: el.left,
+          top: el.top,
           radius: r,
           fill: el.fill,
           stroke: el.stroke,
@@ -62,27 +64,20 @@ function loadMockElements(canvas: Canvas, boardId: string, w: number, h: number)
       if (el.text) {
         canvas.add(
           new IText(el.text, {
-            left: x + r - 20,
-            top: y + r - 8,
-            fontSize: el.fontSize ?? 13,
+            left: el.left + r - 15,
+            top: el.top + r - 8,
+            fontSize: el.fontSize ?? 12,
             fontFamily: 'Inter, sans-serif',
             fill: el.fontColor ?? '#374151',
           }),
         );
       }
-    } else if (el.type === 'line' && el.x2 !== undefined && el.y2 !== undefined) {
-      canvas.add(
-        new Line([x, y, el.x2 * w, el.y2 * h], {
-          stroke: el.stroke ?? '#9CA3AF',
-          strokeWidth: 1.5,
-        }),
-      );
     } else if (el.type === 'text') {
       canvas.add(
         new IText(el.text ?? '', {
-          left: x,
-          top: y,
-          fontSize: el.fontSize ?? 16,
+          left: el.left,
+          top: el.top,
+          fontSize: el.fontSize ?? 14,
           fontFamily: 'Inter, sans-serif',
           fill: el.fontColor ?? '#374151',
         }),
@@ -101,7 +96,7 @@ export function WhiteboardCanvas({ activeTool, boardId, width = 900, height = 60
     if (!canvasRef.current) return;
     const canvas = new Canvas(canvasRef.current, { width, height, backgroundColor: '#FAFAFA' });
     fabricRef.current = canvas;
-    if (isMock && boardId) loadMockElements(canvas, boardId, width, height);
+    if (isMock && boardId) loadMockElements(canvas, boardId);
     return () => {
       fabricRef.current = null;
       canvas.dispose();
@@ -162,7 +157,7 @@ export function WhiteboardCanvas({ activeTool, boardId, width = 900, height = 60
               left: x,
               top: y,
               width: 150,
-              height: 150,
+              height: 100,
               fill: '#FEF3C7',
               stroke: '#F59E0B',
               strokeWidth: 1,
