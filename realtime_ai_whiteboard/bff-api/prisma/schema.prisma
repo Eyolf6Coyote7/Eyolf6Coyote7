@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id         String   @id @default(uuid())
+  name       String
+  schemaName String   @unique @map("schema_name")
+  plan       String   @default("free")
+  createdAt  DateTime @default(now()) @map("created_at")
+  users      User[]
+  boards     Board[]
+
+  @@map("tenants")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  tenantId     String   @map("tenant_id")
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  displayName  String   @map("display_name")
+  role         String   @default("member")
+  locale       String   @default("en")
+  createdAt    DateTime @default(now()) @map("created_at")
+  tenant       Tenant   @relation(fields: [tenantId], references: [id])
+  boards       Board[]
+  conversations AiConversation[]
+
+  @@map("users")
+}
+
+model Board {
+  id            String   @id @default(uuid())
+  tenantId      String   @map("tenant_id")
+  ownerId       String   @map("owner_id")
+  title         String
+  templateId    String?  @map("template_id")
+  guestEditable Boolean  @default(false) @map("guest_editable")
+  guestToken    String?  @unique @map("guest_token")
+  yjsState      Bytes?   @map("yjs_state")
+  thumbnailUrl  String?  @map("thumbnail_url")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  owner         User     @relation(fields: [ownerId], references: [id])
+  conversations AiConversation[]
+
+  @@index([ownerId])
+  @@index([createdAt(sort: Desc)])
+  @@map("boards")
+}
+
+model AiConversation {
+  id        String      @id @default(uuid())
+  boardId   String      @map("board_id")
+  userId    String      @map("user_id")
+  createdAt DateTime    @default(now()) @map("created_at")
+  board     Board       @relation(fields: [boardId], references: [id])
+  user      User        @relation(fields: [userId], references: [id])
+  messages  AiMessage[]
+
+  @@map("ai_conversations")
+}
+
+model AiMessage {
+  id             String         @id @default(uuid())
+  conversationId String         @map("conversation_id")
+  role           String
+  content        String
+  toolCalls      Json?          @map("tool_calls")
+  tokensUsed     Int?           @map("tokens_used")
+  latencyMs      Int?           @map("latency_ms")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  conversation   AiConversation @relation(fields: [conversationId], references: [id])
+
+  @@index([conversationId, createdAt])
+  @@map("ai_messages")
+}
