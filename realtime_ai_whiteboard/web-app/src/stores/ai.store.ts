@@ -3,10 +3,26 @@ import { api } from '../api';
 
 interface Message {
   id: string;
-  role: 'user' | 'assistant' | 'tool';
+  role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
 }
+
+const isMock = import.meta.env.VITE_MOCK === 'true';
+
+const MOCK_RESPONSES: Record<string, string> = {
+  Summarize:
+    '📋 **Board Summary**\n\n1. **Sprint Planning** — 3 tasks in progress, 2 blocked\n2. **Design Review** — Wireframes approved, moving to high-fi\n3. **Tech Debt** — Redis caching layer needs refactor\n\n_Generated from 6 sticky notes and 3 connected shapes._',
+  'Generate diagram':
+    '✅ **Flowchart generated — 5 nodes added to canvas**\n\nStart → User Input → Validate → Process → Complete\n\n_Click on the canvas to see the new diagram._',
+  'Organize layout':
+    '🧹 **Layout organized**\n\n- Grouped 4 sticky notes by topic\n- Aligned shapes to grid\n- Connected related items with arrows\n\n_6 elements repositioned._',
+  'Create flowchart':
+    '✅ **Checkout flowchart created — 8 nodes**\n\nCart → Shipping → Payment → Review → Confirm → Processing → Complete\n↳ Error → Retry\n\n_Placed in the center of the canvas._',
+};
+
+const DEFAULT_RESPONSE =
+  "🤖 I analyzed your board and here's what I found:\n\n- 6 elements on canvas (3 sticky notes, 2 shapes, 1 connector)\n- Main theme: Product brainstorming\n- Suggestion: Try grouping related ideas with color coding\n\n_This is a demo — connect Ollama for real AI responses._";
 
 interface AiState {
   messages: Message[];
@@ -32,9 +48,23 @@ export const useAiStore = create<AiState>((set) => ({
     };
     set((s) => ({ messages: [...s.messages, userMsg], isStreaming: true }));
 
+    if (isMock) {
+      // Simulate AI thinking delay
+      await new Promise((r) => setTimeout(r, 1200));
+      const response = MOCK_RESPONSES[prompt] ?? DEFAULT_RESPONSE;
+      const aiMsg: Message = {
+        id: crypto.randomUUID(),
+        role: 'assistant',
+        content: response,
+        timestamp: new Date(),
+      };
+      set((s) => ({ messages: [...s.messages, aiMsg], isStreaming: false }));
+      return;
+    }
+
+    // Real mode — SSE
     try {
       const { taskId } = await api.submitAiPrompt(boardId, prompt);
-
       const eventSource = new EventSource(
         `${import.meta.env.VITE_API_URL || 'http://localhost:4001'}/api/web/ai/stream/${taskId}`,
       );
@@ -45,7 +75,6 @@ export const useAiStore = create<AiState>((set) => ({
             type: string;
             response?: string;
             message?: string;
-            tool_results?: unknown[];
           };
 
           if (data.type === 'done') {
@@ -68,35 +97,17 @@ export const useAiStore = create<AiState>((set) => ({
             eventSource.close();
           }
         } catch {
-          const errorMsg: Message = {
-            id: crypto.randomUUID(),
-            role: 'assistant',
-            content: 'Failed to process AI response.',
-            timestamp: new Date(),
-          };
-          set((s) => ({ messages: [...s.messages, errorMsg], isStreaming: false }));
+          set({ isStreaming: false });
           eventSource.close();
         }
       };
 
       eventSource.onerror = () => {
-        const errorMsg: Message = {
-          id: crypto.randomUUID(),
-          role: 'assistant',
-          content: 'Connection to AI service lost.',
-          timestamp: new Date(),
-        };
-        set((s) => ({ messages: [...s.messages, errorMsg], isStreaming: false }));
+        set({ isStreaming: false });
         eventSource.close();
       };
     } catch {
-      const errorMsg: Message = {
-        id: crypto.randomUUID(),
-        role: 'assistant',
-        content: 'Failed to send prompt.',
-        timestamp: new Date(),
-      };
-      set((s) => ({ messages: [...s.messages, errorMsg], isStreaming: false }));
+      set({ isStreaming: false });
     }
   },
 }));
