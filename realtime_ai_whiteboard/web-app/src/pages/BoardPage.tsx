@@ -5,6 +5,7 @@ import { WhiteboardCanvas, type Tool } from '../components/canvas/WhiteboardCanv
 import { Toolbar } from '../components/canvas/Toolbar';
 import { CursorPresence } from '../components/canvas/CursorPresence';
 import { AiChatPanel } from '../components/ai/AiChatPanel';
+import { DemoTooltip } from '../components/DemoTooltip';
 import { useYjs } from '../hooks/useYjs';
 import { useAiStore } from '../stores/ai.store';
 import styles from './BoardPage.module.css';
@@ -12,6 +13,7 @@ import styles from './BoardPage.module.css';
 const ZOOM_MIN = 25;
 const ZOOM_MAX = 200;
 const ZOOM_STEP = 25;
+const isMock = import.meta.env.VITE_MOCK === 'true';
 
 export function BoardPage() {
   const { t } = useTranslation();
@@ -31,19 +33,41 @@ export function BoardPage() {
         <Link to="/dashboard" className={styles.backLink}>
           {t('board.back')}
         </Link>
-        <span className={styles.title}>Board {id}</span>
+        <span className={styles.title}>
+          Board {id}
+          {isMock && (
+            <span
+              style={{
+                background: '#FEF3C7',
+                color: '#92400E',
+                fontSize: 10,
+                fontWeight: 600,
+                padding: '1px 6px',
+                borderRadius: 4,
+                marginLeft: 8,
+              }}
+            >
+              DEMO
+            </span>
+          )}
+        </span>
         <div className={styles.headerRight}>
-          <span className={styles.status} style={{ color: connected ? '#10B981' : '#EF4444' }}>
+          <span
+            className={styles.status}
+            style={{ color: isMock ? '#10B981' : connected ? '#10B981' : '#EF4444' }}
+          >
             <span
               className={styles.statusDot}
-              style={{ background: connected ? '#10B981' : '#EF4444' }}
+              style={{ background: isMock ? '#10B981' : connected ? '#10B981' : '#EF4444' }}
             />
-            {t('board.online', { count: onlineCount })}
+            {isMock ? '3 online' : t('board.online', { count: onlineCount })}
           </span>
           <button className={styles.shareBtn} onClick={toggleAi}>
             {t('board.ai')}
           </button>
-          <button className={styles.shareBtn}>{t('board.share')}</button>
+          <DemoTooltip message="Share requires backend">
+            <button className={styles.shareBtn}>{t('board.share')}</button>
+          </DemoTooltip>
         </div>
       </header>
 

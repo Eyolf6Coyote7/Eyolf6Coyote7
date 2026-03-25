@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useBoardStore } from '../stores/board.store';
 import { useAuthStore } from '../stores/auth.store';
-import { useTranslation } from 'react-i18next';
 import { BoardThumbnail } from '../components/BoardThumbnail';
+import { DemoTooltip } from '../components/DemoTooltip';
 
 const isMock = import.meta.env.VITE_MOCK === 'true';
 
@@ -52,14 +53,21 @@ export function DashboardPage() {
             </span>
           )}
         </div>
-        {!isMock && (
-          <button
-            onClick={logout}
-            style={{ background: 'none', border: 'none', color: '#6B7280', cursor: 'pointer' }}
-          >
-            {t('dashboard.logout')}
-          </button>
-        )}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {isMock && (
+            <span style={{ fontSize: 12, color: '#9CA3AF' }}>
+              Static demo — clone repo for full experience
+            </span>
+          )}
+          {!isMock && (
+            <button
+              onClick={logout}
+              style={{ background: 'none', border: 'none', color: '#6B7280', cursor: 'pointer' }}
+            >
+              {t('dashboard.logout')}
+            </button>
+          )}
+        </div>
       </header>
       <main style={{ maxWidth: 1200, margin: '0 auto', padding: '40px 24px' }}>
         <div
@@ -71,20 +79,22 @@ export function DashboardPage() {
           }}
         >
           <h1 style={{ fontSize: 28, fontWeight: 700 }}>{t('dashboard.title')}</h1>
-          <button
-            onClick={() => void handleCreate()}
-            style={{
-              padding: '12px 24px',
-              background: '#2563EB',
-              color: 'white',
-              border: 'none',
-              borderRadius: 8,
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
-          >
-            {t('dashboard.newBoard')}
-          </button>
+          <DemoTooltip message="Create board requires backend">
+            <button
+              onClick={() => !isMock && void handleCreate()}
+              style={{
+                padding: '12px 24px',
+                background: isMock ? '#93C5FD' : '#2563EB',
+                color: 'white',
+                border: 'none',
+                borderRadius: 8,
+                fontWeight: 600,
+                cursor: isMock ? 'default' : 'pointer',
+              }}
+            >
+              {t('dashboard.newBoard')}
+            </button>
+          </DemoTooltip>
         </div>
         {loading ? (
           <p>{t('dashboard.loading')}</p>
@@ -100,7 +110,14 @@ export function DashboardPage() {
                   boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
                   overflow: 'hidden',
                   cursor: 'pointer',
+                  transition: 'box-shadow 150ms',
                 }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)')
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)')
+                }
               >
                 <BoardThumbnail boardId={board.id} />
                 <div style={{ padding: 16 }}>
