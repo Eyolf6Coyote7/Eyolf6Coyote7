@@ -1,67 +1,85 @@
 import asyncio
 import json
 import os
-import redis.asyncio as redis
-from src.agents.whiteboard_agent import agent, AgentState
+import signal
 
+import redis.asyncio as redis
+
+from src.agents.whiteboard_agent import AgentState, agent
 
 STREAM_KEY = "ai-tasks"
 GROUP_NAME = "ai-service"
-CONSUMER_NAME = "worker-1"
+RESULT_PREFIX = "ai-result:"
+RESULT_TTL = 300
 
 
-async def consume_tasks():
+async def consume_tasks() -> None:
     """Consume AI tasks from Redis Stream."""
+    consumer_name = os.getenv("CONSUMER_NAME", f"worker-{os.getpid()}")
     r = redis.from_url(os.getenv("REDIS_URL", "redis://localhost:6379"))
 
-    # Create consumer group if not exists
     try:
         await r.xgroup_create(STREAM_KEY, GROUP_NAME, id="0", mkstream=True)
     except redis.ResponseError:
-        pass  # Group already exists
+        pass
 
-    print(f"AI Service consuming from Redis Stream: {STREAM_KEY}")
+    print(
+        f"AI Service consuming from Redis Stream: {STREAM_KEY} (consumer: {consumer_name})"
+    )
 
-    while True:
-        messages = await r.xreadgroup(
-            GROUP_NAME, CONSUMER_NAME, {STREAM_KEY: ">"}, count=1, block=5000
-        )
+    running = True
 
-        for stream, entries in messages:
-            for msg_id, data in entries:
-                task = {k.decode(): v.decode() for k, v in data.items()}
-                print(f"Processing task: {task.get('prompt', '')[:50]}...")
+    def shutdown(_sig: int, _frame: object) -> None:
+        nonlocal running
+        running = False
+        print("Shutting down consumer...")
 
-                state: AgentState = {
-                    "prompt": task.get("prompt", ""),
-                    "board_id": task.get("board_id", ""),
-                    "user_id": task.get("user_id", ""),
-                    "intent": "",
-                    "context": "",
-                    "plan": [],
-                    "tool_results": [],
-                    "response": "",
-                    "should_retry": False,
-                }
+    signal.signal(signal.SIGINT, shutdown)
+    signal.signal(signal.SIGTERM, shutdown)
 
-                result = await asyncio.to_thread(agent.invoke, state)
+    try:
+        while running:
+            messages = await r.xreadgroup(
+                GROUP_NAME, consumer_name, {STREAM_KEY: ">"}, count=1, block=5000
+            )
 
-                # Store result for SSE pickup
-                result_key = f"ai-result:{task.get('task_id', msg_id.decode())}"
-                await r.set(
-                    result_key,
-                    json.dumps(
-                        {
-                            "response": result["response"],
-                            "tool_results": result["tool_results"],
-                        }
-                    ),
-                    ex=300,
-                )
+            for _stream, entries in messages:
+                for msg_id, data in entries:
+                    task = {k.decode(): v.decode() for k, v in data.items()}
+                    print(f"Processing task: {task.get('prompt', '')[:50]}...")
 
-                await r.xack(STREAM_KEY, GROUP_NAME, msg_id)
+                    state: AgentState = {
+                        "prompt": task.get("prompt", ""),
+                        "board_id": task.get("board_id", ""),
+                        "user_id": task.get("user_id", ""),
+                        "intent": "",
+                        "context": "",
+                        "plan": [],
+                        "tool_results": [],
+                        "response": "",
+                        "should_retry": False,
+                    }
 
-    await r.close()
+                    result = await asyncio.to_thread(agent.invoke, state)
+
+                    result_key = (
+                        f"{RESULT_PREFIX}{task.get('task_id', msg_id.decode())}"
+                    )
+                    await r.set(
+                        result_key,
+                        json.dumps(
+                            {
+                                "response": result["response"],
+                                "tool_results": result["tool_results"],
+                            }
+                        ),
+                        ex=RESULT_TTL,
+                    )
+
+                    await r.xack(STREAM_KEY, GROUP_NAME, msg_id)
+    finally:
+        await r.close()
+        print("Consumer stopped.")
 
 
 if __name__ == "__main__":

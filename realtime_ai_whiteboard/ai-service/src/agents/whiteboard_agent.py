@@ -1,14 +1,15 @@
-from typing import TypedDict, Literal
-from langgraph.graph import StateGraph, END
+from typing import Literal, TypedDict
+
+from langgraph.graph import END, StateGraph
 
 
 class AgentState(TypedDict):
     prompt: str
     board_id: str
     user_id: str
-    intent: str  # "info_retrieval" | "action_execution"
-    context: str  # RAG context
-    plan: list[str]  # ReAct steps
+    intent: Literal["info_retrieval", "action_execution", ""]
+    context: str
+    plan: list[str]
     tool_results: list[dict]
     response: str
     should_retry: bool
@@ -27,7 +28,7 @@ def classify_intent(state: AgentState) -> AgentState:
         "delete",
         "organize",
     ]
-    intent = (
+    intent: Literal["info_retrieval", "action_execution"] = (
         "action_execution"
         if any(kw in prompt_lower for kw in action_keywords)
         else "info_retrieval"
@@ -46,21 +47,18 @@ def plan_steps(state: AgentState) -> AgentState:
 
 def retrieve_context(state: AgentState) -> AgentState:
     """RAG: retrieve relevant board context from ChromaDB."""
-    # TODO: implement ChromaDB retrieval
     context = f"Board {state['board_id']} context placeholder"
     return {**state, "context": context}
 
 
 def execute_tools(state: AgentState) -> AgentState:
     """Execute MCP tools on the board."""
-    # TODO: implement MCP tool calls
     tool_results = [{"tool": "placeholder", "result": "ok"}]
     return {**state, "tool_results": tool_results}
 
 
 def generate_response(state: AgentState) -> AgentState:
     """Generate final response using Ollama LLM."""
-    # TODO: implement Ollama call
     response = (
         f"AI response for: {state['prompt']} (with context: {state['context'][:50]})"
     )
@@ -69,8 +67,7 @@ def generate_response(state: AgentState) -> AgentState:
 
 def reflect(state: AgentState) -> AgentState:
     """Quality check: should we retry?"""
-    should_retry = False  # TODO: implement quality check
-    return {**state, "should_retry": should_retry}
+    return {**state, "should_retry": False}
 
 
 def route_after_reflect(state: AgentState) -> Literal["plan_steps", "end"]:

@@ -1,10 +1,13 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
 import { v4 as uuid } from 'uuid';
 
+const STREAM_KEY = 'ai-tasks';
+const RESULT_PREFIX = 'ai-result:';
+
 @Injectable()
-export class AiGatewayService {
+export class AiGatewayService implements OnModuleDestroy {
   private readonly logger = new Logger(AiGatewayService.name);
   private readonly redis: Redis;
 
@@ -12,10 +15,14 @@ export class AiGatewayService {
     this.redis = new Redis(this.config.get('REDIS_URL', 'redis://localhost:6379'));
   }
 
+  async onModuleDestroy() {
+    await this.redis.quit();
+  }
+
   async enqueueTask(boardId: string, prompt: string, userId: string): Promise<string> {
     const taskId = uuid();
     await this.redis.xadd(
-      'ai-tasks',
+      STREAM_KEY,
       '*',
       'task_id',
       taskId,
@@ -31,6 +38,6 @@ export class AiGatewayService {
   }
 
   async getResult(taskId: string): Promise<string | null> {
-    return this.redis.get(`ai-result:${taskId}`);
+    return this.redis.get(`${RESULT_PREFIX}${taskId}`);
   }
 }
