@@ -17,6 +17,10 @@ export interface AuthResponse {
   user: User;
 }
 
+export interface AiPromptResponse {
+  taskId: string;
+}
+
 export interface ApiClient {
   register(email: string, password: string, displayName: string): Promise<AuthResponse>;
   login(email: string, password: string): Promise<AuthResponse>;
@@ -24,4 +28,5 @@ export interface ApiClient {
   createBoard(title: string, templateId?: string): Promise<Board>;
   getBoard(id: string): Promise<Board>;
   deleteBoard(id: string): Promise<void>;
+  submitAiPrompt(boardId: string, prompt: string): Promise<AiPromptResponse>;
 }
