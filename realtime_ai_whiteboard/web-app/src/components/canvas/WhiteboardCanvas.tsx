@@ -1,6 +1,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { Canvas, Rect, Circle, IText, Line, type TPointerEventInfo } from 'fabric';
 import { getMockContent } from '../../api/mock-board-content';
+import { setThumbnail } from '../../api/thumbnail-cache';
 
 export type Tool = 'select' | 'rect' | 'circle' | 'line' | 'text' | 'sticky' | 'freehand';
 
@@ -16,13 +17,19 @@ interface Props {
 function loadMockElements(canvas: Canvas, boardId: string, w: number, h: number) {
   const elements = getMockContent(boardId);
   elements.forEach((el) => {
-    // Convert relative (0-1) to absolute canvas coordinates
     const x = el.left * w;
     const y = el.top * h;
-    const elW = (el.width ?? 0.15) * w;
-    const elH = (el.height ?? 0.15) * h;
 
-    if (el.type === 'sticky' || el.type === 'rect') {
+    if (el.type === 'line' && el.x2 !== undefined && el.y2 !== undefined) {
+      canvas.add(
+        new Line([x, y, el.x2 * w, el.y2 * h], {
+          stroke: el.stroke ?? '#9CA3AF',
+          strokeWidth: 1.5,
+        }),
+      );
+    } else if (el.type === 'sticky' || el.type === 'rect') {
+      const elW = (el.width ?? 0.15) * w;
+      const elH = (el.height ?? 0.1) * h;
       canvas.add(
         new Rect({
           left: x,
@@ -70,13 +77,6 @@ function loadMockElements(canvas: Canvas, boardId: string, w: number, h: number)
           }),
         );
       }
-    } else if (el.type === 'line' && el.x2 !== undefined && el.y2 !== undefined) {
-      canvas.add(
-        new Line([x, y, el.x2 * w, el.y2 * h], {
-          stroke: el.stroke ?? '#9CA3AF',
-          strokeWidth: 1.5,
-        }),
-      );
     } else if (el.type === 'text') {
       canvas.add(
         new IText(el.text ?? '', {
@@ -90,6 +90,12 @@ function loadMockElements(canvas: Canvas, boardId: string, w: number, h: number)
     }
   });
   canvas.renderAll();
+
+  // Capture thumbnail
+  setTimeout(() => {
+    const dataUrl = canvas.toDataURL({ format: 'png', multiplier: 0.3 });
+    setThumbnail(boardId, dataUrl);
+  }, 100);
 }
 
 export function WhiteboardCanvas({ activeTool, boardId, width = 900, height = 600 }: Props) {

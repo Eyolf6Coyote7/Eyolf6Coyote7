@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './stores/auth.store';
 import { LandingPage } from './pages/LandingPage';
@@ -14,6 +15,12 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  useEffect(() => {
+    if (isMock) {
+      import('./api/generate-thumbnails').then((m) => m.preGenerateThumbnails());
+    }
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>
