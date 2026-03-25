@@ -8,8 +8,8 @@
     "eslint --fix"
   ],
   "realtime_ai_whiteboard/ai-service/**/*.py": [
-    "ruff check --fix",
-    "ruff format"
+    "python3 -m ruff check --fix",
+    "python3 -m ruff format"
   ],
   "realtime_ai_whiteboard/mobile-app/**/*.{ts,tsx}": [
     "prettier --write",
@@ -40,7 +40,7 @@
     "eslint --fix"
   ],
   "3d_asset_collaboration/ai-service/**/*.py": [
-    "ruff check --fix",
-    "ruff format"
+    "python3 -m ruff check --fix",
+    "python3 -m ruff format"
   ]
 }
