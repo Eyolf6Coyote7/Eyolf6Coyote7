@@ -11,6 +11,6 @@ export default defineConfig({
   webServer: {
     command: 'VITE_MOCK=true pnpm dev',
     port: 5173,
-    reuseExistingServer: true,
+    reuseExistingServer: !process.env.CI,
   },
 });

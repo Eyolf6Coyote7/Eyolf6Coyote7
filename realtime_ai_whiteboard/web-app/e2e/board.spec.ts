@@ -1,11 +1,9 @@
 import { test, expect } from '@playwright/test';
+import { mockLogin } from './helpers/auth';
 
 test.describe('Board Canvas', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/auth');
-    await page.getByPlaceholder('Email').fill('test@example.com');
-    await page.getByPlaceholder('Password').fill('password123');
-    await page.getByRole('button', { name: 'Log In' }).click();
+    await mockLogin(page);
     await page.goto('/board/1');
   });
 
