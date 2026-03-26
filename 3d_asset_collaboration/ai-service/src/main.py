@@ -8,7 +8,7 @@ app = FastAPI(title="3D Asset AI Tagger", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:3003", "http://localhost:4003"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

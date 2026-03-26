@@ -24,13 +24,14 @@ builder.Services.AddGrpc();
 // CORS
 builder.Services.AddCors(options =>
 {
+    var allowedOrigins = new[] { "http://localhost:3003", "http://localhost:4013" };
     options.AddDefaultPolicy(policy =>
     {
-        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        policy.WithOrigins(allowedOrigins).AllowAnyMethod().AllowAnyHeader();
     });
     options.AddPolicy("SignalR", policy =>
     {
-        policy.SetIsOriginAllowed(_ => true).AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+        policy.WithOrigins(allowedOrigins).AllowAnyMethod().AllowAnyHeader().AllowCredentials();
     });
 });
 
@@ -39,9 +40,11 @@ builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
-// Swagger (all environments for now)
-app.UseSwagger();
-app.UseSwaggerUI();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseCors();
 
