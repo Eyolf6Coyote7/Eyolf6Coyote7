@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.10.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/workspace/v1.9.1...workspace/v1.10.0) (2026-03-26)
+
+
+### Features
+
+* **3d-asset:** scaffold foundation - all services ([#163](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/163)) ([#164](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/164)) ([dd172af](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/dd172afe22d92ea377f5dd7f4285b7de1d99315c))
+* **workflow:** scaffold foundation - all 6 services ([#160](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/160)) ([#162](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/162)) ([3528d23](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/3528d236d8cb09564689aa40a8c3327316bf0011))
+
 ## [1.9.1](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/workspace/v1.9.0...workspace/v1.9.1) (2026-03-25)
 
 
