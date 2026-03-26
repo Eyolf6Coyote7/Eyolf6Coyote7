@@ -1,0 +1,59 @@
+type Query {
+    workflows: [Workflow!]!
+    workflow(id: ID!): Workflow
+    myApprovals(assigneeId: ID!): [ApprovalStep!]!
+}
+
+type Mutation {
+    createWorkflow(title: String!, description: String, requesterId: ID!, orgId: ID!): Workflow!
+    approveStep(stepId: ID!, comment: String): ApprovalStep!
+    rejectStep(stepId: ID!, comment: String): ApprovalStep!
+}
+
+type Workflow {
+    id: ID!
+    title: String!
+    description: String
+    status: WorkflowStatus!
+    requesterId: ID!
+    orgId: ID!
+    createdAt: String!
+    updatedAt: String!
+}
+
+type ApprovalStep {
+    id: ID!
+    workflowId: ID!
+    stepOrder: Int!
+    assigneeId: ID!
+    status: ApprovalStatus!
+    comment: String
+    decidedAt: String
+}
+
+type User {
+    id: ID!
+    email: String!
+    displayName: String!
+    role: UserRole!
+    orgId: ID!
+}
+
+enum WorkflowStatus {
+    DRAFT
+    PENDING
+    APPROVED
+    REJECTED
+}
+
+enum ApprovalStatus {
+    PENDING
+    APPROVED
+    REJECTED
+}
+
+enum UserRole {
+    ADMIN
+    MANAGER
+    EMPLOYEE
+}

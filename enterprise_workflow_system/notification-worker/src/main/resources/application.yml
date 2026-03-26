@@ -1,0 +1,25 @@
+server:
+  port: 4022
+
+spring:
+  application:
+    name: notification-worker
+  kafka:
+    bootstrap-servers: localhost:9095
+    consumer:
+      group-id: notification-worker
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  mail:
+    host: localhost
+    port: 1026
+    properties:
+      mail.smtp.auth: false
+      mail.smtp.starttls.enable: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

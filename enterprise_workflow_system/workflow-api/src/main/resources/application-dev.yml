@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/workflow_db
+    username: workflow_user
+    password: workflow_pass
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  sql:
+    init:
+      mode: always
+  kafka:
+    bootstrap-servers: localhost:9092
+
+logging:
+  level:
+    com.workflow: DEBUG
+    org.hibernate.SQL: DEBUG
