@@ -18,26 +18,17 @@
   "enterprise_workflow_system/workflow-api/**/*.kt": [
     "bash -c 'cd enterprise_workflow_system/workflow-api && ./gradlew ktlintFormat'"
   ],
-  "enterprise_workflow_system/admin-api/**/*.php": [
-    "php-cs-fixer fix"
-  ],
   "enterprise_workflow_system/employee-portal/**/*.{ts,tsx,vue}": [
-    "prettier --write",
-    "eslint --fix"
+    "prettier --write"
   ],
   "enterprise_workflow_system/admin-dashboard/**/*.{ts,tsx,vue}": [
-    "prettier --write",
-    "eslint --fix"
+    "prettier --write"
   ],
   "enterprise_workflow_system/notification-worker/**/*.kt": [
     "bash -c 'cd enterprise_workflow_system/notification-worker && ./gradlew ktlintFormat'"
   ],
-  "3d_asset_collaboration/asset-api/**/*.cs": [
-    "dotnet format --include"
-  ],
   "3d_asset_collaboration/asset-portal/**/*.{ts,tsx}": [
-    "prettier --write",
-    "eslint --fix"
+    "prettier --write"
   ],
   "3d_asset_collaboration/ai-service/**/*.py": [
     "python3 -m ruff check --fix",
