@@ -6,10 +6,10 @@
 
 | Project | Version |
 |---------|---------|
-| Workspace | ![Workspace](https://img.shields.io/badge/workspace-v1.11.0-2563EB) |
-| Whiteboard | ![Whiteboard](https://img.shields.io/badge/whiteboard-v1.10.0-F97316) |
-| Workflow | ![Workflow](https://img.shields.io/badge/workflow-v1.1.0-0EA5E9) |
-| 3D Asset | ![3D Asset](https://img.shields.io/badge/3d--asset-v1.1.0-8B5CF6) |
+| Workspace | ![Workspace](https://img.shields.io/badge/workspace-v1.11.1-2563EB) |
+| Whiteboard | ![Whiteboard](https://img.shields.io/badge/whiteboard-v1.10.1-F97316) |
+| Workflow | ![Workflow](https://img.shields.io/badge/workflow-v1.1.1-0EA5E9) |
+| 3D Asset | ![3D Asset](https://img.shields.io/badge/3d--asset-v1.1.1-8B5CF6) |
 
 ---
 
