@@ -1,6 +1,10 @@
 .wrapper {
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+}
+
+.wrapper > * {
+  width: 100%;
 }
 
 .tooltip {
