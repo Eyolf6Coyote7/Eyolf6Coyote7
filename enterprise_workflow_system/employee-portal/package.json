@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:mock": "vite --mode mock",
     "build": "vue-tsc --noEmit && vite build",
+    "build:demo": "VITE_MOCK=true vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.ts,.tsx",
     "format": "prettier --write src/"
