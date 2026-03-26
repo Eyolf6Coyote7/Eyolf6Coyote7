@@ -12,8 +12,10 @@
     "python3 -m ruff format"
   ],
   "realtime_ai_whiteboard/mobile-app/**/*.{ts,tsx}": [
-    "prettier --write",
-    "eslint --fix"
+    "prettier --write"
+  ],
+  "3d_asset_collaboration/mobile-app/**/*.{ts,tsx}": [
+    "prettier --write"
   ],
   "enterprise_workflow_system/workflow-api/**/*.kt": [
     "bash -c 'cd enterprise_workflow_system/workflow-api && ./gradlew ktlintFormat'"
