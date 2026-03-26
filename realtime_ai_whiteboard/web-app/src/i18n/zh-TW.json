@@ -8,8 +8,8 @@
     "appName": "Whiteboard AI",
     "signUp": "註冊",
     "logIn": "登入",
-    "fullName": "姓名",
-    "email": "電子郵件",
+    "fullName": "全名",
+    "email": "電子郵件地址",
     "password": "密碼",
     "createAccount": "建立帳號"
   },

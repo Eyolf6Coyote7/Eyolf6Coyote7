@@ -4,6 +4,8 @@ import { LandingPage } from './pages/LandingPage';
 import { AuthPage } from './pages/AuthPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { BoardPage } from './pages/BoardPage';
+import { AccountSettingsPage } from './pages/AccountSettingsPage';
+import { PricingPage } from './pages/PricingPage';
 
 const isMock = import.meta.env.VITE_MOCK === 'true';
 
@@ -20,6 +22,7 @@ export default function App() {
         <Route path="/" element={isMock ? <Navigate to="/dashboard" /> : <LandingPage />} />
         <Route path="/landing" element={<LandingPage />} />
         <Route path="/auth" element={<AuthPage />} />
+        <Route path="/pricing" element={<PricingPage />} />
         <Route
           path="/dashboard"
           element={
@@ -33,6 +36,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <BoardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <AccountSettingsPage />
             </ProtectedRoute>
           }
         />

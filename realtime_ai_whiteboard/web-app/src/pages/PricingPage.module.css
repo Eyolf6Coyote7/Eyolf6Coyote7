@@ -1,0 +1,485 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', sans-serif;
+  background: #F7F9FB;
+}
+
+/* Top Nav */
+.topNav {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 48px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(6px);
+  z-index: 10;
+}
+
+.navBrand {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 28px;
+  letter-spacing: -1px;
+  color: #0F172A;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.navLink {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.35px;
+  color: #475569;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.navLinkActive {
+  composes: navLink;
+  font-weight: 700;
+  color: #2563EB;
+  border-bottom: 2px solid #2563EB;
+  padding-bottom: 2px;
+}
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.loginBtn {
+  font-weight: 500;
+  font-size: 14px;
+  color: #475569;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.signUpBtn {
+  padding: 8px 20px;
+  background: #2563EB;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+/* Main */
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 128px 0 96px;
+  gap: 64px;
+  flex: 1;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+}
+
+.heroTitle {
+  font-weight: 600;
+  font-size: 48px;
+  line-height: 48px;
+  letter-spacing: -1.2px;
+  color: #191C1E;
+  margin: 0;
+}
+
+.heroSubtitle {
+  font-size: 20px;
+  line-height: 28px;
+  color: #434655;
+  margin: 16px 0 0;
+}
+
+/* Billing Toggle */
+.billingToggle {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.billingLabel {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #191C1E;
+}
+
+.toggleTrack {
+  width: 56px;
+  height: 28px;
+  background: #E0E3E5;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  padding: 0;
+}
+
+.toggleTrackActive {
+  composes: toggleTrack;
+  background: #2563EB;
+}
+
+.toggleKnob {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #FFFFFF;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 9999px;
+  top: 4px;
+  right: 4px;
+  transition: left 150ms, right 150ms;
+}
+
+.toggleTrack .toggleKnob {
+  right: auto;
+  left: 4px;
+}
+
+.toggleTrackActive .toggleKnob {
+  left: auto;
+  right: 4px;
+}
+
+.saveBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  background: #007D55;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #BDFFDB;
+}
+
+/* Pricing Cards */
+.cardsRow {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0 24px;
+  max-width: 1024px;
+}
+
+.card {
+  width: 320px;
+  padding: 32px;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardPro {
+  composes: card;
+  width: 336px;
+  border-top: 4px solid #004AC6;
+  box-shadow: 0px 20px 25px -5px rgba(0, 0, 0, 0.1), 0px 8px 10px -6px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.popularBadge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 16px;
+  background: #004AC6;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.cardName {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  color: #191C1E;
+  margin: 0;
+}
+
+.cardPrice {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin: 8px 0;
+}
+
+.priceAmount {
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 40px;
+  letter-spacing: -0.9px;
+  color: #191C1E;
+}
+
+.pricePeriod {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.35px;
+  text-transform: uppercase;
+  color: #434655;
+}
+
+.cardDesc {
+  font-size: 14px;
+  line-height: 20px;
+  color: #434655;
+  margin: 0 0 32px;
+}
+
+.featureList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 40px;
+  flex: 1;
+}
+
+.feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 14px;
+  line-height: 20px;
+  color: #434655;
+}
+
+.featureBold {
+  composes: feature;
+  font-weight: 500;
+  color: #191C1E;
+}
+
+.checkIcon {
+  width: 17px;
+  height: 17px;
+  color: #006242;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.cardBtnOutline {
+  width: 100%;
+  padding: 12px 24px;
+  border: 1px solid #737686;
+  border-radius: 8px;
+  background: none;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: #434655;
+  cursor: pointer;
+}
+
+.cardBtnPrimary {
+  width: 100%;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #004AC6 0%, #2563EB 100%);
+  border-radius: 8px;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: #FFFFFF;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.cardBtnDark {
+  width: 100%;
+  padding: 12px 24px;
+  background: #2D3133;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: #EFF1F3;
+  cursor: pointer;
+}
+
+/* FAQ */
+.faqSection {
+  width: 768px;
+  max-width: 768px;
+  padding: 64px 24px;
+}
+
+.faqTitle {
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 36px;
+  color: #191C1E;
+  text-align: center;
+  margin: 0 0 48px;
+}
+
+.faqList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.faqItem {
+  background: #FFFFFF;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.faqQuestion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  width: 100%;
+  background: none;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  color: #191C1E;
+  cursor: pointer;
+  text-align: left;
+}
+
+.faqChevron {
+  width: 12px;
+  height: 7px;
+  color: #434655;
+  flex-shrink: 0;
+  transition: transform 200ms;
+}
+
+.faqChevronOpen {
+  composes: faqChevron;
+  transform: rotate(180deg);
+}
+
+.faqAnswer {
+  padding: 0 24px 24px;
+  font-size: 14px;
+  line-height: 23px;
+  color: #434655;
+}
+
+/* CTA Section */
+.ctaSection {
+  width: 1024px;
+  max-width: 1024px;
+  padding: 64px 0;
+  background: #F2F4F6;
+  border-radius: 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.ctaTitle {
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 36px;
+  color: #191C1E;
+  margin: 0;
+}
+
+.ctaBtn {
+  padding: 16px 32px;
+  background: #004AC6;
+  border-radius: 9999px;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  color: #FFFFFF;
+  cursor: pointer;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer */
+.footer {
+  padding: 48px 0;
+  background: #F8FAFC;
+  border-top: 1px solid #E2E8F0;
+}
+
+.footerInner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.footerBrand {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 28px;
+  color: #0F172A;
+}
+
+.footerCopy {
+  font-size: 12px;
+  line-height: 16px;
+  color: #64748B;
+  margin: 8px 0 0;
+}
+
+.footerLinks {
+  display: flex;
+  gap: 24px;
+}
+
+.footerLink {
+  font-size: 12px;
+  line-height: 16px;
+  color: #64748B;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}

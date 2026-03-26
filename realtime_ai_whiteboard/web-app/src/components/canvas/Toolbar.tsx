@@ -12,7 +12,7 @@ const tools: { id: Tool; icon: string; label: string }[] = [
   { id: 'circle', icon: '○', label: 'Circle' },
   { id: 'line', icon: '─', label: 'Line' },
   { id: 'text', icon: 'T', label: 'Text' },
-  { id: 'sticky', icon: '📝', label: 'Sticky Note' },
+  { id: 'sticky', icon: '▢', label: 'Sticky Note' },
   { id: 'freehand', icon: '✏', label: 'Freehand' },
 ];
 
@@ -29,6 +29,14 @@ export function Toolbar({ activeTool, onToolChange }: Props) {
           {tool.icon}
         </button>
       ))}
+      <div className={styles.divider} />
+      <button
+        className={`${styles.toolBtn} ${styles.active}`}
+        title="AI Assistant"
+        style={{ color: '#2563EB' }}
+      >
+        ✦
+      </button>
     </div>
   );
 }
