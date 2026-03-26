@@ -9,7 +9,8 @@ dist/
 *.orig.*
 web-build/
 .env
-.env.*
-!.env.example
+.env.local
 npm-debug.*
+yarn-debug.*
+yarn-error.*
 *.tsbuildinfo
