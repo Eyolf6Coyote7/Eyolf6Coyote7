@@ -1,0 +1,208 @@
+services:
+  # ── PostgreSQL 16 ── asset metadata
+  asset3d-postgres:
+    image: postgres:16
+    container_name: asset3d-postgres
+    restart: unless-stopped
+    read_only: true
+    security_opt:
+      - no-new-privileges
+    tmpfs:
+      - /tmp
+      - /run
+    ports:
+      - "${POSTGRES_PORT:-5434}:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - asset3d-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── TimescaleDB ── IoT time-series
+  asset3d-timescaledb:
+    image: timescale/timescaledb:latest-pg16
+    container_name: asset3d-timescaledb
+    restart: unless-stopped
+    read_only: true
+    security_opt:
+      - no-new-privileges
+    tmpfs:
+      - /tmp
+      - /run
+    ports:
+      - "${TIMESCALEDB_PORT:-5435}:5432"
+    environment:
+      POSTGRES_USER: ${TIMESCALEDB_USER}
+      POSTGRES_PASSWORD: ${TIMESCALEDB_PASSWORD}
+      POSTGRES_DB: ${TIMESCALEDB_DB}
+    volumes:
+      - asset3d-timescaledb-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${TIMESCALEDB_USER} -d ${TIMESCALEDB_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Redis 7.2 ── cache & pub/sub
+  asset3d-redis:
+    image: redis:7.2
+    container_name: asset3d-redis
+    restart: unless-stopped
+    read_only: true
+    security_opt:
+      - no-new-privileges
+    tmpfs:
+      - /tmp
+    ports:
+      - "${REDIS_PORT:-6382}:6379"
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
+    volumes:
+      - asset3d-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Kafka ── event streaming
+  asset3d-kafka:
+    image: apache/kafka:3.7.0
+    container_name: asset3d-kafka
+    restart: unless-stopped
+    read_only: true
+    security_opt:
+      - no-new-privileges
+    tmpfs:
+      - /tmp
+    ports:
+      - "${KAFKA_PORT:-9096}:9096"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9096,CONTROLLER://0.0.0.0:9097
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${KAFKA_ADVERTISED_HOST:-localhost}:${KAFKA_PORT:-9096}
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9097
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
+      CLUSTER_ID: ${KAFKA_CLUSTER_ID:-MkU3OEVBNTcwNTJENDM2Qk}
+    volumes:
+      - asset3d-kafka-data:/tmp/kraft-combined-logs
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9096 || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+  # ── MinIO ── 3D file storage (S3-compatible)
+  asset3d-minio:
+    image: minio/minio:latest
+    container_name: asset3d-minio
+    restart: unless-stopped
+    read_only: true
+    security_opt:
+      - no-new-privileges
+    tmpfs:
+      - /tmp
+    ports:
+      - "${MINIO_API_PORT:-9004}:9000"
+      - "${MINIO_CONSOLE_PORT:-9005}:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    command: server /data --console-address ":9001"
+    volumes:
+      - asset3d-minio-data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Elasticsearch 8 ── asset search
+  asset3d-elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+    container_name: asset3d-elasticsearch
+    restart: unless-stopped
+    read_only: true
+    security_opt:
+      - no-new-privileges
+    tmpfs:
+      - /tmp
+    ports:
+      - "${ELASTICSEARCH_PORT:-9201}:9200"
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    volumes:
+      - asset3d-elasticsearch-data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:9200/_cluster/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+  # ── Mosquitto ── MQTT broker for IoT
+  asset3d-mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: asset3d-mosquitto
+    restart: unless-stopped
+    read_only: true
+    security_opt:
+      - no-new-privileges
+    tmpfs:
+      - /tmp
+    ports:
+      - "${MQTT_PORT:-1883}:1883"
+    volumes:
+      - asset3d-mosquitto-data:/mosquitto/data
+      - asset3d-mosquitto-log:/mosquitto/log
+      - asset3d-mosquitto-config:/mosquitto/config
+    healthcheck:
+      test: ["CMD-SHELL", "mosquitto_sub -t '$$SYS/broker/uptime' -C 1 -W 3 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  # ── Unleash ── feature flags
+  asset3d-unleash:
+    image: unleashorg/unleash-server:latest
+    container_name: asset3d-unleash
+    restart: unless-stopped
+    read_only: true
+    security_opt:
+      - no-new-privileges
+    tmpfs:
+      - /tmp
+    ports:
+      - "${UNLEASH_PORT:-4244}:4242"
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@asset3d-postgres:5432/${UNLEASH_DB:-unleash}
+      DATABASE_SSL: "false"
+    depends_on:
+      asset3d-postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:4242/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  asset3d-postgres-data:
+  asset3d-timescaledb-data:
+  asset3d-redis-data:
+  asset3d-kafka-data:
+  asset3d-elasticsearch-data:
+  asset3d-minio-data:
+  asset3d-mosquitto-data:
+  asset3d-mosquitto-log:
+  asset3d-mosquitto-config:
