@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.1](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/whiteboard/v1.10.0...whiteboard/v1.10.1) (2026-03-26)
+
+
+### Bug Fixes
+
+* mobile app build fixes ([#183](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/183)) ([#184](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/184)) ([3068f91](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/3068f911b67771850d1729174df08645c97b0adf))
+
 ## [1.10.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/whiteboard/v1.9.2...whiteboard/v1.10.0) (2026-03-26)
 
 
