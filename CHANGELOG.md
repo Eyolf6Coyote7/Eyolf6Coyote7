@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.1](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/workspace/v1.11.0...workspace/v1.11.1) (2026-03-26)
+
+
+### Bug Fixes
+
+* mobile app build fixes ([#183](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/183)) ([#184](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/184)) ([3068f91](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/3068f911b67771850d1729174df08645c97b0adf))
+
 ## [1.11.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/workspace/v1.10.1...workspace/v1.11.0) (2026-03-26)
 
 
