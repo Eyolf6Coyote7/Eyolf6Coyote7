@@ -59,7 +59,7 @@ export function AuthPage() {
           <span className={styles.brandText}>{t('auth.appName')}</span>
         </div>
         <div className={styles.headerRight}>
-          <button className={styles.helpLink}>Help</button>
+          <button className={styles.helpLink}>{t('auth.help')}</button>
           <button className={styles.langButton} onClick={toggleLang} title="Switch language">
             <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="10" cy="10" r="8.5" stroke="currentColor" strokeWidth="1.5" />
@@ -100,7 +100,7 @@ export function AuthPage() {
               </svg>
             </div>
             <h1 className={styles.logoTitle}>{t('auth.appName')}</h1>
-            <p className={styles.logoSubtitle}>Where ideas find their space.</p>
+            <p className={styles.logoSubtitle}>{t('auth.subtitle')}</p>
           </div>
 
           {/* Tabs */}
@@ -177,7 +177,7 @@ export function AuthPage() {
                 </button>
               </div>
             </div>
-            <DemoTooltip message="Authentication requires backend">
+            <DemoTooltip message={t('demo.authRequired')}>
               <button type="submit" className={styles.submitButton} disabled={isMock}>
                 {isLogin ? t('auth.logIn') : t('auth.createAccount')}
               </button>
@@ -187,13 +187,13 @@ export function AuthPage() {
           {/* Divider */}
           <div className={styles.divider}>
             <div className={styles.dividerLine} />
-            <span className={styles.dividerText}>OR</span>
+            <span className={styles.dividerText}>{t('auth.or')}</span>
             <div className={styles.dividerLine} />
           </div>
 
           {/* OAuth */}
           <div className={styles.oauthButtons}>
-            <DemoTooltip message="OAuth requires backend">
+            <DemoTooltip message={t('demo.oauthRequired')}>
               <button className={styles.oauthButton} disabled={isMock}>
                 <svg
                   className={styles.oauthIcon}
@@ -217,10 +217,10 @@ export function AuthPage() {
                     fill="#FBBC05"
                   />
                 </svg>
-                Continue with Google
+                {t('auth.continueGoogle')}
               </button>
             </DemoTooltip>
-            <DemoTooltip message="OAuth requires backend">
+            <DemoTooltip message={t('demo.oauthRequired')}>
               <button className={styles.oauthButton} disabled={isMock}>
                 <svg
                   className={styles.oauthIcon}
@@ -235,14 +235,14 @@ export function AuthPage() {
                     fill="#191C1D"
                   />
                 </svg>
-                Continue with GitHub
+                {t('auth.continueGithub')}
               </button>
             </DemoTooltip>
           </div>
 
           {/* Redirect */}
           <p className={styles.redirect}>
-            {isLogin ? "Don't have an account? " : 'Already have an account? '}
+            {isLogin ? `${t('auth.noAccount')} ` : `${t('auth.haveAccount')} `}
             <button className={styles.redirectLink} onClick={() => setIsLogin(!isLogin)}>
               {isLogin ? t('auth.signUp') : t('auth.logIn')}
             </button>
@@ -252,14 +252,12 @@ export function AuthPage() {
 
       {/* Footer */}
       <footer className={styles.footer}>
-        <span className={styles.footerCopyright}>
-          &copy; 2024 Whiteboard AI. The Ethereal Workshop.
-        </span>
+        <span className={styles.footerCopyright}>{t('footer.copyright')}</span>
         <div className={styles.footerLinks}>
-          <button className={styles.footerLink}>Privacy Policy</button>
-          <button className={styles.footerLink}>Terms of Service</button>
-          <button className={styles.footerLink}>Security</button>
-          <button className={styles.footerLink}>Contact</button>
+          <button className={styles.footerLink}>{t('footer.privacyPolicy')}</button>
+          <button className={styles.footerLink}>{t('footer.termsOfService')}</button>
+          <button className={styles.footerLink}>{t('footer.security')}</button>
+          <button className={styles.footerLink}>{t('footer.contact')}</button>
         </div>
       </footer>
     </div>

@@ -9,12 +9,17 @@ import styles from './DashboardPage.module.css';
 
 const isMock = import.meta.env.VITE_MOCK === 'true';
 
-const FILTERS = ['All', 'Recent', 'Shared with me', 'Starred'] as const;
-const NAV_ITEMS = [
-  { label: 'ALL', icon: 'grid' },
-  { label: 'RECENT', icon: 'clock' },
-  { label: 'SHARED WITH ME', icon: 'users' },
-  { label: 'STARRED', icon: 'star' },
+const FILTER_KEYS = [
+  'dashboard.all',
+  'dashboard.recent',
+  'dashboard.sharedWithMe',
+  'dashboard.starred',
+] as const;
+const NAV_KEYS = [
+  { key: 'dashboard.all', icon: 'grid' },
+  { key: 'dashboard.recent', icon: 'clock' },
+  { key: 'dashboard.sharedWithMe', icon: 'users' },
+  { key: 'dashboard.starred', icon: 'star' },
 ] as const;
 
 const COLLABORATORS: Record<string, { colors: string[]; initials: string[]; extra?: number }> = {
@@ -78,7 +83,7 @@ export function DashboardPage() {
           </svg>
           <input
             className={styles.searchInput}
-            placeholder="Search boards..."
+            placeholder={t('dashboard.searchPlaceholder')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -129,13 +134,13 @@ export function DashboardPage() {
         {/* Sidebar */}
         <aside className={styles.sidebar}>
           <div style={{ paddingBottom: 24 }}>
-            <h2 className={styles.sidebarTitle}>MY BOARDS</h2>
-            <p className={styles.sidebarSubtitle}>Manage your creative workspace</p>
+            <h2 className={styles.sidebarTitle}>{t('dashboard.myBoards')}</h2>
+            <p className={styles.sidebarSubtitle}>{t('dashboard.manageWorkspace')}</p>
           </div>
           <nav className={styles.sidebarNav}>
-            {NAV_ITEMS.map((item, i) => (
+            {NAV_KEYS.map((item, i) => (
               <button
-                key={item.label}
+                key={item.key}
                 className={activeNav === i ? styles.navLinkActive : styles.navLink}
                 onClick={() => setActiveNav(i)}
               >
@@ -216,14 +221,14 @@ export function DashboardPage() {
                     />
                   </svg>
                 )}
-                {item.label}
+                {t(item.key)}
               </button>
             ))}
           </nav>
           <div style={{ marginTop: 48 }}>
-            <DemoTooltip message="Create board requires backend">
+            <DemoTooltip message={t('demo.createBoard')}>
               <button className={styles.sidebarCta} onClick={() => !isMock && void handleCreate()}>
-                + New Board
+                {t('dashboard.newBoard')}
               </button>
             </DemoTooltip>
           </div>
@@ -233,7 +238,7 @@ export function DashboardPage() {
         <main className={styles.main}>
           <div className={styles.headerSection}>
             <h1 className={styles.pageTitle}>{t('dashboard.title')}</h1>
-            <DemoTooltip message="Create board requires backend">
+            <DemoTooltip message={t('demo.createBoard')}>
               <button
                 className={styles.newBoardButton}
                 onClick={() => !isMock && void handleCreate()}
@@ -246,13 +251,13 @@ export function DashboardPage() {
 
           {/* Filter Tabs */}
           <div className={styles.filterTabs}>
-            {FILTERS.map((f, i) => (
+            {FILTER_KEYS.map((key, i) => (
               <button
-                key={f}
+                key={key}
                 className={activeFilter === i ? styles.filterTabActive : styles.filterTab}
                 onClick={() => setActiveFilter(i)}
               >
-                {f}
+                {t(key)}
               </button>
             ))}
           </div>
@@ -263,7 +268,7 @@ export function DashboardPage() {
           ) : (
             <div className={styles.boardGrid}>
               {/* New Board Card */}
-              <DemoTooltip message="Create board requires backend">
+              <DemoTooltip message={t('demo.createBoard')}>
                 <button
                   className={styles.newBoardCard}
                   onClick={() => !isMock && void handleCreate()}
@@ -278,7 +283,7 @@ export function DashboardPage() {
                       />
                     </svg>
                   </div>
-                  <span className={styles.newBoardCardText}>New Board</span>
+                  <span className={styles.newBoardCardText}>{t('dashboard.newBoardCard')}</span>
                 </button>
               </DemoTooltip>
 
@@ -357,9 +362,9 @@ export function DashboardPage() {
             strokeLinejoin="round"
           />
         </svg>
-        <span className={styles.aiButtonText}>How can I help you today?</span>
+        <span className={styles.aiButtonText}>{t('dashboard.aiHelp')}</span>
         <span className={styles.aiButtonDivider} />
-        <span className={styles.aiButtonAsk}>Ask AI</span>
+        <span className={styles.aiButtonAsk}>{t('dashboard.askAi')}</span>
       </button>
     </div>
   );

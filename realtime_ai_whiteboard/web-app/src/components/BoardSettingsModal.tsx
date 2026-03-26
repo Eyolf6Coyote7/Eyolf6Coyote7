@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { DemoTooltip } from './DemoTooltip';
 import styles from './BoardSettingsModal.module.css';
 
@@ -32,6 +33,7 @@ const MEMBERS = [
 ];
 
 export function BoardSettingsModal({ isOpen, onClose, boardName = 'Product Brainstorm' }: Props) {
+  const { t } = useTranslation();
   const [name, setName] = useState(boardName);
   const [description, setDescription] = useState('');
   const [selectedColor, setSelectedColor] = useState(0);
@@ -46,7 +48,7 @@ export function BoardSettingsModal({ isOpen, onClose, boardName = 'Product Brain
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className={styles.modalHeader}>
-          <span className={styles.modalTitle}>Board Settings</span>
+          <span className={styles.modalTitle}>{t('boardSettings.title')}</span>
           <button className={styles.closeButton} onClick={onClose}>
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
               <path
@@ -63,9 +65,9 @@ export function BoardSettingsModal({ isOpen, onClose, boardName = 'Product Brain
         <div className={styles.modalBody}>
           {/* General Section */}
           <div className={styles.section}>
-            <span className={styles.sectionTitle}>General</span>
+            <span className={styles.sectionTitle}>{t('boardSettings.general')}</span>
             <div className={styles.field}>
-              <label className={styles.label}>Board Name</label>
+              <label className={styles.label}>{t('boardSettings.boardName')}</label>
               <input
                 className={styles.input}
                 value={name}
@@ -73,16 +75,16 @@ export function BoardSettingsModal({ isOpen, onClose, boardName = 'Product Brain
               />
             </div>
             <div className={styles.field}>
-              <label className={styles.label}>Description</label>
+              <label className={styles.label}>{t('boardSettings.description')}</label>
               <textarea
                 className={styles.textarea}
-                placeholder="Enter board description..."
+                placeholder={t('boardSettings.descPlaceholder')}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
             </div>
             <div className={styles.field}>
-              <label className={styles.label}>Board Color</label>
+              <label className={styles.label}>{t('boardSettings.boardColor')}</label>
               <div className={styles.colorPicker}>
                 {COLORS.map((color, i) => (
                   <button
@@ -112,9 +114,9 @@ export function BoardSettingsModal({ isOpen, onClose, boardName = 'Product Brain
 
           {/* Sharing Section */}
           <div className={styles.section}>
-            <span className={styles.sectionTitle}>Sharing & Permissions</span>
+            <span className={styles.sectionTitle}>{t('boardSettings.sharingPermissions')}</span>
             <div className={styles.field}>
-              <label className={styles.label}>Board visibility</label>
+              <label className={styles.label}>{t('boardSettings.boardVisibility')}</label>
               <select
                 className={styles.select}
                 value={visibility}
@@ -126,16 +128,16 @@ export function BoardSettingsModal({ isOpen, onClose, boardName = 'Product Brain
               </select>
             </div>
             <div className={styles.field}>
-              <label className={styles.label}>Invite members</label>
+              <label className={styles.label}>{t('boardSettings.inviteMembers')}</label>
               <div className={styles.inviteRow}>
                 <input
                   className={styles.input}
-                  placeholder="Enter email..."
+                  placeholder={t('boardSettings.emailPlaceholder')}
                   value={inviteEmail}
                   onChange={(e) => setInviteEmail(e.target.value)}
                 />
-                <DemoTooltip message="Invite requires backend">
-                  <button className={styles.inviteButton}>Invite</button>
+                <DemoTooltip message={t('demo.inviteRequired')}>
+                  <button className={styles.inviteButton}>{t('boardSettings.invite')}</button>
                 </DemoTooltip>
               </div>
             </div>
@@ -173,18 +175,18 @@ export function BoardSettingsModal({ isOpen, onClose, boardName = 'Product Brain
               ))}
             </div>
             <div className={styles.field}>
-              <label className={styles.label}>Guest link</label>
+              <label className={styles.label}>{t('boardSettings.guestLink')}</label>
               <div className={styles.guestLinkRow}>
                 <input
                   className={styles.guestLinkInput}
                   value="https://etherboard.app/b/pb-921-xyz"
                   readOnly
                 />
-                <button className={styles.copyButton}>Copy Link</button>
+                <button className={styles.copyButton}>{t('boardSettings.copyLink')}</button>
               </div>
             </div>
             <div className={styles.toggleRow}>
-              <span className={styles.toggleLabel}>Allow guest editing</span>
+              <span className={styles.toggleLabel}>{t('boardSettings.allowGuestEditing')}</span>
               <button
                 className={guestLink ? styles.toggleOn : styles.toggle}
                 onClick={() => setGuestLink(!guestLink)}
@@ -209,13 +211,11 @@ export function BoardSettingsModal({ isOpen, onClose, boardName = 'Product Brain
                 <path d="M9 6V10" stroke="#B6152E" strokeWidth="1.5" strokeLinecap="round" />
                 <circle cx="9" cy="13" r="0.75" fill="#B6152E" />
               </svg>
-              Danger Zone
+              {t('boardSettings.dangerZone')}
             </div>
             <div className={styles.dangerContent}>
-              <span className={styles.dangerText}>
-                Permanently delete this board and all its contents. This action cannot be undone.
-              </span>
-              <DemoTooltip message="Delete requires backend">
+              <span className={styles.dangerText}>{t('boardSettings.deleteWarning')}</span>
+              <DemoTooltip message={t('demo.deleteRequired')}>
                 <button className={styles.deleteButton}>
                   <svg width="12" height="14" viewBox="0 0 12 14" fill="none">
                     <path
@@ -225,7 +225,7 @@ export function BoardSettingsModal({ isOpen, onClose, boardName = 'Product Brain
                       strokeLinecap="round"
                     />
                   </svg>
-                  Delete Board
+                  {t('boardSettings.deleteBoard')}
                 </button>
               </DemoTooltip>
             </div>
@@ -235,10 +235,10 @@ export function BoardSettingsModal({ isOpen, onClose, boardName = 'Product Brain
         {/* Footer */}
         <div className={styles.modalFooter}>
           <button className={styles.cancelButton} onClick={onClose}>
-            Cancel
+            {t('boardSettings.cancel')}
           </button>
-          <DemoTooltip message="Save requires backend">
-            <button className={styles.saveButton}>Save Changes</button>
+          <DemoTooltip message={t('demo.saveRequired')}>
+            <button className={styles.saveButton}>{t('boardSettings.saveChanges')}</button>
           </DemoTooltip>
         </div>
       </div>

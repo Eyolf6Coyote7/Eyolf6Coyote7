@@ -87,9 +87,9 @@ export function BoardPage() {
             <div className={styles.collabAvatar} style={{ borderColor: '#22C55E', zIndex: 2 }} />
             <div className={styles.collabAvatar} style={{ borderColor: '#F97316', zIndex: 1 }} />
           </div>
-          <DemoTooltip message="Share requires backend">
+          <DemoTooltip message={t('demo.shareRequired')}>
             <button className={styles.shareBtn} onClick={handleShare}>
-              Share
+              {t('board.share')}
             </button>
           </DemoTooltip>
           <button className={styles.moreBtn}>
@@ -164,7 +164,7 @@ export function BoardPage() {
           </button>
         </div>
         <div className={styles.footerRight}>
-          <span className={styles.pageInfo}>Page 1 of 1</span>
+          <span className={styles.pageInfo}>{t('board.page', { current: 1, total: 1 })}</span>
           <button className={styles.footerIconBtn} title="Help" onClick={toggleAi}>
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
               <circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.5" />

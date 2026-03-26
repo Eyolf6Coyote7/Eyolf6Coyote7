@@ -1,17 +1,19 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { DemoTooltip } from '../components/DemoTooltip';
 import styles from './AccountSettingsPage.module.css';
 
 const NAV_ITEMS = [
-  { label: 'Profile', icon: 'user' },
-  { label: 'Plan & Billing', icon: 'card' },
-  { label: 'Team', icon: 'users' },
-  { label: 'Notifications', icon: 'bell' },
-  { label: 'Security', icon: 'shield' },
+  { key: 'settings.profile', icon: 'user' },
+  { key: 'settings.planBilling', icon: 'card' },
+  { key: 'settings.team', icon: 'users' },
+  { key: 'settings.notifications', icon: 'bell' },
+  { key: 'settings.security', icon: 'shield' },
 ];
 
 export function AccountSettingsPage() {
   const [activeTab, setActiveTab] = useState(0);
+  const { t } = useTranslation();
 
   return (
     <div className={styles.page}>
@@ -60,13 +62,13 @@ export function AccountSettingsPage() {
       {/* Sidebar */}
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader}>
-          <h2 className={styles.sidebarTitle}>Account Settings</h2>
-          <p className={styles.sidebarSubtitle}>Management</p>
+          <h2 className={styles.sidebarTitle}>{t('settings.title')}</h2>
+          <p className={styles.sidebarSubtitle}>{t('settings.management')}</p>
         </div>
         <nav className={styles.sidebarNav}>
           {NAV_ITEMS.map((item, i) => (
             <button
-              key={item.label}
+              key={item.key}
               className={activeTab === i ? styles.navItemActive : styles.navItem}
               onClick={() => setActiveTab(i)}
             >
@@ -128,13 +130,13 @@ export function AccountSettingsPage() {
                   </>
                 )}
               </svg>
-              {item.label}
+              {t(item.key)}
             </button>
           ))}
         </nav>
         <div className={styles.sidebarFooter}>
           <span className={styles.statusDot} />
-          <span className={styles.statusText}>System status normal</span>
+          <span className={styles.statusText}>{t('settings.systemStatus')}</span>
         </div>
       </aside>
 
@@ -146,7 +148,7 @@ export function AccountSettingsPage() {
           {activeTab === 2 && <TeamTab />}
           {activeTab >= 3 && (
             <div>
-              <h1 className={styles.pageTitle}>{NAV_ITEMS[activeTab].label}</h1>
+              <h1 className={styles.pageTitle}>{t(NAV_ITEMS[activeTab].key)}</h1>
               <p className={styles.pageSubtitle}>Coming soon.</p>
             </div>
           )}
@@ -157,11 +159,13 @@ export function AccountSettingsPage() {
 }
 
 function ProfileTab() {
+  const { t } = useTranslation();
+
   return (
     <>
       <div>
-        <h1 className={styles.pageTitle}>Profile</h1>
-        <p className={styles.pageSubtitle}>Manage your public identity and account information.</p>
+        <h1 className={styles.pageTitle}>{t('settings.profileTitle')}</h1>
+        <p className={styles.pageSubtitle}>{t('settings.profileSubtitle')}</p>
       </div>
 
       <div className={styles.avatarSection}>
@@ -174,12 +178,12 @@ function ProfileTab() {
 
       <div className={styles.formCard}>
         <div className={styles.field}>
-          <label className={styles.fieldLabel}>Display Name</label>
+          <label className={styles.fieldLabel}>{t('settings.displayName')}</label>
           <input className={styles.fieldInput} defaultValue="Jerry Wolf" />
         </div>
         <div className={styles.field}>
           <div className={styles.emailHeader}>
-            <label className={styles.fieldLabel}>Email Address</label>
+            <label className={styles.fieldLabel}>{t('settings.emailAddress')}</label>
             <span className={styles.verifiedBadge}>
               <svg width="13" height="12" viewBox="0 0 13 12" fill="none">
                 <path
@@ -190,7 +194,7 @@ function ProfileTab() {
                   strokeLinejoin="round"
                 />
               </svg>
-              Verified
+              {t('settings.verified')}
             </span>
           </div>
           <input
@@ -200,7 +204,7 @@ function ProfileTab() {
           />
         </div>
         <div className={styles.field}>
-          <label className={styles.fieldLabel}>Bio</label>
+          <label className={styles.fieldLabel}>{t('settings.bio')}</label>
           <textarea
             className={styles.textarea}
             defaultValue="Product Designer passionate about AI and cognitive workflows. Building the future of digital ideation."
@@ -208,7 +212,7 @@ function ProfileTab() {
         </div>
         <div className={styles.fieldRow}>
           <div className={styles.field}>
-            <label className={styles.fieldLabel}>Timezone</label>
+            <label className={styles.fieldLabel}>{t('settings.timezone')}</label>
             <select className={styles.selectInput}>
               <option>PST (UTC -8)</option>
               <option>EST (UTC -5)</option>
@@ -216,7 +220,7 @@ function ProfileTab() {
             </select>
           </div>
           <div className={styles.field}>
-            <label className={styles.fieldLabel}>Language</label>
+            <label className={styles.fieldLabel}>{t('settings.language')}</label>
             <select className={styles.selectInput}>
               <option>English (US)</option>
               <option>繁體中文</option>
@@ -226,8 +230,8 @@ function ProfileTab() {
       </div>
 
       <div className={styles.actions}>
-        <button className={styles.discardBtn}>Discard Changes</button>
-        <DemoTooltip message="Save requires backend">
+        <button className={styles.discardBtn}>{t('settings.discardChanges')}</button>
+        <DemoTooltip message={t('demo.saveRequired')}>
           <button className={styles.saveBtn}>
             <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
               <path
@@ -239,7 +243,7 @@ function ProfileTab() {
               <path d="M4 1v4h6V1" stroke="currentColor" strokeWidth="1.5" />
               <path d="M4 14v-5h7v5" stroke="currentColor" strokeWidth="1.5" />
             </svg>
-            Save Profile
+            {t('settings.saveProfile')}
           </button>
         </DemoTooltip>
       </div>
@@ -252,8 +256,8 @@ function ProfileTab() {
               <path d="M10 6h3M16 2v8M22 6h-3" stroke="currentColor" strokeWidth="1.5" />
             </svg>
           </div>
-          <h3 className={styles.bentoTitle}>Passkeys</h3>
-          <p className={styles.bentoDesc}>Enable biometric login for faster access.</p>
+          <h3 className={styles.bentoTitle}>{t('settings.passkeys')}</h3>
+          <p className={styles.bentoDesc}>{t('settings.passkeysDesc')}</p>
         </div>
         <div className={styles.bentoCard}>
           <div className={styles.bentoIcon} style={{ color: '#006242' }}>
@@ -267,8 +271,8 @@ function ProfileTab() {
               <circle cx="9" cy="9" r="7" stroke="currentColor" strokeWidth="1.5" />
             </svg>
           </div>
-          <h3 className={styles.bentoTitle}>Activity Log</h3>
-          <p className={styles.bentoDesc}>Review your recent security events.</p>
+          <h3 className={styles.bentoTitle}>{t('settings.activityLog')}</h3>
+          <p className={styles.bentoDesc}>{t('settings.activityLogDesc')}</p>
         </div>
         <div className={styles.bentoCard}>
           <div className={styles.bentoIcon} style={{ color: '#515F74' }}>
@@ -311,8 +315,8 @@ function ProfileTab() {
               />
             </svg>
           </div>
-          <h3 className={styles.bentoTitle}>Integrations</h3>
-          <p className={styles.bentoDesc}>Connect your external creative tools.</p>
+          <h3 className={styles.bentoTitle}>{t('settings.integrations')}</h3>
+          <p className={styles.bentoDesc}>{t('settings.integrationsDesc')}</p>
         </div>
       </div>
     </>
@@ -320,23 +324,23 @@ function ProfileTab() {
 }
 
 function PlanBillingTab() {
+  const { t } = useTranslation();
+
   return (
     <>
       <div>
-        <h1 className={styles.pageTitle}>Plan & Billing</h1>
-        <p className={styles.pageSubtitle}>
-          Manage your subscription, usage limits and billing history.
-        </p>
+        <h1 className={styles.pageTitle}>{t('settings.planTitle')}</h1>
+        <p className={styles.pageSubtitle}>{t('settings.planSubtitle')}</p>
       </div>
 
       <div className={styles.planCard}>
         <div className={styles.planHeader}>
           <div>
-            <div className={styles.planLabel}>Current Plan</div>
-            <div className={styles.planName}>Free Plan</div>
+            <div className={styles.planLabel}>{t('settings.currentPlan')}</div>
+            <div className={styles.planName}>{t('settings.freePlan')}</div>
           </div>
-          <DemoTooltip message="Upgrade requires backend">
-            <button className={styles.upgradeBtn}>Upgrade</button>
+          <DemoTooltip message={t('demo.upgradeRequired')}>
+            <button className={styles.upgradeBtn}>{t('settings.upgrade')}</button>
           </DemoTooltip>
         </div>
         <div className={styles.planFeatures}>
@@ -344,31 +348,31 @@ function PlanBillingTab() {
             <svg viewBox="0 0 12 12" fill="none">
               <circle cx="6" cy="6" r="4" fill="currentColor" />
             </svg>
-            3 boards
+            {t('settings.boards3')}
           </div>
           <div className={styles.planFeature}>
             <svg viewBox="0 0 12 12" fill="none">
               <circle cx="6" cy="6" r="4" fill="currentColor" />
             </svg>
-            1 collaborator per board
+            {t('settings.collab1')}
           </div>
           <div className={styles.planFeature}>
             <svg viewBox="0 0 12 12" fill="none">
               <circle cx="6" cy="6" r="4" fill="currentColor" />
             </svg>
-            100 AI queries/month
+            {t('settings.ai100')}
           </div>
         </div>
       </div>
 
       <div className={styles.usageSection}>
-        <span className={styles.usageSectionTitle}>Usage Limits</span>
+        <span className={styles.usageSectionTitle}>{t('settings.usageLimits')}</span>
         <div className={styles.usageItems}>
           <div className={styles.usageItem}>
             <div className={styles.usageHeader}>
               <div>
-                <div className={styles.usageLabel}>Boards</div>
-                <div className={styles.usageDesc}>Active workspace canvases</div>
+                <div className={styles.usageLabel}>{t('settings.boardsLabel')}</div>
+                <div className={styles.usageDesc}>{t('settings.boardsDesc')}</div>
               </div>
               <span className={styles.usageValue}>2 / 3</span>
             </div>
@@ -379,8 +383,8 @@ function PlanBillingTab() {
           <div className={styles.usageItem}>
             <div className={styles.usageHeader}>
               <div>
-                <div className={styles.usageLabel}>AI Queries</div>
-                <div className={styles.usageDesc}>Whiteboard AI assistant requests</div>
+                <div className={styles.usageLabel}>{t('settings.aiQueries')}</div>
+                <div className={styles.usageDesc}>{t('settings.aiQueriesDesc')}</div>
               </div>
               <span className={styles.usageValue}>47 / 100</span>
             </div>
@@ -391,21 +395,21 @@ function PlanBillingTab() {
           <div className={styles.usageItemDanger}>
             <div className={styles.usageHeader}>
               <div>
-                <div className={styles.usageLabel}>Collaborators</div>
-                <div className={styles.usageDesc}>Team members invited to boards</div>
+                <div className={styles.usageLabel}>{t('settings.collaborators')}</div>
+                <div className={styles.usageDesc}>{t('settings.collaboratorsDesc')}</div>
               </div>
               <span className={styles.usageValueDanger}>1 / 1</span>
             </div>
             <div className={styles.usageBar}>
               <div className={styles.usageBarDanger} style={{ width: '100%' }} />
             </div>
-            <span className={styles.limitWarning}>Limit reached — Upgrade to add more</span>
+            <span className={styles.limitWarning}>{t('settings.limitReached')}</span>
           </div>
         </div>
       </div>
 
       <div className={styles.usageSection}>
-        <span className={styles.usageSectionTitle}>Recent Activity</span>
+        <span className={styles.usageSectionTitle}>{t('settings.recentActivity')}</span>
         <div className={styles.activityGrid}>
           <div className={styles.activityCard}>
             <svg className={styles.activityIcon} viewBox="0 0 20 20" fill="none">
@@ -426,7 +430,7 @@ function PlanBillingTab() {
               />
             </svg>
             <div>
-              <div className={styles.activityLabel}>Last Invoice</div>
+              <div className={styles.activityLabel}>{t('settings.lastInvoice')}</div>
               <div className={styles.activityValue}>$0.00 (Free Tier)</div>
             </div>
           </div>
@@ -444,7 +448,7 @@ function PlanBillingTab() {
               <path d="M6 6h8v8H6z" stroke="currentColor" strokeWidth="1.5" />
             </svg>
             <div>
-              <div className={styles.activityLabel}>Next Reset</div>
+              <div className={styles.activityLabel}>{t('settings.nextReset')}</div>
               <div className={styles.activityValue}>Oct 12, 2023</div>
             </div>
           </div>
@@ -463,32 +467,30 @@ const TEAM_MEMBERS = [
 
 function TeamTab() {
   const [inviteEmail, setInviteEmail] = useState('');
+  const { t } = useTranslation();
 
   return (
     <>
       <div>
-        <h1 className={styles.pageTitle}>Your Team</h1>
-        <p className={styles.pageSubtitle}>
-          Manage your collaborators, invite new team members, and control workspace permissions from
-          one editorial dashboard.
-        </p>
+        <h1 className={styles.pageTitle}>{t('settings.teamTitle')}</h1>
+        <p className={styles.pageSubtitle}>{t('settings.teamSubtitle')}</p>
       </div>
 
       {/* Invite */}
       <div className={styles.formCard}>
-        <span className={styles.usageSectionTitle}>Invite New Members</span>
+        <span className={styles.usageSectionTitle}>{t('settings.inviteNewMembers')}</span>
         <div className={styles.inviteRow}>
           <input
             className={styles.fieldInput}
             style={{ flex: 1 }}
-            placeholder="colleague@company.com"
+            placeholder={t('settings.invitePlaceholder')}
             value={inviteEmail}
             onChange={(e) => setInviteEmail(e.target.value)}
           />
-          <DemoTooltip message="Invite requires backend">
+          <DemoTooltip message={t('demo.inviteRequired')}>
             <button className={styles.inviteBtn}>
               {' '}
-              Invite
+              {t('settings.invite')}
               <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
                 <path
                   d="M1 4.5L4.5 8L10 1"
@@ -506,18 +508,17 @@ function TeamTab() {
             <circle cx="7.5" cy="7.5" r="6" stroke="#006242" strokeWidth="1.5" />
             <path d="M7.5 5v3M7.5 10h0" stroke="#006242" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
-          <span>
-            Invited members will receive an email with instructions to join the Whiteboard AI
-            workspace.
-          </span>
+          <span>{t('settings.inviteHint')}</span>
         </div>
       </div>
 
       {/* Members */}
       <div className={styles.membersCard}>
         <div className={styles.membersHeader}>
-          <span className={styles.usageSectionTitle}>Active Members</span>
-          <span className={styles.memberCountBadge}>8 Members</span>
+          <span className={styles.usageSectionTitle}>{t('settings.activeMembers')}</span>
+          <span className={styles.memberCountBadge}>
+            {t('settings.membersCount', { count: 8 })}
+          </span>
         </div>
         {TEAM_MEMBERS.map((m, i) => (
           <div key={m.email} className={i > 0 ? styles.memberRowBorder : styles.memberRow}>
@@ -547,7 +548,7 @@ function TeamTab() {
         ))}
         <div className={styles.loadMoreFooter}>
           <button className={styles.loadMoreBtn}>
-            Load more team members
+            {t('settings.loadMore')}
             <svg width="7" height="5" viewBox="0 0 7 5" fill="none">
               <path
                 d="M1 1l2.5 3L6 1"
@@ -564,7 +565,7 @@ function TeamTab() {
       {/* Pending */}
       <div className={styles.pendingSection}>
         <div className={styles.pendingHeader}>
-          <span className={styles.usageSectionTitle}>Pending Invitations</span>
+          <span className={styles.usageSectionTitle}>{t('settings.pendingInvitations')}</span>
           <span className={styles.pendingDot} />
         </div>
         <div className={styles.pendingCard}>
@@ -588,19 +589,16 @@ function TeamTab() {
               <div className={styles.pendingTime}>Sent 2 hours ago</div>
             </div>
           </div>
-          <button className={styles.resendBtn}>Resend</button>
+          <button className={styles.resendBtn}>{t('settings.resend')}</button>
         </div>
       </div>
 
       {/* Transfer Ownership */}
       <div className={styles.dangerSection}>
-        <div className={styles.dangerTitle}>Transfer Ownership</div>
-        <p className={styles.dangerDesc}>
-          Changing the primary owner of this workspace will transfer all billing responsibilities
-          and administrative rights. This action is permanent.
-        </p>
-        <DemoTooltip message="Transfer requires backend">
-          <button className={styles.dangerBtn}>Transfer Ownership</button>
+        <div className={styles.dangerTitle}>{t('settings.transferOwnership')}</div>
+        <p className={styles.dangerDesc}>{t('settings.transferDesc')}</p>
+        <DemoTooltip message={t('demo.transferRequired')}>
+          <button className={styles.dangerBtn}>{t('settings.transferOwnership')}</button>
         </DemoTooltip>
       </div>
     </>
