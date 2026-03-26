@@ -350,7 +350,12 @@ export function DashboardPage() {
       </div>
 
       {/* Floating AI Button */}
-      <button className={styles.aiButton}>
+      <button
+        className={styles.aiButton}
+        onClick={() => {
+          if (boards.length > 0) navigate(`/board/${boards[0].id}?ai=1`);
+        }}
+      >
         <svg
           className={styles.aiButtonIcon}
           viewBox="0 0 22 22"

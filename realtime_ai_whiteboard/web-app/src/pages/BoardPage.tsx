@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useState, useCallback, useEffect } from 'react';
+import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { WhiteboardCanvas, type Tool } from '../components/canvas/WhiteboardCanvas';
 import { Toolbar } from '../components/canvas/Toolbar';
@@ -26,9 +26,17 @@ export function BoardPage() {
   const [demoModal, setDemoModal] = useState('');
   const { cursors, onlineCount, updateCursorPosition } = useYjs(id);
   const toggleAi = useAiStore((s) => s.togglePanel);
+  const isAiOpen = useAiStore((s) => s.isOpen);
+  const [searchParams] = useSearchParams();
   const boards = useBoardStore((s) => s.boards);
   const board = boards.find((b) => b.id === id);
   const boardTitle = board?.title || `Board ${id}`;
+
+  useEffect(() => {
+    if (searchParams.get('ai') === '1' && !isAiOpen) {
+      toggleAi();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const zoomIn = useCallback(() => setZoom((z) => Math.min(z + ZOOM_STEP, ZOOM_MAX)), []);
   const zoomOut = useCallback(() => setZoom((z) => Math.max(z - ZOOM_STEP, ZOOM_MIN)), []);
