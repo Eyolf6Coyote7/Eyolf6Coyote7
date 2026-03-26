@@ -5,9 +5,9 @@ spring:
   application:
     name: workflow-api
   datasource:
-    url: jdbc:postgresql://localhost:5433/workflow_db
-    username: workflow
-    password: workflow_secret
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5433/workflow_db}
+    username: ${DATABASE_USER:workflow}
+    password: ${DATABASE_PASSWORD:changeme}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

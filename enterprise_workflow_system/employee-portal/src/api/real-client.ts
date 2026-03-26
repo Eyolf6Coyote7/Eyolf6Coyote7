@@ -1,7 +1,7 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client/core'
 
 const httpLink = createHttpLink({
-  uri: import.meta.env.VITE_GRAPHQL_URL || 'http://localhost:4000/graphql',
+  uri: import.meta.env.VITE_GRAPHQL_URL || 'http://localhost:4002/graphql',
 })
 
 export const apolloClient = new ApolloClient({
@@ -9,7 +9,6 @@ export const apolloClient = new ApolloClient({
   cache: new InMemoryCache(),
 })
 
-// TODO: implement real GraphQL queries
 export const realClient = {
   async getRequests() {
     throw new Error('Real client not yet implemented. Set VITE_MOCK=true.')
