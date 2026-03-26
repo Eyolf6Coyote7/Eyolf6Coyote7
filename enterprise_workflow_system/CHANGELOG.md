@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/workflow/v1.1.1...workflow/v1.1.2) (2026-03-26)
+
+
+### Bug Fixes
+
+* pre-public audit — secrets, demo mode, code quality ([#186](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/186)) ([#187](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/187)) ([ada10c4](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/ada10c43eb6255e8777f86765fd74d4de479f220))
+
 ## [1.1.1](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/workflow/v1.1.0...workflow/v1.1.1) (2026-03-26)
 
 
