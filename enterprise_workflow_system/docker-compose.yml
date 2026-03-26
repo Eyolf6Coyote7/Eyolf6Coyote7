@@ -164,7 +164,7 @@ services:
   # Temporal UI
   # ──────────────────────────────────────────────
   workflow-temporal-ui:
-    image: temporalio/ui:latest
+    image: temporalio/ui:2.28.1
     container_name: workflow-temporal-ui
     restart: unless-stopped
     read_only: true

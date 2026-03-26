@@ -8,18 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        if (Schema::hasTable('audit_logs')) return;
-        Schema::create('audit_logs', function (Blueprint $table) {
-            $table->id();
-            $table->string('user_id')->nullable();
-            $table->string('action');
-            $table->string('entity_type')->nullable();
-            $table->unsignedBigInteger('entity_id')->nullable();
-            $table->jsonb('details')->nullable();
-            $table->timestamps();
+        if (!Schema::hasTable('audit_logs')) {
+            Schema::create('audit_logs', function (Blueprint $table) {
+                $table->id();
+                $table->uuid('user_id')->nullable();
+                $table->string('action');
+                $table->string('entity_type')->nullable();
+                $table->unsignedBigInteger('entity_id')->nullable();
+                $table->jsonb('details')->nullable();
+                $table->timestamps();
 
-            $table->index(['entity_type', 'entity_id']);
-        });
+                $table->index(['entity_type', 'entity_id']);
+            });
+        }
     }
 
     public function down(): void
