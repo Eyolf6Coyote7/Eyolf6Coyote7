@@ -6,8 +6,8 @@ spring:
     name: workflow-api
   datasource:
     url: jdbc:postgresql://localhost:5433/workflow_db
-    username: workflow_user
-    password: workflow_pass
+    username: workflow
+    password: workflow_secret
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -23,7 +23,7 @@ spring:
     schema:
       locations: classpath:schema/
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: localhost:9095
     consumer:
       group-id: workflow-api
       auto-offset-reset: earliest
