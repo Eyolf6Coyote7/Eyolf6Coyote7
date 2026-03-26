@@ -585,3 +585,283 @@
   line-height: 24px;
   color: #191C1D;
 }
+
+/* Team Tab */
+.inviteRow {
+  display: flex;
+  gap: 12px;
+}
+
+.inviteBtn {
+  composes: saveBtn;
+  height: 48px;
+  padding: 14px 24px;
+  gap: 8px;
+}
+
+.inviteHint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #434655;
+}
+
+.membersCard {
+  composes: formCard;
+  padding: 0;
+  gap: 0;
+}
+
+.membersHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  border-bottom: 1px solid rgba(193, 198, 215, 0.1);
+}
+
+.memberCountBadge {
+  padding: 4px 8px;
+  background: #D5E3FC;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #57657A;
+}
+
+.memberRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+}
+
+.memberRowBorder {
+  composes: memberRow;
+  border-top: 1px solid rgba(193, 198, 215, 0.1);
+}
+
+.memberInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.memberAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  background: #E7E8E9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: #414754;
+}
+
+.memberAvatarOwner {
+  composes: memberAvatar;
+  border: 2px solid rgba(0, 74, 198, 0.2);
+}
+
+.memberAvatarDefault {
+  composes: memberAvatar;
+  border: 1px solid rgba(195, 198, 215, 0.2);
+}
+
+.memberName {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  color: #191C1D;
+}
+
+.memberEmail {
+  font-size: 14px;
+  line-height: 20px;
+  color: #434655;
+}
+
+.memberActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.roleBadge {
+  padding: 8px 12px;
+  background: #F3F4F5;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 12px;
+  color: #434655;
+}
+
+.moreBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #C3C6D7;
+  padding: 8px;
+}
+
+.loadMoreFooter {
+  display: flex;
+  justify-content: center;
+  padding: 24px 32px;
+  background: rgba(243, 244, 245, 0.5);
+}
+
+.loadMoreBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  color: #004AC6;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Pending Invitations */
+.pendingSection {
+  padding-top: 16px;
+}
+
+.pendingHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.pendingDot {
+  width: 6px;
+  height: 6px;
+  background: #BA1A1A;
+  border-radius: 9999px;
+}
+
+.pendingCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #F3F4F5;
+  border: 1px solid rgba(195, 198, 215, 0.1);
+  border-radius: 8px;
+}
+
+.pendingInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.pendingAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  background: #E7E8E9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pendingEmail {
+  font-weight: 700;
+  font-size: 14px;
+  color: #191C1D;
+}
+
+.pendingTime {
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #C3C6D7;
+}
+
+.resendBtn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: none;
+  border: none;
+  font-weight: 700;
+  font-size: 12px;
+  color: #434655;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Transfer Ownership / Danger */
+.dangerSection {
+  border-top: 1px solid rgba(195, 198, 215, 0.2);
+  padding-top: 32px;
+}
+
+.dangerTitle {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: #BA1A1A;
+  margin-bottom: 16px;
+}
+
+.dangerDesc {
+  font-size: 12px;
+  line-height: 16px;
+  color: #434655;
+  margin: 0 0 8px;
+}
+
+.dangerBtn {
+  padding: 8px 16px;
+  border: 1px solid rgba(186, 26, 46, 0.2);
+  border-radius: 8px;
+  background: none;
+  font-weight: 700;
+  font-size: 14px;
+  color: #BA1A1A;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Plan features list */
+.planFeatures {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Usage items container */
+.usageItems {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.usageItemDanger {
+  composes: usageItem;
+  opacity: 0.5;
+  border-top: 1px solid #EDEEEF;
+  padding-top: 16px;
+}
+
+.usageValueDanger {
+  composes: usageValue;
+  color: #BA1A1A;
+}
+
+.limitWarning {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+  color: #BA1A1A;
+}
