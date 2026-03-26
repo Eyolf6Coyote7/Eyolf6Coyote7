@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.10.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/whiteboard/v1.9.2...whiteboard/v1.10.0) (2026-03-26)
+
+
+### Features
+
+* scaffold mobile apps for all 3 projects ([#173](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/173)) ([#177](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/177)) ([362bc48](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/362bc48f0e041fc3e36ecf08ed281101594fac7d))
+* **whiteboard:** wire AI Service with Ollama LLM ([#179](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/179)) ([#180](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/180)) ([cd50d6e](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/cd50d6e47ebc5322609625e25831a11299f23f0a))
+
 ## [1.9.2](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/whiteboard/v1.9.1...whiteboard/v1.9.2) (2026-03-26)
 
 

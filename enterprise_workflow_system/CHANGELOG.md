@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/workflow/v1.0.1...workflow/v1.1.0) (2026-03-26)
+
+
+### Features
+
+* scaffold mobile apps for all 3 projects ([#173](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/173)) ([#177](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/177)) ([362bc48](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/362bc48f0e041fc3e36ecf08ed281101594fac7d))
+
 ## [1.0.1](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/workflow/v1.0.0...workflow/v1.0.1) (2026-03-26)
 
 
