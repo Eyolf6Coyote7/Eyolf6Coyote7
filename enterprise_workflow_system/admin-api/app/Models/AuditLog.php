@@ -21,8 +21,12 @@ class AuditLog extends Model
         ];
     }
 
-    public function user()
+    /**
+     * user_id stores a UUID from Keycloak/JPA users table.
+     * No FK constraint since the users table uses UUID primary keys.
+     */
+    public function getUserIdAttribute($value): ?string
     {
-        return $this->belongsTo(User::class);
+        return $value;
     }
 }

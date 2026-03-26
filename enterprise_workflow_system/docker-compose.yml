@@ -20,6 +20,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-workflow_db}
     volumes:
       - workflow-postgres-data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-workflow} -d ${POSTGRES_DB:-workflow_db}"]
       interval: 10s
@@ -77,10 +78,10 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
       CLUSTER_ID: workflow-kafka-cluster-001
     volumes:
-      - workflow-kafka-data:/tmp/kraft-combined-logs
+      - workflow-kafka-data:/var/lib/kafka/data
     healthcheck:
       test: ["CMD-SHELL", "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092 > /dev/null 2>&1"]
       interval: 15s
@@ -105,7 +106,7 @@ services:
       - "${KEYCLOAK_PORT:-8080}:8080"
     environment:
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://workflow-postgres:5432/${POSTGRES_DB:-workflow_db}
+      KC_DB_URL: jdbc:postgresql://workflow-postgres:5432/keycloak_db
       KC_DB_USERNAME: ${POSTGRES_USER:-workflow}
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-workflow_secret}
       KC_HOSTNAME: localhost
@@ -141,12 +142,12 @@ services:
     ports:
       - "${TEMPORAL_PORT:-7233}:7233"
     environment:
-      DB: postgresql
+      DB: postgres12
       DB_PORT: 5432
       POSTGRES_USER: ${POSTGRES_USER:-workflow}
       POSTGRES_PWD: ${POSTGRES_PASSWORD:-workflow_secret}
       POSTGRES_SEEDS: workflow-postgres
-      DYNAMIC_CONFIG_FILE_PATH: config/dynamicconfig/development-sql.yaml
+      DYNAMIC_CONFIG_FILE_PATH: config/dynamicconfig/docker.yaml
     depends_on:
       workflow-postgres:
         condition: service_healthy
@@ -163,7 +164,7 @@ services:
   # Temporal UI
   # ──────────────────────────────────────────────
   workflow-temporal-ui:
-    image: temporalio/ui:2.26
+    image: temporalio/ui:2.28.1
     container_name: workflow-temporal-ui
     restart: unless-stopped
     read_only: true
@@ -172,14 +173,14 @@ services:
     tmpfs:
       - /tmp
     ports:
-      - "${TEMPORAL_UI_PORT:-8233}:8233"
+      - "${TEMPORAL_UI_PORT:-8233}:8080"
     environment:
       TEMPORAL_ADDRESS: workflow-temporal:7233
       TEMPORAL_CORS_ORIGINS: http://localhost:${TEMPORAL_UI_PORT:-8233}
     depends_on:
       - workflow-temporal
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8233/health || exit 1"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080 || exit 1"]
       interval: 15s
       timeout: 5s
       retries: 5
