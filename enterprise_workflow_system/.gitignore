@@ -6,6 +6,9 @@ out/
 *.jar
 !**/gradle/wrapper/gradle-wrapper.jar
 
+# Android
+local.properties
+
 # IntelliJ
 .idea/
 *.iml
