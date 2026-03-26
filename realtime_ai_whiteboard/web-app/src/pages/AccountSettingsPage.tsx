@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { DemoTooltip } from '../components/DemoTooltip';
 import styles from './AccountSettingsPage.module.css';
 
 const NAV_ITEMS = [
@@ -226,19 +227,21 @@ function ProfileTab() {
 
       <div className={styles.actions}>
         <button className={styles.discardBtn}>Discard Changes</button>
-        <button className={styles.saveBtn}>
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-            <path
-              d="M12 1H3a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V4l-2-3Z"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinejoin="round"
-            />
-            <path d="M4 1v4h6V1" stroke="currentColor" strokeWidth="1.5" />
-            <path d="M4 14v-5h7v5" stroke="currentColor" strokeWidth="1.5" />
-          </svg>
-          Save Profile
-        </button>
+        <DemoTooltip message="Save requires backend">
+          <button className={styles.saveBtn}>
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+              <path
+                d="M12 1H3a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V4l-2-3Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinejoin="round"
+              />
+              <path d="M4 1v4h6V1" stroke="currentColor" strokeWidth="1.5" />
+              <path d="M4 14v-5h7v5" stroke="currentColor" strokeWidth="1.5" />
+            </svg>
+            Save Profile
+          </button>
+        </DemoTooltip>
       </div>
 
       <div className={styles.bentoGrid}>
@@ -332,7 +335,9 @@ function PlanBillingTab() {
             <div className={styles.planLabel}>Current Plan</div>
             <div className={styles.planName}>Free Plan</div>
           </div>
-          <button className={styles.upgradeBtn}>Upgrade</button>
+          <DemoTooltip message="Upgrade requires backend">
+            <button className={styles.upgradeBtn}>Upgrade</button>
+          </DemoTooltip>
         </div>
         <div className={styles.planFeatures}>
           <div className={styles.planFeature}>
@@ -480,18 +485,21 @@ function TeamTab() {
             value={inviteEmail}
             onChange={(e) => setInviteEmail(e.target.value)}
           />
-          <button className={styles.inviteBtn}>
-            Invite
-            <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
-              <path
-                d="M1 4.5L4.5 8L10 1"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+          <DemoTooltip message="Invite requires backend">
+            <button className={styles.inviteBtn}>
+              {' '}
+              Invite
+              <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+                <path
+                  d="M1 4.5L4.5 8L10 1"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </DemoTooltip>
         </div>
         <div className={styles.inviteHint}>
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
@@ -591,7 +599,9 @@ function TeamTab() {
           Changing the primary owner of this workspace will transfer all billing responsibilities
           and administrative rights. This action is permanent.
         </p>
-        <button className={styles.dangerBtn}>Transfer Ownership</button>
+        <DemoTooltip message="Transfer requires backend">
+          <button className={styles.dangerBtn}>Transfer Ownership</button>
+        </DemoTooltip>
       </div>
     </>
   );

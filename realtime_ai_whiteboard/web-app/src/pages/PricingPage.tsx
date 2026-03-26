@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { DemoTooltip } from '../components/DemoTooltip';
 import styles from './PricingPage.module.css';
 
 const Check = () => (
@@ -98,7 +99,9 @@ export function PricingPage() {
                 PNG export
               </div>
             </div>
-            <button className={styles.cardBtnOutline}>Current Plan</button>
+            <DemoTooltip message="Plan management requires backend">
+              <button className={styles.cardBtnOutline}>Current Plan</button>
+            </DemoTooltip>
           </div>
 
           {/* Pro */}
@@ -140,7 +143,9 @@ export function PricingPage() {
                 Priority support
               </div>
             </div>
-            <button className={styles.cardBtnPrimary}>Upgrade to Pro</button>
+            <DemoTooltip message="Upgrade requires backend">
+              <button className={styles.cardBtnPrimary}>Upgrade to Pro</button>
+            </DemoTooltip>
           </div>
 
           {/* Team */}
@@ -181,7 +186,9 @@ export function PricingPage() {
                 Dedicated support
               </div>
             </div>
-            <button className={styles.cardBtnDark}>Contact Sales</button>
+            <DemoTooltip message="Contact sales requires backend">
+              <button className={styles.cardBtnDark}>Contact Sales</button>
+            </DemoTooltip>
           </div>
         </div>
 
@@ -219,7 +226,9 @@ export function PricingPage() {
         {/* CTA */}
         <div className={styles.ctaSection}>
           <h2 className={styles.ctaTitle}>Still not sure? Try free for 14 days.</h2>
-          <button className={styles.ctaBtn}>Start Free Trial</button>
+          <DemoTooltip message="Free trial requires backend">
+            <button className={styles.ctaBtn}>Start Free Trial</button>
+          </DemoTooltip>
         </div>
       </main>
 

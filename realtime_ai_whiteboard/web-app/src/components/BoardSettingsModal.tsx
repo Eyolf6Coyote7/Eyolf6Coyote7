@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { DemoTooltip } from './DemoTooltip';
 import styles from './BoardSettingsModal.module.css';
 
 interface Props {
@@ -133,7 +134,9 @@ export function BoardSettingsModal({ isOpen, onClose, boardName = 'Product Brain
                   value={inviteEmail}
                   onChange={(e) => setInviteEmail(e.target.value)}
                 />
-                <button className={styles.inviteButton}>Invite</button>
+                <DemoTooltip message="Invite requires backend">
+                  <button className={styles.inviteButton}>Invite</button>
+                </DemoTooltip>
               </div>
             </div>
             <div className={styles.memberList}>
@@ -212,17 +215,19 @@ export function BoardSettingsModal({ isOpen, onClose, boardName = 'Product Brain
               <span className={styles.dangerText}>
                 Permanently delete this board and all its contents. This action cannot be undone.
               </span>
-              <button className={styles.deleteButton}>
-                <svg width="12" height="14" viewBox="0 0 12 14" fill="none">
-                  <path
-                    d="M1 3H11M4 3V2C4 1.44772 4.44772 1 5 1H7C7.55228 1 8 1.44772 8 2V3M2 3V12C2 12.5523 2.44772 13 3 13H9C9.55228 13 10 12.5523 10 12V3"
-                    stroke="#B6152E"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
-                Delete Board
-              </button>
+              <DemoTooltip message="Delete requires backend">
+                <button className={styles.deleteButton}>
+                  <svg width="12" height="14" viewBox="0 0 12 14" fill="none">
+                    <path
+                      d="M1 3H11M4 3V2C4 1.44772 4.44772 1 5 1H7C7.55228 1 8 1.44772 8 2V3M2 3V12C2 12.5523 2.44772 13 3 13H9C9.55228 13 10 12.5523 10 12V3"
+                      stroke="#B6152E"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  Delete Board
+                </button>
+              </DemoTooltip>
             </div>
           </div>
         </div>
@@ -232,7 +237,9 @@ export function BoardSettingsModal({ isOpen, onClose, boardName = 'Product Brain
           <button className={styles.cancelButton} onClick={onClose}>
             Cancel
           </button>
-          <button className={styles.saveButton}>Save Changes</button>
+          <DemoTooltip message="Save requires backend">
+            <button className={styles.saveButton}>Save Changes</button>
+          </DemoTooltip>
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import { Toolbar } from '../components/canvas/Toolbar';
 import { CursorPresence } from '../components/canvas/CursorPresence';
 import { AiChatPanel } from '../components/ai/AiChatPanel';
 import { DemoModal } from '../components/DemoModal';
+import { DemoTooltip } from '../components/DemoTooltip';
 import { useYjs } from '../hooks/useYjs';
 import { useAiStore } from '../stores/ai.store';
 import { useBoardStore } from '../stores/board.store';
@@ -86,9 +87,11 @@ export function BoardPage() {
             <div className={styles.collabAvatar} style={{ borderColor: '#22C55E', zIndex: 2 }} />
             <div className={styles.collabAvatar} style={{ borderColor: '#F97316', zIndex: 1 }} />
           </div>
-          <button className={styles.shareBtn} onClick={handleShare}>
-            Share
-          </button>
+          <DemoTooltip message="Share requires backend">
+            <button className={styles.shareBtn} onClick={handleShare}>
+              Share
+            </button>
+          </DemoTooltip>
           <button className={styles.moreBtn}>
             <svg width="4" height="16" viewBox="0 0 4 16" fill="none">
               <circle cx="2" cy="2" r="1.5" fill="currentColor" />
