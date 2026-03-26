@@ -1,6 +1,11 @@
+import os
 from typing import Literal, TypedDict
 
+from langchain_ollama import ChatOllama
 from langgraph.graph import END, StateGraph
+
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.2:1b")
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
 
 class AgentState(TypedDict):
@@ -59,9 +64,25 @@ def execute_tools(state: AgentState) -> AgentState:
 
 def generate_response(state: AgentState) -> AgentState:
     """Generate final response using Ollama LLM."""
-    response = (
-        f"AI response for: {state['prompt']} (with context: {state['context'][:50]})"
+    llm = ChatOllama(model=OLLAMA_MODEL, base_url=OLLAMA_BASE_URL, temperature=0.7)
+
+    system_prompt = (
+        "You are an AI assistant for a collaborative whiteboard application. "
+        "Help users brainstorm, organize ideas, and provide suggestions. "
+        "Keep responses concise and actionable."
     )
+
+    messages = [
+        ("system", system_prompt),
+        ("human", f"Context: {state['context']}\n\nUser request: {state['prompt']}"),
+    ]
+
+    try:
+        result = llm.invoke(messages)
+        response = result.content
+    except Exception as e:
+        response = f"AI is currently unavailable. Error: {str(e)}"
+
     return {**state, "response": response}
 
 
