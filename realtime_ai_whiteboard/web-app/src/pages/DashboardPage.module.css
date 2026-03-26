@@ -187,7 +187,8 @@
 .sidebarCta {
   margin-top: 48px;
   width: 100%;
-  padding: 12px 0;
+  padding: 12px 24px;
+  box-sizing: border-box;
   background: linear-gradient(101.31deg, #004AC6 0%, #2563EB 100%);
   border-radius: 12px;
   border: none;
