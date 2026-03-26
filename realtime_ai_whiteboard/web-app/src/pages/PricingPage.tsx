@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { DemoTooltip } from '../components/DemoTooltip';
+import { LanguageToggle } from '../components/LanguageToggle';
 import styles from './PricingPage.module.css';
 
 const Check = () => (
@@ -42,6 +43,7 @@ export function PricingPage() {
           <button className={styles.navLink}>{t('pricing.navDocs')}</button>
         </div>
         <div className={styles.navActions}>
+          <LanguageToggle />
           <Link to="/auth" className={styles.loginBtn}>
             {t('pricing.logIn')}
           </Link>

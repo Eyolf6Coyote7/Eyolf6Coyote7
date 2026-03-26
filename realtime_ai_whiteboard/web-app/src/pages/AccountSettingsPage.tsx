@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DemoTooltip } from '../components/DemoTooltip';
+import { LanguageToggle } from '../components/LanguageToggle';
 import styles from './AccountSettingsPage.module.css';
 
 const NAV_ITEMS = [
@@ -34,6 +35,7 @@ export function AccountSettingsPage() {
           </button>
         </div>
         <div className={styles.topNavActions}>
+          <LanguageToggle />
           <button className={styles.iconBtn}>
             <svg width="16" height="20" viewBox="0 0 16 20" fill="none">
               <path

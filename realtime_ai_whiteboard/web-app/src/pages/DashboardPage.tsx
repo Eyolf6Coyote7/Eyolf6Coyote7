@@ -5,6 +5,7 @@ import { useBoardStore } from '../stores/board.store';
 import { useAuthStore } from '../stores/auth.store';
 import { BoardThumbnail } from '../components/BoardThumbnail';
 import { DemoTooltip } from '../components/DemoTooltip';
+import { LanguageToggle } from '../components/LanguageToggle';
 import styles from './DashboardPage.module.css';
 
 const isMock = import.meta.env.VITE_MOCK === 'true';
@@ -90,6 +91,7 @@ export function DashboardPage() {
         </div>
         <div className={styles.topBarActions}>
           {isMock && <span className={styles.demoNote}>Static demo</span>}
+          <LanguageToggle />
           <button className={styles.iconButton} title="Notifications">
             <svg
               width="16"

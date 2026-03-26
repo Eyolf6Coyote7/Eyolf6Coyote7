@@ -7,6 +7,7 @@ import { CursorPresence } from '../components/canvas/CursorPresence';
 import { AiChatPanel } from '../components/ai/AiChatPanel';
 import { DemoModal } from '../components/DemoModal';
 import { DemoTooltip } from '../components/DemoTooltip';
+import { LanguageToggle } from '../components/LanguageToggle';
 import { useYjs } from '../hooks/useYjs';
 import { useAiStore } from '../stores/ai.store';
 import { useBoardStore } from '../stores/board.store';
@@ -76,6 +77,7 @@ export function BoardPage() {
           </span>
         </div>
         <div className={styles.headerRight}>
+          <LanguageToggle />
           <div className={styles.onlineBadge}>
             <span className={styles.onlineDot} />
             <span className={styles.onlineText}>
