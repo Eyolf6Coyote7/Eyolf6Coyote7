@@ -6,18 +6,58 @@ on:
       - '3d_asset_collaboration/**'
 
 jobs:
-  lint:
+  build-asset-api:
+    name: Build — Asset API (C#)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 3d_asset_collaboration/asset-api
     steps:
       - uses: actions/checkout@v4
-      # TODO: setup-dotnet + dotnet format --verify-no-changes when .csproj exists
-      - name: dotnet format (placeholder)
-        run: echo "Skipped — no .csproj yet"
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet build --no-restore || dotnet restore && dotnet build
 
-  test:
+  build-iot-consumer:
+    name: Build — IoT Consumer (C#)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 3d_asset_collaboration/iot-consumer
     steps:
       - uses: actions/checkout@v4
-      # TODO: setup-dotnet + dotnet test when tests exist
-      - name: Unit tests (placeholder)
-        run: echo "Skipped — no tests yet"
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet build --no-restore || dotnet restore && dotnet build
+
+  lint-ai-service:
+    name: Lint — AI Service (Python)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 3d_asset_collaboration/ai-service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install ruff
+      - run: ruff check src/
+      - run: ruff format --check src/
+
+  lint-asset-portal:
+    name: Lint — Asset Portal (React)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 3d_asset_collaboration/asset-portal
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: pnpm install
+      - run: npx prettier --check "src/**/*.{ts,tsx}"

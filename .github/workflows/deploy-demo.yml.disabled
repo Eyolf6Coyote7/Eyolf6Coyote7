@@ -1,4 +1,4 @@
-name: Deploy Whiteboard Demo
+name: Deploy Demo (GitHub Pages)
 
 on:
   push:
@@ -6,29 +6,84 @@ on:
       - dev
     paths:
       - 'realtime_ai_whiteboard/web-app/**'
+      - 'enterprise_workflow_system/employee-portal/**'
+      - 'enterprise_workflow_system/admin-dashboard/**'
+      - '3d_asset_collaboration/asset-portal/**'
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: realtime_ai_whiteboard/web-app
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: pnpm install
-      - run: pnpm build:demo
+
+      - name: Build Whiteboard Demo
+        working-directory: realtime_ai_whiteboard/web-app
+        env:
+          VITE_MOCK: 'true'
+        run: |
+          pnpm install
+          npx vite build --base /fullstack_ai_workspace/whiteboard/
+
+      - name: Build Employee Portal Demo
+        working-directory: enterprise_workflow_system/employee-portal
+        env:
+          VITE_MOCK: 'true'
+        run: |
+          pnpm install
+          npx vite build --base /fullstack_ai_workspace/workflow/
+
+      - name: Build Admin Dashboard Demo
+        working-directory: enterprise_workflow_system/admin-dashboard
+        env:
+          VITE_MOCK: 'true'
+        run: |
+          pnpm install
+          npx vite build --base /fullstack_ai_workspace/workflow-admin/
+
+      - name: Build Asset Portal Demo
+        working-directory: 3d_asset_collaboration/asset-portal
+        env:
+          VITE_MOCK: 'true'
+        run: |
+          pnpm install
+          npx vite build --base /fullstack_ai_workspace/3d-asset/
+
+      - name: Assemble site
+        run: |
+          mkdir -p _site/whiteboard _site/workflow _site/workflow-admin _site/3d-asset
+          cp -r realtime_ai_whiteboard/web-app/dist/* _site/whiteboard/
+          cp -r enterprise_workflow_system/employee-portal/dist/* _site/workflow/
+          cp -r enterprise_workflow_system/admin-dashboard/dist/* _site/workflow-admin/
+          cp -r 3d_asset_collaboration/asset-portal/dist/* _site/3d-asset/
+          cat > _site/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html><head><title>Fullstack AI Workspace</title>
+          <style>body{font-family:system-ui;max-width:600px;margin:60px auto;padding:0 20px}a{display:block;padding:16px;margin:8px 0;background:#f0f0f0;border-radius:8px;text-decoration:none;color:#333}a:hover{background:#e0e0e0}</style></head>
+          <body><h1>Fullstack AI Workspace</h1>
+          <p>3 projects x 3 industries x 7 languages</p>
+          <a href="whiteboard/">Realtime AI Whiteboard (SaaS)</a>
+          <a href="workflow/">Employee Portal (Semiconductor)</a>
+          <a href="workflow-admin/">Admin Dashboard (Semiconductor)</a>
+          <a href="3d-asset/">3D Asset Portal (Media)</a>
+          </body></html>
+          EOF
+
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: realtime_ai_whiteboard/web-app/dist
+          path: _site
 
   deploy:
     needs: build
