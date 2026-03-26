@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.2](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/whiteboard/v1.9.1...whiteboard/v1.9.2) (2026-03-26)
+
+
+### Bug Fixes
+
+* docker-compose fixes for real mode ([#174](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/174)) ([#175](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/175)) ([2f0ee91](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/2f0ee91865c789fda2fd3b909e7ce9a8bad0ead2))
+
 ## [1.9.1](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/whiteboard/v1.9.0...whiteboard/v1.9.1) (2026-03-25)
 
 
