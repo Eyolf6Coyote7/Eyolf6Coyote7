@@ -1,7 +1,13 @@
-import { View, Text, FlatList, StyleSheet, Image } from "react-native";
+import { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import { getAssets } from "../../src/api";
-
-const assets = getAssets();
+import type { Asset } from "../../src/api";
 
 const PLACEHOLDER_COLORS = [
   "#6c5ce7",
@@ -13,6 +19,23 @@ const PLACEHOLDER_COLORS = [
 ];
 
 export default function AssetsScreen() {
+  const [assets, setAssets] = useState<Asset[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getAssets()
+      .then(setAssets)
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
   return (
     <FlatList
       data={assets}
@@ -46,6 +69,7 @@ export default function AssetsScreen() {
 }
 
 const styles = StyleSheet.create({
+  center: { flex: 1, justifyContent: "center", alignItems: "center" },
   list: { padding: 12 },
   card: {
     flex: 1,

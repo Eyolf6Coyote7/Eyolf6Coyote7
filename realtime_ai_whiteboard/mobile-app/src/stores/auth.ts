@@ -13,8 +13,8 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  user: { name: "Jerry", email: "jerry@example.com" },
-  token: "mock-token",
+  user: null,
+  token: null,
   login: (name, email, token) => set({ user: { name, email }, token }),
   logout: () => set({ user: null, token: null }),
 }));

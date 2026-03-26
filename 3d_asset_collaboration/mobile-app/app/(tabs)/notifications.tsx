@@ -1,9 +1,32 @@
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import { getNotifications } from "../../src/api";
-
-const notifications = getNotifications();
+import type { Notification } from "../../src/api";
 
 export default function NotificationsScreen() {
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getNotifications()
+      .then(setNotifications)
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
   return (
     <FlatList
       data={notifications}
@@ -21,6 +44,7 @@ export default function NotificationsScreen() {
 }
 
 const styles = StyleSheet.create({
+  center: { flex: 1, justifyContent: "center", alignItems: "center" },
   list: { padding: 12 },
   card: {
     backgroundColor: "#fff",

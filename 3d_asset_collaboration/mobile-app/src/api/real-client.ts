@@ -1,8 +1,11 @@
 import axios from "axios";
 import type { Asset, Notification } from "./mock-client";
 
+const API_BASE_URL =
+  process.env.EXPO_PUBLIC_API_URL || "http://localhost:4003/api";
+
 const api = axios.create({
-  baseURL: "http://localhost:8000/api/v1",
+  baseURL: API_BASE_URL,
   timeout: 10000,
 });
 

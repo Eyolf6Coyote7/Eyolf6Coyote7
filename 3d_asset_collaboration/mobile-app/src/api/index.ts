@@ -1,17 +1,17 @@
 import { mockAssets, mockNotifications } from "./mock-client";
+import { fetchAssets, fetchNotifications } from "./real-client";
 import type { Asset, Notification } from "./mock-client";
 
-const USE_MOCK = true;
+const USE_MOCK = __DEV__;
 
 export type { Asset, Notification };
 
-export function getAssets(): Asset[] {
+export async function getAssets(): Promise<Asset[]> {
   if (USE_MOCK) return mockAssets;
-  // In real mode, use fetchAssets() from real-client.ts via async calls
-  return [];
+  return fetchAssets();
 }
 
-export function getNotifications(): Notification[] {
+export async function getNotifications(): Promise<Notification[]> {
   if (USE_MOCK) return mockNotifications;
-  return [];
+  return fetchNotifications();
 }
