@@ -44,6 +44,7 @@ docker compose up -d
 cd bff-api
 cp .env.example .env
 pnpm install
+npx prisma db push       # sync database schema
 pnpm start:dev
 ```
 
