@@ -16,7 +16,7 @@
     "eslint --fix"
   ],
   "enterprise_workflow_system/workflow-api/**/*.kt": [
-    "ktlint --format"
+    "bash -c 'cd enterprise_workflow_system/workflow-api && ./gradlew ktlintFormat'"
   ],
   "enterprise_workflow_system/admin-api/**/*.php": [
     "php-cs-fixer fix"
@@ -29,8 +29,8 @@
     "prettier --write",
     "eslint --fix"
   ],
-  "enterprise_workflow_system/mobile-app/**/*.kt": [
-    "ktlint --format"
+  "enterprise_workflow_system/notification-worker/**/*.kt": [
+    "bash -c 'cd enterprise_workflow_system/notification-worker && ./gradlew ktlintFormat'"
   ],
   "3d_asset_collaboration/asset-api/**/*.cs": [
     "dotnet format --include"
