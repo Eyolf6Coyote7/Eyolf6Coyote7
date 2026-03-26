@@ -71,27 +71,36 @@ async def prompt(req: PromptRequest):
 
 @app.post("/api/stream")
 async def stream_prompt(req: PromptRequest):
-    """Submit a prompt and get SSE streaming response."""
+    """Submit a prompt and get true SSE streaming response via Ollama."""
+    from langchain_ollama import ChatOllama
 
     async def event_generator():
-        state: AgentState = {
-            "prompt": req.prompt,
-            "board_id": req.board_id,
-            "user_id": req.user_id,
-            "intent": "",
-            "context": "",
-            "plan": [],
-            "tool_results": [],
-            "response": "",
-            "should_retry": False,
-        }
+        llm = ChatOllama(
+            model=os.getenv("OLLAMA_MODEL", "llama3.2:1b"),
+            base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
+            temperature=0.7,
+        )
 
-        result = await asyncio.to_thread(agent.invoke, state)
+        system_prompt = (
+            "You are an AI assistant for a collaborative whiteboard application. "
+            "Help users brainstorm, organize ideas, and provide suggestions. "
+            "Keep responses concise and actionable."
+        )
 
-        words = result["response"].split()
-        for i, word in enumerate(words):
-            yield {"event": "token", "data": word + (" " if i < len(words) - 1 else "")}
-            await asyncio.sleep(0.05)
+        messages = [
+            ("system", system_prompt),
+            ("human", req.prompt),
+        ]
+
+        try:
+            for chunk in llm.stream(messages):
+                if chunk.content:
+                    yield {"event": "token", "data": chunk.content}
+        except Exception:
+            yield {
+                "event": "token",
+                "data": "AI is currently unavailable. Please try again later.",
+            }
 
         yield {"event": "done", "data": ""}
 

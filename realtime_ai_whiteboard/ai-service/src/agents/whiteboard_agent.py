@@ -80,8 +80,8 @@ def generate_response(state: AgentState) -> AgentState:
     try:
         result = llm.invoke(messages)
         response = result.content
-    except Exception as e:
-        response = f"AI is currently unavailable. Error: {str(e)}"
+    except Exception:
+        response = "AI is currently unavailable. Please try again later."
 
     return {**state, "response": response}
 
