@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,22 +39,24 @@ export default function LoginPage() {
         onSubmit={handleSubmit}
         style={{ width: 360, background: "#161822", padding: 32, borderRadius: 16, border: "1px solid #2a2d3a" }}
       >
-        <h1 style={{ fontSize: 24, fontWeight: 700, color: "#6c63ff", marginBottom: 8 }}>Asset Portal</h1>
-        <p style={{ color: "#8b8fa3", fontSize: 14, marginBottom: 24 }}>Sign in to your account</p>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: "#6c63ff", marginBottom: 8 }}>{t("login.title")}</h1>
+        <p style={{ color: "#8b8fa3", fontSize: 14, marginBottom: 24 }}>{t("login.subtitle")}</p>
 
         <label style={{ display: "block", marginBottom: 16 }}>
-          <span style={{ display: "block", fontSize: 13, color: "#8b8fa3", marginBottom: 6 }}>Email</span>
+          <span style={{ display: "block", fontSize: 13, color: "#8b8fa3", marginBottom: 6 }}>{t("login.email")}</span>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             style={inputStyle}
-            placeholder="you@example.com"
+            placeholder={t("login.emailPlaceholder")}
           />
         </label>
 
         <label style={{ display: "block", marginBottom: 24 }}>
-          <span style={{ display: "block", fontSize: 13, color: "#8b8fa3", marginBottom: 6 }}>Password</span>
+          <span style={{ display: "block", fontSize: 13, color: "#8b8fa3", marginBottom: 6 }}>
+            {t("login.password")}
+          </span>
           <input
             type="password"
             value={password}
@@ -76,7 +80,7 @@ export default function LoginPage() {
             cursor: "pointer",
           }}
         >
-          Sign In
+          {t("login.signIn")}
         </button>
       </form>
     </div>

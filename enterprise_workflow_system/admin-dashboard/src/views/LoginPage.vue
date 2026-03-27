@@ -24,17 +24,17 @@ async function handleLogin() {
   <div class="login-wrapper">
     <el-card class="login-card" shadow="always">
       <template #header>
-        <h2 style="margin: 0; text-align: center">Admin Login</h2>
+        <h2 style="margin: 0; text-align: center">{{ $t('auth.adminLogin') }}</h2>
       </template>
       <el-form @submit.prevent="handleLogin">
-        <el-form-item label="Username">
+        <el-form-item :label="$t('auth.username')">
           <el-input v-model="username" prefix-icon="User" />
         </el-form-item>
-        <el-form-item label="Password">
+        <el-form-item :label="$t('auth.password')">
           <el-input v-model="password" type="password" prefix-icon="Lock" show-password />
         </el-form-item>
         <el-button type="primary" native-type="submit" :loading="loading" style="width: 100%">
-          Sign In
+          {{ $t('auth.signIn') }}
         </el-button>
       </el-form>
     </el-card>
