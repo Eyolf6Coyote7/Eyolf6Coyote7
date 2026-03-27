@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/Eyolf6Coyote7/Eyolf6Coyote7/compare/3d-asset/v1.1.2...3d-asset/v1.1.3) (2026-03-27)
+
+
+### Bug Fixes
+
+* add BASE_URL to all routers for GitHub Pages SPA support ([#200](https://github.com/Eyolf6Coyote7/Eyolf6Coyote7/issues/200)) ([74303a6](https://github.com/Eyolf6Coyote7/Eyolf6Coyote7/commit/74303a6802f218a507b464167cd4cbf84b2fdf54))
+
 ## [1.1.2](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/3d-asset/v1.1.1...3d-asset/v1.1.2) (2026-03-26)
 
 
