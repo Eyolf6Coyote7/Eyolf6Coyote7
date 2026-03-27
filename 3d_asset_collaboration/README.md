@@ -2,90 +2,67 @@
 
 > DAM + Digital Twin + IoT. gRPC streaming for large files + Three.js browser preview.
 
-**Industry:** Media / Advertising | **Architecture:** Hexagonal (Ports & Adapters) | **11 systems**
+**Industry:** Media / Advertising | **Architecture:** Hexagonal (Ports & Adapters)
 
 ## Systems
 
-| # | System | Directory | Tech | Port |
-|---|--------|-----------|------|------|
-| 1 | PostgreSQL | docker | PostgreSQL 16 | 5434 |
-| 2 | TimescaleDB | docker | TimescaleDB (PG16) | 5435 |
-| 3 | Redis | docker | Redis 7.2 | 6382 |
-| 4 | Kafka | docker | Apache Kafka 3.7 | 9096 |
-| 5 | MinIO | docker | MinIO | 9004/9005 |
-| 6 | Elasticsearch | docker | Elasticsearch 8.13 | 9201 |
-| 7 | Mosquitto | docker | Eclipse Mosquitto 2.0 | 1883 |
-| 8 | Unleash | docker | Unleash | 4244 |
-| 9 | Asset API | `asset-api/` | ASP.NET Core 8 + gRPC + SignalR | 4003 |
-| 10 | AI Service | `ai-service/` | Python FastAPI + ONNX | 4013 |
-| 11 | Asset Portal | `asset-portal/` | React 19 + Three.js + Redux Toolkit | 3003 |
+| # | System | Tech | Port |
+|---|--------|------|------|
+| 1 | PostgreSQL | PostgreSQL 16 | 5434 |
+| 2 | TimescaleDB | TimescaleDB (PG16) | 5435 |
+| 3 | Redis | Redis 7.2 | 6382 |
+| 4 | Kafka | Apache Kafka 3.7 | 9096 |
+| 5 | MinIO | MinIO | 9004 |
+| 6 | Elasticsearch | Elasticsearch 8.13 | 9200 |
+| 7 | Mosquitto | Eclipse Mosquitto 2.0 | 1883 |
+| 8 | Unleash | Unleash | 4244 |
+| 9 | Asset API | ASP.NET Core 8 + gRPC + SignalR | 5000 |
+| 10 | AI Service | Python FastAPI + ONNX | 4020 |
+| 11 | IoT Consumer | C# Kafka worker | — |
+| 12 | Asset Portal | React 19 + Three.js + Redux Toolkit | 5176 |
+| 13 | Mobile App | React Native + Expo | — |
 
 ## Quick Start
 
-### Demo Mode (no backend needed)
+### Demo Mode
 
 ```bash
-cd asset-portal && pnpm install && pnpm dev
-# Open http://localhost:3003
-# Features: 3D viewer, asset grid, IoT dashboard with mock data
+cd asset-portal && pnpm install && VITE_MOCK=true pnpm dev   # http://localhost:5176
 ```
 
-### Real Mode (full stack)
-
-#### Start
+### Real Mode
 
 ```bash
-# 1. Infrastructure (8 Docker services)
+# 1. Docker infra (8 services)
 docker compose up -d
 
 # 2. Asset API (C# + gRPC + SignalR)
-cd asset-api
-dotnet run --urls http://localhost:4003    # Swagger: http://localhost:4003/swagger
+cd asset-api && dotnet run
 
 # 3. AI Service (Python + ONNX)
-cd ai-service
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt            # first time only
-python3 -m uvicorn src.main:app --port 4013
+cd ai-service && source .venv/bin/activate && uvicorn src.main:app --port 4020
 
-# 4. IoT Consumer (C# Kafka worker)
-cd iot-consumer
-dotnet run
+# 4. IoT Consumer
+cd iot-consumer && dotnet run
 
-# 5. Asset Portal (React + Three.js)
-cd asset-portal
-echo "VITE_MOCK=false" > .env.local        # switch to real mode
-pnpm install && pnpm dev
+# 5. Asset Portal
+cd asset-portal && pnpm install && pnpm dev
 ```
 
-#### Stop
+### Stop
 
 ```bash
-# Stop app services: Ctrl+C in each terminal
-
-# Stop Docker infrastructure
+# Ctrl+C each terminal, then:
 docker compose down
 ```
-
-### All Service URLs
-
-| Service | URL |
-|---------|-----|
-| Asset Portal | http://localhost:3003 |
-| Asset API (Swagger) | http://localhost:4003/swagger |
-| AI Service | http://localhost:4013/health |
-| MinIO Console | http://localhost:9005 |
-| Elasticsearch | http://localhost:9201 |
-| Unleash | http://localhost:4244 |
-| Mosquitto (MQTT) | localhost:1883 |
 
 ## Prerequisites
 
 - Node.js 20+ / pnpm 9+
-- .NET 8 SDK (for C# services)
-- Python 3.12+ (for AI service)
+- .NET 8 SDK
+- Python 3.12+
 - Docker + Docker Compose
 
 ## Documentation
 
-See [docs/](docs/) for architecture, technical design, ADRs, and development roadmap.
+See [docs/](docs/) for ConOps, PRD, UI/UX, Architecture, Technical Design, Roadmap, Testing.
