@@ -1,0 +1,48 @@
+coverage:
+  range: "30...80"
+  status:
+    project:
+      default:
+        target: 60%
+        threshold: 5%
+    patch:
+      default:
+        target: 70%
+
+flags:
+  whiteboard-web:
+    paths: [realtime_ai_whiteboard/web-app/src/]
+    carryforward: true
+  whiteboard-bff:
+    paths: [realtime_ai_whiteboard/bff-api/src/]
+    carryforward: true
+  whiteboard-ai:
+    paths: [realtime_ai_whiteboard/ai-service/src/]
+    carryforward: true
+  workflow-portal:
+    paths: [enterprise_workflow_system/employee-portal/src/]
+    carryforward: true
+  workflow-admin:
+    paths: [enterprise_workflow_system/admin-dashboard/src/]
+    carryforward: true
+  workflow-api:
+    paths: [enterprise_workflow_system/workflow-api/src/]
+    carryforward: true
+  workflow-notification:
+    paths: [enterprise_workflow_system/notification-worker/src/]
+    carryforward: true
+  workflow-php:
+    paths: [enterprise_workflow_system/admin-api/app/]
+    carryforward: true
+  asset-web:
+    paths: [3d_asset_collaboration/asset-portal/src/]
+    carryforward: true
+  asset-api:
+    paths: [3d_asset_collaboration/asset-api/]
+    carryforward: true
+  asset-ai:
+    paths: [3d_asset_collaboration/ai-service/src/]
+    carryforward: true
+  asset-iot:
+    paths: [3d_asset_collaboration/iot-consumer/]
+    carryforward: true

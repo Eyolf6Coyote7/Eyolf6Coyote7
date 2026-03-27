@@ -1,6 +1,10 @@
 name: CI — Workflow
 
 on:
+  push:
+    branches: [dev, stable]
+    paths:
+      - 'enterprise_workflow_system/**'
   pull_request:
     paths:
       - 'enterprise_workflow_system/**'
@@ -77,3 +81,101 @@ jobs:
           node-version: 20
       - run: pnpm install
       - run: npx prettier --check "src/**/*.{ts,tsx,vue}"
+
+  test-employee-portal:
+    name: Test + Coverage — Employee Portal
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: enterprise_workflow_system/employee-portal
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install
+      - run: pnpm vitest run --coverage
+      - uses: codecov/codecov-action@v5
+        with:
+          files: enterprise_workflow_system/employee-portal/coverage/lcov.info
+          flags: workflow-portal
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  test-admin-dashboard:
+    name: Test + Coverage — Admin Dashboard
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: enterprise_workflow_system/admin-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install
+      - run: pnpm vitest run --coverage
+      - uses: codecov/codecov-action@v5
+        with:
+          files: enterprise_workflow_system/admin-dashboard/coverage/lcov.info
+          flags: workflow-admin
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  test-workflow-api:
+    name: Test + Coverage — Workflow API
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: enterprise_workflow_system/workflow-api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - run: ./gradlew test jacocoTestReport
+      - uses: codecov/codecov-action@v5
+        with:
+          files: enterprise_workflow_system/workflow-api/build/reports/jacoco/test/jacocoTestReport.xml
+          flags: workflow-api
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  test-notification-worker:
+    name: Test + Coverage — Notification Worker
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: enterprise_workflow_system/notification-worker
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: ./gradlew test jacocoTestReport
+      - uses: codecov/codecov-action@v5
+        with:
+          files: enterprise_workflow_system/notification-worker/build/reports/jacoco/test/jacocoTestReport.xml
+          flags: workflow-notification
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  test-admin-api:
+    name: Test + Coverage — Admin API
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: enterprise_workflow_system/admin-api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: xdebug
+      - run: composer install --no-interaction --prefer-dist
+      - run: vendor/bin/phpunit --coverage-clover=coverage.xml
+      - uses: codecov/codecov-action@v5
+        with:
+          files: enterprise_workflow_system/admin-api/coverage.xml
+          flags: workflow-php
+          token: ${{ secrets.CODECOV_TOKEN }}

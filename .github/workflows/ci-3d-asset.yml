@@ -1,6 +1,10 @@
 name: CI — 3D Asset
 
 on:
+  push:
+    branches: [dev, stable]
+    paths:
+      - '3d_asset_collaboration/**'
   pull_request:
     paths:
       - '3d_asset_collaboration/**'
@@ -61,3 +65,78 @@ jobs:
           node-version: 20
       - run: pnpm install
       - run: npx prettier --check "src/**/*.{ts,tsx}"
+
+  test-asset-portal:
+    name: Test + Coverage — Asset Portal
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 3d_asset_collaboration/asset-portal
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install
+      - run: pnpm vitest run --coverage
+      - uses: codecov/codecov-action@v5
+        with:
+          files: 3d_asset_collaboration/asset-portal/coverage/lcov.info
+          flags: asset-web
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  test-asset-api:
+    name: Test + Coverage — Asset API
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 3d_asset_collaboration
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet test asset-api.Tests/asset-api.Tests.csproj --collect:"XPlat Code Coverage" --results-directory ./coverage
+      - uses: codecov/codecov-action@v5
+        with:
+          directory: 3d_asset_collaboration/coverage
+          flags: asset-api
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  test-ai-service:
+    name: Test + Coverage — AI Service
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 3d_asset_collaboration/ai-service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt pytest pytest-cov
+      - run: pytest --cov=src --cov-report=xml:coverage.xml
+      - uses: codecov/codecov-action@v5
+        with:
+          files: 3d_asset_collaboration/ai-service/coverage.xml
+          flags: asset-ai
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  test-iot-consumer:
+    name: Test + Coverage — IoT Consumer
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 3d_asset_collaboration
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet test iot-consumer.Tests/iot-consumer.Tests.csproj --collect:"XPlat Code Coverage" --results-directory ./coverage-iot
+      - uses: codecov/codecov-action@v5
+        with:
+          directory: 3d_asset_collaboration/coverage-iot
+          flags: asset-iot
+          token: ${{ secrets.CODECOV_TOKEN }}
