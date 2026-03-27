@@ -1,17 +1,5 @@
 # Testing Strategy: 3D Asset Collaboration
 
-## Table of Contents
-
-- [Test Pyramid](#test-pyramid)
-- [Test Scenarios](#test-scenarios)
-- [Platform-specific Tests](#platform-specific-tests)
-- [CI Integration](#ci-integration)
-- [Test Data Strategy](#test-data-strategy)
-- [Test Environment](#test-environment)
-- [Regression Strategy](#regression-strategy)
-- [Quality Gates](#quality-gates)
-
----
 
 ## Test Pyramid
 
