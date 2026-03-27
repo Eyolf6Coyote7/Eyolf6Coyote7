@@ -19,7 +19,7 @@ export default meta
 type Story = StoryObj<typeof DemoTooltip>
 
 export const Default: Story = {
-  render: (args: Record<string, unknown>) => ({
+  render: (args) => ({
     components: { DemoTooltip },
     setup() {
       return { args }
@@ -38,7 +38,7 @@ export const CustomMessage: Story = {
   args: {
     message: 'This feature requires a paid subscription',
   },
-  render: (args: Record<string, unknown>) => ({
+  render: (args) => ({
     components: { DemoTooltip },
     setup() {
       return { args }
