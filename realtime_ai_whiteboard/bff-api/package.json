@@ -86,7 +86,8 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "**/*.(t|j)s",
+      "!**/*.stories.*"
     ],
     "coverageDirectory": "../coverage",
     "coverageReporters": ["text", "json-summary"],

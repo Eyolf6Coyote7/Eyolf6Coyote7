@@ -1,5 +1,4 @@
-/// <reference types="vitest" />
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import vue from '@vitejs/plugin-vue'
 import { fileURLToPath } from 'node:url'
 
@@ -19,7 +18,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'lcov', 'json-summary'],
       include: ['src/**/*.ts'],
-      exclude: ['src/test-setup.ts', 'src/**/*.d.ts', 'src/main.ts'],
+      exclude: ['src/test-setup.ts', 'src/**/*.d.ts', 'src/main.ts', '**/*.stories.*'],
     },
   },
 })
