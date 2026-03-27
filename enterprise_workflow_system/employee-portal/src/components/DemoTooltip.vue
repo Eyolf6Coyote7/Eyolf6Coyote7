@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref } from 'vue'
 
 const props = defineProps<{ message?: string }>()
 const isMock = import.meta.env.VITE_MOCK === 'true'

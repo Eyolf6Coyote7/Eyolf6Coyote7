@@ -112,9 +112,11 @@ function formatDate(iso: string) {
         <button
           class="filter-reset"
           @click="
-            statusFilter = 'all'
-            typeFilter = 'all'
-            search = ''
+            () => {
+              statusFilter = 'all'
+              typeFilter = 'all'
+              search = ''
+            }
           "
         >
           {{ t('history.reset') }}

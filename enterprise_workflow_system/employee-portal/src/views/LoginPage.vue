@@ -20,20 +20,6 @@ const form = reactive({
 const otpDigits = reactive(['', '', '', '', '', ''])
 const otpRefs = ref<HTMLInputElement[]>([])
 
-async function handleLogin() {
-  loading.value = true
-  try {
-    // Simulate SSO login -> go to 2FA
-    step.value = '2fa'
-    await nextTick()
-    otpRefs.value[0]?.focus()
-  } catch {
-    ElMessage.error('Login failed')
-  } finally {
-    loading.value = false
-  }
-}
-
 async function handleSSOLogin() {
   loading.value = true
   try {
@@ -308,7 +294,7 @@ const footerLinks = [
     <footer class="page-footer">
       <span class="footer-copy">{{ t('footer.copyright') }}</span>
       <div class="footer-links">
-        <template v-for="(link, i) in footerLinks" :key="link.labelKey">
+        <template v-for="link in footerLinks" :key="link.labelKey">
           <a :href="link.href" class="footer-link">{{ t(link.labelKey) }}</a>
         </template>
       </div>

@@ -8,6 +8,20 @@ import 'element-plus/dist/index.css'
 import en from '../src/i18n/en.json'
 import zhTW from '../src/i18n/zh-TW.json'
 
+// Load Material Symbols font (same as index.html)
+const link = document.createElement('link')
+link.href =
+  'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap'
+link.rel = 'stylesheet'
+document.head.appendChild(link)
+
+// Load Inter + Manrope fonts
+const fontLink = document.createElement('link')
+fontLink.href =
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap'
+fontLink.rel = 'stylesheet'
+document.head.appendChild(fontLink)
+
 const router = createRouter({
   history: createMemoryHistory(),
   routes: [
