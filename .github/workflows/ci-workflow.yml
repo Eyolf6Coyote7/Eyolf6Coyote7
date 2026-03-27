@@ -110,7 +110,7 @@ jobs:
           auth: ${{ secrets.GIST_TOKEN }}
           gistID: ba5e6bd35946886986dbba31e9252f66
           filename: workflow-portal.json
-          label: portal
+          label: vue-portal
           message: ${{ steps.cov.outputs.pct }}%
           color: ${{ steps.cov.outputs.color }}
 
@@ -142,7 +142,7 @@ jobs:
           auth: ${{ secrets.GIST_TOKEN }}
           gistID: ba5e6bd35946886986dbba31e9252f66
           filename: workflow-admin.json
-          label: admin
+          label: vue-admin
           message: ${{ steps.cov.outputs.pct }}%
           color: ${{ steps.cov.outputs.color }}
 
@@ -173,7 +173,7 @@ jobs:
           auth: ${{ secrets.GIST_TOKEN }}
           gistID: ba5e6bd35946886986dbba31e9252f66
           filename: workflow-api.json
-          label: api
+          label: spring
           message: ${{ steps.cov.outputs.pct }}%
           color: ${{ steps.cov.outputs.color }}
 
@@ -204,7 +204,7 @@ jobs:
           auth: ${{ secrets.GIST_TOKEN }}
           gistID: ba5e6bd35946886986dbba31e9252f66
           filename: workflow-notification.json
-          label: notification
+          label: kafka
           message: ${{ steps.cov.outputs.pct }}%
           color: ${{ steps.cov.outputs.color }}
 
@@ -236,6 +236,6 @@ jobs:
           auth: ${{ secrets.GIST_TOKEN }}
           gistID: ba5e6bd35946886986dbba31e9252f66
           filename: workflow-php.json
-          label: php
+          label: laravel
           message: ${{ steps.cov.outputs.pct }}%
           color: ${{ steps.cov.outputs.color }}

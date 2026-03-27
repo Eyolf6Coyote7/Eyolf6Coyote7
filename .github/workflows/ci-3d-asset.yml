@@ -94,7 +94,7 @@ jobs:
           auth: ${{ secrets.GIST_TOKEN }}
           gistID: ba5e6bd35946886986dbba31e9252f66
           filename: asset-web.json
-          label: web
+          label: react
           message: ${{ steps.cov.outputs.pct }}%
           color: ${{ steps.cov.outputs.color }}
 
@@ -124,7 +124,7 @@ jobs:
           auth: ${{ secrets.GIST_TOKEN }}
           gistID: ba5e6bd35946886986dbba31e9252f66
           filename: asset-api.json
-          label: api
+          label: dotnet
           message: ${{ steps.cov.outputs.pct }}%
           color: ${{ steps.cov.outputs.color }}
 
@@ -155,7 +155,7 @@ jobs:
           auth: ${{ secrets.GIST_TOKEN }}
           gistID: ba5e6bd35946886986dbba31e9252f66
           filename: asset-ai.json
-          label: ai
+          label: fastapi
           message: ${{ steps.cov.outputs.pct }}%
           color: ${{ steps.cov.outputs.color }}
 
@@ -185,6 +185,6 @@ jobs:
           auth: ${{ secrets.GIST_TOKEN }}
           gistID: ba5e6bd35946886986dbba31e9252f66
           filename: asset-iot.json
-          label: iot
+          label: dotnet-iot
           message: ${{ steps.cov.outputs.pct }}%
           color: ${{ steps.cov.outputs.color }}

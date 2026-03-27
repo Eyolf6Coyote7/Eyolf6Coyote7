@@ -83,7 +83,7 @@ jobs:
           auth: ${{ secrets.GIST_TOKEN }}
           gistID: ba5e6bd35946886986dbba31e9252f66
           filename: whiteboard-web.json
-          label: web-app
+          label: react
           message: ${{ steps.cov.outputs.pct }}%
           color: ${{ steps.cov.outputs.color }}
 
@@ -118,7 +118,7 @@ jobs:
           auth: ${{ secrets.GIST_TOKEN }}
           gistID: ba5e6bd35946886986dbba31e9252f66
           filename: whiteboard-bff.json
-          label: bff-api
+          label: nestjs
           message: ${{ steps.cov.outputs.pct }}%
           color: ${{ steps.cov.outputs.color }}
 
@@ -149,6 +149,6 @@ jobs:
           auth: ${{ secrets.GIST_TOKEN }}
           gistID: ba5e6bd35946886986dbba31e9252f66
           filename: whiteboard-ai.json
-          label: ai-service
+          label: langchain
           message: ${{ steps.cov.outputs.pct }}%
           color: ${{ steps.cov.outputs.color }}
