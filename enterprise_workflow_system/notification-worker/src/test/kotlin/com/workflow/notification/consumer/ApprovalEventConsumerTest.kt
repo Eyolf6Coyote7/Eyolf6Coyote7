@@ -3,12 +3,13 @@ package com.workflow.notification.consumer
 import com.workflow.notification.service.EmailService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.anyString
-import org.mockito.Mockito.argThat
-import org.mockito.Mockito.doThrow
-import org.mockito.Mockito.eq
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
+import org.mockito.kotlin.any
+import org.mockito.kotlin.argThat
+import org.mockito.kotlin.doThrow
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 class ApprovalEventConsumerTest {
     private lateinit var emailService: EmailService
@@ -16,7 +17,7 @@ class ApprovalEventConsumerTest {
 
     @BeforeEach
     fun setUp() {
-        emailService = mock(EmailService::class.java)
+        emailService = mock()
         consumer = ApprovalEventConsumer(emailService)
     }
 
@@ -27,15 +28,15 @@ class ApprovalEventConsumerTest {
         verify(emailService).sendNotification(
             eq("manager@example.com"),
             eq("Workflow Approval Required"),
-            contains("WF-001"),
+            argThat { contains("WF-001") },
         )
     }
 
     @Test
     fun `handleApprovalEvent should not throw when email fails`() {
         doThrow(RuntimeException("SMTP error"))
-            .`when`(emailService)
-            .sendNotification(anyString(), anyString(), anyString())
+            .whenever(emailService)
+            .sendNotification(any(), any(), any())
 
         // Should not throw
         consumer.handleApprovalEvent("test message")
@@ -55,13 +56,9 @@ class ApprovalEventConsumerTest {
     @Test
     fun `handleNotification should not throw when email fails`() {
         doThrow(RuntimeException("SMTP error"))
-            .`when`(emailService)
-            .sendNotification(anyString(), anyString(), anyString())
+            .whenever(emailService)
+            .sendNotification(any(), any(), any())
 
         consumer.handleNotification("test message")
-    }
-
-    private fun contains(substring: String): String {
-        return argThat<String> { it?.contains(substring) == true } ?: ""
     }
 }
