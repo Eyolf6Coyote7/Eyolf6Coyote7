@@ -89,6 +89,7 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
+    "coverageReporters": ["text", "json-summary"],
     "testEnvironment": "node",
     "transformIgnorePatterns": [
       "node_modules/(?!(uuid|ioredis)/)"
