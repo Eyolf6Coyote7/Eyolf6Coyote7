@@ -2,14 +2,14 @@
 
 > 3 projects · 3 industries · 7 frontends · 8 backends · 24 infra services
 
-**Releases**
+**Releases & Coverage**
 
-| Project | Version |
-|---------|---------|
-| Workspace | ![Workspace](https://img.shields.io/badge/workspace-v1.11.1-2563EB) |
-| Whiteboard | ![Whiteboard](https://img.shields.io/badge/whiteboard-v1.10.1-F97316) |
-| Workflow | ![Workflow](https://img.shields.io/badge/workflow-v1.1.1-0EA5E9) |
-| 3D Asset | ![3D Asset](https://img.shields.io/badge/3d--asset-v1.1.1-8B5CF6) |
+| Project | Version | Coverage |
+|---------|---------|----------|
+| Workspace | ![Workspace](https://img.shields.io/badge/workspace-v1.11.1-2563EB) | |
+| Whiteboard | ![Whiteboard](https://img.shields.io/badge/whiteboard-v1.10.1-F97316) | ![web](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=whiteboard-web&label=web) ![bff](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=whiteboard-bff&label=bff) ![ai](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=whiteboard-ai&label=ai) |
+| Workflow | ![Workflow](https://img.shields.io/badge/workflow-v1.1.1-0EA5E9) | ![portal](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=workflow-portal&label=portal) ![admin](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=workflow-admin&label=admin) ![api](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=workflow-api&label=api) ![php](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=workflow-php&label=php) |
+| 3D Asset | ![3D Asset](https://img.shields.io/badge/3d--asset-v1.1.1-8B5CF6) | ![web](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=asset-web&label=web) ![api](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=asset-api&label=api) ![ai](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=asset-ai&label=ai) |
 
 ---
 
