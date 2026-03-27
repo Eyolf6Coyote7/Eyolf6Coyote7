@@ -226,7 +226,7 @@ jobs:
         id: cov
         run: |
           PCT=$(grep -oP 'Lines:\s+\K[\d.]+' coverage-output.txt || echo "0")
-          echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+          echo "pct=${PCT%.*}" >> "$GITHUB_OUTPUT"
       - name: Update badge
         if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
         uses: schneegans/dynamic-badges-action@v1.7.0
