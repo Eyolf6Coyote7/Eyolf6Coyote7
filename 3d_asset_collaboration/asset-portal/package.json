@@ -11,9 +11,9 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
-    "test": "vitest run",
+    "test": "VITE_MOCK=true vitest run",
     "test:watch": "vitest",
-    "test:cov": "vitest run --coverage",
+    "test:cov": "VITE_MOCK=true vitest run --coverage",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
