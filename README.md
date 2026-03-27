@@ -33,7 +33,7 @@
 
 > Miro + ChatGPT, fully local. CRDT realtime sync + AI agent state machine.
 
-📐 [Figma](https://www.figma.com/design/mIygAbHRH0NbXxXO5K4yV6/Whiteboard---Design) · 🚀 [Live Demo](https://eyolf6coyote7.github.io/fullstack_ai_workspace/whiteboard/) · 📖 [Docs](realtime_ai_whiteboard/docs/)
+📐 [Figma](https://www.figma.com/design/mIygAbHRH0NbXxXO5K4yV6/Whiteboard---Design) · 🚀 [Live Demo](https://eyolf6coyote7.github.io/fullstack_ai_workspace/whiteboard/) · 📚 [Storybook](https://eyolf6coyote7.github.io/fullstack_ai_workspace/storybook/whiteboard/) · 📖 [Docs](realtime_ai_whiteboard/docs/)
 
 | System | Tech |
 |--------|------|
@@ -48,7 +48,7 @@
 
 > Multi-step approval with Temporal orchestration + Kafka event sourcing + immutable audit trail.
 
-📐 [Figma](https://www.figma.com/design/Uj6nyMA7fnlciLrBekuJ1Z/Workflow---Design) · 🚀 [Live Demo](https://eyolf6coyote7.github.io/fullstack_ai_workspace/workflow/) · 📖 [Docs](enterprise_workflow_system/docs/)
+📐 [Figma](https://www.figma.com/design/Uj6nyMA7fnlciLrBekuJ1Z/Workflow---Design) · 🚀 [Live Demo](https://eyolf6coyote7.github.io/fullstack_ai_workspace/workflow/) · 📚 [Storybook](https://eyolf6coyote7.github.io/fullstack_ai_workspace/storybook/workflow/) · 📖 [Docs](enterprise_workflow_system/docs/)
 
 | System | Tech |
 |--------|------|
@@ -65,7 +65,7 @@
 
 > DAM + Digital Twin + IoT. gRPC streaming for large files + Three.js browser preview.
 
-📐 [Figma](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design) · 🚀 [Live Demo](https://eyolf6coyote7.github.io/fullstack_ai_workspace/3d-asset/) · 📖 [Docs](3d_asset_collaboration/docs/)
+📐 [Figma](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design) · 🚀 [Live Demo](https://eyolf6coyote7.github.io/fullstack_ai_workspace/3d-asset/) · 📚 [Storybook](https://eyolf6coyote7.github.io/fullstack_ai_workspace/storybook/3d-asset/) · 📖 [Docs](3d_asset_collaboration/docs/)
 
 | System | Tech |
 |--------|------|
