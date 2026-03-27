@@ -7,9 +7,9 @@
 | Project | Version | Coverage |
 |---------|---------|----------|
 | Workspace | ![Workspace](https://img.shields.io/badge/workspace-v1.11.1-2563EB) | |
-| Whiteboard | ![Whiteboard](https://img.shields.io/badge/whiteboard-v1.10.1-F97316) | ![web](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=whiteboard-web&label=web) ![bff](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=whiteboard-bff&label=bff) ![ai](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=whiteboard-ai&label=ai) |
-| Workflow | ![Workflow](https://img.shields.io/badge/workflow-v1.1.1-0EA5E9) | ![portal](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=workflow-portal&label=portal) ![admin](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=workflow-admin&label=admin) ![api](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=workflow-api&label=api) ![php](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=workflow-php&label=php) |
-| 3D Asset | ![3D Asset](https://img.shields.io/badge/3d--asset-v1.1.1-8B5CF6) | ![web](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=asset-web&label=web) ![api](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=asset-api&label=api) ![ai](https://img.shields.io/codecov/c/github/coyote7wolf/fullstack_ai_workspace/dev?flag=asset-ai&label=ai) |
+| Whiteboard | ![Whiteboard](https://img.shields.io/badge/whiteboard-v1.10.1-F97316) | ![web](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Eyolf6Coyote7/ba5e6bd35946886986dbba31e9252f66/raw/whiteboard-web.json) ![bff](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Eyolf6Coyote7/ba5e6bd35946886986dbba31e9252f66/raw/whiteboard-bff.json) ![ai](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Eyolf6Coyote7/ba5e6bd35946886986dbba31e9252f66/raw/whiteboard-ai.json) |
+| Workflow | ![Workflow](https://img.shields.io/badge/workflow-v1.1.1-0EA5E9) | ![portal](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Eyolf6Coyote7/ba5e6bd35946886986dbba31e9252f66/raw/workflow-portal.json) ![admin](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Eyolf6Coyote7/ba5e6bd35946886986dbba31e9252f66/raw/workflow-admin.json) ![api](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Eyolf6Coyote7/ba5e6bd35946886986dbba31e9252f66/raw/workflow-api.json) ![php](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Eyolf6Coyote7/ba5e6bd35946886986dbba31e9252f66/raw/workflow-php.json) |
+| 3D Asset | ![3D Asset](https://img.shields.io/badge/3d--asset-v1.1.1-8B5CF6) | ![web](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Eyolf6Coyote7/ba5e6bd35946886986dbba31e9252f66/raw/asset-web.json) ![api](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Eyolf6Coyote7/ba5e6bd35946886986dbba31e9252f66/raw/asset-api.json) ![ai](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Eyolf6Coyote7/ba5e6bd35946886986dbba31e9252f66/raw/asset-ai.json) |
 
 ---
 
@@ -33,6 +33,8 @@
 
 > Miro + ChatGPT, fully local. CRDT realtime sync + AI agent state machine.
 
+📐 [Figma](https://www.figma.com/design/mIygAbHRH0NbXxXO5K4yV6/Whiteboard---Design) · 🚀 [Live Demo](https://eyolf6coyote7.github.io/fullstack_ai_workspace/whiteboard/) · 📖 [Docs](realtime_ai_whiteboard/docs/)
+
 | System | Tech |
 |--------|------|
 | Web App | ![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black) ![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white) ![Zustand](https://img.shields.io/badge/Zustand-443E38?logoColor=white) ![Yjs](https://img.shields.io/badge/Yjs_CRDT-F97316?logoColor=white) |
@@ -40,13 +42,13 @@
 | AI Service | ![LangGraph](https://img.shields.io/badge/LangGraph-1C3C3C?logoColor=white) ![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?logo=langchain&logoColor=white) ![Ollama](https://img.shields.io/badge/Ollama-000000?logoColor=white) ![ChromaDB](https://img.shields.io/badge/ChromaDB-FF6F61?logoColor=white) ![RAG](https://img.shields.io/badge/RAG-purple?logoColor=white) ![MCP](https://img.shields.io/badge/MCP_Tools-blue?logoColor=white) ![Langfuse](https://img.shields.io/badge/Langfuse-000000?logoColor=white) |
 | Mobile | ![React Native](https://img.shields.io/badge/React_Native-61DAFB?logo=react&logoColor=black) ![Expo](https://img.shields.io/badge/Expo-000020?logo=expo&logoColor=white) |
 
-📐 [Figma](https://www.figma.com/design/mIygAbHRH0NbXxXO5K4yV6/Whiteboard---Design) · 🚀 [Live Demo](https://eyolf6coyote7.github.io/fullstack_ai_workspace/whiteboard/) · 📖 [Docs](realtime_ai_whiteboard/docs/)
-
 ---
 
 ## ⚙️ Enterprise Workflow System — Semiconductor
 
 > Multi-step approval with Temporal orchestration + Kafka event sourcing + immutable audit trail.
+
+📐 [Figma](https://www.figma.com/design/Uj6nyMA7fnlciLrBekuJ1Z/Workflow---Design) · 🚀 [Live Demo](https://eyolf6coyote7.github.io/fullstack_ai_workspace/workflow/) · 📖 [Docs](enterprise_workflow_system/docs/)
 
 | System | Tech |
 |--------|------|
@@ -57,13 +59,13 @@
 | Notification | ![Kafka](https://img.shields.io/badge/Kafka-231F20?logo=apachekafka&logoColor=white) ![FCM](https://img.shields.io/badge/FCM-FFCA28?logo=firebase&logoColor=black) |
 | Mobile | ![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white) ![Swift](https://img.shields.io/badge/Swift-F05138?logo=swift&logoColor=white) |
 
-📐 [Figma](https://www.figma.com/design/Uj6nyMA7fnlciLrBekuJ1Z/Workflow---Design) · 🚀 [Live Demo](https://eyolf6coyote7.github.io/fullstack_ai_workspace/workflow/) · 📖 [Docs](enterprise_workflow_system/docs/)
-
 ---
 
 ## 🎨 3D Asset Collaboration — Media / Advertising
 
 > DAM + Digital Twin + IoT. gRPC streaming for large files + Three.js browser preview.
+
+📐 [Figma](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design) · 🚀 [Live Demo](https://eyolf6coyote7.github.io/fullstack_ai_workspace/3d-asset/) · 📖 [Docs](3d_asset_collaboration/docs/)
 
 | System | Tech |
 |--------|------|
@@ -73,8 +75,6 @@
 | AI Service | ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white) ![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white) ![ONNX](https://img.shields.io/badge/ONNX-005CED?logo=onnx&logoColor=white) |
 | IoT Pipeline | ![MQTT](https://img.shields.io/badge/MQTT-660066?logo=mqtt&logoColor=white) ![Kafka](https://img.shields.io/badge/Kafka-231F20?logo=apachekafka&logoColor=white) ![TimescaleDB](https://img.shields.io/badge/TimescaleDB-FDB515?logo=timescale&logoColor=black) |
 | Mobile | ![React Native](https://img.shields.io/badge/React_Native-61DAFB?logo=react&logoColor=black) ![Expo](https://img.shields.io/badge/Expo-000020?logo=expo&logoColor=white) |
-
-📐 [Figma](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design) · 🚀 [Live Demo](https://eyolf6coyote7.github.io/fullstack_ai_workspace/3d-asset/) · 📖 [Docs](3d_asset_collaboration/docs/)
 
 ---
 

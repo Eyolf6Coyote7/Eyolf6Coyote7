@@ -96,11 +96,23 @@ jobs:
           node-version: 22
       - run: pnpm install
       - run: pnpm vitest run --coverage
-      - uses: codecov/codecov-action@v5
+      - name: Extract coverage %
+        id: cov
+        run: |
+          PCT=$(node -e "const s=require('./coverage/coverage-summary.json');console.log(s.total.statements.pct)")
+          echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+      - name: Update badge
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        uses: schneegans/dynamic-badges-action@v1.7.0
         with:
-          files: enterprise_workflow_system/employee-portal/coverage/lcov.info
-          flags: workflow-portal
-          token: ${{ secrets.CODECOV_TOKEN }}
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ba5e6bd35946886986dbba31e9252f66
+          filename: workflow-portal.json
+          label: portal
+          message: ${{ steps.cov.outputs.pct }}%
+          valColorRange: ${{ steps.cov.outputs.pct }}
+          minColorRange: 30
+          maxColorRange: 80
 
   test-admin-dashboard:
     name: Test + Coverage — Admin Dashboard
@@ -116,11 +128,23 @@ jobs:
           node-version: 22
       - run: pnpm install
       - run: pnpm vitest run --coverage
-      - uses: codecov/codecov-action@v5
+      - name: Extract coverage %
+        id: cov
+        run: |
+          PCT=$(node -e "const s=require('./coverage/coverage-summary.json');console.log(s.total.statements.pct)")
+          echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+      - name: Update badge
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        uses: schneegans/dynamic-badges-action@v1.7.0
         with:
-          files: enterprise_workflow_system/admin-dashboard/coverage/lcov.info
-          flags: workflow-admin
-          token: ${{ secrets.CODECOV_TOKEN }}
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ba5e6bd35946886986dbba31e9252f66
+          filename: workflow-admin.json
+          label: admin
+          message: ${{ steps.cov.outputs.pct }}%
+          valColorRange: ${{ steps.cov.outputs.pct }}
+          minColorRange: 30
+          maxColorRange: 80
 
   test-workflow-api:
     name: Test + Coverage — Workflow API
@@ -135,11 +159,23 @@ jobs:
           distribution: temurin
           java-version: 17
       - run: ./gradlew test jacocoTestReport
-      - uses: codecov/codecov-action@v5
+      - name: Extract coverage %
+        id: cov
+        run: |
+          PCT=$(grep -oP 'INSTRUCTION.*?(\d+)%' build/reports/jacoco/test/html/index.html | grep -oP '\d+' | head -1 || echo "0")
+          echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+      - name: Update badge
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        uses: schneegans/dynamic-badges-action@v1.7.0
         with:
-          files: enterprise_workflow_system/workflow-api/build/reports/jacoco/test/jacocoTestReport.xml
-          flags: workflow-api
-          token: ${{ secrets.CODECOV_TOKEN }}
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ba5e6bd35946886986dbba31e9252f66
+          filename: workflow-api.json
+          label: api
+          message: ${{ steps.cov.outputs.pct }}%
+          valColorRange: ${{ steps.cov.outputs.pct }}
+          minColorRange: 30
+          maxColorRange: 80
 
   test-notification-worker:
     name: Test + Coverage — Notification Worker
@@ -154,11 +190,23 @@ jobs:
           distribution: temurin
           java-version: 21
       - run: ./gradlew test jacocoTestReport
-      - uses: codecov/codecov-action@v5
+      - name: Extract coverage %
+        id: cov
+        run: |
+          PCT=$(grep -oP 'INSTRUCTION.*?(\d+)%' build/reports/jacoco/test/html/index.html | grep -oP '\d+' | head -1 || echo "0")
+          echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+      - name: Update badge
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        uses: schneegans/dynamic-badges-action@v1.7.0
         with:
-          files: enterprise_workflow_system/notification-worker/build/reports/jacoco/test/jacocoTestReport.xml
-          flags: workflow-notification
-          token: ${{ secrets.CODECOV_TOKEN }}
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ba5e6bd35946886986dbba31e9252f66
+          filename: workflow-notification.json
+          label: notification
+          message: ${{ steps.cov.outputs.pct }}%
+          valColorRange: ${{ steps.cov.outputs.pct }}
+          minColorRange: 30
+          maxColorRange: 80
 
   test-admin-api:
     name: Test + Coverage — Admin API
@@ -173,9 +221,21 @@ jobs:
           php-version: '8.2'
           coverage: xdebug
       - run: composer install --no-interaction --prefer-dist
-      - run: vendor/bin/phpunit --coverage-clover=coverage.xml
-      - uses: codecov/codecov-action@v5
+      - run: vendor/bin/phpunit --coverage-clover=coverage.xml --coverage-text | tee coverage-output.txt
+      - name: Extract coverage %
+        id: cov
+        run: |
+          PCT=$(grep -oP 'Lines:\s+\K[\d.]+' coverage-output.txt || echo "0")
+          echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+      - name: Update badge
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        uses: schneegans/dynamic-badges-action@v1.7.0
         with:
-          files: enterprise_workflow_system/admin-api/coverage.xml
-          flags: workflow-php
-          token: ${{ secrets.CODECOV_TOKEN }}
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ba5e6bd35946886986dbba31e9252f66
+          filename: workflow-php.json
+          label: php
+          message: ${{ steps.cov.outputs.pct }}%
+          valColorRange: ${{ steps.cov.outputs.pct }}
+          minColorRange: 30
+          maxColorRange: 80
