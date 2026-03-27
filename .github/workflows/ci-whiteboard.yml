@@ -1,6 +1,10 @@
 name: CI — Whiteboard
 
 on:
+  push:
+    branches: [dev, stable]
+    paths:
+      - 'realtime_ai_whiteboard/**'
   pull_request:
     paths:
       - 'realtime_ai_whiteboard/**'
@@ -51,8 +55,28 @@ jobs:
       - run: ruff check src/
       - run: ruff format --check src/
 
+  test-web:
+    name: Test + Coverage — Web App
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: realtime_ai_whiteboard/web-app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install
+      - run: pnpm vitest run --coverage
+      - uses: codecov/codecov-action@v5
+        with:
+          files: realtime_ai_whiteboard/web-app/coverage/lcov.info
+          flags: whiteboard-web
+          token: ${{ secrets.CODECOV_TOKEN }}
+
   test-bff:
-    name: Test — BFF API
+    name: Test + Coverage — BFF API
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -62,6 +86,30 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - run: pnpm install
-      - run: pnpm test --passWithNoTests
+      - run: pnpm jest --coverage
+      - uses: codecov/codecov-action@v5
+        with:
+          files: realtime_ai_whiteboard/bff-api/coverage/lcov.info
+          flags: whiteboard-bff
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  test-ai:
+    name: Test + Coverage — AI Service
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: realtime_ai_whiteboard/ai-service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt pytest pytest-cov httpx
+      - run: pytest --cov=src --cov-report=xml:coverage.xml
+      - uses: codecov/codecov-action@v5
+        with:
+          files: realtime_ai_whiteboard/ai-service/coverage.xml
+          flags: whiteboard-ai
+          token: ${{ secrets.CODECOV_TOKEN }}

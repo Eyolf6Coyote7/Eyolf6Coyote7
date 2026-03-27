@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
-import { AiGatewayService } from './ai-gateway.service';
 
 const mockRedis = {
   xadd: jest.fn().mockResolvedValue('stream-id'),
@@ -8,7 +7,18 @@ const mockRedis = {
   quit: jest.fn(),
 };
 
-jest.mock('ioredis', () => jest.fn(() => mockRedis));
+// Mock ESM modules before importing the service
+jest.mock('uuid', () => ({
+  v4: jest.fn(() => 'mock-uuid-1234'),
+}));
+
+jest.mock('ioredis', () => {
+  const MockRedis = jest.fn(() => mockRedis);
+  return { __esModule: true, default: MockRedis, Redis: MockRedis };
+});
+
+// Now import the service after the mock is set up
+import { AiGatewayService } from './ai-gateway.service';
 
 describe('AiGatewayService', () => {
   let service: AiGatewayService;
