@@ -127,11 +127,7 @@ function eventColor(action: string) {
             </td>
             <td class="cell-details">{{ e.details }}</td>
             <td class="cell-mono cell-ip">
-              {{
-                e.id.includes('3')
-                  ? '45.76.12.203'
-                  : '192.168.1.' + ((e.id.charCodeAt(4) % 100) + 1)
-              }}
+              {{ String(e.id).includes('3') ? '45.76.12.203' : '192.168.1.' + ((e.id % 100) + 1) }}
             </td>
             <td>
               <span
