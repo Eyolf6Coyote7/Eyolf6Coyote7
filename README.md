@@ -48,7 +48,7 @@
 
 > Multi-step approval with Temporal orchestration + Kafka event sourcing + immutable audit trail.
 
-📐 [Figma](https://www.figma.com/design/Uj6nyMA7fnlciLrBekuJ1Z/Workflow---Design) · 🚀 [Employee Demo](https://eyolf6coyote7.github.io/Eyolf6Coyote7/workflow/) · 🚀 [Admin Demo](https://eyolf6coyote7.github.io/Eyolf6Coyote7/workflow-admin/) · 📚 [Storybook](https://eyolf6coyote7.github.io/Eyolf6Coyote7/storybook/workflow/) · 📖 [Docs](enterprise_workflow_system/docs/)
+📐 [Figma](https://www.figma.com/design/Uj6nyMA7fnlciLrBekuJ1Z/Workflow---Design) · 🚀 Demos: [Employee](https://eyolf6coyote7.github.io/Eyolf6Coyote7/workflow/) / [Admin](https://eyolf6coyote7.github.io/Eyolf6Coyote7/workflow-admin/) · 📚 [Storybook](https://eyolf6coyote7.github.io/Eyolf6Coyote7/storybook/workflow/) · 📖 [Docs](enterprise_workflow_system/docs/)
 
 | System | Tech |
 |--------|------|
