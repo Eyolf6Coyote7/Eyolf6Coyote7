@@ -101,6 +101,7 @@ jobs:
         run: |
           PCT=$(node -e "const s=require('./coverage/coverage-summary.json');console.log(s.total.statements.pct)")
           echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+          if [ "${PCT%.*}" -ge 80 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 60 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 40 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
       - name: Update badge
         if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
         uses: schneegans/dynamic-badges-action@v1.7.0
@@ -110,9 +111,7 @@ jobs:
           filename: workflow-portal.json
           label: portal
           message: ${{ steps.cov.outputs.pct }}%
-          valColorRange: ${{ steps.cov.outputs.pct }}
-          minColorRange: 30
-          maxColorRange: 80
+          color: ${{ steps.cov.outputs.color }}
 
   test-admin-dashboard:
     name: Test + Coverage — Admin Dashboard
@@ -133,6 +132,7 @@ jobs:
         run: |
           PCT=$(node -e "const s=require('./coverage/coverage-summary.json');console.log(s.total.statements.pct)")
           echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+          if [ "${PCT%.*}" -ge 80 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 60 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 40 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
       - name: Update badge
         if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
         uses: schneegans/dynamic-badges-action@v1.7.0
@@ -142,9 +142,7 @@ jobs:
           filename: workflow-admin.json
           label: admin
           message: ${{ steps.cov.outputs.pct }}%
-          valColorRange: ${{ steps.cov.outputs.pct }}
-          minColorRange: 30
-          maxColorRange: 80
+          color: ${{ steps.cov.outputs.color }}
 
   test-workflow-api:
     name: Test + Coverage — Workflow API
@@ -164,6 +162,7 @@ jobs:
         run: |
           PCT=$(grep -oP 'INSTRUCTION.*?(\d+)%' build/reports/jacoco/test/html/index.html | grep -oP '\d+' | head -1 || echo "0")
           echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+          if [ "${PCT%.*}" -ge 80 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 60 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 40 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
       - name: Update badge
         if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
         uses: schneegans/dynamic-badges-action@v1.7.0
@@ -173,9 +172,7 @@ jobs:
           filename: workflow-api.json
           label: api
           message: ${{ steps.cov.outputs.pct }}%
-          valColorRange: ${{ steps.cov.outputs.pct }}
-          minColorRange: 30
-          maxColorRange: 80
+          color: ${{ steps.cov.outputs.color }}
 
   test-notification-worker:
     name: Test + Coverage — Notification Worker
@@ -195,6 +192,7 @@ jobs:
         run: |
           PCT=$(grep -oP 'INSTRUCTION.*?(\d+)%' build/reports/jacoco/test/html/index.html | grep -oP '\d+' | head -1 || echo "0")
           echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+          if [ "${PCT%.*}" -ge 80 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 60 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 40 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
       - name: Update badge
         if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
         uses: schneegans/dynamic-badges-action@v1.7.0
@@ -204,9 +202,7 @@ jobs:
           filename: workflow-notification.json
           label: notification
           message: ${{ steps.cov.outputs.pct }}%
-          valColorRange: ${{ steps.cov.outputs.pct }}
-          minColorRange: 30
-          maxColorRange: 80
+          color: ${{ steps.cov.outputs.color }}
 
   test-admin-api:
     name: Test + Coverage — Admin API
@@ -227,6 +223,7 @@ jobs:
         run: |
           PCT=$(grep -oP 'Lines:\s+\K[\d.]+' coverage-output.txt | head -1 || echo "0")
           echo "pct=${PCT%.*}" >> "$GITHUB_OUTPUT"
+          if [ "${PCT%.*}" -ge 80 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 60 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 40 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
       - name: Update badge
         if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
         uses: schneegans/dynamic-badges-action@v1.7.0
@@ -236,6 +233,4 @@ jobs:
           filename: workflow-php.json
           label: php
           message: ${{ steps.cov.outputs.pct }}%
-          valColorRange: ${{ steps.cov.outputs.pct }}
-          minColorRange: 30
-          maxColorRange: 80
+          color: ${{ steps.cov.outputs.color }}

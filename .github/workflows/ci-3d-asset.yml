@@ -85,6 +85,7 @@ jobs:
         run: |
           PCT=$(node -e "const s=require('./coverage/coverage-summary.json');console.log(s.total.statements.pct)")
           echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+          if [ "${PCT%.*}" -ge 80 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 60 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 40 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
       - name: Update badge
         if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
         uses: schneegans/dynamic-badges-action@v1.7.0
@@ -94,9 +95,7 @@ jobs:
           filename: asset-web.json
           label: web
           message: ${{ steps.cov.outputs.pct }}%
-          valColorRange: ${{ steps.cov.outputs.pct }}
-          minColorRange: 30
-          maxColorRange: 80
+          color: ${{ steps.cov.outputs.color }}
 
   test-asset-api:
     name: Test + Coverage — Asset API
@@ -115,6 +114,7 @@ jobs:
         run: |
           PCT=$(grep -oP 'line-rate="\K[\d.]+' coverage/*/coverage.cobertura.xml | head -1 | awk '{printf "%.1f", $1 * 100}')
           echo "pct=${PCT:-0}" >> "$GITHUB_OUTPUT"
+          if [ "${PCT%.*}" -ge 80 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 60 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 40 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
       - name: Update badge
         if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
         uses: schneegans/dynamic-badges-action@v1.7.0
@@ -124,9 +124,7 @@ jobs:
           filename: asset-api.json
           label: api
           message: ${{ steps.cov.outputs.pct }}%
-          valColorRange: ${{ steps.cov.outputs.pct }}
-          minColorRange: 30
-          maxColorRange: 80
+          color: ${{ steps.cov.outputs.color }}
 
   test-ai-service:
     name: Test + Coverage — AI Service
@@ -146,6 +144,7 @@ jobs:
         run: |
           PCT=$(python -c "import json;d=json.load(open('coverage.json'));print(round(d['totals']['percent_covered'],1))")
           echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+          if [ "${PCT%.*}" -ge 80 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 60 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 40 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
       - name: Update badge
         if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
         uses: schneegans/dynamic-badges-action@v1.7.0
@@ -155,9 +154,7 @@ jobs:
           filename: asset-ai.json
           label: ai
           message: ${{ steps.cov.outputs.pct }}%
-          valColorRange: ${{ steps.cov.outputs.pct }}
-          minColorRange: 30
-          maxColorRange: 80
+          color: ${{ steps.cov.outputs.color }}
 
   test-iot-consumer:
     name: Test + Coverage — IoT Consumer
@@ -176,6 +173,7 @@ jobs:
         run: |
           PCT=$(grep -oP 'line-rate="\K[\d.]+' coverage-iot/*/coverage.cobertura.xml | head -1 | awk '{printf "%.1f", $1 * 100}')
           echo "pct=${PCT:-0}" >> "$GITHUB_OUTPUT"
+          if [ "${PCT%.*}" -ge 80 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 60 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 40 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
       - name: Update badge
         if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
         uses: schneegans/dynamic-badges-action@v1.7.0
@@ -185,6 +183,4 @@ jobs:
           filename: asset-iot.json
           label: iot
           message: ${{ steps.cov.outputs.pct }}%
-          valColorRange: ${{ steps.cov.outputs.pct }}
-          minColorRange: 30
-          maxColorRange: 80
+          color: ${{ steps.cov.outputs.color }}

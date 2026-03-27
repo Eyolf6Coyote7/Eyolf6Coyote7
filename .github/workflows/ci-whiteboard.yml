@@ -74,6 +74,7 @@ jobs:
         run: |
           PCT=$(node -e "const s=require('./coverage/coverage-summary.json');console.log(s.total.statements.pct)")
           echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+          if [ "${PCT%.*}" -ge 80 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 60 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 40 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
       - name: Update badge
         if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
         uses: schneegans/dynamic-badges-action@v1.7.0
@@ -83,9 +84,7 @@ jobs:
           filename: whiteboard-web.json
           label: web-app
           message: ${{ steps.cov.outputs.pct }}%
-          valColorRange: ${{ steps.cov.outputs.pct }}
-          minColorRange: 30
-          maxColorRange: 80
+          color: ${{ steps.cov.outputs.color }}
 
   test-bff:
     name: Test + Coverage — BFF API
@@ -109,6 +108,7 @@ jobs:
         run: |
           PCT=$(node -e "const s=require('./coverage/coverage-summary.json');console.log(s.total.statements.pct)")
           echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+          if [ "${PCT%.*}" -ge 80 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 60 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 40 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
       - name: Update badge
         if: steps.test.outcome == 'success' && github.ref == 'refs/heads/dev' && github.event_name == 'push'
         uses: schneegans/dynamic-badges-action@v1.7.0
@@ -118,9 +118,7 @@ jobs:
           filename: whiteboard-bff.json
           label: bff-api
           message: ${{ steps.cov.outputs.pct }}%
-          valColorRange: ${{ steps.cov.outputs.pct }}
-          minColorRange: 30
-          maxColorRange: 80
+          color: ${{ steps.cov.outputs.color }}
 
   test-ai:
     name: Test + Coverage — AI Service
@@ -140,6 +138,7 @@ jobs:
         run: |
           PCT=$(python -c "import json;d=json.load(open('coverage.json'));print(round(d['totals']['percent_covered'],1))")
           echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+          if [ "${PCT%.*}" -ge 80 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 60 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 40 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
       - name: Update badge
         if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
         uses: schneegans/dynamic-badges-action@v1.7.0
@@ -149,6 +148,4 @@ jobs:
           filename: whiteboard-ai.json
           label: ai-service
           message: ${{ steps.cov.outputs.pct }}%
-          valColorRange: ${{ steps.cov.outputs.pct }}
-          minColorRange: 30
-          maxColorRange: 80
+          color: ${{ steps.cov.outputs.color }}

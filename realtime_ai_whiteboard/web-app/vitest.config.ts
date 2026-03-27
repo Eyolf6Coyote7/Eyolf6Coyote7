@@ -1,5 +1,4 @@
-/// <reference types="vitest" />
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
@@ -14,7 +13,13 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'lcov', 'json-summary'],
       include: ['src/**/*.{ts,tsx}'],
-      exclude: ['src/test-setup.ts', 'src/**/*.d.ts', 'src/main.tsx', 'src/vite-env.d.ts'],
+      exclude: [
+        'src/test-setup.ts',
+        'src/**/*.d.ts',
+        'src/main.tsx',
+        'src/vite-env.d.ts',
+        '**/*.stories.*',
+      ],
     },
   },
 });
