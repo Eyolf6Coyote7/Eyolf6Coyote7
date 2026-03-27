@@ -66,7 +66,7 @@ export const useAiStore = create<AiState>((set) => ({
     try {
       const { taskId } = await api.submitAiPrompt(boardId, prompt);
       const eventSource = new EventSource(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:4001'}/api/web/ai/stream/${taskId}`,
+        `${import.meta.env.VITE_API_URL || 'http://localhost:4001'}/api/v1/ai/stream/${taskId}`,
       );
 
       eventSource.onmessage = (event) => {

@@ -20,26 +20,26 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const realClient: ApiClient = {
   register: (email, password, displayName) =>
-    request<AuthResponse>('/api/web/auth/register', {
+    request<AuthResponse>('/api/v1/auth/register', {
       method: 'POST',
       body: JSON.stringify({ email, password, displayName }),
     }),
   login: (email, password) =>
-    request<AuthResponse>('/api/web/auth/login', {
+    request<AuthResponse>('/api/v1/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     }),
-  getBoards: (page = 1) => request<Board[]>(`/api/web/boards?page=${page}`),
+  getBoards: (page = 1) => request<Board[]>(`/api/v1/boards?page=${page}`),
   createBoard: (title, templateId) =>
-    request<Board>('/api/web/boards', {
+    request<Board>('/api/v1/boards', {
       method: 'POST',
       body: JSON.stringify({ title, templateId }),
     }),
-  getBoard: (id) => request<Board>(`/api/web/boards/${encodeURIComponent(id)}`),
+  getBoard: (id) => request<Board>(`/api/v1/boards/${encodeURIComponent(id)}`),
   deleteBoard: (id) =>
-    request<void>(`/api/web/boards/${encodeURIComponent(id)}`, { method: 'DELETE' }),
+    request<void>(`/api/v1/boards/${encodeURIComponent(id)}`, { method: 'DELETE' }),
   submitAiPrompt: (boardId, prompt) =>
-    request<AiPromptResponse>('/api/web/ai/prompt', {
+    request<AiPromptResponse>('/api/v1/ai/prompt', {
       method: 'POST',
       body: JSON.stringify({ boardId, prompt }),
     }),

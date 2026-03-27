@@ -2,7 +2,7 @@
 
 > Miro + ChatGPT, fully local. CRDT realtime sync + AI agent state machine.
 
-**Industry:** SaaS | **Architecture:** Modular Monolith + BFF | **10 systems**
+**Industry:** SaaS | **Architecture:** Modular Monolith + BFF | **11 systems**
 
 ## Systems
 
@@ -18,6 +18,7 @@
 | 8 | BFF API | `bff-api/` | NestJS + Prisma + WebSocket | 4001 |
 | 9 | AI Service | `ai-service/` | LangGraph + Ollama + ChromaDB | 4010 |
 | 10 | Web App | `web-app/` | React + Vite + Zustand + Fabric.js | 5173 |
+| 11 | Mobile App | `mobile-app/` | React Native + Expo | 8081 |
 
 ## Quick Start
 
@@ -56,7 +57,27 @@ pnpm start:dev
 cd web-app
 pnpm install                          # first time only
 pnpm dev
+
+# 6. Mobile App (React Native / Expo)
+cd mobile-app
+pnpm install                          # first time only
+npx expo start                        # Expo dev server
+# Press 'i' for iOS simulator, 'a' for Android emulator, 'w' for web
 ```
+
+### Mobile App Screens
+
+7 screens aligned with Figma design system (`#2563EB` / `#004AC6`):
+
+| Screen | File | Description |
+|--------|------|-------------|
+| Splash | `app/splash.tsx` | Animated loading with brand identity |
+| Auth | `app/auth.tsx` | Sign Up / Log In with OAuth (Google, GitHub) |
+| Home | `app/(tabs)/boards.tsx` | Board list with thumbnails, search, FAB |
+| AI Chat | `app/(tabs)/chat.tsx` | AI assistant with suggestion chips, action cards |
+| Canvas | `app/board/[id].tsx` | Collaborative canvas with floating toolbar |
+| Board Settings | `app/board/settings.tsx` | Sharing, members, danger zone |
+| Account | `app/(tabs)/settings.tsx` | Profile, plan, team, preferences |
 
 #### Stop
 
@@ -78,6 +99,7 @@ pkill ollama
 | BFF API | http://localhost:4001 |
 | Yjs WebSocket | ws://localhost:4002 |
 | AI Service | http://localhost:4010 |
+| Mobile App (Expo) | http://localhost:8081 |
 | Langfuse | http://localhost:3100 |
 | MinIO Console | http://localhost:9001 |
 | Unleash | http://localhost:4242 |
@@ -98,6 +120,8 @@ cd bff-api && pnpm lint         # ESLint + Prisma generate
 - Python 3.12+ (for AI Service)
 - Ollama (for local LLM)
 - Docker + Docker Compose
+- Expo CLI (for Mobile App): `npm i -g expo-cli`
+- iOS Simulator (Xcode) or Android Emulator (Android Studio) for mobile
 
 ## Documentation
 

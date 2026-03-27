@@ -24,14 +24,14 @@ class PromptDto {
   prompt: string;
 }
 
-@Controller('api/web/ai')
-@UseGuards(AuthGuard('jwt'))
+@Controller('ai')
 export class AiGatewayController {
   private readonly logger = new Logger(AiGatewayController.name);
 
   constructor(private aiGateway: AiGatewayService) {}
 
   @Post('prompt')
+  @UseGuards(AuthGuard('jwt'))
   async submitPrompt(@CurrentUser() user: AuthUser, @Body() dto: PromptDto) {
     const taskId = await this.aiGateway.enqueueTask(dto.boardId, dto.prompt, user.userId);
     return { taskId };
