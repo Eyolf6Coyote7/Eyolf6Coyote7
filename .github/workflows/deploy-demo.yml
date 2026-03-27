@@ -91,6 +91,11 @@ jobs:
           cp -r realtime_ai_whiteboard/web-app/storybook-static/* _site/storybook/whiteboard/
           cp -r enterprise_workflow_system/employee-portal/storybook-static/* _site/storybook/workflow/
           cp -r 3d_asset_collaboration/asset-portal/storybook-static/* _site/storybook/3d-asset/
+          # SPA fallback: copy index.html to 404.html for each app
+          cp _site/whiteboard/index.html _site/whiteboard/404.html
+          cp _site/workflow/index.html _site/workflow/404.html
+          cp _site/workflow-admin/index.html _site/workflow-admin/404.html
+          cp _site/3d-asset/index.html _site/3d-asset/404.html
           cat > _site/index.html << 'HTMLEOF'
           <!DOCTYPE html>
           <html><head><title>Fullstack AI Workspace</title>
