@@ -1,6 +1,8 @@
 import { mockClient } from "./mock-client";
 import { realClient } from "./real-client";
 
+export type { Board } from "./mock-client";
+
 export interface ChatMessage {
   id: string;
   role: "user" | "assistant";
