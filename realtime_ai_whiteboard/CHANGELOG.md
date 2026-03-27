@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/whiteboard/v1.10.1...whiteboard/v1.11.0) (2026-03-27)
+
+
+### Features
+
+* **whiteboard:** align all web-app pages to Figma design system ([#189](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/189)) ([#190](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/issues/190)) ([b1a98b6](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/commit/b1a98b6419a8039c205caabff0f1b522282099e6))
+
 ## [1.10.1](https://github.com/Eyolf6Coyote7/fullstack_ai_workspace/compare/whiteboard/v1.10.0...whiteboard/v1.10.1) (2026-03-26)
 
 
