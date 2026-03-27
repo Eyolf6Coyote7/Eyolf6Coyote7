@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import DemoTooltip from '@/components/DemoTooltip.vue'
 
 const { t } = useI18n()
 
@@ -102,10 +103,12 @@ const toggles = ref([
           <span class="material-symbols-outlined" style="font-size: 14px">filter_list</span>
           {{ $t('toggles.filter') }}
         </button>
-        <button class="btn-primary">
-          <span class="material-symbols-outlined" style="font-size: 11px">add</span>
-          {{ $t('toggles.addToggle') }}
-        </button>
+        <DemoTooltip :message="$t('demo.toggleRequired')">
+          <button class="btn-primary">
+            <span class="material-symbols-outlined" style="font-size: 11px">add</span>
+            {{ $t('toggles.addToggle') }}
+          </button>
+        </DemoTooltip>
       </div>
     </div>
 
@@ -148,9 +151,11 @@ const toggles = ref([
             <span class="toggle-label" :style="{ color: tog.enabled ? '#286C00' : '#707784' }">{{
               tog.enabled ? $t('toggles.on') : $t('toggles.off')
             }}</span>
-            <div :class="['toggle', { on: tog.enabled }]" @click="tog.enabled = !tog.enabled">
-              <div class="toggle-thumb"></div>
-            </div>
+            <DemoTooltip :message="$t('demo.toggleRequired')">
+              <div :class="['toggle', { on: tog.enabled }]" @click="tog.enabled = !tog.enabled">
+                <div class="toggle-thumb"></div>
+              </div>
+            </DemoTooltip>
           </div>
           <button class="btn-dots">
             <span class="material-symbols-outlined" style="font-size: 16px">more_vert</span>

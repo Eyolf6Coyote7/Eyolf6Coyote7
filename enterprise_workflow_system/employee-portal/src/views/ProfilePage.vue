@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useI18n } from 'vue-i18n'
+import DemoTooltip from '@/components/DemoTooltip.vue'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -56,7 +57,9 @@ const sessions = [
             <div class="profile-info">
               <div class="name-row">
                 <h2 class="profile-name">{{ profile.name }}</h2>
-                <a class="edit-btn">{{ t('profile.edit') }}</a>
+                <DemoTooltip :message="t('demo.editRequired')">
+                  <a class="edit-btn">{{ t('profile.edit') }}</a>
+                </DemoTooltip>
               </div>
               <span class="profile-email">{{ profile.email }}</span>
               <div class="tag-row">
@@ -118,8 +121,12 @@ const sessions = [
             <div class="backup-row">
               <span class="backup-desc">{{ t('profile.unusedCodes') }}</span>
               <div class="backup-btns">
-                <button class="btn-outline-sm">{{ t('profile.regenerateCodes') }}</button>
-                <a class="link-sm">{{ t('profile.viewCodes') }}</a>
+                <DemoTooltip :message="t('demo.codesRequired')">
+                  <button class="btn-outline-sm">{{ t('profile.regenerateCodes') }}</button>
+                </DemoTooltip>
+                <DemoTooltip :message="t('demo.codesRequired')">
+                  <a class="link-sm">{{ t('profile.viewCodes') }}</a>
+                </DemoTooltip>
               </div>
             </div>
           </div>
@@ -170,10 +177,14 @@ const sessions = [
                 </div>
                 <span class="session-location">{{ s.location }}</span>
               </div>
-              <a v-if="!s.current" class="revoke-link">{{ t('profile.revoke') }}</a>
+              <DemoTooltip v-if="!s.current" :message="t('demo.revokeRequired')">
+                <a class="revoke-link">{{ t('profile.revoke') }}</a>
+              </DemoTooltip>
             </div>
           </div>
-          <a class="logout-all">{{ t('profile.logoutAll') }}</a>
+          <DemoTooltip :message="t('demo.logoutAllRequired')">
+            <a class="logout-all">{{ t('profile.logoutAll') }}</a>
+          </DemoTooltip>
         </div>
       </div>
     </div>

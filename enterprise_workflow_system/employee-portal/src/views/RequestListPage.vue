@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { api } from '@/api'
 import type { WorkflowRequest } from '@/api'
 import { useI18n } from 'vue-i18n'
+import DemoTooltip from '@/components/DemoTooltip.vue'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -70,10 +71,12 @@ function formatDate(iso: string) {
         <h1 class="page-title">{{ t('history.title') }}</h1>
         <p class="page-subtitle">{{ t('history.subtitle') }}</p>
       </div>
-      <button class="btn-export">
-        <span class="material-symbols-outlined" style="font-size: 12px">download</span>
-        {{ t('history.exportCsv') }}
-      </button>
+      <DemoTooltip :message="t('demo.exportRequired')">
+        <button class="btn-export">
+          <span class="material-symbols-outlined" style="font-size: 12px">download</span>
+          {{ t('history.exportCsv') }}
+        </button>
+      </DemoTooltip>
     </div>
 
     <!-- Filter Bar -->

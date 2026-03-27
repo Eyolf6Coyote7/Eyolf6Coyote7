@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { api } from '@/api'
 import type { WorkflowRequest } from '@/api'
 import { useI18n } from 'vue-i18n'
+import DemoTooltip from '@/components/DemoTooltip.vue'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -175,17 +176,18 @@ function formatDate(iso: string) {
     <div class="quick-actions">
       <span class="quick-label">{{ t('dashboard.fastAccess') }}</span>
       <div class="quick-btns">
-        <button
+        <DemoTooltip
           v-for="action in quickActions"
           :key="action.labelKey"
-          class="quick-btn"
-          @click="router.push(action.route)"
+          :message="t('demo.submitRequired')"
         >
-          <span class="material-symbols-outlined" style="font-size: 18px; color: #0060a9">{{
-            action.icon
-          }}</span>
-          {{ t(action.labelKey) }}
-        </button>
+          <button class="quick-btn" @click="router.push(action.route)">
+            <span class="material-symbols-outlined" style="font-size: 18px; color: #0060a9">{{
+              action.icon
+            }}</span>
+            {{ t(action.labelKey) }}
+          </button>
+        </DemoTooltip>
       </div>
     </div>
 

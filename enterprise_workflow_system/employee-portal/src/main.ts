@@ -11,6 +11,7 @@ import en from './i18n/en.json'
 import zhTW from './i18n/zh-TW.json'
 
 const i18n = createI18n({
+  legacy: false,
   locale: localStorage.getItem('lang') || 'en',
   fallbackLocale: 'en',
   messages: { en, 'zh-TW': zhTW },

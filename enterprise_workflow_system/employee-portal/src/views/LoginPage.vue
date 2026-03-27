@@ -4,8 +4,9 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { ElMessage } from 'element-plus'
 import { useI18n } from 'vue-i18n'
+import DemoTooltip from '@/components/DemoTooltip.vue'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const router = useRouter()
 const auth = useAuthStore()
 const loading = ref(false)
@@ -87,6 +88,12 @@ async function handleVerify() {
   }
 }
 
+function toggleLocale() {
+  const next = locale.value === 'en' ? 'zh-TW' : 'en'
+  locale.value = next
+  localStorage.setItem('lang', next)
+}
+
 const footerLinks = [
   { labelKey: 'footer.privacy', href: '#' },
   { labelKey: 'footer.terms', href: '#' },
@@ -122,8 +129,9 @@ const footerLinks = [
           <button class="icon-btn" aria-label="Help">
             <span class="material-symbols-outlined">help_outline</span>
           </button>
-          <button class="icon-btn" aria-label="Language">
+          <button class="icon-btn" aria-label="Language" @click="toggleLocale">
             <span class="material-symbols-outlined">language</span>
+            <span class="lang-label">{{ locale === 'en' ? '中文' : 'EN' }}</span>
           </button>
         </nav>
       </div>
@@ -201,10 +209,12 @@ const footerLinks = [
           </div>
 
           <!-- SSO Button -->
-          <button class="sso-btn" :disabled="loading" @click="handleSSOLogin">
-            <span class="material-symbols-outlined" style="font-size: 16px">shield</span>
-            {{ t('auth.ssoSignIn') }}
-          </button>
+          <DemoTooltip :message="t('demo.ssoRequired')">
+            <button class="sso-btn" :disabled="loading" @click="handleSSOLogin">
+              <span class="material-symbols-outlined" style="font-size: 16px">shield</span>
+              {{ t('auth.ssoSignIn') }}
+            </button>
+          </DemoTooltip>
 
           <!-- Divider -->
           <div class="or-divider">
@@ -215,17 +225,21 @@ const footerLinks = [
 
           <!-- Social SSO -->
           <div class="social-grid">
-            <button class="social-btn">
-              <span class="material-symbols-outlined" style="font-size: 14px">grid_view</span>
-              {{ t('auth.microsoft') }}
-            </button>
-            <button class="social-btn">
-              <span
-                style="font-family: 'Material Symbols Outlined'; font-size: 18px; color: #404752"
-                >GOOGLE</span
-              >
-              {{ t('auth.google') }}
-            </button>
+            <DemoTooltip :message="t('demo.ssoRequired')">
+              <button class="social-btn">
+                <span class="material-symbols-outlined" style="font-size: 14px">grid_view</span>
+                {{ t('auth.microsoft') }}
+              </button>
+            </DemoTooltip>
+            <DemoTooltip :message="t('demo.ssoRequired')">
+              <button class="social-btn">
+                <span
+                  style="font-family: 'Material Symbols Outlined'; font-size: 18px; color: #404752"
+                  >GOOGLE</span
+                >
+                {{ t('auth.google') }}
+              </button>
+            </DemoTooltip>
           </div>
         </div>
       </div>
@@ -272,9 +286,11 @@ const footerLinks = [
 
         <!-- Action Area -->
         <div class="tfa-actions">
-          <button class="sso-btn" :disabled="loading" @click="handleVerify">
-            {{ t('auth.verify') }}
-          </button>
+          <DemoTooltip :message="t('demo.ssoRequired')">
+            <button class="sso-btn" :disabled="loading" @click="handleVerify">
+              {{ t('auth.verify') }}
+            </button>
+          </DemoTooltip>
           <div class="tfa-links">
             <a href="#" class="link-primary">{{ t('auth.resendCode') }}</a>
             <a href="#" class="link-muted">
@@ -421,7 +437,7 @@ const footerLinks = [
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 36px;
+  min-width: 36px;
   height: 36px;
   border: none;
   background: transparent;
@@ -432,6 +448,14 @@ const footerLinks = [
 }
 .icon-btn:hover {
   background: rgba(0, 0, 0, 0.04);
+}
+.lang-label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 1;
+  color: #64748b;
+  margin-left: 2px;
 }
 
 /* ===== Main Content ===== */

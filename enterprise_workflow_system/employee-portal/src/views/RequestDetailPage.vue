@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import DemoTooltip from '@/components/DemoTooltip.vue'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -163,7 +164,9 @@ const comments = [
         <div class="card">
           <div class="card-header-row">
             <span class="card-section-title">{{ t('detail.requestInfo') }}</span>
-            <a class="edit-link">{{ t('detail.editDetails') }}</a>
+            <DemoTooltip :message="t('demo.editRequired')">
+              <a class="edit-link">{{ t('detail.editDetails') }}</a>
+            </DemoTooltip>
           </div>
           <div class="detail-grid">
             <div class="detail-field">
@@ -286,11 +289,13 @@ const comments = [
           </div>
           <div class="comment-input-wrap">
             <input type="text" :placeholder="t('detail.writeComment')" class="comment-input" />
-            <button class="comment-send">
-              <span class="material-symbols-outlined" style="font-size: 16px; color: #0060a9"
-                >send</span
-              >
-            </button>
+            <DemoTooltip :message="t('demo.commentRequired')">
+              <button class="comment-send">
+                <span class="material-symbols-outlined" style="font-size: 16px; color: #0060a9"
+                  >send</span
+                >
+              </button>
+            </DemoTooltip>
           </div>
         </div>
       </div>

@@ -7,7 +7,12 @@ import { useAuthStore } from '@/stores/auth'
 const router = useRouter()
 const route = useRoute()
 const auth = useAuthStore()
-const { t } = useI18n()
+const { t, locale } = useI18n()
+
+function toggleLang() {
+  locale.value = locale.value === 'en' ? 'zh-TW' : 'en'
+  localStorage.setItem('lang', locale.value)
+}
 
 const showLayout = computed(() => auth.isAuthenticated && route.path !== '/login')
 
@@ -42,6 +47,9 @@ function handleLogout() {
         <a class="top-link">{{ $t('nav.reports') }}</a>
       </div>
       <div class="top-nav-right">
+        <button class="lang-toggle" @click="toggleLang">
+          {{ locale === 'en' ? '中文' : 'EN' }}
+        </button>
         <a class="switch-link" @click="handleLogout">{{ $t('nav.switchToPortal') }}</a>
         <span class="admin-label">{{ $t('nav.admin') }}</span>
         <div class="admin-avatar">
@@ -168,6 +176,22 @@ body,
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.lang-toggle {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  color: #475569;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.lang-toggle:hover {
+  background: #e2e8f0;
 }
 
 /* App Body */

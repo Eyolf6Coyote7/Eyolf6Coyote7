@@ -149,6 +149,19 @@
     "loginPlaceholder": "輸入登入畫面上使用者的自訂訊息...",
     "showLogo": "在頁首顯示公司標誌"
   },
+  "demo": {
+    "inviteRequired": "邀請需要後端服務",
+    "toggleRequired": "開關需要後端服務",
+    "exportRequired": "匯出需要後端服務",
+    "filterRequired": "篩選需要後端服務",
+    "createRequired": "建立需要後端服務",
+    "saveRequired": "儲存需要後端服務",
+    "resetRequired": "重設需要後端服務",
+    "uploadRequired": "上傳需要後端服務",
+    "removeRequired": "移除需要後端服務",
+    "sendRequired": "傳送需要後端服務",
+    "actionRequired": "操作需要後端服務"
+  },
   "departments": {
     "engineering": "工程部",
     "finance": "財務部",

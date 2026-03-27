@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { api } from '@/api'
 import type { AuditEntry } from '@/api'
+import DemoTooltip from '@/components/DemoTooltip.vue'
 
 const { t } = useI18n()
 const entries = ref<AuditEntry[]>([])
@@ -42,10 +43,12 @@ function eventColor(action: string) {
         <h1 class="page-title">{{ $t('audit.title') }}</h1>
         <p class="page-sub">{{ $t('audit.subtitle') }}</p>
       </div>
-      <button class="btn-export">
-        {{ $t('audit.export') }}
-        <span class="material-symbols-outlined" style="font-size: 10px">expand_more</span>
-      </button>
+      <DemoTooltip :message="$t('demo.exportRequired')">
+        <button class="btn-export">
+          {{ $t('audit.export') }}
+          <span class="material-symbols-outlined" style="font-size: 10px">expand_more</span>
+        </button>
+      </DemoTooltip>
     </div>
 
     <!-- Filter Bar -->
@@ -80,7 +83,9 @@ function eventColor(action: string) {
       </div>
       <div class="filter-actions">
         <a class="link-reset">{{ $t('audit.reset') }}</a>
-        <button class="btn-apply">{{ $t('audit.apply') }}</button>
+        <DemoTooltip :message="$t('demo.filterRequired')">
+          <button class="btn-apply">{{ $t('audit.apply') }}</button>
+        </DemoTooltip>
       </div>
     </div>
 

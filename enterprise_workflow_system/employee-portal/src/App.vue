@@ -4,7 +4,13 @@ import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
+
+function toggleLocale() {
+  const next = locale.value === 'en' ? 'zh-TW' : 'en'
+  locale.value = next
+  localStorage.setItem('lang', next)
+}
 const auth = useAuthStore()
 const router = useRouter()
 const route = useRoute()
@@ -46,6 +52,14 @@ const menuItems = [
         </div>
       </div>
       <div class="top-nav-right">
+        <button
+          class="nav-icon-btn"
+          @click="toggleLocale"
+          :title="locale === 'en' ? '切換中文' : 'Switch to English'"
+        >
+          <span class="material-symbols-outlined">language</span>
+          <span class="lang-label">{{ locale === 'en' ? '中文' : 'EN' }}</span>
+        </button>
         <button class="nav-icon-btn" style="position: relative">
           <span class="material-symbols-outlined">notifications</span>
           <span class="notif-badge"></span>
@@ -197,7 +211,7 @@ body,
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
+  min-width: 32px;
   height: 36px;
   background: none;
   border: none;
@@ -208,6 +222,14 @@ body,
 }
 .nav-icon-btn:hover {
   background: rgba(0, 0, 0, 0.04);
+}
+.lang-label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 1;
+  color: #64748b;
+  margin-left: 2px;
 }
 .notif-badge {
   position: absolute;

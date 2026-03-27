@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import DemoTooltip from '@/components/DemoTooltip.vue'
 
 const { t } = useI18n()
 const activeTab = ref('brand')
@@ -50,8 +51,12 @@ const emailForm = ref({ headerColor: '#409EFF', footerText: '', includeLogo: tru
             <div class="logo-info">
               <span class="logo-label">Company Logo</span>
               <div class="logo-btns">
-                <button class="btn-sm-primary">{{ $t('config.uploadLogo') }}</button>
-                <a class="link-danger">{{ $t('config.remove') }}</a>
+                <DemoTooltip :message="$t('demo.uploadRequired')">
+                  <button class="btn-sm-primary">{{ $t('config.uploadLogo') }}</button>
+                </DemoTooltip>
+                <DemoTooltip :message="$t('demo.removeRequired')">
+                  <a class="link-danger">{{ $t('config.remove') }}</a>
+                </DemoTooltip>
               </div>
               <span class="logo-hint">{{ $t('config.logoHint') }}</span>
             </div>
@@ -94,8 +99,12 @@ const emailForm = ref({ headerColor: '#409EFF', footerText: '', includeLogo: tru
           </div>
 
           <div class="form-footer">
-            <a class="link-muted">{{ $t('config.resetDefaults') }}</a>
-            <button class="btn-primary-lg">{{ $t('config.saveChanges') }}</button>
+            <DemoTooltip :message="$t('demo.resetRequired')">
+              <a class="link-muted">{{ $t('config.resetDefaults') }}</a>
+            </DemoTooltip>
+            <DemoTooltip :message="$t('demo.saveRequired')">
+              <button class="btn-primary-lg">{{ $t('config.saveChanges') }}</button>
+            </DemoTooltip>
           </div>
         </div>
       </div>

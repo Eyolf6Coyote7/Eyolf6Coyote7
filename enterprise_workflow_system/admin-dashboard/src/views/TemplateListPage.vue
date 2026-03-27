@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { api } from '@/api'
 import type { Template } from '@/api'
+import DemoTooltip from '@/components/DemoTooltip.vue'
 
 const router = useRouter()
 const { t } = useI18n()
@@ -92,10 +93,12 @@ const cards = [
         <h1 class="page-title">{{ $t('templates.title') }}</h1>
         <p class="page-sub">{{ $t('templates.subtitle') }}</p>
       </div>
-      <button class="btn-primary">
-        <span class="material-symbols-outlined" style="font-size: 14px">add</span>
-        {{ $t('templates.createTemplate') }}
-      </button>
+      <DemoTooltip :message="$t('demo.createRequired')">
+        <button class="btn-primary">
+          <span class="material-symbols-outlined" style="font-size: 14px">add</span>
+          {{ $t('templates.createTemplate') }}
+        </button>
+      </DemoTooltip>
     </div>
 
     <div class="template-grid">

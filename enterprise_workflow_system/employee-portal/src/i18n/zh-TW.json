@@ -223,6 +223,20 @@
     "cancel": "取消",
     "commentRequired": "駁回時必須填寫留言"
   },
+  "demo": {
+    "ssoRequired": "SSO 登入需要後端服務",
+    "submitRequired": "提交需要後端服務",
+    "uploadRequired": "上傳需要後端服務",
+    "approveRequired": "核准需要後端服務",
+    "rejectRequired": "駁回需要後端服務",
+    "bulkRequired": "批次操作需要後端服務",
+    "editRequired": "編輯需要後端服務",
+    "commentRequired": "留言需要後端服務",
+    "exportRequired": "匯出需要後端服務",
+    "codesRequired": "備用驗證碼需要後端服務",
+    "revokeRequired": "撤銷需要後端服務",
+    "logoutAllRequired": "登出所有裝置需要後端服務"
+  },
   "departments": {
     "marketing": "行銷與傳播",
     "engineering": "工程",

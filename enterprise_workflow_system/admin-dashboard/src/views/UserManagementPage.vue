@@ -3,6 +3,7 @@ import { ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { api } from '@/api'
 import type { User } from '@/api'
+import DemoTooltip from '@/components/DemoTooltip.vue'
 
 const { t } = useI18n()
 const users = ref<User[]>([])
@@ -55,10 +56,12 @@ function statusColor(status: string) {
         <h1 class="page-title">{{ $t('users.title') }}</h1>
         <p class="page-sub">{{ $t('users.subtitle') }}</p>
       </div>
-      <button class="btn-primary" @click="showInviteModal = true">
-        <span class="material-symbols-outlined" style="font-size: 11px">add</span>
-        {{ $t('users.inviteUser') }}
-      </button>
+      <DemoTooltip :message="$t('demo.inviteRequired')">
+        <button class="btn-primary" @click="showInviteModal = true">
+          <span class="material-symbols-outlined" style="font-size: 11px">add</span>
+          {{ $t('users.inviteUser') }}
+        </button>
+      </DemoTooltip>
     </div>
 
     <div class="stats-row">
@@ -142,9 +145,11 @@ function statusColor(status: string) {
             </td>
             <td class="cell-muted">2 min ago</td>
             <td style="text-align: right">
-              <button class="btn-dots">
-                <span class="material-symbols-outlined" style="font-size: 12px">more_vert</span>
-              </button>
+              <DemoTooltip :message="$t('demo.actionRequired')">
+                <button class="btn-dots">
+                  <span class="material-symbols-outlined" style="font-size: 12px">more_vert</span>
+                </button>
+              </DemoTooltip>
             </td>
           </tr>
         </tbody>
@@ -211,9 +216,11 @@ function statusColor(status: string) {
         <div class="modal-footer">
           <button class="btn-cancel" @click="showInviteModal = false">
             {{ $t('users.cancel') }}</button
-          ><button class="btn-primary" @click="showInviteModal = false">
-            {{ $t('users.sendInvitation') }}
-          </button>
+          ><DemoTooltip :message="$t('demo.sendRequired')">
+            <button class="btn-primary" @click="showInviteModal = false">
+              {{ $t('users.sendInvitation') }}
+            </button>
+          </DemoTooltip>
         </div>
       </div>
     </div>

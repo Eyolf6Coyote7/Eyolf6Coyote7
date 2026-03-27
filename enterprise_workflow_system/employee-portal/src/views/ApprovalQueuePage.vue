@@ -4,6 +4,7 @@ import { api } from '@/api'
 import type { WorkflowRequest } from '@/api'
 import { ElMessage } from 'element-plus'
 import { useI18n } from 'vue-i18n'
+import DemoTooltip from '@/components/DemoTooltip.vue'
 
 const { t } = useI18n()
 const approvals = ref<WorkflowRequest[]>([])
@@ -71,10 +72,12 @@ function formatAmount(amount?: number) {
         <h1 class="page-title">{{ t('approvals.title') }}</h1>
         <p class="page-subtitle">{{ approvals.length }} {{ t('approvals.awaitingApproval') }}</p>
       </div>
-      <button class="btn-filter">
-        {{ t('approvals.bulkActions') }}
-        <span class="material-symbols-outlined" style="font-size: 8px">expand_more</span>
-      </button>
+      <DemoTooltip :message="t('demo.bulkRequired')">
+        <button class="btn-filter">
+          {{ t('approvals.bulkActions') }}
+          <span class="material-symbols-outlined" style="font-size: 8px">expand_more</span>
+        </button>
+      </DemoTooltip>
     </div>
 
     <!-- Filter Bar -->
@@ -149,14 +152,18 @@ function formatAmount(amount?: number) {
         </div>
         <div class="card-actions">
           <div class="action-btns">
-            <button class="btn-approve" @click="openModal(row, 'approve')">
-              <span class="material-symbols-outlined" style="font-size: 12px">check</span>
-              {{ t('approvals.approve') }}
-            </button>
-            <button class="btn-reject" @click="openModal(row, 'reject')">
-              <span class="material-symbols-outlined" style="font-size: 11px">close</span>
-              {{ t('approvals.reject') }}
-            </button>
+            <DemoTooltip :message="t('demo.approveRequired')">
+              <button class="btn-approve" @click="openModal(row, 'approve')">
+                <span class="material-symbols-outlined" style="font-size: 12px">check</span>
+                {{ t('approvals.approve') }}
+              </button>
+            </DemoTooltip>
+            <DemoTooltip :message="t('demo.rejectRequired')">
+              <button class="btn-reject" @click="openModal(row, 'reject')">
+                <span class="material-symbols-outlined" style="font-size: 11px">close</span>
+                {{ t('approvals.reject') }}
+              </button>
+            </DemoTooltip>
           </div>
           <a class="view-link" @click="$router.push(`/requests/${row.id}`)">
             {{ t('approvals.viewDetails') }}
@@ -251,16 +258,22 @@ function formatAmount(amount?: number) {
         </div>
         <div class="modal-footer">
           <button class="btn-cancel" @click="showModal = false">{{ t('approvals.cancel') }}</button>
-          <button
-            :class="['btn-modal-action', modalAction]"
-            :disabled="!confirmed"
-            @click="handleConfirm"
+          <DemoTooltip
+            :message="
+              modalAction === 'approve' ? t('demo.approveRequired') : t('demo.rejectRequired')
+            "
           >
-            <span class="material-symbols-outlined" style="font-size: 13px">{{
-              modalAction === 'approve' ? 'check' : 'close'
-            }}</span>
-            {{ modalAction === 'approve' ? t('approvals.approve') : t('approvals.reject') }}
-          </button>
+            <button
+              :class="['btn-modal-action', modalAction]"
+              :disabled="!confirmed"
+              @click="handleConfirm"
+            >
+              <span class="material-symbols-outlined" style="font-size: 13px">{{
+                modalAction === 'approve' ? 'check' : 'close'
+              }}</span>
+              {{ modalAction === 'approve' ? t('approvals.approve') : t('approvals.reject') }}
+            </button>
+          </DemoTooltip>
         </div>
       </div>
     </div>

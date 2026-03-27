@@ -223,6 +223,20 @@
     "cancel": "Cancel",
     "commentRequired": "Comment is required for rejection"
   },
+  "demo": {
+    "ssoRequired": "SSO login requires backend",
+    "submitRequired": "Submit requires backend",
+    "uploadRequired": "Upload requires backend",
+    "approveRequired": "Approve requires backend",
+    "rejectRequired": "Reject requires backend",
+    "bulkRequired": "Bulk actions require backend",
+    "editRequired": "Edit requires backend",
+    "commentRequired": "Comment requires backend",
+    "exportRequired": "Export requires backend",
+    "codesRequired": "Backup codes require backend",
+    "revokeRequired": "Revoke requires backend",
+    "logoutAllRequired": "Logout all requires backend"
+  },
   "departments": {
     "marketing": "Marketing & Communications",
     "engineering": "Engineering",

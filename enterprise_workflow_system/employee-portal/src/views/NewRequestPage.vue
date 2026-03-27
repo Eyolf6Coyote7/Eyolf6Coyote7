@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useI18n } from 'vue-i18n'
+import DemoTooltip from '@/components/DemoTooltip.vue'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -269,13 +270,15 @@ const priorityKeys: Record<string, string> = {
 
             <div class="field-full">
               <label class="field-label">{{ t('newRequest.attachments') }}</label>
-              <div class="dropzone">
-                <span class="material-symbols-outlined" style="font-size: 28px; color: #0060a9"
-                  >cloud_upload</span
-                >
-                <span class="dropzone-text">{{ t('newRequest.dragFiles') }}</span>
-                <span class="dropzone-hint">{{ t('newRequest.maxSize') }}</span>
-              </div>
+              <DemoTooltip :message="t('demo.uploadRequired')">
+                <div class="dropzone">
+                  <span class="material-symbols-outlined" style="font-size: 28px; color: #0060a9"
+                    >cloud_upload</span
+                  >
+                  <span class="dropzone-text">{{ t('newRequest.dragFiles') }}</span>
+                  <span class="dropzone-hint">{{ t('newRequest.maxSize') }}</span>
+                </div>
+              </DemoTooltip>
               <div v-if="form.attachment" class="file-chip">
                 <span class="material-symbols-outlined" style="font-size: 12px">description</span>
                 {{ form.attachment }}
@@ -336,10 +339,12 @@ const priorityKeys: Record<string, string> = {
             <span class="material-symbols-outlined" style="font-size: 12px">arrow_back</span>
             {{ t('newRequest.back') }}
           </button>
-          <button class="btn-primary btn-submit" @click="submitRequest">
-            {{ t('newRequest.submitRequest') }}
-            <span class="material-symbols-outlined" style="font-size: 14px">send</span>
-          </button>
+          <DemoTooltip :message="t('demo.submitRequired')">
+            <button class="btn-primary btn-submit" @click="submitRequest">
+              {{ t('newRequest.submitRequest') }}
+              <span class="material-symbols-outlined" style="font-size: 14px">send</span>
+            </button>
+          </DemoTooltip>
         </div>
       </div>
     </div>

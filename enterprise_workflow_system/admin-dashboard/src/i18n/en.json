@@ -149,6 +149,19 @@
     "loginPlaceholder": "Enter custom message for users on the sign-in screen...",
     "showLogo": "Show company logo in headers"
   },
+  "demo": {
+    "inviteRequired": "Invite requires backend",
+    "toggleRequired": "Toggle requires backend",
+    "exportRequired": "Export requires backend",
+    "filterRequired": "Filter requires backend",
+    "createRequired": "Create requires backend",
+    "saveRequired": "Save requires backend",
+    "resetRequired": "Reset requires backend",
+    "uploadRequired": "Upload requires backend",
+    "removeRequired": "Remove requires backend",
+    "sendRequired": "Send requires backend",
+    "actionRequired": "Action requires backend"
+  },
   "departments": {
     "engineering": "Engineering",
     "finance": "Finance",
