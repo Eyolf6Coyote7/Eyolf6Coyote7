@@ -1,5 +1,8 @@
 import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { DemoTooltip } from "../components/DemoTooltip";
+
+const isMock = import.meta.env.VITE_MOCK === "true";
 
 const stepKeys = ["upload.dropzone", "upload.metadata", "common.submit"];
 const aiTags = ["shoe", "sneaker", "hero-shot"];
@@ -55,8 +58,8 @@ export default function UploadPage() {
         style={{
           width: 800,
           maxWidth: "100%",
-          background: "#FFFFFF",
-          boxShadow: "0px 1px 2px rgba(0,0,0,0.05)",
+          background: "var(--bg-surface)",
+          boxShadow: "var(--card-shadow)",
           borderRadius: 8,
           position: "relative",
           padding: "32px",
@@ -75,7 +78,15 @@ export default function UploadPage() {
         >
           {/* Connecting line */}
           <div
-            style={{ position: "absolute", top: 20, left: 80, right: 80, height: 2, background: "#DCE2F7", zIndex: 0 }}
+            style={{
+              position: "absolute",
+              top: 20,
+              left: 80,
+              right: 80,
+              height: 2,
+              background: "var(--border)",
+              zIndex: 0,
+            }}
           />
           {steps.map((label, i) => (
             <div
@@ -98,7 +109,7 @@ export default function UploadPage() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  background: i <= step ? "#4648D4" : "#E1E8FD",
+                  background: i <= step ? "#4648D4" : "var(--accent-surface)",
                   boxShadow: i === step ? "0px 0px 0px 4px rgba(70,72,212,0.1)" : "none",
                 }}
               >
@@ -107,7 +118,7 @@ export default function UploadPage() {
                     fontFamily: "Inter, sans-serif",
                     fontSize: 14,
                     fontWeight: 700,
-                    color: i <= step ? "#FFFFFF" : "#464554",
+                    color: i <= step ? "#FFFFFF" : "var(--text-primary)",
                   }}
                 >
                   {i + 1}
@@ -118,7 +129,7 @@ export default function UploadPage() {
                   fontFamily: "Inter, sans-serif",
                   fontSize: 12,
                   fontWeight: 700,
-                  color: i <= step ? "#4648D4" : "rgba(70,69,84,0.6)",
+                  color: i <= step ? "#4648D4" : "var(--text-muted)",
                 }}
               >
                 {label}
@@ -140,8 +151,8 @@ export default function UploadPage() {
               onClick={() => document.getElementById("file-input")?.click()}
               style={{
                 height: 280,
-                background: dragging ? "#E8EBFF" : "#F1F3FF",
-                border: "2px dashed #C7C4D7",
+                background: dragging ? "var(--accent-surface)" : "var(--bg-elevated)",
+                border: "2px dashed var(--border)",
                 borderRadius: 8,
                 display: "flex",
                 flexDirection: "column",
@@ -159,15 +170,15 @@ export default function UploadPage() {
                 onChange={handleFileInput}
               />
               <svg width="44" height="32" viewBox="0 0 44 32" fill="none" style={{ marginBottom: 16, opacity: 0.4 }}>
-                <path d="M22 0L32 10H26V20H18V10H12L22 0Z" fill="#464554" />
-                <path d="M0 28H44V32H0V28Z" fill="#464554" />
+                <path d="M22 0L32 10H26V20H18V10H12L22 0Z" fill="currentColor" />
+                <path d="M0 28H44V32H0V28Z" fill="currentColor" />
               </svg>
               <span
                 style={{
                   fontFamily: "Manrope, sans-serif",
                   fontSize: 16,
                   fontWeight: 700,
-                  color: "#464554",
+                  color: "var(--text-primary)",
                   marginBottom: 16,
                 }}
               >
@@ -175,7 +186,7 @@ export default function UploadPage() {
               </span>
               <button
                 style={{
-                  background: "#FFFFFF",
+                  background: "var(--bg-surface)",
                   border: "1px solid #4648D4",
                   borderRadius: 4,
                   padding: "10px 24px",
@@ -189,7 +200,7 @@ export default function UploadPage() {
                 Browse Files
               </button>
               <span
-                style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "rgba(70,69,84,0.6)", marginTop: 16 }}
+                style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "var(--text-muted)", marginTop: 16 }}
               >
                 Supports: GLB, FBX, OBJ. Max 500MB
               </span>
@@ -198,8 +209,8 @@ export default function UploadPage() {
             {file && (
               <div
                 style={{
-                  background: "#FFFFFF",
-                  border: "1px solid rgba(199,196,215,0.2)",
+                  background: "var(--bg-surface)",
+                  border: "1px solid var(--border)",
                   borderRadius: 8,
                   padding: 16,
                 }}
@@ -209,7 +220,7 @@ export default function UploadPage() {
                     style={{
                       width: 40,
                       height: 40,
-                      background: "#E9EDFF",
+                      background: "var(--accent-surface)",
                       borderRadius: 4,
                       display: "flex",
                       alignItems: "center",
@@ -224,11 +235,16 @@ export default function UploadPage() {
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                         <span
-                          style={{ fontFamily: "Inter, sans-serif", fontSize: 14, fontWeight: 700, color: "#141B2B" }}
+                          style={{
+                            fontFamily: "Inter, sans-serif",
+                            fontSize: 14,
+                            fontWeight: 700,
+                            color: "var(--text-primary)",
+                          }}
                         >
                           {file.name}
                         </span>
-                        <span style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "rgba(70,69,84,0.5)" }}>
+                        <span style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "var(--text-muted)" }}>
                           {(file.size / 1024 / 1024).toFixed(0)} MB
                         </span>
                       </div>
@@ -242,7 +258,13 @@ export default function UploadPage() {
                       </button>
                     </div>
                     <div
-                      style={{ width: "100%", height: 8, background: "#E9EDFF", borderRadius: 12, overflow: "hidden" }}
+                      style={{
+                        width: "100%",
+                        height: 8,
+                        background: "var(--accent-surface)",
+                        borderRadius: 12,
+                        overflow: "hidden",
+                      }}
                     >
                       <div
                         style={{
@@ -254,7 +276,7 @@ export default function UploadPage() {
                         }}
                       />
                     </div>
-                    <span style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "rgba(70,69,84,0.6)" }}>
+                    <span style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "var(--text-muted)" }}>
                       {progress}% &middot; {Math.round(((file.size / 1024 / 1024) * progress) / 100)} MB /{" "}
                       {(file.size / 1024 / 1024).toFixed(0)} MB &middot; ~12s remaining
                     </span>
@@ -269,8 +291,8 @@ export default function UploadPage() {
                 disabled={!file}
                 style={{
                   padding: "10px 32px",
-                  background: file ? "#4648D4" : "#E1E8FD",
-                  color: file ? "#FFF" : "#767586",
+                  background: file ? "#4648D4" : "var(--accent-surface)",
+                  color: file ? "#FFF" : "var(--text-muted)",
                   border: "none",
                   borderRadius: 4,
                   fontFamily: "Inter, sans-serif",
@@ -292,7 +314,7 @@ export default function UploadPage() {
               display: "flex",
               flexDirection: "column",
               gap: 24,
-              borderTop: "1px solid rgba(199,196,215,0.1)",
+              borderTop: "1px solid var(--border)",
               paddingTop: 16,
             }}
           >
@@ -305,7 +327,7 @@ export default function UploadPage() {
                     fontWeight: 700,
                     letterSpacing: 0.6,
                     textTransform: "uppercase" as const,
-                    color: "rgba(70,69,84,0.7)",
+                    color: "var(--text-secondary)",
                     display: "block",
                     marginBottom: 8,
                   }}
@@ -318,12 +340,12 @@ export default function UploadPage() {
                   style={{
                     width: "100%",
                     padding: 12,
-                    background: "#F1F3FF",
-                    border: "none",
+                    background: "var(--input-bg)",
+                    border: "1px solid var(--input-border)",
                     borderRadius: 4,
                     fontFamily: "Inter, sans-serif",
                     fontSize: 14,
-                    color: "#141B2B",
+                    color: "var(--text-primary)",
                     boxSizing: "border-box",
                   }}
                 />
@@ -336,7 +358,7 @@ export default function UploadPage() {
                     fontWeight: 700,
                     letterSpacing: 0.6,
                     textTransform: "uppercase" as const,
-                    color: "rgba(70,69,84,0.7)",
+                    color: "var(--text-secondary)",
                     display: "block",
                     marginBottom: 8,
                   }}
@@ -349,12 +371,12 @@ export default function UploadPage() {
                   style={{
                     width: "100%",
                     padding: 12,
-                    background: "#F1F3FF",
-                    border: "none",
+                    background: "var(--input-bg)",
+                    border: "1px solid var(--input-border)",
                     borderRadius: 4,
                     fontFamily: "Inter, sans-serif",
                     fontSize: 14,
-                    color: "#141B2B",
+                    color: "var(--text-primary)",
                     boxSizing: "border-box",
                     appearance: "auto",
                   }}
@@ -374,7 +396,7 @@ export default function UploadPage() {
                   fontWeight: 700,
                   letterSpacing: 0.6,
                   textTransform: "uppercase" as const,
-                  color: "rgba(70,69,84,0.7)",
+                  color: "var(--text-secondary)",
                   display: "block",
                   marginBottom: 8,
                 }}
@@ -389,12 +411,12 @@ export default function UploadPage() {
                   width: "100%",
                   height: 84,
                   padding: 12,
-                  background: "#F1F3FF",
-                  border: "none",
+                  background: "var(--input-bg)",
+                  border: "1px solid var(--input-border)",
                   borderRadius: 4,
                   fontFamily: "Inter, sans-serif",
                   fontSize: 14,
-                  color: "#141B2B",
+                  color: "var(--text-primary)",
                   resize: "none",
                   boxSizing: "border-box",
                 }}
@@ -409,7 +431,7 @@ export default function UploadPage() {
                   fontWeight: 700,
                   letterSpacing: 0.6,
                   textTransform: "uppercase" as const,
-                  color: "rgba(70,69,84,0.7)",
+                  color: "var(--text-secondary)",
                   display: "block",
                   marginBottom: 12,
                 }}
@@ -425,12 +447,12 @@ export default function UploadPage() {
                       alignItems: "center",
                       gap: 6,
                       padding: "6px 12px",
-                      background: "#E1E8FD",
+                      background: "var(--accent-surface)",
                       borderRadius: 12,
                       fontFamily: "Inter, sans-serif",
                       fontSize: 12,
                       fontWeight: 700,
-                      color: "#141B2B",
+                      color: "var(--text-primary)",
                     }}
                   >
                     {tag}
@@ -441,7 +463,7 @@ export default function UploadPage() {
                       style={{ cursor: "pointer" }}
                       onClick={() => setForm({ ...form, tags: form.tags.filter((t) => t !== tag) })}
                     >
-                      <path d="M1 1L7 7M7 1L1 7" stroke="#141B2B" strokeWidth="1.2" />
+                      <path d="M1 1L7 7M7 1L1 7" stroke="var(--text-primary)" strokeWidth="1.2" />
                     </svg>
                   </span>
                 ))}
@@ -454,7 +476,7 @@ export default function UploadPage() {
                       alignItems: "center",
                       gap: 6,
                       padding: "5px 12px",
-                      background: "rgba(70,72,212,0.05)",
+                      background: "var(--accent-surface)",
                       border: "1px dashed rgba(70,72,212,0.4)",
                       borderRadius: 12,
                       fontFamily: "Inter, sans-serif",
@@ -479,12 +501,12 @@ export default function UploadPage() {
                 style={{
                   padding: "10px 24px",
                   background: "none",
-                  border: "1px solid #C7C4D7",
+                  border: "1px solid var(--border)",
                   borderRadius: 4,
                   fontFamily: "Inter, sans-serif",
                   fontSize: 14,
                   fontWeight: 600,
-                  color: "#464554",
+                  color: "var(--text-primary)",
                   cursor: "pointer",
                 }}
               >
@@ -514,7 +536,7 @@ export default function UploadPage() {
         {step === 2 && (
           <div
             style={{
-              borderTop: "1px solid rgba(199,196,215,0.1)",
+              borderTop: "1px solid var(--border)",
               paddingTop: 24,
               display: "flex",
               flexDirection: "column",
@@ -526,7 +548,7 @@ export default function UploadPage() {
                 display: "flex",
                 alignItems: "center",
                 gap: 16,
-                background: "#F1F3FF",
+                background: "var(--bg-elevated)",
                 borderRadius: 8,
                 padding: 16,
               }}
@@ -535,7 +557,7 @@ export default function UploadPage() {
                 style={{
                   width: 64,
                   height: 64,
-                  background: "#DCE2F7",
+                  background: "var(--accent-surface)",
                   borderRadius: 4,
                   display: "flex",
                   alignItems: "center",
@@ -547,40 +569,49 @@ export default function UploadPage() {
                 </svg>
               </div>
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: "Inter, sans-serif", fontSize: 14, fontWeight: 700, color: "#141B2B" }}>
+                <div
+                  style={{
+                    fontFamily: "Inter, sans-serif",
+                    fontSize: 14,
+                    fontWeight: 700,
+                    color: "var(--text-primary)",
+                  }}
+                >
                   Final Package Preview
                 </div>
-                <div style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "rgba(70,69,84,0.6)" }}>
+                <div style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "var(--text-muted)" }}>
                   1 Asset &middot; {form.tags.length} Tags &middot; {file?.name || "air-max-2026-hero.glb"} &middot;{" "}
                   {file ? (file.size / 1024 / 1024).toFixed(1) : "52.4"}MB
                 </div>
               </div>
             </div>
 
-            <button
-              onClick={() => setStep(0)}
-              style={{
-                width: "100%",
-                height: 48,
-                background: "#4648D4",
-                border: "none",
-                borderRadius: 4,
-                fontFamily: "Inter, sans-serif",
-                fontSize: 16,
-                fontWeight: 700,
-                color: "#FFFFFF",
-                cursor: "pointer",
-                boxShadow: "0px 10px 15px -3px rgba(70,72,212,0.2)",
-              }}
-            >
-              Upload Asset
-            </button>
+            <DemoTooltip message={t("demo.uploadRequired")}>
+              <button
+                onClick={() => setStep(0)}
+                style={{
+                  width: "100%",
+                  height: 48,
+                  background: "#4648D4",
+                  border: "none",
+                  borderRadius: 4,
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: 16,
+                  fontWeight: 700,
+                  color: "#FFFFFF",
+                  cursor: "pointer",
+                  boxShadow: "0px 10px 15px -3px rgba(70,72,212,0.2)",
+                }}
+              >
+                Upload Asset
+              </button>
+            </DemoTooltip>
 
             <p
               style={{
                 fontFamily: "Inter, sans-serif",
                 fontSize: 12,
-                color: "rgba(70,69,84,0.4)",
+                color: "var(--text-muted)",
                 textAlign: "center",
               }}
             >
@@ -593,12 +624,12 @@ export default function UploadPage() {
                 style={{
                   padding: "10px 24px",
                   background: "none",
-                  border: "1px solid #C7C4D7",
+                  border: "1px solid var(--border)",
                   borderRadius: 4,
                   fontFamily: "Inter, sans-serif",
                   fontSize: 14,
                   fontWeight: 600,
-                  color: "#464554",
+                  color: "var(--text-primary)",
                   cursor: "pointer",
                 }}
               >

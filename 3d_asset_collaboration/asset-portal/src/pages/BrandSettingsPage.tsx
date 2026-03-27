@@ -1,4 +1,8 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { DemoTooltip } from "../components/DemoTooltip";
+
+const isMock = import.meta.env.VITE_MOCK === "true";
 
 const members = [
   { name: "Sarah Bowerman", email: "sarah.b@acme-studio.io", role: "Owner", joined: "Jan 12, 2024", removable: false },
@@ -31,7 +35,7 @@ const label: React.CSSProperties = {
   fontFamily: "Inter, sans-serif",
   fontSize: 14,
   fontWeight: 600,
-  color: "#141B2B",
+  color: "var(--text-primary)",
   letterSpacing: -0.35,
   marginBottom: 8,
   display: "block",
@@ -39,23 +43,24 @@ const label: React.CSSProperties = {
 const input: React.CSSProperties = {
   width: "100%",
   padding: "12px 16px",
-  background: "#FFF",
-  border: "1px solid rgba(199,196,215,0.2)",
+  background: "var(--input-bg)",
+  border: "1px solid var(--input-border)",
   borderRadius: 8,
   fontFamily: "Inter, sans-serif",
   fontSize: 14,
-  color: "#141B2B",
+  color: "var(--text-primary)",
   boxSizing: "border-box",
 };
 const sectionTitle: React.CSSProperties = {
   fontFamily: "Plus Jakarta Sans, Inter, sans-serif",
   fontSize: 30,
   fontWeight: 800,
-  color: "#141B2B",
+  color: "var(--text-primary)",
   letterSpacing: -0.75,
 };
 
 export default function BrandSettingsPage() {
+  const { t } = useTranslation();
   const [brandName, setBrandName] = useState("Acme Studio");
   const [desc, setDesc] = useState(
     "Acme Studio\u2019s mission is to empower creative teams with collaborative 3D asset management. We make digital creation seamless and accessible for everyone.",
@@ -66,11 +71,13 @@ export default function BrandSettingsPage() {
       {/* Section 1: Brand Profile */}
       <div style={{ marginBottom: 64 }}>
         <h1 style={{ ...sectionTitle, margin: "0 0 4px" }}>Brand Profile</h1>
-        <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#464554", margin: "0 0 32px" }}>
+        <p
+          style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "var(--text-secondary)", margin: "0 0 32px" }}
+        >
           Update your brand identity, logo, and core information displayed across AssetHub.
         </p>
         <div
-          style={{ background: "#FFF", boxShadow: "0px 20px 40px rgba(20,27,43,0.06)", borderRadius: 12, padding: 32 }}
+          style={{ background: "var(--bg-surface)", boxShadow: "var(--card-shadow)", borderRadius: 12, padding: 32 }}
         >
           <div style={{ display: "flex", gap: 32, marginBottom: 32 }}>
             <div style={{ width: 256 }}>
@@ -79,8 +86,8 @@ export default function BrandSettingsPage() {
                 style={{
                   width: 128,
                   height: 128,
-                  background: "#F1F3FF",
-                  border: "2px dashed rgba(199,196,215,0.3)",
+                  background: "var(--bg-elevated)",
+                  border: "2px dashed var(--border)",
                   borderRadius: 12,
                   display: "flex",
                   alignItems: "center",
@@ -93,7 +100,14 @@ export default function BrandSettingsPage() {
                   <circle cx="30" cy="12" r="3" fill="#4648D4" />
                 </svg>
               </div>
-              <p style={{ fontFamily: "Inter, sans-serif", fontSize: 11, color: "#464554", lineHeight: "18px" }}>
+              <p
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: 11,
+                  color: "var(--text-secondary)",
+                  lineHeight: "18px",
+                }}
+              >
                 Recommended 800x800px. PNG or SVG preferred.
               </p>
             </div>
@@ -114,15 +128,49 @@ export default function BrandSettingsPage() {
           </div>
           <div
             style={{
-              borderTop: "1px solid rgba(199,196,215,0.1)",
+              borderTop: "1px solid var(--border)",
               paddingTop: 16,
               display: "flex",
               justifyContent: "flex-end",
             }}
           >
+            <DemoTooltip message={t("demo.saveRequired")}>
+              <button
+                style={{
+                  padding: "10px 32px",
+                  background: "linear-gradient(135deg, #4648D4 0%, #6063EE 100%)",
+                  border: "none",
+                  borderRadius: 8,
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: 14,
+                  fontWeight: 700,
+                  color: "#FFF",
+                  cursor: "pointer",
+                }}
+              >
+                Save Changes
+              </button>
+            </DemoTooltip>
+          </div>
+        </div>
+      </div>
+
+      {/* Section 2: Members */}
+      <div style={{ marginBottom: 64 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 32 }}>
+          <div>
+            <h2 style={{ ...sectionTitle, margin: "0 0 4px" }}>Members</h2>
+            <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "var(--text-secondary)", margin: 0 }}>
+              Manage who has access to your brand assets and define their permission levels.
+            </p>
+          </div>
+          <DemoTooltip message={t("demo.inviteRequired")}>
             <button
               style={{
-                padding: "10px 32px",
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "10px 24px",
                 background: "linear-gradient(135deg, #4648D4 0%, #6063EE 100%)",
                 border: "none",
                 borderRadius: 8,
@@ -133,52 +181,22 @@ export default function BrandSettingsPage() {
                 cursor: "pointer",
               }}
             >
-              Save Changes
+              + Invite Member
             </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Section 2: Members */}
-      <div style={{ marginBottom: 64 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 32 }}>
-          <div>
-            <h2 style={{ ...sectionTitle, margin: "0 0 4px" }}>Members</h2>
-            <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#464554", margin: 0 }}>
-              Manage who has access to your brand assets and define their permission levels.
-            </p>
-          </div>
-          <button
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "10px 24px",
-              background: "linear-gradient(135deg, #4648D4 0%, #6063EE 100%)",
-              border: "none",
-              borderRadius: 8,
-              fontFamily: "Inter, sans-serif",
-              fontSize: 14,
-              fontWeight: 700,
-              color: "#FFF",
-              cursor: "pointer",
-            }}
-          >
-            + Invite Member
-          </button>
+          </DemoTooltip>
         </div>
         <div
           style={{
-            background: "#FFF",
-            border: "1px solid rgba(199,196,215,0.15)",
-            boxShadow: "0px 20px 40px rgba(20,27,43,0.06)",
+            background: "var(--bg-surface)",
+            border: "1px solid var(--border)",
+            boxShadow: "var(--card-shadow)",
             borderRadius: 12,
             overflow: "hidden",
           }}
         >
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
-              <tr style={{ background: "#F1F3FF", borderBottom: "1px solid rgba(199,196,215,0.1)" }}>
+              <tr style={{ background: "var(--bg-elevated)", borderBottom: "1px solid var(--border)" }}>
                 {["User", "Role", "Joined", ""].map((h, i) => (
                   <th
                     key={i}
@@ -189,7 +207,7 @@ export default function BrandSettingsPage() {
                       fontWeight: 700,
                       letterSpacing: 1.2,
                       textTransform: "uppercase" as const,
-                      color: "#464554",
+                      color: "var(--text-secondary)",
                       textAlign: i === 3 ? "right" : "left",
                     }}
                   >
@@ -203,8 +221,8 @@ export default function BrandSettingsPage() {
                 <tr
                   key={m.email}
                   style={{
-                    background: i % 2 === 1 ? "rgba(241,243,255,0.2)" : "#FFF",
-                    borderTop: "1px solid rgba(199,196,215,0.05)",
+                    background: i % 2 === 1 ? "var(--bg-elevated)" : "var(--bg-surface)",
+                    borderTop: "1px solid var(--border)",
                   }}
                 >
                   <td style={{ padding: "16px 32px" }}>
@@ -214,14 +232,19 @@ export default function BrandSettingsPage() {
                           width: 36,
                           height: 36,
                           borderRadius: 9999,
-                          background: "#D3DAEF",
+                          background: "var(--accent-surface)",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
                         }}
                       >
                         <span
-                          style={{ fontFamily: "Inter, sans-serif", fontSize: 12, fontWeight: 700, color: "#464554" }}
+                          style={{
+                            fontFamily: "Inter, sans-serif",
+                            fontSize: 12,
+                            fontWeight: 700,
+                            color: "var(--text-secondary)",
+                          }}
                         >
                           {m.name
                             .split(" ")
@@ -231,11 +254,18 @@ export default function BrandSettingsPage() {
                       </div>
                       <div>
                         <div
-                          style={{ fontFamily: "Inter, sans-serif", fontSize: 14, fontWeight: 700, color: "#141B2B" }}
+                          style={{
+                            fontFamily: "Inter, sans-serif",
+                            fontSize: 14,
+                            fontWeight: 700,
+                            color: "var(--text-primary)",
+                          }}
                         >
                           {m.name}
                         </div>
-                        <div style={{ fontFamily: "Inter, sans-serif", fontSize: 11, color: "#464554" }}>{m.email}</div>
+                        <div style={{ fontFamily: "Inter, sans-serif", fontSize: 11, color: "var(--text-secondary)" }}>
+                          {m.email}
+                        </div>
                       </div>
                     </div>
                   </td>
@@ -245,7 +275,7 @@ export default function BrandSettingsPage() {
                       fontFamily: "Inter, sans-serif",
                       fontSize: 14,
                       fontWeight: 500,
-                      color: m.removable ? "#141B2B" : "rgba(70,69,84,0.6)",
+                      color: m.removable ? "var(--text-primary)" : "var(--text-muted)",
                     }}
                   >
                     {m.role}
@@ -256,24 +286,26 @@ export default function BrandSettingsPage() {
                       fontFamily: "Inter, sans-serif",
                       fontSize: 12,
                       fontWeight: 500,
-                      color: "#464554",
+                      color: "var(--text-secondary)",
                     }}
                   >
                     {m.joined}
                   </td>
                   <td style={{ padding: "16px 32px", textAlign: "right" }}>
                     {m.removable ? (
-                      <span
-                        style={{
-                          fontFamily: "Inter, sans-serif",
-                          fontSize: 12,
-                          fontWeight: 700,
-                          color: "#BA1A1A",
-                          cursor: "pointer",
-                        }}
-                      >
-                        Remove
-                      </span>
+                      <DemoTooltip message={t("demo.removeRequired")}>
+                        <span
+                          style={{
+                            fontFamily: "Inter, sans-serif",
+                            fontSize: 12,
+                            fontWeight: 700,
+                            color: "#BA1A1A",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Remove
+                        </span>
+                      </DemoTooltip>
                     ) : (
                       <span
                         style={{
@@ -282,7 +314,7 @@ export default function BrandSettingsPage() {
                           fontWeight: 700,
                           letterSpacing: 0.6,
                           textTransform: "uppercase" as const,
-                          color: "#767586",
+                          color: "var(--text-muted)",
                         }}
                       >
                         DEFAULT
@@ -301,41 +333,43 @@ export default function BrandSettingsPage() {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 32 }}>
           <div>
             <h2 style={{ ...sectionTitle, margin: "0 0 4px" }}>Shared Links</h2>
-            <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#464554", margin: 0 }}>
+            <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "var(--text-secondary)", margin: 0 }}>
               Control external access to specific asset collections and track engagement.
             </p>
           </div>
-          <button
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "10px 24px",
-              background: "linear-gradient(135deg, #4648D4 0%, #6063EE 100%)",
-              border: "none",
-              borderRadius: 8,
-              fontFamily: "Inter, sans-serif",
-              fontSize: 14,
-              fontWeight: 700,
-              color: "#FFF",
-              cursor: "pointer",
-            }}
-          >
-            Create Link
-          </button>
+          <DemoTooltip message={t("demo.createLinkRequired")}>
+            <button
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "10px 24px",
+                background: "linear-gradient(135deg, #4648D4 0%, #6063EE 100%)",
+                border: "none",
+                borderRadius: 8,
+                fontFamily: "Inter, sans-serif",
+                fontSize: 14,
+                fontWeight: 700,
+                color: "#FFF",
+                cursor: "pointer",
+              }}
+            >
+              Create Link
+            </button>
+          </DemoTooltip>
         </div>
         <div
           style={{
-            background: "#FFF",
-            border: "1px solid rgba(199,196,215,0.15)",
-            boxShadow: "0px 20px 40px rgba(20,27,43,0.06)",
+            background: "var(--bg-surface)",
+            border: "1px solid var(--border)",
+            boxShadow: "var(--card-shadow)",
             borderRadius: 12,
             overflow: "hidden",
           }}
         >
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
-              <tr style={{ background: "#F1F3FF" }}>
+              <tr style={{ background: "var(--bg-elevated)" }}>
                 {["Link Name", "Status", "Expires", "Actions"].map((h, i) => (
                   <th
                     key={i}
@@ -346,7 +380,7 @@ export default function BrandSettingsPage() {
                       fontWeight: 700,
                       letterSpacing: 1.2,
                       textTransform: "uppercase" as const,
-                      color: "#464554",
+                      color: "var(--text-secondary)",
                       textAlign: "left",
                     }}
                   >
@@ -357,12 +391,21 @@ export default function BrandSettingsPage() {
             </thead>
             <tbody>
               {sharedLinks.map((l) => (
-                <tr key={l.name} style={{ borderTop: "1px solid rgba(199,196,215,0.05)" }}>
+                <tr key={l.name} style={{ borderTop: "1px solid var(--border)" }}>
                   <td style={{ padding: "16px 32px" }}>
-                    <div style={{ fontFamily: "Inter, sans-serif", fontSize: 14, fontWeight: 700, color: "#141B2B" }}>
+                    <div
+                      style={{
+                        fontFamily: "Inter, sans-serif",
+                        fontSize: 14,
+                        fontWeight: 700,
+                        color: "var(--text-primary)",
+                      }}
+                    >
                       {l.name}
                     </div>
-                    <div style={{ fontFamily: "Inter, sans-serif", fontSize: 11, color: "#464554" }}>{l.detail}</div>
+                    <div style={{ fontFamily: "Inter, sans-serif", fontSize: 11, color: "var(--text-secondary)" }}>
+                      {l.detail}
+                    </div>
                   </td>
                   <td style={{ padding: "16px 32px" }}>
                     <span
@@ -379,51 +422,62 @@ export default function BrandSettingsPage() {
                       {l.status}
                     </span>
                   </td>
-                  <td style={{ padding: "16px 32px", fontFamily: "Inter, sans-serif", fontSize: 12, color: "#464554" }}>
+                  <td
+                    style={{
+                      padding: "16px 32px",
+                      fontFamily: "Inter, sans-serif",
+                      fontSize: 12,
+                      color: "var(--text-secondary)",
+                    }}
+                  >
                     {l.expires}
                   </td>
                   <td style={{ padding: "16px 32px" }}>
                     <div style={{ display: "flex", gap: 8 }}>
                       {["copy", "disable", "delete"].map((a) => (
-                        <div
+                        <DemoTooltip
                           key={a}
-                          style={{
-                            width: 24,
-                            height: 24,
-                            borderRadius: 4,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            cursor: "pointer",
-                          }}
+                          message={a === "delete" ? t("demo.deleteRequired") : t("demo.actionRequired")}
                         >
-                          <svg
-                            width="14"
-                            height="14"
-                            viewBox="0 0 14 14"
-                            fill="none"
-                            stroke={a === "delete" ? "#BA1A1A" : "#767586"}
-                            strokeWidth="1.5"
+                          <div
+                            style={{
+                              width: 24,
+                              height: 24,
+                              borderRadius: 4,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              cursor: "pointer",
+                            }}
                           >
-                            {a === "copy" && (
-                              <>
-                                <rect x="4" y="4" width="8" height="8" rx="1" />
-                                <path d="M10 4V2H2V10H4" />
-                              </>
-                            )}
-                            {a === "disable" && (
-                              <>
-                                <circle cx="7" cy="7" r="5" />
-                                <path d="M3 11L11 3" />
-                              </>
-                            )}
-                            {a === "delete" && (
-                              <>
-                                <path d="M2 4H12M5 4V2H9V4M3 4V12H11V4" />
-                              </>
-                            )}
-                          </svg>
-                        </div>
+                            <svg
+                              width="14"
+                              height="14"
+                              viewBox="0 0 14 14"
+                              fill="none"
+                              stroke={a === "delete" ? "#BA1A1A" : "var(--text-muted)"}
+                              strokeWidth="1.5"
+                            >
+                              {a === "copy" && (
+                                <>
+                                  <rect x="4" y="4" width="8" height="8" rx="1" />
+                                  <path d="M10 4V2H2V10H4" />
+                                </>
+                              )}
+                              {a === "disable" && (
+                                <>
+                                  <circle cx="7" cy="7" r="5" />
+                                  <path d="M3 11L11 3" />
+                                </>
+                              )}
+                              {a === "delete" && (
+                                <>
+                                  <path d="M2 4H12M5 4V2H9V4M3 4V12H11V4" />
+                                </>
+                              )}
+                            </svg>
+                          </div>
+                        </DemoTooltip>
                       ))}
                     </div>
                   </td>

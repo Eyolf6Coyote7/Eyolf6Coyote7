@@ -1,4 +1,8 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { DemoTooltip } from "../components/DemoTooltip";
+
+const isMock = import.meta.env.VITE_MOCK === "true";
 
 const apiKeys = [
   { name: "Unity Client", lastUsed: "Last used 2h ago", key: "sk_••••••••••••v9f7", created: "Oct 12, 2023" },
@@ -16,8 +20,8 @@ const notifications = [
 ];
 
 const sectionCard: React.CSSProperties = {
-  background: "#FFF",
-  boxShadow: "0px 1px 2px rgba(99,102,241,0.05)",
+  background: "var(--bg-surface)",
+  boxShadow: "var(--card-shadow)",
   borderRadius: 12,
   padding: 40,
 };
@@ -25,17 +29,18 @@ const heading: React.CSSProperties = {
   fontFamily: "Inter, sans-serif",
   fontSize: 24,
   fontWeight: 600,
-  color: "#191C1D",
+  color: "var(--text-primary)",
   margin: "0 0 4px",
 };
 const subtext: React.CSSProperties = {
   fontFamily: "Inter, sans-serif",
   fontSize: 16,
-  color: "#464554",
+  color: "var(--text-secondary)",
   margin: "0 0 32px",
 };
 
 export default function AccountPage() {
+  const { t } = useTranslation();
   const [notifState, setNotifState] = useState(notifications.map((n) => n.on));
 
   return (
@@ -51,7 +56,7 @@ export default function AccountPage() {
               alignItems: "center",
               gap: 32,
               paddingBottom: 40,
-              borderBottom: "1px solid #EDEEEF",
+              borderBottom: "1px solid var(--border)",
               marginBottom: 32,
             }}
           >
@@ -81,7 +86,9 @@ export default function AccountPage() {
               >
                 Change avatar
               </span>
-              <div style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "#464554", marginTop: 4 }}>
+              <div
+                style={{ fontFamily: "Inter, sans-serif", fontSize: 12, color: "var(--text-secondary)", marginTop: 4 }}
+              >
                 JPG, GIF or PNG. Max size of 800K
               </div>
             </div>
@@ -99,7 +106,7 @@ export default function AccountPage() {
                     fontFamily: "Inter, sans-serif",
                     fontSize: 14,
                     fontWeight: 500,
-                    color: "#464554",
+                    color: "var(--text-secondary)",
                     display: "block",
                     marginBottom: 8,
                   }}
@@ -113,12 +120,12 @@ export default function AccountPage() {
                     style={{
                       width: "100%",
                       padding: "12px 16px",
-                      background: f.badge ? "#EDEEEF" : "#F3F4F5",
-                      border: "none",
+                      background: f.badge ? "var(--bg-elevated)" : "var(--input-bg)",
+                      border: "1px solid var(--input-border)",
                       borderRadius: 12,
                       fontFamily: "Inter, sans-serif",
                       fontSize: 16,
-                      color: f.badge ? "#464554" : "#191C1D",
+                      color: f.badge ? "var(--text-secondary)" : "var(--text-primary)",
                       boxSizing: "border-box",
                     }}
                   />
@@ -129,7 +136,7 @@ export default function AccountPage() {
                         right: 16,
                         top: "50%",
                         transform: "translateY(-50%)",
-                        background: "#E1E0FF",
+                        background: "var(--accent-surface)",
                         borderRadius: 4,
                         padding: "4px 8px",
                         fontFamily: "Inter, sans-serif",
@@ -147,22 +154,24 @@ export default function AccountPage() {
               </div>
             ))}
           </div>
-          <button
-            style={{
-              padding: "12px 32px",
-              background: "linear-gradient(135deg, #4648D4 0%, #6063EE 100%)",
-              border: "none",
-              borderRadius: 12,
-              fontFamily: "Inter, sans-serif",
-              fontSize: 16,
-              fontWeight: 600,
-              color: "#FFF",
-              cursor: "pointer",
-              boxShadow: "0px 4px 6px -1px rgba(70,72,212,0.2)",
-            }}
-          >
-            Save Profile
-          </button>
+          <DemoTooltip message={t("demo.saveRequired")}>
+            <button
+              style={{
+                padding: "12px 32px",
+                background: "linear-gradient(135deg, #4648D4 0%, #6063EE 100%)",
+                border: "none",
+                borderRadius: 12,
+                fontFamily: "Inter, sans-serif",
+                fontSize: 16,
+                fontWeight: 600,
+                color: "#FFF",
+                cursor: "pointer",
+                boxShadow: "0px 4px 6px -1px rgba(70,72,212,0.2)",
+              }}
+            >
+              Save Profile
+            </button>
+          </DemoTooltip>
         </div>
 
         {/* API Keys */}
@@ -172,24 +181,26 @@ export default function AccountPage() {
               <h2 style={heading}>API Keys</h2>
               <p style={{ ...subtext, margin: 0 }}>Manage machine-to-machine authentication keys</p>
             </div>
-            <button
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                padding: "10px 24px",
-                background: "#E7E8E9",
-                border: "none",
-                borderRadius: 12,
-                fontFamily: "Inter, sans-serif",
-                fontSize: 16,
-                fontWeight: 500,
-                color: "#191C1D",
-                cursor: "pointer",
-              }}
-            >
-              + Generate New Key
-            </button>
+            <DemoTooltip message={t("demo.generateKeyRequired")}>
+              <button
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "10px 24px",
+                  background: "var(--bg-elevated)",
+                  border: "1px solid var(--border)",
+                  borderRadius: 12,
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: 16,
+                  fontWeight: 500,
+                  color: "var(--text-primary)",
+                  cursor: "pointer",
+                }}
+              >
+                + Generate New Key
+              </button>
+            </DemoTooltip>
           </div>
           <div
             style={{
@@ -212,7 +223,7 @@ export default function AccountPage() {
           </div>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
-              <tr style={{ borderBottom: "1px solid #EDEEEF" }}>
+              <tr style={{ borderBottom: "1px solid var(--border)" }}>
                 {["Name", "Key", "Created", "Actions"].map((h, i) => (
                   <th
                     key={h}
@@ -223,7 +234,7 @@ export default function AccountPage() {
                       fontWeight: 700,
                       letterSpacing: 1,
                       textTransform: "uppercase" as const,
-                      color: "rgba(70,69,84,0.6)",
+                      color: "var(--text-muted)",
                       textAlign: i === 3 ? "right" : "left",
                     }}
                   >
@@ -234,9 +245,16 @@ export default function AccountPage() {
             </thead>
             <tbody>
               {apiKeys.map((k, i) => (
-                <tr key={i} style={{ borderTop: i > 0 ? "1px solid #EDEEEF" : "none" }}>
+                <tr key={i} style={{ borderTop: i > 0 ? "1px solid var(--border)" : "none" }}>
                   <td style={{ padding: "20px 8px" }}>
-                    <div style={{ fontFamily: "Inter, sans-serif", fontSize: 16, fontWeight: 500, color: "#191C1D" }}>
+                    <div
+                      style={{
+                        fontFamily: "Inter, sans-serif",
+                        fontSize: 16,
+                        fontWeight: 500,
+                        color: "var(--text-primary)",
+                      }}
+                    >
                       {k.name}
                     </div>
                     <div
@@ -244,7 +262,7 @@ export default function AccountPage() {
                         fontFamily: "Inter, sans-serif",
                         fontSize: 12,
                         fontWeight: k.warn ? 500 : 400,
-                        color: k.warn ? "#904900" : "#464554",
+                        color: k.warn ? "#904900" : "var(--text-secondary)",
                       }}
                     >
                       {k.lastUsed}
@@ -253,34 +271,43 @@ export default function AccountPage() {
                   <td style={{ padding: "20px 8px" }}>
                     <code
                       style={{
-                        background: "#EDEEEF",
+                        background: "var(--bg-elevated)",
                         borderRadius: 4,
                         padding: "3px 8px",
                         fontFamily: "Liberation Mono, monospace",
                         fontSize: 12,
                         letterSpacing: 1.2,
-                        color: "#191C1D",
+                        color: "var(--text-primary)",
                       }}
                     >
                       {k.key}
                     </code>
                   </td>
-                  <td style={{ padding: "20px 8px", fontFamily: "Inter, sans-serif", fontSize: 14, color: "#464554" }}>
+                  <td
+                    style={{
+                      padding: "20px 8px",
+                      fontFamily: "Inter, sans-serif",
+                      fontSize: 14,
+                      color: "var(--text-secondary)",
+                    }}
+                  >
                     {k.created}
                   </td>
                   <td style={{ padding: "20px 8px", textAlign: "right" }}>
-                    <span
-                      style={{
-                        fontFamily: "Inter, sans-serif",
-                        fontSize: 14,
-                        fontWeight: 500,
-                        color: "#BA1A1A",
-                        cursor: "pointer",
-                        opacity: 0.7,
-                      }}
-                    >
-                      Revoke
-                    </span>
+                    <DemoTooltip message={t("demo.revokeRequired")}>
+                      <span
+                        style={{
+                          fontFamily: "Inter, sans-serif",
+                          fontSize: 14,
+                          fontWeight: 500,
+                          color: "#BA1A1A",
+                          cursor: "pointer",
+                          opacity: 0.7,
+                        }}
+                      >
+                        Revoke
+                      </span>
+                    </DemoTooltip>
                   </td>
                 </tr>
               ))}
@@ -301,14 +328,23 @@ export default function AccountPage() {
                   justifyContent: "space-between",
                   alignItems: "center",
                   padding: "16px 0",
-                  borderBottom: "1px solid #EDEEEF",
+                  borderBottom: "1px solid var(--border)",
                 }}
               >
                 <div>
-                  <div style={{ fontFamily: "Inter, sans-serif", fontSize: 16, fontWeight: 500, color: "#191C1D" }}>
+                  <div
+                    style={{
+                      fontFamily: "Inter, sans-serif",
+                      fontSize: 16,
+                      fontWeight: 500,
+                      color: "var(--text-primary)",
+                    }}
+                  >
                     {n.title}
                   </div>
-                  <div style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#464554" }}>{n.desc}</div>
+                  <div style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "var(--text-secondary)" }}>
+                    {n.desc}
+                  </div>
                   <div
                     style={{
                       fontFamily: "Inter, sans-serif",
@@ -333,7 +369,7 @@ export default function AccountPage() {
                     width: 44,
                     height: 24,
                     borderRadius: 9999,
-                    background: notifState[i] ? "#4648D4" : "#E1E3E4",
+                    background: notifState[i] ? "#4648D4" : "var(--border)",
                     position: "relative",
                     cursor: "pointer",
                     flexShrink: 0,
@@ -345,8 +381,8 @@ export default function AccountPage() {
                       width: 20,
                       height: 20,
                       borderRadius: 9999,
-                      background: "#FFF",
-                      border: "1px solid #FFF",
+                      background: "var(--bg-surface)",
+                      border: "1px solid var(--bg-surface)",
                       position: "absolute",
                       top: 2,
                       left: notifState[i] ? 22 : 2,

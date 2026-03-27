@@ -5,63 +5,16 @@ import { useTranslation } from "react-i18next";
 import type { RootState } from "../store";
 import { setAssets, setLoading } from "../store/assetSlice";
 import { api } from "../api";
+import { DemoTooltip } from "../components/DemoTooltip";
 
-const mockAssets = [
-  {
-    id: "1",
-    name: "Air Max V-Core 2026",
-    format: "GLB",
-    size: "52 MB",
-    version: "v3",
-    brand: "Acme Studio",
-    timeAgo: "3D AGO",
-  },
-  {
-    id: "2",
-    name: "Titanium Chronos X",
-    format: "GLB",
-    size: "124 MB",
-    version: "v1",
-    brand: "Acme Studio",
-    timeAgo: "5D AGO",
-  },
-  {
-    id: "3",
-    name: "Spatial Audio Pro H1",
-    format: "GLB",
-    size: "86 MB",
-    version: "v4",
-    brand: "Acme Studio",
-    timeAgo: "1W AGO",
-  },
-  {
-    id: "4",
-    name: "Eco-Tough Flask",
-    format: "GLB",
-    size: "34 MB",
-    version: "v2",
-    brand: "Acme Studio",
-    timeAgo: "2W AGO",
-  },
-  {
-    id: "5",
-    name: "Urban Nomad Pack",
-    format: "GLB",
-    size: "112 MB",
-    version: "v5",
-    brand: "Acme Studio",
-    timeAgo: "1MO AGO",
-  },
-  {
-    id: "6",
-    name: "Velocity Vision Goggles",
-    format: "GLB",
-    size: "18 MB",
-    version: "v2",
-    brand: "Acme Studio",
-    timeAgo: "2MO AGO",
-  },
-];
+function timeAgo(dateStr: string): string {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  if (days < 1) return "TODAY";
+  if (days < 7) return `${days}D AGO`;
+  if (days < 30) return `${Math.floor(days / 7)}W AGO`;
+  return `${Math.floor(days / 30)}MO AGO`;
+}
 
 export default function AssetListPage() {
   const { t } = useTranslation();
@@ -77,21 +30,20 @@ export default function AssetListPage() {
     });
   }, [dispatch]);
 
-  const displayAssets =
-    mockAssets.length > 0
-      ? mockAssets
-      : items.map((a) => ({
-          id: a.id,
-          name: a.name,
-          format: a.format,
-          size: a.size,
-          version: "v1",
-          brand: "Acme Studio",
-          timeAgo: "recently",
-        }));
+  const displayAssets = items.map((a) => ({
+    id: a.id,
+    name: a.name,
+    format: a.format,
+    size: a.size,
+    version: "v1",
+    brand: a.author,
+    timeAgo: timeAgo(a.createdAt),
+  }));
 
   if (loading)
-    return <p style={{ padding: 32, color: "#767586", fontFamily: "Inter, sans-serif" }}>{t("assets.loading")}</p>;
+    return (
+      <p style={{ padding: 32, color: "var(--text-muted)", fontFamily: "Inter, sans-serif" }}>{t("assets.loading")}</p>
+    );
 
   return (
     <div style={{ padding: 32 }}>
@@ -103,26 +55,26 @@ export default function AssetListPage() {
               fontFamily: "Manrope, sans-serif",
               fontSize: 28,
               fontWeight: 700,
-              color: "#141B2B",
+              color: "var(--text-primary)",
               letterSpacing: -0.7,
             }}
           >
             {t("assets.title")}
           </span>
-          <span style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#767586", marginLeft: 12 }}>
+          <span style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "var(--text-muted)", marginLeft: 12 }}>
             {t("assets.totalPieces", { count: 247 })}
           </span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <div style={{ display: "flex", border: "1px solid #E2E8F0", borderRadius: 8, overflow: "hidden" }}>
+          <div style={{ display: "flex", border: "1px solid var(--border)", borderRadius: 8, overflow: "hidden" }}>
             <button
               onClick={() => setViewMode("grid")}
               style={{
                 padding: "8px 10px",
-                background: viewMode === "grid" ? "#EEF2FF" : "#FFF",
+                background: viewMode === "grid" ? "var(--accent-surface)" : "var(--bg-surface)",
                 border: "none",
                 cursor: "pointer",
-                color: viewMode === "grid" ? "#4648D4" : "#64748B",
+                color: viewMode === "grid" ? "#4648D4" : "var(--text-secondary)",
                 display: "flex",
                 alignItems: "center",
               }}
@@ -138,10 +90,10 @@ export default function AssetListPage() {
               onClick={() => setViewMode("list")}
               style={{
                 padding: "8px 10px",
-                background: viewMode === "list" ? "#EEF2FF" : "#FFF",
+                background: viewMode === "list" ? "var(--accent-surface)" : "var(--bg-surface)",
                 border: "none",
                 cursor: "pointer",
-                color: viewMode === "list" ? "#4648D4" : "#64748B",
+                color: viewMode === "list" ? "#4648D4" : "var(--text-secondary)",
                 display: "flex",
                 alignItems: "center",
               }}
@@ -157,37 +109,39 @@ export default function AssetListPage() {
               alignItems: "center",
               gap: 8,
               padding: "8px 16px",
-              background: "#FFFFFF",
-              border: "1px solid #C7C4D7",
+              background: "var(--bg-surface)",
+              border: "1px solid var(--border)",
               borderRadius: 8,
               fontFamily: "Inter, sans-serif",
               fontSize: 14,
               fontWeight: 500,
-              color: "#141B2B",
+              color: "var(--text-primary)",
               cursor: "pointer",
             }}
           >
             {t("assets.newest")}
             <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
-              <path d="M1 1L5 5L9 1" stroke="#141B2B" strokeWidth="1.5" />
+              <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" />
             </svg>
           </button>
           <Link to="/upload" style={{ textDecoration: "none" }}>
-            <button
-              style={{
-                padding: "10px 24px",
-                background: "#4648D4",
-                color: "#FFF",
-                border: "none",
-                borderRadius: 8,
-                fontFamily: "Inter, sans-serif",
-                fontSize: 14,
-                fontWeight: 700,
-                cursor: "pointer",
-              }}
-            >
-              + {t("assets.uploadAsset")}
-            </button>
+            <DemoTooltip message={t("demo.uploadRequired")}>
+              <button
+                style={{
+                  padding: "10px 24px",
+                  background: "#4648D4",
+                  color: "#FFF",
+                  border: "none",
+                  borderRadius: 8,
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: 14,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                + {t("assets.uploadAsset")}
+              </button>
+            </DemoTooltip>
           </Link>
         </div>
       </div>
@@ -199,7 +153,7 @@ export default function AssetListPage() {
             to={`/assets/${asset.id}`}
             key={asset.id}
             style={{
-              background: "#FFFFFF",
+              background: "var(--bg-surface)",
               borderRadius: 12,
               overflow: "hidden",
               textDecoration: "none",
@@ -243,12 +197,19 @@ export default function AssetListPage() {
               <div
                 style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}
               >
-                <span style={{ fontFamily: "Manrope, sans-serif", fontSize: 14, fontWeight: 700, color: "#191C1D" }}>
+                <span
+                  style={{
+                    fontFamily: "Manrope, sans-serif",
+                    fontSize: 14,
+                    fontWeight: 700,
+                    color: "var(--text-primary)",
+                  }}
+                >
                   {asset.name}
                 </span>
                 <span
                   style={{
-                    background: "#E1E0FF",
+                    background: "var(--accent-surface)",
                     borderRadius: 4,
                     padding: "2px 6px",
                     fontFamily: "Inter, sans-serif",
@@ -263,7 +224,7 @@ export default function AssetListPage() {
               <span
                 style={{
                   display: "inline-block",
-                  background: "rgba(70,72,212,0.05)",
+                  background: "var(--accent-surface)",
                   border: "1px solid rgba(70,72,212,0.2)",
                   borderRadius: 6,
                   padding: "2px 8px",
@@ -276,7 +237,7 @@ export default function AssetListPage() {
               >
                 {asset.brand}
               </span>
-              <div style={{ height: 1, background: "rgba(199,196,215,0.1)", margin: "8px 0" }} />
+              <div style={{ height: 1, background: "var(--border)", margin: "8px 0" }} />
               <div
                 style={{
                   display: "flex",
@@ -284,7 +245,7 @@ export default function AssetListPage() {
                   fontFamily: "Inter, sans-serif",
                   fontSize: 10,
                   fontWeight: 600,
-                  color: "#767586",
+                  color: "var(--text-muted)",
                   textTransform: "uppercase" as const,
                 }}
               >
@@ -312,7 +273,7 @@ export default function AssetListPage() {
           }}
         >
           <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
-            <path d="M7 1L1 6L7 11" stroke="#585F6A" strokeWidth="1.5" />
+            <path d="M7 1L1 6L7 11" stroke="var(--text-secondary)" strokeWidth="1.5" />
           </svg>
         </button>
         {[1, 2, 3].map((n) => (
@@ -331,14 +292,16 @@ export default function AssetListPage() {
               fontSize: 16,
               fontWeight: n === 1 ? 700 : 600,
               background: n === 1 ? "#4648D4" : "transparent",
-              color: n === 1 ? "#FFF" : "#141B2B",
+              color: n === 1 ? "#FFF" : "var(--text-primary)",
               boxShadow: n === 1 ? "0px 10px 15px -3px rgba(70,72,212,0.2)" : "none",
             }}
           >
             {n}
           </button>
         ))}
-        <span style={{ fontFamily: "Inter, sans-serif", fontSize: 16, color: "#767586", padding: "0 8px" }}>...</span>
+        <span style={{ fontFamily: "Inter, sans-serif", fontSize: 16, color: "var(--text-muted)", padding: "0 8px" }}>
+          ...
+        </span>
         <button
           style={{
             width: 40,
@@ -353,7 +316,7 @@ export default function AssetListPage() {
             fontSize: 16,
             fontWeight: 600,
             background: "transparent",
-            color: "#141B2B",
+            color: "var(--text-primary)",
           }}
         >
           12
@@ -372,7 +335,7 @@ export default function AssetListPage() {
           }}
         >
           <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
-            <path d="M1 1L7 6L1 11" stroke="#585F6A" strokeWidth="1.5" />
+            <path d="M1 1L7 6L1 11" stroke="var(--text-secondary)" strokeWidth="1.5" />
           </svg>
         </button>
       </div>

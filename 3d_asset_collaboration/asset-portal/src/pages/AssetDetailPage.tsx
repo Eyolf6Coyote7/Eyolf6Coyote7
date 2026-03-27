@@ -4,29 +4,31 @@ import { useTranslation } from "react-i18next";
 import type { Asset } from "../store/assetSlice";
 import { api } from "../api";
 import ThreeViewer from "../components/ThreeViewer";
+import { DemoTooltip } from "../components/DemoTooltip";
 
-const metadata = [
-  { label: "FORMAT", value: "GLB", color: "#4648D4" },
-  { label: "SIZE", value: "52 MB" },
-  { label: "VERTICES", value: "124,500" },
-  { label: "TEXTURES", value: "4" },
-  { label: "CREATED", value: "2026-03-15" },
-  { label: "BY", value: "Maya Chen" },
-  { label: "UPDATED", value: "2026-03-20" },
-];
+function buildMetadata(asset: Asset) {
+  return [
+    { label: "FORMAT", value: asset.format, color: "#4648D4" },
+    { label: "SIZE", value: asset.size },
+    { label: "CREATED", value: asset.createdAt },
+    { label: "BY", value: asset.author },
+  ];
+}
 
-const tags = ["shoe", "hero", "campaign-2026", "air-max"];
-const versions = [
-  { id: "v3", label: "v3 (Current)", date: "Today, 2:45 PM \u00b7 Maya Chen", current: true, badge: "APPROVED" },
-  { id: "v2", label: "v2", date: "Yesterday, 10:20 AM \u00b7 Maya Chen", current: false },
-  { id: "v1", label: "v1", date: "March 15, 2026 \u00b7 Maya Chen", current: false },
-];
-const shared = [
-  { name: "Maya Chen", email: "maya.chen@brand.com", role: "OWNER" },
-  { name: "Jake Liu", email: "jake.liu@studio.com", role: "EDITOR" },
-];
+function buildVersions(asset: Asset) {
+  return [
+    { id: "v1", label: "v1 (Current)", date: `${asset.createdAt} · ${asset.author}`, current: true, badge: "APPROVED" },
+  ];
+}
+
+function buildShared(asset: Asset) {
+  return [
+    { name: asset.author, email: `${asset.author.toLowerCase().replace(/\s+/g, ".")}@studio.com`, role: "OWNER" },
+  ];
+}
 
 export default function AssetDetailPage() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const [asset, setAsset] = useState<Asset | null>(null);
 
@@ -34,7 +36,15 @@ export default function AssetDetailPage() {
     if (id) api.fetchAssetById(id).then((a) => setAsset(a ?? null));
   }, [id]);
 
-  const displayName = asset?.name || "Air Max 2026 \u2014 Hero Shot";
+  if (!asset) {
+    return <p style={{ padding: 32, color: "var(--text-muted)", fontFamily: "Inter, sans-serif" }}>Loading...</p>;
+  }
+
+  const displayName = asset.name;
+  const metadata = buildMetadata(asset);
+  const tags = asset.tags;
+  const versions = buildVersions(asset);
+  const shared = buildShared(asset);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
@@ -46,7 +56,7 @@ export default function AssetDetailPage() {
           alignItems: "center",
           padding: "0 24px",
           height: 56,
-          background: "#F1F3FF",
+          background: "var(--bg-elevated)",
           flexShrink: 0,
         }}
       >
@@ -57,14 +67,14 @@ export default function AssetDetailPage() {
             alignItems: "center",
             gap: 8,
             textDecoration: "none",
-            color: "#464554",
+            color: "var(--text-secondary)",
             fontFamily: "Inter, sans-serif",
             fontSize: 14,
             fontWeight: 500,
           }}
         >
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-            <path d="M8 1L2 6.5L8 12" stroke="#464554" strokeWidth="1.5" />
+            <path d="M8 1L2 6.5L8 12" stroke="currentColor" strokeWidth="1.5" />
           </svg>
           Back to Library
         </Link>
@@ -73,57 +83,61 @@ export default function AssetDetailPage() {
             fontFamily: "Inter, sans-serif",
             fontSize: 18,
             fontWeight: 700,
-            color: "#141B2B",
+            color: "var(--text-primary)",
             letterSpacing: -0.45,
           }}
         >
           {displayName}
         </span>
         <div style={{ display: "flex", gap: 12 }}>
-          <button
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "8px 16px",
-              background: "#FFFFFF",
-              border: "1px solid #C7C4D7",
-              borderRadius: 8,
-              fontFamily: "Inter, sans-serif",
-              fontSize: 14,
-              fontWeight: 600,
-              color: "#464554",
-              cursor: "pointer",
-            }}
-          >
-            <svg width="14" height="15" viewBox="0 0 14 15" fill="none" stroke="#464554" strokeWidth="1.5">
-              <path d="M4 6L1 8V14H5V10H9V14H13V8L10 6" />
-              <path d="M5 1H9L11 4H3L5 1Z" />
-            </svg>
-            Share
-          </button>
-          <button
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "8px 20px",
-              background: "linear-gradient(135deg, #4648D4 0%, #6063EE 100%)",
-              border: "none",
-              borderRadius: 8,
-              fontFamily: "Inter, sans-serif",
-              fontSize: 14,
-              fontWeight: 700,
-              color: "#FFFFFF",
-              cursor: "pointer",
-              boxShadow: "0px 12px 40px rgba(20,27,43,0.06)",
-            }}
-          >
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M6 1V11M6 11L2 7M6 11L10 7" stroke="#FFF" strokeWidth="1.5" />
-            </svg>
-            Download
-          </button>
+          <DemoTooltip message={t("demo.shareRequired")}>
+            <button
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "8px 16px",
+                background: "var(--bg-surface)",
+                border: "1px solid var(--border)",
+                borderRadius: 8,
+                fontFamily: "Inter, sans-serif",
+                fontSize: 14,
+                fontWeight: 600,
+                color: "var(--text-secondary)",
+                cursor: "pointer",
+              }}
+            >
+              <svg width="14" height="15" viewBox="0 0 14 15" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M4 6L1 8V14H5V10H9V14H13V8L10 6" />
+                <path d="M5 1H9L11 4H3L5 1Z" />
+              </svg>
+              Share
+            </button>
+          </DemoTooltip>
+          <DemoTooltip message={t("demo.downloadRequired")}>
+            <button
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "8px 20px",
+                background: "linear-gradient(135deg, #4648D4 0%, #6063EE 100%)",
+                border: "none",
+                borderRadius: 8,
+                fontFamily: "Inter, sans-serif",
+                fontSize: 14,
+                fontWeight: 700,
+                color: "#FFFFFF",
+                cursor: "pointer",
+                boxShadow: "0px 12px 40px rgba(20,27,43,0.06)",
+              }}
+            >
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M6 1V11M6 11L2 7M6 11L10 7" stroke="#FFF" strokeWidth="1.5" />
+              </svg>
+              Download
+            </button>
+          </DemoTooltip>
         </div>
       </div>
 
@@ -158,7 +172,7 @@ export default function AssetDetailPage() {
               padding: "6px 12px",
             }}
           >
-            {["GLB", "52 MB", "V3"].map((t, i) => (
+            {[asset.format, asset.size, "V1"].map((t, i) => (
               <span key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 {i > 0 && (
                   <span style={{ width: 4, height: 4, borderRadius: 4, background: "rgba(255,255,255,0.3)" }} />
@@ -281,8 +295,8 @@ export default function AssetDetailPage() {
         <div
           style={{
             width: 448,
-            background: "#F1F3FF",
-            borderLeft: "1px solid rgba(199,196,215,0.15)",
+            background: "var(--bg-elevated)",
+            borderLeft: "1px solid var(--border)",
             overflowY: "auto",
             padding: 32,
             display: "flex",
@@ -295,7 +309,7 @@ export default function AssetDetailPage() {
             <span
               style={{
                 display: "inline-block",
-                background: "#E1E0FF",
+                background: "var(--accent-surface)",
                 borderRadius: 6,
                 padding: "2px 10px",
                 fontFamily: "Inter, sans-serif",
@@ -307,14 +321,14 @@ export default function AssetDetailPage() {
                 marginBottom: 8,
               }}
             >
-              ACME STUDIO
+              {asset.author.toUpperCase()}
             </span>
             <h2
               style={{
                 fontFamily: "Inter, sans-serif",
                 fontSize: 24,
                 fontWeight: 600,
-                color: "#141B2B",
+                color: "var(--text-primary)",
                 letterSpacing: -0.6,
                 margin: "0 0 8px",
               }}
@@ -322,27 +336,53 @@ export default function AssetDetailPage() {
               {displayName}
             </h2>
             <p
-              style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#464554", lineHeight: "23px", margin: 0 }}
+              style={{
+                fontFamily: "Inter, sans-serif",
+                fontSize: 14,
+                color: "var(--text-secondary)",
+                lineHeight: "23px",
+                margin: 0,
+              }}
             >
-              Hero shot render of the Air Max 2026 for Q3 campaign. Final approved version.
+              {asset.description}
             </p>
           </div>
 
           {/* Metadata */}
           <div>
-            <h3
-              style={{
-                fontFamily: "Inter, sans-serif",
-                fontSize: 10,
-                fontWeight: 700,
-                letterSpacing: 1,
-                textTransform: "uppercase" as const,
-                color: "#464554",
-                marginBottom: 16,
-              }}
-            >
-              Metadata
-            </h3>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <h3
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: 10,
+                  fontWeight: 700,
+                  letterSpacing: 1,
+                  textTransform: "uppercase" as const,
+                  color: "var(--text-secondary)",
+                  margin: 0,
+                }}
+              >
+                Metadata
+              </h3>
+              <DemoTooltip message={t("demo.editMetadataRequired")}>
+                <button
+                  style={{
+                    fontFamily: "Inter, sans-serif",
+                    fontSize: 10,
+                    fontWeight: 700,
+                    letterSpacing: 1,
+                    textTransform: "uppercase" as const,
+                    color: "#4648D4",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: 0,
+                  }}
+                >
+                  Edit Metadata
+                </button>
+              </DemoTooltip>
+            </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px 24px" }}>
               {metadata.map((m) => (
                 <div key={m.label}>
@@ -353,7 +393,7 @@ export default function AssetDetailPage() {
                       fontWeight: 700,
                       letterSpacing: 1,
                       textTransform: "uppercase" as const,
-                      color: "#767586",
+                      color: "var(--text-muted)",
                       marginBottom: 4,
                     }}
                   >
@@ -364,7 +404,7 @@ export default function AssetDetailPage() {
                       fontFamily: "Inter, sans-serif",
                       fontSize: 14,
                       fontWeight: 500,
-                      color: m.color || "#141B2B",
+                      color: m.color || "var(--text-primary)",
                     }}
                   >
                     {m.value}
@@ -379,7 +419,7 @@ export default function AssetDetailPage() {
                     fontWeight: 700,
                     letterSpacing: 1,
                     textTransform: "uppercase" as const,
-                    color: "#767586",
+                    color: "var(--text-muted)",
                     marginBottom: 4,
                   }}
                 >
@@ -404,7 +444,7 @@ export default function AssetDetailPage() {
                 fontWeight: 700,
                 letterSpacing: 1,
                 textTransform: "uppercase" as const,
-                color: "#464554",
+                color: "var(--text-secondary)",
                 marginBottom: 16,
               }}
             >
@@ -418,18 +458,18 @@ export default function AssetDetailPage() {
                     display: "flex",
                     alignItems: "center",
                     gap: 6,
-                    background: "#E1E8FD",
+                    background: "var(--accent-surface)",
                     borderRadius: 8,
                     padding: "6px 12px",
                     fontFamily: "Inter, sans-serif",
                     fontSize: 12,
                     fontWeight: 500,
-                    color: "#141B2B",
+                    color: "var(--text-primary)",
                   }}
                 >
                   {t}
                   <svg width="8" height="8" viewBox="0 0 8 8" style={{ cursor: "pointer" }}>
-                    <path d="M1 1L7 7M7 1L1 7" stroke="#767586" strokeWidth="1.2" />
+                    <path d="M1 1L7 7M7 1L1 7" stroke="var(--text-muted)" strokeWidth="1.2" />
                   </svg>
                 </span>
               ))}
@@ -438,14 +478,14 @@ export default function AssetDetailPage() {
                   display: "flex",
                   alignItems: "center",
                   gap: 6,
-                  border: "1px dashed #767586",
+                  border: "1px dashed var(--text-muted)",
                   borderRadius: 8,
                   padding: "6px 12px",
                   background: "none",
                   fontFamily: "Inter, sans-serif",
                   fontSize: 12,
                   fontWeight: 500,
-                  color: "#767586",
+                  color: "var(--text-muted)",
                   cursor: "pointer",
                 }}
               >
@@ -464,7 +504,7 @@ export default function AssetDetailPage() {
                   fontWeight: 700,
                   letterSpacing: 1,
                   textTransform: "uppercase" as const,
-                  color: "#464554",
+                  color: "var(--text-secondary)",
                   margin: 0,
                 }}
               >
@@ -504,7 +544,7 @@ export default function AssetDetailPage() {
                         top: 16,
                         bottom: 0,
                         width: 1.5,
-                        borderLeft: "1px dashed #C7C4D7",
+                        borderLeft: "1px dashed var(--border)",
                       }}
                     />
                   )}
@@ -513,10 +553,10 @@ export default function AssetDetailPage() {
                       width: 8,
                       height: 8,
                       borderRadius: 9999,
-                      background: v.current ? "#4648D4" : "#767586",
+                      background: v.current ? "#4648D4" : "var(--text-muted)",
                       marginTop: 6,
                       flexShrink: 0,
-                      boxShadow: v.current ? "0px 0px 0px 4px #E1E0FF" : "none",
+                      boxShadow: v.current ? "0px 0px 0px 4px var(--accent-surface)" : "none",
                       zIndex: 1,
                     }}
                   />
@@ -527,7 +567,7 @@ export default function AssetDetailPage() {
                           fontFamily: "Inter, sans-serif",
                           fontSize: 14,
                           fontWeight: v.current ? 600 : 500,
-                          color: "#141B2B",
+                          color: "var(--text-primary)",
                         }}
                       >
                         {v.label}
@@ -551,7 +591,14 @@ export default function AssetDetailPage() {
                         </span>
                       )}
                     </div>
-                    <span style={{ fontFamily: "Inter, sans-serif", fontSize: 10, fontWeight: 500, color: "#464554" }}>
+                    <span
+                      style={{
+                        fontFamily: "Inter, sans-serif",
+                        fontSize: 10,
+                        fontWeight: 500,
+                        color: "var(--text-secondary)",
+                      }}
+                    >
                       {v.date}
                     </span>
                   </div>
@@ -570,7 +617,7 @@ export default function AssetDetailPage() {
                   fontWeight: 700,
                   letterSpacing: 1,
                   textTransform: "uppercase" as const,
-                  color: "#464554",
+                  color: "var(--text-secondary)",
                   margin: 0,
                 }}
               >
@@ -601,13 +648,20 @@ export default function AssetDetailPage() {
                       width: 32,
                       height: 32,
                       borderRadius: 9999,
-                      background: "#D3DAEF",
+                      background: "var(--accent-surface)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                     }}
                   >
-                    <span style={{ fontFamily: "Inter, sans-serif", fontSize: 11, fontWeight: 700, color: "#464554" }}>
+                    <span
+                      style={{
+                        fontFamily: "Inter, sans-serif",
+                        fontSize: 11,
+                        fontWeight: 700,
+                        color: "var(--text-secondary)",
+                      }}
+                    >
                       {u.name
                         .split(" ")
                         .map((n) => n[0])
@@ -615,10 +669,24 @@ export default function AssetDetailPage() {
                     </span>
                   </div>
                   <div>
-                    <div style={{ fontFamily: "Inter, sans-serif", fontSize: 14, fontWeight: 600, color: "#141B2B" }}>
+                    <div
+                      style={{
+                        fontFamily: "Inter, sans-serif",
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: "var(--text-primary)",
+                      }}
+                    >
                       {u.name}
                     </div>
-                    <div style={{ fontFamily: "Inter, sans-serif", fontSize: 10, fontWeight: 500, color: "#464554" }}>
+                    <div
+                      style={{
+                        fontFamily: "Inter, sans-serif",
+                        fontSize: 10,
+                        fontWeight: 500,
+                        color: "var(--text-secondary)",
+                      }}
+                    >
                       {u.email}
                     </div>
                   </div>
@@ -630,7 +698,7 @@ export default function AssetDetailPage() {
                     fontWeight: 700,
                     letterSpacing: 1,
                     textTransform: "uppercase" as const,
-                    color: "#767586",
+                    color: "var(--text-muted)",
                   }}
                 >
                   {u.role}

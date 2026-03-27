@@ -171,6 +171,15 @@
     "download": "下載",
     "share": "分享"
   },
+  "demo": {
+    "uploadRequired": "上傳需要後端",
+    "saveRequired": "儲存需要後端",
+    "shareRequired": "分享需要後端",
+    "downloadRequired": "下載需要後端",
+    "deleteRequired": "刪除需要後端",
+    "generateKeyRequired": "生成 API 金鑰需要後端",
+    "loginRequired": "登入需要後端"
+  },
   "viewer3d": {
     "rotate": "旋轉",
     "zoom": "縮放",

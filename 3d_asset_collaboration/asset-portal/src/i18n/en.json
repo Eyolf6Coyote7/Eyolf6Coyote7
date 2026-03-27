@@ -171,6 +171,15 @@
     "download": "Download",
     "share": "Share"
   },
+  "demo": {
+    "uploadRequired": "Upload requires backend",
+    "saveRequired": "Save requires backend",
+    "shareRequired": "Share requires backend",
+    "downloadRequired": "Download requires backend",
+    "deleteRequired": "Delete requires backend",
+    "generateKeyRequired": "API key generation requires backend",
+    "loginRequired": "Login requires backend"
+  },
   "viewer3d": {
     "rotate": "Rotate",
     "zoom": "Zoom",

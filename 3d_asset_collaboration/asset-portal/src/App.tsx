@@ -1,5 +1,8 @@
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { LanguageToggle } from "./components/LanguageToggle";
+import { ThemeToggle } from "./components/ThemeToggle";
+import { useTheme } from "./hooks/useTheme";
 
 const navItemDefs = [
   { to: "/assets", labelKey: "nav.assets", icon: "grid" },
@@ -53,6 +56,7 @@ const icons: Record<string, React.ReactNode> = {
 export default function App() {
   const location = useLocation();
   const { t } = useTranslation();
+  useTheme(); // initialize theme on mount
   const isUnity = location.pathname.startsWith("/unity");
   const navItems = navItemDefs.map((d) => ({ ...d, label: t(d.labelKey) }));
 
@@ -61,13 +65,14 @@ export default function App() {
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "#F9F9FF" }}>
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "var(--bg-primary)" }}>
       {/* Header */}
       <header
         style={{
           height: 56,
-          background: "#FFFFFF",
-          borderBottom: "1px solid #E2E8F0",
+          background: "var(--header-bg)",
+          backdropFilter: "blur(12px)",
+          borderBottom: "1px solid var(--border)",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -100,7 +105,7 @@ export default function App() {
               fontFamily: "Inter, sans-serif",
               fontWeight: 800,
               fontSize: 18,
-              color: "#141B2B",
+              color: "var(--text-primary)",
               letterSpacing: -0.45,
             }}
           >
@@ -113,62 +118,41 @@ export default function App() {
             display: "flex",
             alignItems: "center",
             gap: 8,
-            background: "#F8FAFC",
-            border: "1px solid #E2E8F0",
+            background: "var(--input-bg)",
+            border: "1px solid var(--input-border)",
             borderRadius: 12,
             padding: "8px 16px",
             width: 400,
             maxWidth: "40vw",
           }}
         >
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#94A3B8" strokeWidth="1.8">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--text-muted)" strokeWidth="1.8">
             <circle cx="8" cy="8" r="5.5" />
             <path d="M12.5 12.5L16 16" />
           </svg>
-          <span style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "#94A3B8", flex: 1 }}>
+          <span style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "var(--text-muted)", flex: 1 }}>
             {t("app.searchPlaceholder")}
           </span>
           <span
             style={{
               fontSize: 11,
               fontWeight: 600,
-              color: "#94A3B8",
-              background: "#F1F5F9",
+              color: "var(--text-muted)",
+              background: "var(--bg-surface)",
               borderRadius: 4,
               padding: "2px 6px",
-              border: "1px solid #E2E8F0",
+              border: "1px solid var(--border)",
             }}
           >
             &#8984;K
           </span>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
-            <div
-              style={{
-                width: 28,
-                height: 28,
-                borderRadius: 14,
-                background: "#E1E0FF",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="#4648D4">
-                <circle cx="7" cy="7" r="6" stroke="#4648D4" strokeWidth="1" fill="none" />
-              </svg>
-            </div>
-            <span style={{ fontFamily: "Inter, sans-serif", fontSize: 14, fontWeight: 500, color: "#141B2B" }}>
-              Acme Studio
-            </span>
-            <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
-              <path d="M1 1L5 5L9 1" stroke="#64748B" strokeWidth="1.5" />
-            </svg>
-          </div>
-          <div style={{ color: "#64748B", cursor: "pointer" }}>
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#64748B" strokeWidth="1.8">
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <LanguageToggle />
+          <ThemeToggle />
+          <div style={{ color: "var(--text-secondary)", cursor: "pointer" }}>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8">
               <path d="M10 2C7.2 2 5 4.2 5 7V11L3 14H17L15 11V7C15 4.2 12.8 2 10 2Z" />
               <path d="M8 16C8 17.1 8.9 18 10 18C11.1 18 12 17.1 12 16" />
             </svg>
@@ -195,8 +179,8 @@ export default function App() {
         <aside
           style={{
             width: 240,
-            background: "#F8FAFC",
-            borderRight: "1px solid #F1F5F9",
+            background: "var(--sidebar-bg)",
+            borderRight: "1px solid var(--border)",
             padding: 16,
             display: "flex",
             flexDirection: "column",
@@ -216,8 +200,8 @@ export default function App() {
                   gap: 12,
                   padding: "10px 12px",
                   borderRadius: 8,
-                  color: isActive ? "#4F46E5" : "#64748B",
-                  background: isActive ? "#EEF2FF" : "transparent",
+                  color: isActive ? "var(--accent-light)" : "var(--text-secondary)",
+                  background: isActive ? "var(--accent-surface)" : "transparent",
                   textDecoration: "none",
                   fontFamily: "Inter, sans-serif",
                   fontSize: 14,
@@ -234,7 +218,7 @@ export default function App() {
           <div
             style={{
               marginTop: 24,
-              background: "#F1F3FF",
+              background: "var(--accent-surface)",
               borderRadius: 12,
               padding: 16,
               display: "flex",
@@ -247,28 +231,30 @@ export default function App() {
                 width: 40,
                 height: 40,
                 borderRadius: 8,
-                background: "#E1E8FD",
+                background: "var(--bg-surface)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              <span style={{ fontFamily: "Inter, sans-serif", fontSize: 14, fontWeight: 700, color: "#4648D4" }}>
+              <span style={{ fontFamily: "Inter, sans-serif", fontSize: 14, fontWeight: 700, color: "var(--accent)" }}>
                 MW
               </span>
             </div>
             <div>
-              <div style={{ fontFamily: "Inter, sans-serif", fontSize: 12, fontWeight: 700, color: "#141B2B" }}>
+              <div
+                style={{ fontFamily: "Inter, sans-serif", fontSize: 12, fontWeight: 700, color: "var(--text-primary)" }}
+              >
                 Maya W.
               </div>
-              <div style={{ fontFamily: "Inter, sans-serif", fontSize: 10, color: "#464554" }}>
+              <div style={{ fontFamily: "Inter, sans-serif", fontSize: 10, color: "var(--text-secondary)" }}>
                 {t("app.brandAdmin")}
               </div>
             </div>
           </div>
         </aside>
 
-        <main style={{ flex: 1, overflow: "auto", background: "#F9F9FF" }}>
+        <main style={{ flex: 1, overflow: "auto", background: "var(--bg-primary)" }}>
           <Outlet />
         </main>
       </div>
