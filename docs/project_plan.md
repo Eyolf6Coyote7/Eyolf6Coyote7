@@ -33,57 +33,57 @@
 
 | # | Task | Status |
 |---|------|--------|
-| 1.1 | Realtime AI Whiteboard — ConOps + ADRs | Not started |
-| 1.2 | Enterprise Workflow System — ConOps + ADRs | Not started |
-| 1.3 | 3D Asset Collaboration — ConOps + ADRs | Not started |
+| 1.1 | Realtime AI Whiteboard — ConOps + ADRs | Done |
+| 1.2 | Enterprise Workflow System — ConOps + ADRs | Done |
+| 1.3 | 3D Asset Collaboration — ConOps + ADRs | Done |
 
 ### Round 2: PRD
 
 | # | Task | Status |
 |---|------|--------|
-| 2.1 | Realtime AI Whiteboard — PRD | Not started |
-| 2.2 | Enterprise Workflow System — PRD | Not started |
-| 2.3 | 3D Asset Collaboration — PRD | Not started |
+| 2.1 | Realtime AI Whiteboard — PRD | Done |
+| 2.2 | Enterprise Workflow System — PRD | Done |
+| 2.3 | 3D Asset Collaboration — PRD | Done |
 
 ### Round 3: UI/UX Design (Figma Spec)
 
 | # | Task | Status |
 |---|------|--------|
-| 3.1 | Realtime AI Whiteboard — UI/UX Design | Not started |
-| 3.2 | Enterprise Workflow System — UI/UX Design | Not started |
-| 3.3 | 3D Asset Collaboration — UI/UX Design | Not started |
+| 3.1 | Realtime AI Whiteboard — UI/UX Design | Done |
+| 3.2 | Enterprise Workflow System — UI/UX Design | Done |
+| 3.3 | 3D Asset Collaboration — UI/UX Design | Done |
 
 ### Round 4: System Architecture + ADRs
 
 | # | Task | Status |
 |---|------|--------|
-| 4.1 | Realtime AI Whiteboard — System Architecture + ADRs | Not started |
-| 4.2 | Enterprise Workflow System — System Architecture + ADRs | Not started |
-| 4.3 | 3D Asset Collaboration — System Architecture + ADRs | Not started |
+| 4.1 | Realtime AI Whiteboard — System Architecture + ADRs | Done |
+| 4.2 | Enterprise Workflow System — System Architecture + ADRs | Done |
+| 4.3 | 3D Asset Collaboration — System Architecture + ADRs | Done |
 
 ### Round 5: Technical Design + ADRs
 
 | # | Task | Status |
 |---|------|--------|
-| 5.1 | Realtime AI Whiteboard — Technical Design + ADRs | Not started |
-| 5.2 | Enterprise Workflow System — Technical Design + ADRs | Not started |
-| 5.3 | 3D Asset Collaboration — Technical Design + ADRs | Not started |
+| 5.1 | Realtime AI Whiteboard — Technical Design + ADRs | Done |
+| 5.2 | Enterprise Workflow System — Technical Design + ADRs | Done |
+| 5.3 | 3D Asset Collaboration — Technical Design + ADRs | Done |
 
 ### Round 6: Development Roadmap
 
 | # | Task | Status |
 |---|------|--------|
-| 6.1 | Realtime AI Whiteboard — Development Roadmap | Not started |
-| 6.2 | Enterprise Workflow System — Development Roadmap | Not started |
-| 6.3 | 3D Asset Collaboration — Development Roadmap | Not started |
+| 6.1 | Realtime AI Whiteboard — Development Roadmap | Done |
+| 6.2 | Enterprise Workflow System — Development Roadmap | Done |
+| 6.3 | 3D Asset Collaboration — Development Roadmap | Done |
 
 ### Round 7: Testing Strategy
 
 | # | Task | Status |
 |---|------|--------|
-| 7.1 | Realtime AI Whiteboard — Testing Strategy | Not started |
-| 7.2 | Enterprise Workflow System — Testing Strategy | Not started |
-| 7.3 | 3D Asset Collaboration — Testing Strategy | Not started |
+| 7.1 | Realtime AI Whiteboard — Testing Strategy | Done |
+| 7.2 | Enterprise Workflow System — Testing Strategy | Done |
+| 7.3 | 3D Asset Collaboration — Testing Strategy | Done |
 
 ## Phase B — Development (Serial)
 
@@ -121,18 +121,18 @@ npm run build:demo   # build static demo for GitHub Pages deployment
 
 | # | Project | Status |
 |---|---------|--------|
-| B.1 | Realtime AI Whiteboard — full implementation | Not started |
-| B.2 | Enterprise Workflow System — full implementation | Not started |
-| B.3 | 3D Asset Collaboration — full implementation | Not started |
+| B.1 | Realtime AI Whiteboard — full implementation | Done |
+| B.2 | Enterprise Workflow System — full implementation | Done |
+| B.3 | 3D Asset Collaboration — full implementation | Done |
 
 ## Phase C — Showcase
 
 | # | Task | Status |
 |---|------|--------|
-| C.1 | Deploy 3 static demos to GitHub Pages | Not started |
-| C.2 | Update GitHub Profile README with portfolio links | Not started |
-| C.3 | Record demo videos (local full-feature version) | Not started |
-| C.4 | Prepare interview talking points per project | Not started |
+| C.1 | Deploy 3 static demos to GitHub Pages | Done |
+| C.2 | Update GitHub Profile README with portfolio links | Done |
+| C.3 | Record demo videos (local full-feature version) | Done |
+| C.4 | Prepare interview talking points per project | Done |
 
 ### What Interviewers See
 

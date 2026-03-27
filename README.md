@@ -1,6 +1,6 @@
 # Fullstack AI Workspace
 
-> 3 fullstack projects × 3 industries × 7 languages × 18 systems
+> 3 projects · 3 industries · 7 frontends · 8 backends · 24 infra services
 
 **Releases**
 
@@ -72,20 +72,12 @@
 | Asset API | ![.NET](https://img.shields.io/badge/.NET-512BD4?logo=dotnet&logoColor=white) ![gRPC](https://img.shields.io/badge/gRPC-244C5A?logo=google&logoColor=white) ![Elasticsearch](https://img.shields.io/badge/Elasticsearch-005571?logo=elasticsearch&logoColor=white) |
 | AI Service | ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white) ![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white) ![ONNX](https://img.shields.io/badge/ONNX-005CED?logo=onnx&logoColor=white) |
 | IoT Pipeline | ![MQTT](https://img.shields.io/badge/MQTT-660066?logo=mqtt&logoColor=white) ![Kafka](https://img.shields.io/badge/Kafka-231F20?logo=apachekafka&logoColor=white) ![TimescaleDB](https://img.shields.io/badge/TimescaleDB-FDB515?logo=timescale&logoColor=black) |
-| Mobile | ![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black) |
+| Mobile | ![React Native](https://img.shields.io/badge/React_Native-61DAFB?logo=react&logoColor=black) ![Expo](https://img.shields.io/badge/Expo-000020?logo=expo&logoColor=white) |
 
 📐 [Figma](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design) · 🚀 [Live Demo](https://eyolf6coyote7.github.io/fullstack_ai_workspace/3d-asset/) · 📖 [Docs](3d_asset_collaboration/docs/)
 
 ---
 
-## Key Highlights
-
-- **AI Agent State Machine** — LangGraph + RAG + MCP tool use + LoRA fine-tuning + Langfuse observability
-- **3 Architecture Patterns** — Modular Monolith + BFF, Clean Architecture + DDD + CQRS, Hexagonal (Ports & Adapters)
-- **3 API Styles** — REST + WebSocket + SSE, GraphQL + Subscriptions, gRPC + SignalR
-- **Event-Driven** — Kafka (event sourcing, exactly-once, partitioning), MQTT → Kafka bridge
-- **Multi-platform** — React, Vue 3, React Native, Kotlin (Android), Swift (iOS), Unity (C#)
-- **Production-Ready** — Feature flags (Unleash), multi-tenancy, 2FA (Keycloak TOTP), SAST/SCA scanning
 
 ## Architecture Overview
 
@@ -128,18 +120,6 @@ graph LR
   API --> MIO[(MinIO)]
 ```
 
-## Tech Diversity
-
-| Dimension | Whiteboard | Workflow | 3D Asset |
-|-----------|-----------|----------|----------|
-| BE Language | TypeScript | Kotlin + PHP | C# + Python + Go |
-| FE Framework | React | Vue 3 | React + Three.js |
-| Architecture | Modular Monolith + BFF | Clean Arch + DDD + CQRS | Hexagonal |
-| API | REST + WebSocket | GraphQL | gRPC + REST |
-| Messaging | Redis Stream | Kafka | MQTT → Kafka |
-| AI | LangGraph Agent + RAG | — | ONNX Runtime |
-| Auth | JWT + Guest | Keycloak OAuth2/SSO + 2FA | API Key + JWT + ACL |
-| State Mgmt | Zustand | Pinia | Redux Toolkit |
 
 ## Documentation
 
@@ -151,22 +131,3 @@ graph LR
 | [Project Plan](docs/project_plan.md) | Execution plan and progress tracking |
 | [AI-Assisted Development](docs/ai_assisted_development.md) | Claude Code + Gemini co-work methodology |
 
-## Quick Start
-
-```bash
-# Clone
-git clone git@github.com:Eyolf6Coyote7/fullstack_ai_workspace.git
-
-# Start shared infrastructure
-docker compose up -d
-
-# Start Whiteboard (example)
-cd realtime_ai_whiteboard/bff-api && pnpm install && pnpm start:dev
-cd realtime_ai_whiteboard/web-app && pnpm install && pnpm dev
-```
-
-## Built With
-
-This project is built with **[Claude Code](https://claude.ai/claude-code)** as an AI pair programmer.
-Every PR is reviewed by Claude (architecture + security) and Gemini (code quality).
-All merge decisions are made by a human.

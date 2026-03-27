@@ -1,26 +1,5 @@
 # AI-Assisted Development Guide
 
-## Table of Contents
-
-- [AI Tools Used](#ai-tools-used)
-- [Development Workflow with AI](#development-workflow-with-ai)
-- [Claude Code Review Format](#claude-code-review-format)
-- [🤖 Claude Code Review](#claude-code-review)
-  - [Summary](#summary)
-  - [Architecture Impact](#architecture-impact)
-  - [Security Scan (code PRs only)](#security-scan-code-prs-only)
-  - [Review](#review)
-  - [Risk Level](#risk-level)
-- [Gemini Review Handling](#gemini-review-handling)
-- [Gemini Review — All X Items Fixed in [commit]](#gemini-review-all-x-items-fixed-in-commit)
-- [Co-authorship](#co-authorship)
-- [Git Conventions (AI-specific)](#git-conventions-ai-specific)
-- [Prompt Patterns](#prompt-patterns)
-- [What Claude Cannot Do](#what-claude-cannot-do)
-- [Quality Metrics](#quality-metrics)
-
----
-
 This project is built with **Claude Code (Opus 4.6)** as an AI pair programmer and **Gemini Code Review** as an automated reviewer. This document describes the AI co-work methodology, tools, and conventions.
 
 ## AI Tools Used
