@@ -63,6 +63,12 @@ docker compose down
 - Python 3.12+
 - Docker + Docker Compose
 
+### Storybook
+
+```bash
+cd asset-portal && pnpm storybook   # http://localhost:6006
+```
+
 ## Documentation
 
 See [docs/](docs/) for ConOps, PRD, UI/UX, Architecture, Technical Design, Roadmap, Testing.

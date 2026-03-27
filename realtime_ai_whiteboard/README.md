@@ -66,6 +66,12 @@ pkill ollama   # optional
 - Ollama
 - Docker + Docker Compose
 
+### Storybook
+
+```bash
+cd web-app && pnpm storybook   # http://localhost:6006
+```
+
 ## Documentation
 
 See [docs/](docs/) for ConOps, PRD, UI/UX, Architecture, Technical Design, Roadmap, Testing.

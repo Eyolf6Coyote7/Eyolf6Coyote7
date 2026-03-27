@@ -70,6 +70,12 @@ docker compose down
 - PHP 8.2+ / Composer
 - Docker + Docker Compose
 
+### Storybook
+
+```bash
+cd employee-portal && pnpm storybook   # http://localhost:6006
+```
+
 ## Documentation
 
 See [docs/](docs/) for ConOps, PRD, UI/UX, Architecture, Technical Design, Roadmap, Testing.
