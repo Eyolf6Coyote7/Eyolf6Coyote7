@@ -139,7 +139,7 @@ npm run build:demo   # build static demo for GitHub Pages deployment
 ```
 Resume
   ├─ Portfolio: github.com/Eyolf6Coyote7
-  └─ Live Demo: eyolf6coyote7.github.io/fullstack_ai_workspace
+  └─ Live Demo: eyolf6coyote7.github.io/Eyolf6Coyote7
 
 HR clicks demo link → sees working app (mock data, static)
 Interview → candidate runs local version (real backend, AI, Kafka, realtime)

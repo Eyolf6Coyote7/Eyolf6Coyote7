@@ -35,7 +35,7 @@ jobs:
           VITE_MOCK: 'true'
         run: |
           pnpm install
-          npx vite build --base /fullstack_ai_workspace/whiteboard/
+          npx vite build --base /Eyolf6Coyote7/whiteboard/
 
       - name: Build Employee Portal Demo
         working-directory: enterprise_workflow_system/employee-portal
@@ -43,7 +43,7 @@ jobs:
           VITE_MOCK: 'true'
         run: |
           pnpm install
-          npx vite build --base /fullstack_ai_workspace/workflow/
+          npx vite build --base /Eyolf6Coyote7/workflow/
 
       - name: Build Admin Dashboard Demo
         working-directory: enterprise_workflow_system/admin-dashboard
@@ -51,7 +51,7 @@ jobs:
           VITE_MOCK: 'true'
         run: |
           pnpm install
-          npx vite build --base /fullstack_ai_workspace/workflow-admin/
+          npx vite build --base /Eyolf6Coyote7/workflow-admin/
 
       - name: Build Asset Portal Demo
         working-directory: 3d_asset_collaboration/asset-portal
@@ -59,7 +59,7 @@ jobs:
           VITE_MOCK: 'true'
         run: |
           pnpm install
-          npx vite build --base /fullstack_ai_workspace/3d-asset/
+          npx vite build --base /Eyolf6Coyote7/3d-asset/
 
       - name: Assemble site
         run: |
