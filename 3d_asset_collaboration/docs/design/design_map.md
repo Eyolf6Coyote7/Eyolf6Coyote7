@@ -21,9 +21,9 @@
 | Screen | Figma | Stitch Prompt |
 |--------|-------|--------------|
 | Login | [link](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design?node-id=41-2769&t=eg40m3sRYHemZv4L-4) | [10_unity_login](stitch_prompts/10_unity_login.md) |
-| Asset Browser | [link]() | [11_unity_asset_browser](stitch_prompts/11_unity_asset_browser.md) |
-| 3D Viewport | [link]() | [12_unity_3d_viewport](stitch_prompts/12_unity_3d_viewport.md) |
-| IoT Overlay | [link]() | [13_unity_iot_overlay](stitch_prompts/13_unity_iot_overlay.md) |
+| Asset Browser | [link](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design?node-id=41-2096&t=eg40m3sRYHemZv4L-4) | [11_unity_asset_browser](stitch_prompts/11_unity_asset_browser.md) |
+| 3D Viewport | [link](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design?node-id=41-3157&t=eg40m3sRYHemZv4L-4) | [12_unity_3d_viewport](stitch_prompts/12_unity_3d_viewport.md) |
+| IoT Overlay | [link](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design?node-id=41-2&t=eg40m3sRYHemZv4L-4) | [13_unity_iot_overlay](stitch_prompts/13_unity_iot_overlay.md) |
 | Asset Inspector | [link]() | [14_unity_asset_inspector](stitch_prompts/14_unity_asset_inspector.md) |
 
 ## Mobile
