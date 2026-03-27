@@ -102,13 +102,15 @@ jobs:
       - run: pnpm install
       - run: pnpm prisma generate
       - run: pnpm jest --coverage
+        id: test
       - name: Extract coverage %
+        if: steps.test.outcome == 'success'
         id: cov
         run: |
           PCT=$(node -e "const s=require('./coverage/coverage-summary.json');console.log(s.total.statements.pct)")
           echo "pct=$PCT" >> "$GITHUB_OUTPUT"
       - name: Update badge
-        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        if: steps.test.outcome == 'success' && github.ref == 'refs/heads/dev' && github.event_name == 'push'
         uses: schneegans/dynamic-badges-action@v1.7.0
         with:
           auth: ${{ secrets.GIST_TOKEN }}
