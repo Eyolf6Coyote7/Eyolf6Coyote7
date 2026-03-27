@@ -1,47 +1,5 @@
 # Technical Design: Realtime AI Whiteboard
 
-## Table of Contents
-
-- [System: BFF + API (NestJS)](#system-bff-api-nestjs)
-  - [API Specification](#api-specification)
-  - [Database Tables (owned by BFF + API)](#database-tables-owned-by-bff-api)
-  - [Indexes](#indexes)
-- [System: AI Service (LangGraph)](#system-ai-service-langgraph)
-  - [Pipeline Specification](#pipeline-specification)
-  - [MCP Tools](#mcp-tools)
-  - [ChromaDB Collections](#chromadb-collections)
-- [Database Schema (Full)](#database-schema-full)
-  - [ER Diagram](#er-diagram)
-  - [Migrations](#migrations)
-  - [Data Migration Strategy](#data-migration-strategy)
-- [Sequence Diagrams (Key Flows)](#sequence-diagrams-key-flows)
-  - [Flow: Board Creation with Template](#flow-board-creation-with-template)
-  - [Flow: Multi-tenant Schema Switching](#flow-multi-tenant-schema-switching)
-- [Authentication & Authorization](#authentication-authorization)
-  - [JWT Token Structure](#jwt-token-structure)
-- [Error Handling](#error-handling)
-- [Caching Strategy](#caching-strategy)
-- [Background Jobs / Workers](#background-jobs-workers)
-- [Third-party Integrations](#third-party-integrations)
-- [System: Web App (React)](#system-web-app-react)
-  - [State Management (Zustand)](#state-management-zustand)
-  - [Route Definitions](#route-definitions)
-  - [Component Architecture](#component-architecture)
-  - [Canvas Implementation](#canvas-implementation)
-  - [Yjs Integration](#yjs-integration)
-  - [AI Chat — SSE Consumer](#ai-chat-sse-consumer)
-  - [API Client (Real vs Mock)](#api-client-real-vs-mock)
-- [System: Mobile App (React Native)](#system-mobile-app-react-native)
-  - [State Management (Zustand — shared with Web)](#state-management-zustand-shared-with-web)
-  - [Navigation (React Navigation)](#navigation-react-navigation)
-  - [Canvas (Mobile-specific)](#canvas-mobile-specific)
-  - [Push Notifications](#push-notifications)
-  - [Offline Strategy](#offline-strategy)
-- [System: Fine-tune Pipeline](#system-fine-tune-pipeline)
-  - [Pipeline Overview](#pipeline-overview)
-  - [Dataset Format](#dataset-format)
-  - [Deployment](#deployment)
-- [ADRs Created](#adrs-created)
 
 ---
 
@@ -643,45 +601,10 @@ Reconnect:
 
 ---
 
-## System: Fine-tune Pipeline
-
-### Pipeline Overview
-
-| Step | Input | Output | Tool | When |
-|------|-------|--------|------|------|
-| 1. Collect feedback | User accepts/rejects AI suggestions | Training dataset (JSONL) | Custom script | Continuous |
-| 2. Prepare dataset | Raw feedback JSONL | Cleaned training pairs | Python script | Before training |
-| 3. Fine-tune | Base model + dataset | LoRA adapter weights | HuggingFace + PEFT | Weekly/on-demand |
-| 4. Quantize | LoRA weights | GGUF quantized model | llama.cpp | After training |
-| 5. Deploy | GGUF model | Running model in Ollama | `ollama create` | After quantization |
-
-### Dataset Format
-
-```jsonl
-{"prompt": "Create a user flow for checkout", "completion": "1. Cart → 2. Address → 3. Payment → 4. Confirmation", "accepted": true}
-{"prompt": "Summarize this board", "completion": "...", "accepted": false, "feedback": "Too generic"}
-```
-
-### Deployment
-
-```bash
-# Create custom model in Ollama
-ollama create whiteboard-ai -f Modelfile
-
-# Modelfile
-FROM llama3:7b
-ADAPTER ./lora-adapter.gguf
-SYSTEM "You are a whiteboard AI assistant..."
-```
-
-> Fine-tuning runs offline on schedule. Not part of the realtime pipeline. Tracked in Langfuse.
-
----
-
 ## ADRs Created
 
 - [ADR-0001: Why Yjs (CRDT) over OT](adrs/ADR-0001-why-yjs-over-ot.md)
 - [ADR-0002: Why Ollama over cloud LLM](adrs/ADR-0002-why-ollama-over-cloud-llm.md)
 - [ADR-0003: Why schema-per-tenant](adrs/ADR-0003-why-schema-per-tenant.md)
 - [ADR-0004: Why NestJS Modular Monolith](adrs/ADR-0004-why-modular-monolith.md)
-- [ADR-0005: Why Redis Stream over Kafka for AI Task Queue](adrs/ADR-0005-why-redis-stream-over-kafka.md)
+- [ADR-0005: Why Kafka for Event Streaming](adrs/ADR-0005-why-kafka.md)

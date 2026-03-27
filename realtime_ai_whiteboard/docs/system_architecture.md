@@ -1,34 +1,8 @@
 # System Architecture: Realtime AI Whiteboard
 
-## Table of Contents
-
-- [Architecture Pattern](#architecture-pattern)
-- [C4 Model](#c4-model)
-  - [Level 1: System Context](#level-1-system-context)
-  - [Level 2: Container Diagram](#level-2-container-diagram)
-  - [Level 3: Component Diagram (BFF + API)](#level-3-component-diagram-bff-api)
-  - [Level 3: Component Diagram (AI Service)](#level-3-component-diagram-ai-service)
-  - [Level 3: Component Diagram (Web App — React)](#level-3-component-diagram-web-app-react)
-  - [Level 3: Component Diagram (Mobile App — React Native)](#level-3-component-diagram-mobile-app-react-native)
-- [Component Overview](#component-overview)
-- [Data Flow (Sequence Diagrams)](#data-flow-sequence-diagrams)
-  - [Flow 1: Create Board and Start Collaborating](#flow-1-create-board-and-start-collaborating)
-  - [Flow 2: AI Content Generation](#flow-2-ai-content-generation)
-  - [Flow 3: Guest Access](#flow-3-guest-access)
-  - [Flow 4: Offline → Online Sync](#flow-4-offline-online-sync)
-- [API Contracts (High-level)](#api-contracts-high-level)
-- [Database Schema (High-level)](#database-schema-high-level)
-- [Deployment Diagram](#deployment-diagram)
-- [Security Architecture](#security-architecture)
-- [Infrastructure Dependencies](#infrastructure-dependencies)
-- [Scalability Considerations](#scalability-considerations)
-- [ADRs Created](#adrs-created)
-
----
-
 ## Architecture Pattern
 
-**Modular Monolith + BFF** — a single NestJS backend organized by feature modules, with a BFF layer that serves different API surfaces for Web and Mobile clients. AI runs as a separate service (LangGraph) consuming from Redis Stream.
+**Modular Monolith + BFF** — a single NestJS backend organized by feature modules, with a BFF layer that serves different API surfaces for Web and Mobile clients. AI runs as a separate service (LangGraph) consuming from Kafka.
 
 ## C4 Model
 
@@ -377,55 +351,7 @@ sequenceDiagram
   App->>User: All changes preserved, no conflicts
 ```
 
-## API Contracts (High-level)
-
-| Endpoint | Protocol | Direction | Description |
-|----------|----------|-----------|-------------|
-| `POST /api/web/boards` | REST | Client → Server | Create board |
-| `GET /api/web/boards/:id` | REST | Client → Server | Get board data |
-| `POST /api/web/ai/prompt` | REST | Client → Server | Submit AI prompt |
-| `GET /api/web/ai/stream/:taskId` | SSE | Server → Client | Stream AI response |
-| `/ws/board/:id` | WebSocket | Bidirectional | Yjs CRDT sync + cursor presence |
-| `POST /api/mobile/boards` | REST | Client → Server | Create board (mobile-optimized) |
-| `POST /api/web/boards/:id/share` | REST | Client → Server | Generate guest link |
-| `GET /api/web/boards/:id/export` | REST | Client → Server | Export as PNG/PDF |
-| `analytics.whiteboard-events` | Kafka topic | Producer → Consumer | User behavior events |
-
-## Database Schema (High-level)
-
-```mermaid
-erDiagram
-  TENANT ||--o{ USER : has
-  TENANT ||--o{ BOARD : owns
-  USER ||--o{ BOARD : creates
-  BOARD ||--o{ BOARD_ELEMENT : contains
-  BOARD ||--o{ BOARD_COLLABORATOR : has
-  BOARD ||--|| YJS_STATE : syncs
-  USER ||--o{ AI_CONVERSATION : has
-  AI_CONVERSATION ||--o{ AI_MESSAGE : contains
-  
-  TENANT {
-    uuid id PK
-    string name
-    string schema_name
-    string plan "free|pro"
-  }
-  USER {
-    uuid id PK
-    string email
-    string display_name
-    string role "owner|member|guest"
-  }
-  BOARD {
-    uuid id PK
-    uuid owner_id FK
-    string title
-    string template
-    boolean guest_editable
-    string guest_token
-    timestamp created_at
-  }
-```
+See [Technical Design](technical_design.md) for full API spec and database schema.
 
 ## Deployment Diagram
 

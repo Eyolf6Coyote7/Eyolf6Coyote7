@@ -1,23 +1,5 @@
 # PRD: Realtime AI Whiteboard
 
-## Table of Contents
-
-- [Overview](#overview)
-- [User Journey Map](#user-journey-map)
-  - [Alex (Product Manager) Journey](#alex-product-manager-journey)
-- [Feature List](#feature-list)
-- [Feature Details](#feature-details)
-  - [F1: Canvas with Drawing Tools](#f1-canvas-with-drawing-tools)
-  - [F2: Realtime Multi-user Sync (CRDT)](#f2-realtime-multi-user-sync-crdt)
-  - [F4: AI Chat Assistant](#f4-ai-chat-assistant)
-  - [F8: Guest Access via Shared Link](#f8-guest-access-via-shared-link)
-  - [F9: Offline Editing with Auto-Sync](#f9-offline-editing-with-auto-sync)
-- [Non-functional Requirements](#non-functional-requirements)
-- [Release Criteria](#release-criteria)
-- [Dependencies](#dependencies)
-
----
-
 ## Overview
 
 A SaaS collaborative whiteboard with AI-powered content generation, realtime multi-user editing via CRDT, and privacy-first local AI inference. See [ConOps](conops.md) for product vision and user personas.
@@ -38,26 +20,25 @@ A SaaS collaborative whiteboard with AI-powered content generation, realtime mul
 
 ## Feature List
 
-| # | Feature | Priority | Platform | System | Status | Analytics Event |
-|---|---------|----------|----------|--------|--------|----------------|
-| F1 | Canvas with drawing tools | P0 | Web + Mobile | Web App + Mobile App | Planned | `board_created`, `drawing_started` |
-| F2 | Realtime multi-user sync (CRDT) | P0 | Web + Mobile | BFF + API | Planned | `collaborator_joined` |
-| F3 | Cursor presence (see other users) | P0 | Web + Mobile | BFF + API | Planned | — |
-| F4 | AI chat assistant | P0 | Web + Mobile | AI Service | Planned | `ai_prompt_sent`, `ai_suggestion_accepted` |
-| F5 | AI content generation (shapes, flows, mind maps) | P1 | Web | AI Service + MCP | Planned | `ai_content_generated` |
-| F6 | Board templates (brainstorm, retro, kanban) | P1 | Web + Mobile | BFF + API | Planned | `template_used` |
-| F7 | Export (PNG, PDF) | P1 | Web | Web App | Planned | `export_pdf`, `export_png` |
-| F8 | Guest access via shared link | P1 | Web | BFF + API | Planned | `guest_joined` |
-| F9 | Offline editing with auto-sync | P1 | Web + Mobile | Web App + Mobile App | Planned | `offline_sync_completed` |
-| F10 | User authentication (JWT) | P0 | Web + Mobile | BFF + API | Planned | `user_signed_up`, `user_logged_in` |
-| F11 | Multi-tenancy (team workspace) | P1 | Web | BFF + API | Planned | `workspace_created` |
-| F12 | Subscription plans (Free / Pro) | P2 | Web | BFF + API | Planned | `plan_upgraded` |
-| F13 | Usage metering (API calls, storage) | P2 | Web | BFF + API + Kafka | Planned | `usage_tracked` |
-| F14 | Feature flags (gradual rollout) | P1 | All | Unleash | Planned | — |
-| F15 | WebRTC voice/video collaboration | P2 | Web | Web App (P2P) | Planned | `voice_call_started` |
-| F16 | Push notifications | P2 | Mobile | Kafka + FCM/APNs | Planned | `notification_sent` |
-| F17 | Dark mode | P2 | Web + Mobile | Web App + Mobile App | Planned | `dark_mode_toggled` |
-| F18 | i18n (English + Chinese) | P2 | Web + Mobile | All | Planned | — |
+| # | Feature | Priority | Platform | System |
+|---|---------|----------|----------|--------|
+| F1 | Canvas with drawing tools | P0 | Web + Mobile | Web App + Mobile App |
+| F2 | Realtime multi-user sync (CRDT) | P0 | Web + Mobile | BFF + API |
+| F3 | Cursor presence (see other users) | P0 | Web + Mobile | BFF + API |
+| F4 | AI chat assistant | P0 | Web + Mobile | AI Service |
+| F5 | AI content generation (shapes, flows, mind maps) | P1 | Web | AI Service + MCP |
+| F6 | Board templates (brainstorm, retro, kanban) | P1 | Web + Mobile | BFF + API |
+| F7 | Export (PNG, PDF) | P1 | Web | Web App |
+| F8 | Guest access via shared link | P1 | Web | BFF + API |
+| F9 | Offline editing with auto-sync | P1 | Web + Mobile | Web App + Mobile App |
+| F10 | User authentication (JWT) | P0 | Web + Mobile | BFF + API |
+| F11 | Multi-tenancy (team workspace) | P1 | Web | BFF + API |
+| F12 | Subscription plans (Free / Pro) | P2 | Web | BFF + API |
+| F13 | Usage metering (API calls, storage) | P2 | Web | BFF + API + Kafka |
+| F14 | Feature flags (gradual rollout) | P1 | All | Unleash |
+| F15 | Push notifications | P2 | Mobile | Kafka + FCM/APNs |
+| F16 | Dark mode | P2 | Web + Mobile | Web App + Mobile App |
+| F17 | i18n (English + Chinese) | P2 | Web + Mobile | All |
 
 ## Feature Details
 
