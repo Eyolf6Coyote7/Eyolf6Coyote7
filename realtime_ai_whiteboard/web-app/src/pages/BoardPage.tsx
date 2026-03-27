@@ -26,17 +26,17 @@ export function BoardPage() {
   const [demoModal, setDemoModal] = useState('');
   const { cursors, onlineCount, updateCursorPosition } = useYjs(id);
   const toggleAi = useAiStore((s) => s.togglePanel);
-  const isAiOpen = useAiStore((s) => s.isOpen);
   const [searchParams] = useSearchParams();
   const boards = useBoardStore((s) => s.boards);
   const board = boards.find((b) => b.id === id);
   const boardTitle = board?.title || `Board ${id}`;
 
   useEffect(() => {
-    if (searchParams.get('ai') === '1' && !isAiOpen) {
-      toggleAi();
+    if (searchParams.get('ai') === '1') {
+      const store = useAiStore.getState();
+      if (!store.isOpen) store.togglePanel();
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   const zoomIn = useCallback(() => setZoom((z) => Math.min(z + ZOOM_STEP, ZOOM_MAX)), []);
   const zoomOut = useCallback(() => setZoom((z) => Math.max(z - ZOOM_STEP, ZOOM_MIN)), []);
