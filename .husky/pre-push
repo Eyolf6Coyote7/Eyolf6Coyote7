@@ -1,0 +1,52 @@
+#!/bin/sh
+
+# Run tests only for projects with changes (compared to remote)
+REMOTE_REF=$(git rev-parse @{upstream} 2>/dev/null || echo "HEAD~1")
+CHANGED=$(git diff --name-only "$REMOTE_REF"...HEAD 2>/dev/null || git diff --name-only HEAD~1)
+
+run_if_changed() {
+  local pattern="$1"
+  local dir="$2"
+  local cmd="$3"
+  if echo "$CHANGED" | grep -q "^$pattern"; then
+    echo "▶ Testing $dir..."
+    (cd "$dir" && eval "$cmd") || exit 1
+  fi
+}
+
+# Frontend portals (vitest)
+run_if_changed "3d_asset_collaboration/asset-portal/" \
+  "3d_asset_collaboration/asset-portal" \
+  "VITE_MOCK=true pnpm vitest run"
+
+run_if_changed "enterprise_workflow_system/employee-portal/" \
+  "enterprise_workflow_system/employee-portal" \
+  "VITE_MOCK=true pnpm vitest run"
+
+run_if_changed "realtime_ai_whiteboard/web-app/" \
+  "realtime_ai_whiteboard/web-app" \
+  "VITE_MOCK=true pnpm vitest run"
+
+# Backend APIs
+run_if_changed "realtime_ai_whiteboard/bff-api/" \
+  "realtime_ai_whiteboard/bff-api" \
+  "pnpm prisma generate && pnpm jest"
+
+run_if_changed "enterprise_workflow_system/workflow-api/" \
+  "enterprise_workflow_system/workflow-api" \
+  "./gradlew test"
+
+run_if_changed "enterprise_workflow_system/admin-api/" \
+  "enterprise_workflow_system/admin-api" \
+  "php artisan test 2>/dev/null || vendor/bin/phpunit"
+
+# Python AI services
+run_if_changed "3d_asset_collaboration/ai-service/" \
+  "3d_asset_collaboration/ai-service" \
+  "python3 -m pytest tests/"
+
+run_if_changed "realtime_ai_whiteboard/ai-service/" \
+  "realtime_ai_whiteboard/ai-service" \
+  "python3 -m pytest tests/"
+
+echo "✅ Pre-push tests passed"

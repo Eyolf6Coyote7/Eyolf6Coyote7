@@ -1,31 +1,5 @@
 # System Architecture: Enterprise Workflow System
 
-## Table of Contents
-
-- [Architecture Pattern](#architecture-pattern)
-- [C4 Model](#c4-model)
-  - [Level 1: System Context](#level-1-system-context)
-  - [Level 2: Container Diagram](#level-2-container-diagram)
-  - [Level 3: Component Diagram (Workflow API — Clean Architecture)](#level-3-component-diagram-workflow-api-clean-architecture)
-  - [Level 3: Component Diagram (Admin API — Laravel)](#level-3-component-diagram-admin-api-laravel)
-  - [Level 3: Component Diagram (Employee Portal — Vue 3)](#level-3-component-diagram-employee-portal-vue-3)
-  - [Level 3: Component Diagram (Admin Dashboard — Vue 3)](#level-3-component-diagram-admin-dashboard-vue-3)
-  - [Level 3: Component Diagram (Mobile App — Kotlin + Swift)](#level-3-component-diagram-mobile-app-kotlin-swift)
-- [Component Overview](#component-overview)
-- [Data Flow (Sequence Diagrams)](#data-flow-sequence-diagrams)
-  - [Flow 1: Submit Approval Request](#flow-1-submit-approval-request)
-  - [Flow 2: Mobile Approval](#flow-2-mobile-approval)
-  - [Flow 3: Auto-Escalation](#flow-3-auto-escalation)
-  - [Flow 4: Compliance Audit Report](#flow-4-compliance-audit-report)
-- [API Contracts (High-level)](#api-contracts-high-level)
-- [Database Schema (High-level)](#database-schema-high-level)
-- [Deployment Diagram](#deployment-diagram)
-- [Security Architecture](#security-architecture)
-- [Infrastructure Dependencies](#infrastructure-dependencies)
-- [Scalability Considerations](#scalability-considerations)
-- [ADRs Created](#adrs-created)
-
----
 
 ## Architecture Pattern
 
@@ -437,74 +411,7 @@ sequenceDiagram
   ADM_API-->>Admin: CSV file download
 ```
 
-## API Contracts (High-level)
-
-| Endpoint | Protocol | System | Direction | Description |
-|----------|----------|--------|-----------|-------------|
-| `query requestDetail` | GraphQL | Workflow API | Client → Server | Get request with steps + attachments |
-| `query approvalQueue` | GraphQL | Workflow API | Client → Server | List pending approvals for current user |
-| `mutation submitRequest` | GraphQL | Workflow API | Client → Server | Create new approval request |
-| `mutation approveStep` | GraphQL | Workflow API | Client → Server | Approve a pending step |
-| `mutation rejectStep` | GraphQL | Workflow API | Client → Server | Reject with reason |
-| `GET /api/users` | REST | Admin API | Admin → Server | List users (via Keycloak) |
-| `POST /api/templates` | REST | Admin API | Admin → Server | Create workflow template |
-| `GET /api/audit` | REST | Admin API | Admin → Server | Query audit log |
-| `workflow.approval-events` | Kafka | — | Producer → Consumer | Immutable approval state changes |
-| `workflow.audit-log` | Kafka | — | Producer → Consumer | Compliance audit trail (exactly-once) |
-| `workflow.notifications` | Kafka | — | Producer → Consumer | Async notification dispatch |
-
-## Database Schema (High-level)
-
-```mermaid
-erDiagram
-  ORGANIZATION ||--o{ USER : has
-  ORGANIZATION ||--o{ WORKFLOW_TEMPLATE : owns
-  USER ||--o{ WORKFLOW : submits
-  WORKFLOW_TEMPLATE ||--o{ WORKFLOW : creates
-  WORKFLOW ||--o{ APPROVAL_STEP : has
-  APPROVAL_STEP ||--o{ STEP_COMMENT : has
-  WORKFLOW ||--o{ ATTACHMENT : has
-  USER ||--o{ APPROVAL_STEP : "assigned to"
-
-  ORGANIZATION {
-    uuid id PK
-    string name
-    string plan
-  }
-  USER {
-    uuid id PK
-    uuid org_id FK
-    string keycloak_id
-    string role "admin|manager|employee"
-  }
-  WORKFLOW {
-    uuid id PK
-    uuid org_id FK
-    uuid submitter_id FK
-    uuid template_id FK
-    string status "pending|in_progress|approved|rejected"
-    jsonb form_data
-    string temporal_run_id
-    timestamp created_at
-  }
-  APPROVAL_STEP {
-    uuid id PK
-    uuid workflow_id FK
-    uuid assignee_id FK
-    int step_order
-    string type "sequential|parallel"
-    string status "pending|approved|rejected|escalated"
-    timestamp deadline
-    timestamp completed_at
-  }
-  WORKFLOW_TEMPLATE {
-    uuid id PK
-    uuid org_id FK
-    string name
-    jsonb step_definitions
-    boolean published
-  }
-```
+See [Technical Design](technical_design.md) for full API spec and database schema.
 
 ## Deployment Diagram
 

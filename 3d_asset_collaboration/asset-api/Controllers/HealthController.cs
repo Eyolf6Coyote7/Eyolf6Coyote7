@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace asset_api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1/[controller]")]
 public class HealthController : ControllerBase
 {
     [HttpGet]

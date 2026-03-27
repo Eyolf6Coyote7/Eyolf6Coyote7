@@ -14,6 +14,6 @@
 
 See [adrs/](adrs/) for all Architecture Decision Records related to this project.
 
-### Screenshots
+### Design
 
-See [screenshots/](screenshots/) for UI mockups and Figma exports (added per milestone).
+[Figma](https://www.figma.com/design/Uj6nyMA7fnlciLrBekuJ1Z/Workflow---Design) · [Design Map](design/design_map.md) (24 screens — Figma node links + Stitch prompts)

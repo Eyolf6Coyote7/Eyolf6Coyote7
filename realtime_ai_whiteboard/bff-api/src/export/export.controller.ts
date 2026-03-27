@@ -4,7 +4,7 @@ import { ExportService } from './export.service';
 import { ExportDto } from './dto/export.dto';
 import { CurrentUser, AuthUser } from '../common/auth-user.decorator';
 
-@Controller('api/web/boards')
+@Controller('boards')
 @UseGuards(AuthGuard('jwt'))
 export class ExportController {
   constructor(private exportService: ExportService) {}

@@ -1,41 +1,5 @@
 # UI/UX Design: 3D Asset Collaboration
 
-## Table of Contents
-
-- [Design Principles](#design-principles)
-- [Figma Project Structure](#figma-project-structure)
-- [Web UI — Asset Portal](#web-ui-asset-portal)
-  - [Screen Inventory (Asset Portal)](#screen-inventory-asset-portal)
-  - [Asset Portal Layout](#asset-portal-layout)
-  - [Asset Detail Layout](#asset-detail-layout)
-  - [Web-specific Patterns](#web-specific-patterns)
-- [Web UI — IoT Dashboard](#web-ui-iot-dashboard)
-  - [IoT Dashboard Layout](#iot-dashboard-layout)
-- [Unity Client](#unity-client)
-  - [Screen Inventory (Unity)](#screen-inventory-unity)
-  - [Unity Viewport Layout](#unity-viewport-layout)
-  - [Unity-specific Patterns](#unity-specific-patterns)
-- [Mobile UI (iOS + Android)](#mobile-ui-ios-android)
-  - [Screen Inventory (Mobile)](#screen-inventory-mobile)
-  - [Mobile-specific Patterns](#mobile-specific-patterns)
-- [Screen States](#screen-states)
-- [User Flows](#user-flows)
-  - [Upload + Preview Flow](#upload-preview-flow)
-  - [IoT Digital Twin Flow](#iot-digital-twin-flow)
-  - [Search + Browse Flow](#search-browse-flow)
-- [Interaction Specification](#interaction-specification)
-  - [Web Interactions](#web-interactions)
-  - [Unity Interactions](#unity-interactions)
-- [Key Components](#key-components)
-- [Design Tokens](#design-tokens)
-- [Responsive Breakpoints](#responsive-breakpoints)
-- [Handoff Notes](#handoff-notes)
-- [Accessibility (a11y) Checklist](#accessibility-a11y-checklist)
-- [Figma Version History](#figma-version-history)
-- [Stitch Prompts](#stitch-prompts)
-- [Screenshots](#screenshots)
-
----
 
 ## Design Principles
 
@@ -50,8 +14,8 @@
 | File | Content | Link |
 |------|---------|------|
 | 3D Asset — Design System | Shared components, tokens, icons | [Figma URL TBD] |
+| 3D Asset — Design | High-fi mockups for all 19 screens (web + Unity + mobile) | [Figma](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design) |
 | 3D Asset — Wireframes | Low-fi wireframes for all screens | [Figma URL TBD] |
-| 3D Asset — UI Design | High-fi mockups (final) | [Figma URL TBD] |
 | 3D Asset — Prototype | Interactive prototype with transitions | [Figma URL TBD] |
 
 ## Web UI — Asset Portal
@@ -383,55 +347,4 @@ graph TD
 - [ ] Touch targets ≥ 44x44px on mobile
 - [ ] 3D loading state has text description (not just spinner)
 
-## Figma Version History
-
-| Version | Git Tag | Date | Figma Page | What Changed |
-|---------|---------|------|-----------|-------------|
-| — | — | — | — | No designs yet — UI spec complete, ready to start Figma |
-
-> See [dev_guidelines.md](../../docs/dev_guidelines.md#figma--stitch-version-control) for Figma operation guide.
-
-## Stitch Prompts
-
-Each screen has a dedicated Stitch prompt file in `docs/design/stitch_prompts/`. These contain detailed natural-language descriptions ready to paste into [Google Stitch](https://stitch.withgoogle.com) for rapid layout generation, plus design tokens, states to generate, and acceptance criteria.
-
-**Workflow**: Copy the "Stitch Prompt" section → paste into Stitch → pick best layout → recreate/refine in Figma.
-
-| # | Screen | Prompt File | Platform |
-|---|--------|------------|----------|
-| 01 | Login | [01_login.md](design/stitch_prompts/01_login.md) | Web |
-| 02 | Asset Library | [02_asset_library.md](design/stitch_prompts/02_asset_library.md) | Web |
-| 03 | Asset Detail | [03_asset_detail.md](design/stitch_prompts/03_asset_detail.md) | Web |
-| 04 | Version Compare | [04_version_compare.md](design/stitch_prompts/04_version_compare.md) | Web |
-| 05 | Upload | [05_upload.md](design/stitch_prompts/05_upload.md) | Web |
-| 06 | Search Results | [06_search_results.md](design/stitch_prompts/06_search_results.md) | Web |
-| 07 | IoT Dashboard | [07_iot_dashboard.md](design/stitch_prompts/07_iot_dashboard.md) | Web |
-| 08 | Brand Settings | [08_brand_settings.md](design/stitch_prompts/08_brand_settings.md) | Web |
-| 09 | Account Settings | [09_account.md](design/stitch_prompts/09_account.md) | Web |
-| 10 | Unity Login | [10_unity_login.md](design/stitch_prompts/10_unity_login.md) | Unity |
-| 11 | Unity Asset Browser | [11_unity_asset_browser.md](design/stitch_prompts/11_unity_asset_browser.md) | Unity |
-| 12 | Unity 3D Viewport | [12_unity_3d_viewport.md](design/stitch_prompts/12_unity_3d_viewport.md) | Unity |
-| 13 | Unity IoT Overlay | [13_unity_iot_overlay.md](design/stitch_prompts/13_unity_iot_overlay.md) | Unity |
-| 14 | Unity Asset Inspector | [14_unity_asset_inspector.md](design/stitch_prompts/14_unity_asset_inspector.md) | Unity |
-| 15 | Mobile Login | [15_mobile_login.md](design/stitch_prompts/15_mobile_login.md) | iOS + Android |
-| 16 | Mobile Asset List | [16_mobile_asset_list.md](design/stitch_prompts/16_mobile_asset_list.md) | iOS + Android |
-| 17 | Mobile Asset Detail | [17_mobile_asset_detail.md](design/stitch_prompts/17_mobile_asset_detail.md) | iOS + Android |
-| 18 | Mobile Notifications | [18_mobile_notifications.md](design/stitch_prompts/18_mobile_notifications.md) | iOS + Android |
-| 19 | Mobile Profile | [19_mobile_profile.md](design/stitch_prompts/19_mobile_profile.md) | iOS + Android |
-
-> See [dev_guidelines.md](../../docs/dev_guidelines.md#figma-workflow) for the full Claude → Stitch → Figma workflow.
-
-## Screenshots
-
-```
-3d_asset_collaboration/docs/screenshots/
-├─ v0.1.0/
-│   ├─ asset-library.png
-│   ├─ asset-detail-3d.png
-│   ├─ iot-dashboard.png
-│   └─ unity-viewport.png
-└─ v0.2.0/
-    └─ ...
-```
-
-> No screenshots yet — will be added when Figma designs are created.
+See [Design Map](design/design_map.md) for all Figma node links and Stitch prompts.

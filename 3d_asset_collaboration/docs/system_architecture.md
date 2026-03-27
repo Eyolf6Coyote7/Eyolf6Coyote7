@@ -1,31 +1,5 @@
 # System Architecture: 3D Asset Collaboration
 
-## Table of Contents
-
-- [Architecture Pattern](#architecture-pattern)
-- [C4 Model](#c4-model)
-  - [Level 1: System Context](#level-1-system-context)
-  - [Level 2: Container Diagram](#level-2-container-diagram)
-  - [Level 3: Component Diagram (Asset API — Hexagonal)](#level-3-component-diagram-asset-api-hexagonal)
-  - [Level 3: Component Diagram (IoT Pipeline)](#level-3-component-diagram-iot-pipeline)
-  - [Level 3: Component Diagram (Asset Portal — React + Three.js)](#level-3-component-diagram-asset-portal-react-threejs)
-  - [Level 3: Component Diagram (Unity Client — C#)](#level-3-component-diagram-unity-client-c)
-  - [Level 3: Component Diagram (Mobile App — Lightweight)](#level-3-component-diagram-mobile-app-lightweight)
-- [Component Overview](#component-overview)
-- [Data Flow (Sequence Diagrams)](#data-flow-sequence-diagrams)
-  - [Flow 1: Upload 3D Asset (gRPC Streaming)](#flow-1-upload-3d-asset-grpc-streaming)
-  - [Flow 2: Search Assets (Elasticsearch)](#flow-2-search-assets-elasticsearch)
-  - [Flow 3: IoT Digital Twin (MQTT → Kafka → Unity)](#flow-3-iot-digital-twin-mqtt-kafka-unity)
-  - [Flow 4: Version Compare](#flow-4-version-compare)
-- [API Contracts (High-level)](#api-contracts-high-level)
-- [Database Schema (High-level)](#database-schema-high-level)
-- [Deployment Diagram](#deployment-diagram)
-- [Security Architecture](#security-architecture)
-- [Infrastructure Dependencies](#infrastructure-dependencies)
-- [Scalability Considerations](#scalability-considerations)
-- [ADRs Created](#adrs-created)
-
----
 
 ## Architecture Pattern
 
@@ -448,89 +422,7 @@ sequenceDiagram
   Maya->>Portal: Rotate model → both viewers rotate in sync
 ```
 
-## API Contracts (High-level)
-
-| Endpoint | Protocol | System | Direction | Description |
-|----------|----------|--------|-----------|-------------|
-| `GET /api/assets` | REST | Asset API | Client → Server | List assets (paginated, filtered) |
-| `GET /api/assets/:id` | REST | Asset API | Client → Server | Asset detail + metadata |
-| `GET /api/assets/search?q=` | REST | Asset API | Client → Server | Elasticsearch search |
-| `GET /api/assets/:id/versions/:v` | REST | Asset API | Client → Server | Get presigned URL for specific version |
-| `AssetService.Upload` | gRPC stream | Asset API | Client → Server | Chunked bidirectional file upload |
-| `AssetService.Download` | gRPC stream | Asset API | Server → Client | Server-side streaming download |
-| `POST /api/assets/:id/tags` | REST | Asset API | Client → Server | Add/remove tags |
-| `POST /api/assets/:id/share` | REST | Asset API | Client → Server | Generate share link with ACL |
-| SignalR `/hub/iot` | SignalR | Asset API | Bidirectional | Realtime IoT sensor updates |
-| SignalR `/hub/assets` | SignalR | Asset API | Bidirectional | Asset change notifications |
-| `POST /internal/iot/alert` | REST | Asset API | IoT Consumer → API | Internal alert from consumer |
-| `POST /internal/ai/tags` | REST | Asset API | AI Service → API | AI-suggested tags callback |
-| `asset3d.iot-sensor-data` | Kafka | — | MQTT Bridge → Consumer | IoT sensor readings |
-| `asset3d.asset-events` | Kafka | — | API → Analytics | Asset lifecycle events |
-| `analytics.asset3d-events` | Kafka | — | API → Analytics | User behavior events |
-
-## Database Schema (High-level)
-
-```mermaid
-erDiagram
-  BRAND ||--o{ ASSET : owns
-  BRAND ||--o{ BRAND_MEMBER : has
-  USER ||--o{ BRAND_MEMBER : belongs_to
-  USER ||--o{ ASSET : uploads
-  ASSET ||--o{ ASSET_VERSION : has
-  ASSET ||--o{ ASSET_TAG : has
-  ASSET ||--o{ SHARE_LINK : has
-  IOT_DEVICE ||--o{ SENSOR_READING : produces
-
-  BRAND {
-    uuid id PK
-    string name
-    string minio_bucket
-  }
-  ASSET {
-    uuid id PK
-    uuid brand_id FK
-    uuid uploaded_by FK
-    string name
-    enum format "glb, fbx"
-    int current_version
-    string thumbnail_url
-    timestamp created_at
-  }
-  ASSET_VERSION {
-    uuid id PK
-    uuid asset_id FK
-    int version_number
-    string minio_object_key
-    string minio_version_id
-    bigint size_bytes
-    timestamp created_at
-  }
-  ASSET_TAG {
-    uuid id PK
-    uuid asset_id FK
-    string tag
-    string source "manual|ai"
-  }
-  IOT_DEVICE {
-    uuid id PK
-    string device_id
-    string type "temperature|vibration|pressure"
-    jsonb location_3d "{x: float, y: float, z: float}"
-  }
-```
-
-> `SENSOR_READING` lives in **TimescaleDB** (separate instance), not main PostgreSQL:
-
-```sql
--- TimescaleDB hypertable
-CREATE TABLE sensor_readings (
-  time        TIMESTAMPTZ NOT NULL,
-  device_id   TEXT        NOT NULL,
-  value       DOUBLE PRECISION,
-  unit        TEXT
-);
-SELECT create_hypertable('sensor_readings', 'time');
-```
+See [Technical Design](technical_design.md) for full API spec and database schema.
 
 ## Deployment Diagram
 

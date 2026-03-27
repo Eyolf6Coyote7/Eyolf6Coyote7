@@ -1,35 +1,5 @@
 # UI/UX Design: Realtime AI Whiteboard
 
-## Table of Contents
-
-- [Design Principles](#design-principles)
-- [Figma Project Structure](#figma-project-structure)
-- [Web UI](#web-ui)
-  - [Screen Inventory (Web)](#screen-inventory-web)
-  - [Screen States](#screen-states)
-  - [Web Layout](#web-layout)
-  - [Web-specific Patterns](#web-specific-patterns)
-  - [Key Components (Web)](#key-components-web)
-- [Mobile UI (iOS + Android)](#mobile-ui-ios-android)
-  - [Screen Inventory (Mobile)](#screen-inventory-mobile)
-  - [Mobile-specific Patterns](#mobile-specific-patterns)
-  - [Mobile Layout](#mobile-layout)
-- [User Flows](#user-flows)
-  - [Web Flow: Create Board + Collaborate](#web-flow-create-board-collaborate)
-  - [Mobile Flow: Quick Board Access](#mobile-flow-quick-board-access)
-- [Interaction Specification](#interaction-specification)
-  - [Web Interactions](#web-interactions)
-  - [Mobile Interactions](#mobile-interactions)
-- [Design Tokens](#design-tokens)
-- [Responsive Breakpoints](#responsive-breakpoints)
-- [Handoff Notes (Figma → Developer)](#handoff-notes-figma-developer)
-- [Accessibility (a11y) Checklist](#accessibility-a11y-checklist)
-- [Figma Version History](#figma-version-history)
-- [Screenshots](#screenshots)
-- [Stitch Prompts](#stitch-prompts)
-
----
-
 ## Design Principles
 
 1. **Canvas-first** — the board IS the product. Minimize chrome, maximize canvas space.
@@ -37,15 +7,6 @@
 3. **AI is a sidekick** — AI chat panel is always accessible but never blocks the canvas.
 4. **Zero friction onboard** — first board creation in < 30 seconds, no tutorial required.
 5. **Works everywhere** — responsive web + native mobile with consistent interaction patterns.
-
-## Figma Project Structure
-
-| File | Content | Link |
-|------|---------|------|
-| Whiteboard — Design System | Shared components, tokens, icons | [Figma URL TBD] |
-| Whiteboard — Wireframes | Low-fi wireframes for all screens | [Figma URL TBD] |
-| Whiteboard — UI Design | High-fi mockups (final) | [Figma URL TBD] |
-| Whiteboard — Prototype | Interactive prototype with transitions | [Figma URL TBD] |
 
 ## Web UI
 
@@ -281,52 +242,4 @@ graph TD
 - [ ] Reduced motion: disable canvas animations when `prefers-reduced-motion` is set
 - [ ] Empty state illustrations have alt text
 
-## Figma Version History
-
-| Version | Git Tag | Date | Figma Page | What Changed |
-|---------|---------|------|-----------|-------------|
-| — | — | — | — | No designs yet — UI spec complete, ready to start Figma |
-
-> See [dev_guidelines.md](../../docs/dev_guidelines.md#figma--stitch-version-control) for Figma operation guide.
-
-## Screenshots
-
-Screenshots are exported from Figma on every milestone and stored in `docs/screenshots/`:
-
-```
-realtime_ai_whiteboard/docs/screenshots/
-├─ v0.1.0/
-│   ├─ dashboard.png
-│   ├─ canvas.png
-│   └─ ai-chat.png
-└─ v0.2.0/
-    └─ ...
-```
-
-> No screenshots yet — will be added when Figma designs are created.
-
-## Stitch Prompts
-
-Each screen has a dedicated Stitch prompt file in `docs/design/stitch_prompts/`. These contain detailed natural-language descriptions ready to paste into [Google Stitch](https://stitch.withgoogle.com) for rapid layout generation, plus design tokens, states to generate, and acceptance criteria.
-
-**Workflow**: Copy the "Stitch Prompt" section → paste into Stitch → pick best layout → recreate/refine in Figma.
-
-| # | Screen | Prompt File | Platform |
-|---|--------|------------|----------|
-| 01 | Landing Page | [01_landing.md](design/stitch_prompts/01_landing.md) | Web |
-| 02 | Sign Up / Login | [02_auth.md](design/stitch_prompts/02_auth.md) | Web |
-| 03 | Dashboard | [03_dashboard.md](design/stitch_prompts/03_dashboard.md) | Web |
-| 04 | Board Canvas | [04_canvas.md](design/stitch_prompts/04_canvas.md) | Web |
-| 05 | AI Chat Panel | [05_ai_chat_panel.md](design/stitch_prompts/05_ai_chat_panel.md) | Web |
-| 06 | Board Settings | [06_board_settings.md](design/stitch_prompts/06_board_settings.md) | Web |
-| 07 | Account Settings | [07_account_settings.md](design/stitch_prompts/07_account_settings.md) | Web |
-| 08 | Pricing | [08_pricing.md](design/stitch_prompts/08_pricing.md) | Web |
-| 09 | Mobile Home | [09_mobile_home.md](design/stitch_prompts/09_mobile_home.md) | iOS + Android |
-| 10 | Mobile Canvas | [10_mobile_canvas.md](design/stitch_prompts/10_mobile_canvas.md) | iOS + Android |
-| 11 | Mobile AI Chat | [11_mobile_ai_chat.md](design/stitch_prompts/11_mobile_ai_chat.md) | iOS + Android |
-| 12 | Mobile Splash | [12_mobile_splash.md](design/stitch_prompts/12_mobile_splash.md) | iOS + Android |
-| 13 | Mobile Sign Up / Login | [13_mobile_auth.md](design/stitch_prompts/13_mobile_auth.md) | iOS + Android |
-| 14 | Mobile Board Settings | [14_mobile_board_settings.md](design/stitch_prompts/14_mobile_board_settings.md) | iOS + Android |
-| 15 | Mobile Account | [15_mobile_account.md](design/stitch_prompts/15_mobile_account.md) | iOS + Android |
-
-> See [dev_guidelines.md](../../docs/dev_guidelines.md#figma-workflow) for the full Claude → Stitch → Figma workflow.
+See [Design Map](design/design_map.md) for all Figma node links and Stitch prompts.

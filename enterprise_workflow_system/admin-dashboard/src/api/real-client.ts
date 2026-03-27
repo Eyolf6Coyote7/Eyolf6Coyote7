@@ -2,7 +2,7 @@ import axios from 'axios'
 import type { User, Template, AuditEntry, KpiData } from './mock-client'
 
 const http = axios.create({
-  baseURL: '/api/admin',
+  baseURL: '/api/v1',
   timeout: 10000,
 })
 

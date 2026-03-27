@@ -1,6 +1,10 @@
 name: CI — Workflow
 
 on:
+  push:
+    branches: [dev, stable]
+    paths:
+      - 'enterprise_workflow_system/**'
   pull_request:
     paths:
       - 'enterprise_workflow_system/**'
@@ -77,3 +81,161 @@ jobs:
           node-version: 20
       - run: pnpm install
       - run: npx prettier --check "src/**/*.{ts,tsx,vue}"
+
+  test-employee-portal:
+    name: Test + Coverage — Employee Portal
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: enterprise_workflow_system/employee-portal
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install
+      - run: pnpm vitest run --coverage
+      - name: Extract coverage %
+        id: cov
+        run: |
+          PCT=$(node -e "const s=require('./coverage/coverage-summary.json');console.log(s.total.statements.pct)")
+          echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+      - name: Update badge
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ba5e6bd35946886986dbba31e9252f66
+          filename: workflow-portal.json
+          label: portal
+          message: ${{ steps.cov.outputs.pct }}%
+          valColorRange: ${{ steps.cov.outputs.pct }}
+          minColorRange: 30
+          maxColorRange: 80
+
+  test-admin-dashboard:
+    name: Test + Coverage — Admin Dashboard
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: enterprise_workflow_system/admin-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install
+      - run: pnpm vitest run --coverage
+      - name: Extract coverage %
+        id: cov
+        run: |
+          PCT=$(node -e "const s=require('./coverage/coverage-summary.json');console.log(s.total.statements.pct)")
+          echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+      - name: Update badge
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ba5e6bd35946886986dbba31e9252f66
+          filename: workflow-admin.json
+          label: admin
+          message: ${{ steps.cov.outputs.pct }}%
+          valColorRange: ${{ steps.cov.outputs.pct }}
+          minColorRange: 30
+          maxColorRange: 80
+
+  test-workflow-api:
+    name: Test + Coverage — Workflow API
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: enterprise_workflow_system/workflow-api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - run: ./gradlew test jacocoTestReport
+      - name: Extract coverage %
+        id: cov
+        run: |
+          PCT=$(grep -oP 'INSTRUCTION.*?(\d+)%' build/reports/jacoco/test/html/index.html | grep -oP '\d+' | head -1 || echo "0")
+          echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+      - name: Update badge
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ba5e6bd35946886986dbba31e9252f66
+          filename: workflow-api.json
+          label: api
+          message: ${{ steps.cov.outputs.pct }}%
+          valColorRange: ${{ steps.cov.outputs.pct }}
+          minColorRange: 30
+          maxColorRange: 80
+
+  test-notification-worker:
+    name: Test + Coverage — Notification Worker
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: enterprise_workflow_system/notification-worker
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: ./gradlew test jacocoTestReport
+      - name: Extract coverage %
+        id: cov
+        run: |
+          PCT=$(grep -oP 'INSTRUCTION.*?(\d+)%' build/reports/jacoco/test/html/index.html | grep -oP '\d+' | head -1 || echo "0")
+          echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+      - name: Update badge
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ba5e6bd35946886986dbba31e9252f66
+          filename: workflow-notification.json
+          label: notification
+          message: ${{ steps.cov.outputs.pct }}%
+          valColorRange: ${{ steps.cov.outputs.pct }}
+          minColorRange: 30
+          maxColorRange: 80
+
+  test-admin-api:
+    name: Test + Coverage — Admin API
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: enterprise_workflow_system/admin-api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: xdebug
+      - run: composer install --no-interaction --prefer-dist
+      - run: vendor/bin/phpunit --coverage-clover=coverage.xml --coverage-text | tee coverage-output.txt
+      - name: Extract coverage %
+        id: cov
+        run: |
+          PCT=$(grep -oP 'Lines:\s+\K[\d.]+' coverage-output.txt | head -1 || echo "0")
+          echo "pct=${PCT%.*}" >> "$GITHUB_OUTPUT"
+      - name: Update badge
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ba5e6bd35946886986dbba31e9252f66
+          filename: workflow-php.json
+          label: php
+          message: ${{ steps.cov.outputs.pct }}%
+          valColorRange: ${{ steps.cov.outputs.pct }}
+          minColorRange: 30
+          maxColorRange: 80

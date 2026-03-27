@@ -7,27 +7,14 @@ import { createI18n } from 'vue-i18n'
 
 import App from './App.vue'
 import router from './router'
+import en from './i18n/en.json'
+import zhTW from './i18n/zh-TW.json'
 
 const i18n = createI18n({
-  locale: 'en',
+  legacy: false,
+  locale: localStorage.getItem('lang') || 'en',
   fallbackLocale: 'en',
-  messages: {
-    en: {
-      nav: {
-        dashboard: 'Dashboard',
-        newRequest: 'New Request',
-        approvals: 'Approvals',
-        history: 'History',
-        profile: 'Profile',
-      },
-      auth: {
-        login: 'Login',
-        logout: 'Logout',
-        username: 'Username',
-        password: 'Password',
-      },
-    },
-  },
+  messages: { en, 'zh-TW': zhTW },
 })
 
 const app = createApp(App)

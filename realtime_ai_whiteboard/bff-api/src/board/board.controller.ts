@@ -18,7 +18,7 @@ import { UpdateBoardDto } from './dto/update-board.dto';
 import { ShareBoardDto } from './dto/share-board.dto';
 import { CurrentUser, AuthUser } from '../common/auth-user.decorator';
 
-@Controller('api/web/boards')
+@Controller('boards')
 @UseGuards(AuthGuard('jwt'))
 export class BoardController {
   constructor(private boardService: BoardService) {}
@@ -63,7 +63,7 @@ export class BoardController {
   }
 }
 
-@Controller('api/web/guest')
+@Controller('guest')
 export class GuestController {
   constructor(private boardService: BoardService) {}
 

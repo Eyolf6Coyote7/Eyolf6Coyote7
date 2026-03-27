@@ -4,14 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.workflow.mobile.ui.screens.ApprovalsScreen
-import com.workflow.mobile.ui.screens.DashboardScreen
-import com.workflow.mobile.ui.screens.LoginScreen
+import com.workflow.mobile.ui.screens.*
 
 object Routes {
     const val LOGIN = "login"
     const val DASHBOARD = "dashboard"
     const val APPROVALS = "approvals"
+    const val NOTIFICATIONS = "notifications"
+    const val PROFILE = "profile"
 }
 
 @Composable
@@ -38,6 +38,19 @@ fun WorkflowApp() {
         }
         composable(Routes.APPROVALS) {
             ApprovalsScreen(onBack = { navController.popBackStack() })
+        }
+        composable(Routes.NOTIFICATIONS) {
+            NotificationsScreen(onBack = { navController.popBackStack() })
+        }
+        composable(Routes.PROFILE) {
+            ProfileScreen(
+                onBack = { navController.popBackStack() },
+                onLogout = {
+                    navController.navigate(Routes.LOGIN) {
+                        popUpTo(0) { inclusive = true }
+                    }
+                }
+            )
         }
     }
 }

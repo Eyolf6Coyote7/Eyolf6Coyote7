@@ -1,22 +1,5 @@
 # PRD: Enterprise Workflow System
 
-## Table of Contents
-
-- [Overview](#overview)
-- [User Journey Map](#user-journey-map)
-  - [Wei (Process Engineer) Journey](#wei-process-engineer-journey)
-  - [Lin (Engineering Manager) Journey](#lin-engineering-manager-journey)
-- [Feature List](#feature-list)
-- [Feature Details](#feature-details)
-  - [F1: Submit Approval Request](#f1-submit-approval-request)
-  - [F3: Approve / Reject with Comment](#f3-approve-reject-with-comment)
-  - [F7: Configurable Workflow Templates](#f7-configurable-workflow-templates)
-  - [F12: Immutable Audit Log](#f12-immutable-audit-log)
-- [Non-functional Requirements](#non-functional-requirements)
-- [Release Criteria](#release-criteria)
-- [Dependencies](#dependencies)
-
----
 
 ## Overview
 

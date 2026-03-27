@@ -1,20 +1,5 @@
 # Development Roadmap: 3D Asset Collaboration
 
-## Table of Contents
-
-- [Effort Estimation Method](#effort-estimation-method)
-- [Definition of Done](#definition-of-done)
-- [Milestones](#milestones)
-  - [M1: Foundation — `3d-asset/v0.1.0`](#m1-foundation-3d-assetv010)
-  - [M2: Upload + Preview — `3d-asset/v0.2.0`](#m2-upload-preview-3d-assetv020)
-  - [M3: IoT + AI — `3d-asset/v0.3.0`](#m3-iot-ai-3d-assetv030)
-  - [M4: Unity + Mobile — `3d-asset/v0.4.0`](#m4-unity-mobile-3d-assetv040)
-  - [M5: Polish + Release — `3d-asset/v1.0.0`](#m5-polish-release-3d-assetv100)
-- [Dependency Graph](#dependency-graph)
-- [Release Plan](#release-plan)
-- [Tech Debt Planned](#tech-debt-planned)
-
----
 
 ## Effort Estimation Method
 

@@ -1,5 +1,14 @@
 /// <reference types="vite/client" />
 
+declare module '*.vue' {
+  import type { DefineComponent } from 'vue'
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  const component: DefineComponent<{}, {}, any>
+  export default component
+}
+
+declare module '*.css'
+
 interface ImportMetaEnv {
   readonly VITE_MOCK: string
   readonly VITE_API_URL: string

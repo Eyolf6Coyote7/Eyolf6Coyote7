@@ -1,34 +1,43 @@
 import { Tabs } from "expo-router";
-import { Text } from "react-native";
-
-function TabIcon({ label, focused }: { label: string; focused: boolean }) {
-  const icons: Record<string, string> = {
-    Boards: "📋",
-    "AI Chat": "💬",
-    Profile: "👤",
-  };
-  return (
-    <Text style={{ fontSize: 22, opacity: focused ? 1 : 0.5 }}>
-      {icons[label] ?? "●"}
-    </Text>
-  );
-}
+import { View, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { colors } from "../../src/theme";
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#4F46E5",
-        headerStyle: { backgroundColor: "#4F46E5" },
-        headerTintColor: "#fff",
+        headerShown: false,
+        tabBarActiveTintColor: colors.primaryDark,
+        tabBarInactiveTintColor: colors.tabInactive,
+        tabBarStyle: styles.tabBar,
+        tabBarLabelStyle: styles.tabLabel,
       }}
     >
       <Tabs.Screen
         name="boards"
         options={{
-          title: "Boards",
-          tabBarIcon: ({ focused }) => (
-            <TabIcon label="Boards" focused={focused} />
+          title: "Home",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="search"
+        options={{
+          title: "Search",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="search" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="create"
+        options={{
+          title: "Create",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="add-circle-outline" size={size} color={color} />
           ),
         }}
       />
@@ -36,20 +45,44 @@ export default function TabLayout() {
         name="chat"
         options={{
           title: "AI Chat",
-          tabBarIcon: ({ focused }) => (
-            <TabIcon label="AI Chat" focused={focused} />
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons
+              name="chatbubble-ellipses-outline"
+              size={size}
+              color={color}
+            />
           ),
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="settings"
         options={{
-          title: "Profile",
-          tabBarIcon: ({ focused }) => (
-            <TabIcon label="Profile" focused={focused} />
+          title: "Settings",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings-outline" size={size} color={color} />
           ),
         }}
       />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  tabBar: {
+    backgroundColor: "rgba(255, 255, 255, 0.85)",
+    borderTopWidth: 0,
+    paddingTop: 8,
+    paddingBottom: 24,
+    height: 80,
+    shadowColor: "#004AC6",
+    shadowOpacity: 0.04,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: -4 },
+    elevation: 8,
+  },
+  tabLabel: {
+    fontSize: 10,
+    fontWeight: "500",
+    letterSpacing: 0.5,
+  },
+});

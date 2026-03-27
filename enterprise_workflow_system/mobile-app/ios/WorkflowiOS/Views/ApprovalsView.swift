@@ -2,75 +2,108 @@ import SwiftUI
 
 struct ApprovalsView: View {
     @State private var approvals = MockData.approvalItems
+    @State private var selectedTab = 0
+    private let tabs = ["All (8)", "Pending (5)", "Urgent (2)"]
+    private let primaryDark = Color(hex: "0060A9")
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(approvals) { item in
-                    ApprovalRow(item: item)
-                        .swipeActions(edge: .trailing) {
-                            Button {
-                                updateStatus(id: item.id, status: .rejected)
-                            } label: {
-                                Label("Reject", systemImage: "xmark")
-                            }
-                            .tint(.red)
+            VStack(spacing: 0) {
+                // Segmented Control
+                HStack(spacing: 0) {
+                    ForEach(0..<tabs.count, id: \.self) { i in
+                        Button {
+                            selectedTab = i
+                        } label: {
+                            Text(tabs[i])
+                                .font(.system(size: 13, weight: selectedTab == i ? .semibold : .medium))
+                                .foregroundColor(selectedTab == i ? .white : Color(hex: "404752"))
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 32)
+                                .background(selectedTab == i ? primaryDark : Color.clear)
+                                .cornerRadius(4)
                         }
-                        .swipeActions(edge: .leading) {
-                            Button {
-                                updateStatus(id: item.id, status: .approved)
-                            } label: {
-                                Label("Approve", systemImage: "checkmark")
-                            }
-                            .tint(.green)
+                    }
+                }
+                .padding(4)
+                .background(Color(hex: "F2F4F7"))
+                .cornerRadius(8)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(Color.white)
+
+                Divider()
+
+                // Card List
+                ScrollView {
+                    LazyVStack(spacing: 12) {
+                        ForEach(approvals) { approval in
+                            ApprovalListCard(approval: approval)
                         }
+                    }
+                    .padding(16)
+                }
+                .background(Color(hex: "F7F9FC"))
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Image(systemName: "line.3.horizontal").foregroundColor(Color(hex: "0F172A"))
+                }
+                ToolbarItem(placement: .principal) {
+                    Text("Approval Queue").font(.system(size: 16, weight: .semibold)).tracking(-0.4)
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Image(systemName: "line.3.horizontal.decrease").foregroundColor(Color(hex: "0F172A"))
                 }
             }
-            .listStyle(.plain)
-            .navigationTitle("Approvals")
-        }
-    }
-
-    private func updateStatus(id: UUID, status: ApprovalStatus) {
-        if let index = approvals.firstIndex(where: { $0.id == id }) {
-            approvals[index].status = status
         }
     }
 }
 
-struct ApprovalRow: View {
-    let item: ApprovalItem
-
-    var statusColor: Color {
-        switch item.status {
-        case .waiting: return .orange
-        case .approved: return .green
-        case .rejected: return .red
-        }
-    }
+private struct ApprovalListCard: View {
+    let approval: ApprovalItem
+    private let primaryDark = Color(hex: "0060A9")
 
     var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(item.title)
-                    .font(.subheadline.bold())
-                Text("From: \(item.requester)")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+        HStack(spacing: 0) {
+            if approval.priority == "Urgent" {
+                Rectangle().fill(Color(hex: "F56C6C")).frame(width: 4)
             }
-            Spacer()
-            Text(item.status.rawValue.capitalized)
-                .font(.caption2.bold())
-                .foregroundColor(statusColor)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 4)
-                .background(statusColor.opacity(0.15))
-                .cornerRadius(6)
-        }
-        .padding(.vertical, 4)
-    }
-}
 
-#Preview {
-    ApprovalsView()
+            VStack(alignment: .leading, spacing: 8) {
+                // ID + Date
+                HStack {
+                    Text("#\(approval.id)").font(.system(size: 13, weight: .bold)).foregroundColor(primaryDark)
+                    Spacer()
+                    Text(approval.date).font(.system(size: 12)).foregroundColor(Color(hex: "707784"))
+                }
+
+                // Title
+                Text(approval.title).font(.system(size: 15, weight: .bold)).foregroundColor(Color(hex: "191C1E"))
+
+                // Submitter
+                Text("\(approval.requester) · \(approval.department)").font(.system(size: 13)).foregroundColor(Color(hex: "404752"))
+
+                // Priority + Amount
+                HStack {
+                    Text(approval.priority)
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundColor(approval.priorityColor)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 4)
+                        .background(approval.priorityBgColor)
+                        .cornerRadius(12)
+                    Spacer()
+                    if approval.amount != "—" {
+                        Text(approval.amount).font(.system(size: 14, weight: .bold)).foregroundColor(Color(hex: "191C1E"))
+                    }
+                }
+            }
+            .padding(16)
+        }
+        .background(Color.white)
+        .cornerRadius(8)
+        .shadow(color: approval.priority == "Urgent" ? Color(hex: "F56C6C").opacity(0.1) : Color.black.opacity(0.05), radius: approval.priority == "Urgent" ? 16 : 12, x: 0, y: 2)
+    }
 }

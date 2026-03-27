@@ -1,6 +1,10 @@
 name: CI — 3D Asset
 
 on:
+  push:
+    branches: [dev, stable]
+    paths:
+      - '3d_asset_collaboration/**'
   pull_request:
     paths:
       - '3d_asset_collaboration/**'
@@ -61,3 +65,126 @@ jobs:
           node-version: 20
       - run: pnpm install
       - run: npx prettier --check "src/**/*.{ts,tsx}"
+
+  test-asset-portal:
+    name: Test + Coverage — Asset Portal
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 3d_asset_collaboration/asset-portal
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install
+      - run: VITE_MOCK=true pnpm vitest run --coverage
+      - name: Extract coverage %
+        id: cov
+        run: |
+          PCT=$(node -e "const s=require('./coverage/coverage-summary.json');console.log(s.total.statements.pct)")
+          echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+      - name: Update badge
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ba5e6bd35946886986dbba31e9252f66
+          filename: asset-web.json
+          label: web
+          message: ${{ steps.cov.outputs.pct }}%
+          valColorRange: ${{ steps.cov.outputs.pct }}
+          minColorRange: 30
+          maxColorRange: 80
+
+  test-asset-api:
+    name: Test + Coverage — Asset API
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 3d_asset_collaboration
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet test asset-api.Tests/asset-api.Tests.csproj --collect:"XPlat Code Coverage" --results-directory ./coverage
+      - name: Extract coverage %
+        id: cov
+        run: |
+          PCT=$(grep -oP 'line-rate="\K[\d.]+' coverage/*/coverage.cobertura.xml | head -1 | awk '{printf "%.1f", $1 * 100}')
+          echo "pct=${PCT:-0}" >> "$GITHUB_OUTPUT"
+      - name: Update badge
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ba5e6bd35946886986dbba31e9252f66
+          filename: asset-api.json
+          label: api
+          message: ${{ steps.cov.outputs.pct }}%
+          valColorRange: ${{ steps.cov.outputs.pct }}
+          minColorRange: 30
+          maxColorRange: 80
+
+  test-ai-service:
+    name: Test + Coverage — AI Service
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 3d_asset_collaboration/ai-service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt pytest pytest-cov
+      - run: pytest --cov=src --cov-report=json:coverage.json --cov-report=term
+      - name: Extract coverage %
+        id: cov
+        run: |
+          PCT=$(python -c "import json;d=json.load(open('coverage.json'));print(round(d['totals']['percent_covered'],1))")
+          echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+      - name: Update badge
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ba5e6bd35946886986dbba31e9252f66
+          filename: asset-ai.json
+          label: ai
+          message: ${{ steps.cov.outputs.pct }}%
+          valColorRange: ${{ steps.cov.outputs.pct }}
+          minColorRange: 30
+          maxColorRange: 80
+
+  test-iot-consumer:
+    name: Test + Coverage — IoT Consumer
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 3d_asset_collaboration
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet test iot-consumer.Tests/iot-consumer.Tests.csproj --collect:"XPlat Code Coverage" --results-directory ./coverage-iot
+      - name: Extract coverage %
+        id: cov
+        run: |
+          PCT=$(grep -oP 'line-rate="\K[\d.]+' coverage-iot/*/coverage.cobertura.xml | head -1 | awk '{printf "%.1f", $1 * 100}')
+          echo "pct=${PCT:-0}" >> "$GITHUB_OUTPUT"
+      - name: Update badge
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ba5e6bd35946886986dbba31e9252f66
+          filename: asset-iot.json
+          label: iot
+          message: ${{ steps.cov.outputs.pct }}%
+          valColorRange: ${{ steps.cov.outputs.pct }}
+          minColorRange: 30
+          maxColorRange: 80

@@ -2,105 +2,80 @@
 
 > Multi-step approval with Temporal orchestration + Kafka event sourcing + immutable audit trail.
 
-**Industry:** Semiconductor | **Architecture:** Clean Architecture + DDD + CQRS | **13 systems**
+**Industry:** Semiconductor | **Architecture:** Clean Architecture + DDD + CQRS
 
 ## Systems
 
-| # | System | Directory | Tech | Port |
-|---|--------|-----------|------|------|
-| 1 | PostgreSQL | docker | PostgreSQL 16 | 5433 |
-| 2 | Redis | docker | Redis 7.2 | 6381 |
-| 3 | Kafka | docker | Apache Kafka 3.7 | 9095 |
-| 4 | Keycloak | docker | Keycloak 25 | 8080 |
-| 5 | Temporal | docker | Temporal 1.24 | 7233 |
-| 6 | Temporal UI | docker | Temporal UI 2.28 | 8233 |
-| 7 | MinIO | docker | MinIO | 9002/9003 |
-| 8 | Unleash | docker | Unleash | 4243 |
-| 9 | MailHog | docker | MailHog | 1026/8026 |
-| 10 | Workflow API | `workflow-api/` | Spring Boot + Kotlin + GraphQL (DGS) | 4002 |
-| 11 | Admin API | `admin-api/` | Laravel 11 (PHP) | 4012 |
-| 12 | Employee Portal | `employee-portal/` | Vue 3 + Pinia + Element Plus | 3002 |
-| 13 | Admin Dashboard | `admin-dashboard/` | Vue 3 + ECharts | 3012 |
+| # | System | Tech | Port |
+|---|--------|------|------|
+| 1 | PostgreSQL | PostgreSQL 16 | 5433 |
+| 2 | Redis | Redis 7.2 | 6381 |
+| 3 | Kafka | Apache Kafka 3.7 | 9095 |
+| 4 | Keycloak | Keycloak 25 | 8080 |
+| 5 | Temporal | Temporal 1.24 | 7233 |
+| 6 | Temporal UI | Temporal UI 2.32 | 8233 |
+| 7 | MinIO | MinIO | 9002 |
+| 8 | Unleash | Unleash | 4243 |
+| 9 | MailHog | MailHog | 8026 |
+| 10 | Workflow API | Spring Boot + Kotlin + GraphQL (DGS) | 4002 |
+| 11 | Admin API | Laravel 11 (PHP) | 4003 |
+| 12 | Notification Worker | Kotlin + Kafka consumer | — |
+| 13 | Employee Portal | Vue 3 + Pinia + Element Plus | 5174 |
+| 14 | Admin Dashboard | Vue 3 + ECharts | 5175 |
+| 15 | Mobile App (Android) | Kotlin + Jetpack Compose | — |
+| 16 | Mobile App (iOS) | Swift + SwiftUI | — |
 
 ## Quick Start
 
-### Demo Mode (no backend needed)
+### Demo Mode
 
 ```bash
-# Employee Portal
-cd employee-portal && pnpm install && pnpm dev
-# Open http://localhost:3002 (login: demo@example.com / demo)
-
-# Admin Dashboard
-cd admin-dashboard && pnpm install && pnpm dev
-# Open http://localhost:3012 (login: admin / admin)
+cd employee-portal && pnpm install && VITE_MOCK=true pnpm dev   # http://localhost:5174
+cd admin-dashboard && pnpm install && VITE_MOCK=true pnpm dev   # http://localhost:5175
 ```
 
-### Real Mode (full stack)
-
-#### Start
+### Real Mode
 
 ```bash
-# 1. Infrastructure (9 Docker services)
+# 1. Docker infra (9 services)
 docker compose up -d
 
 # 2. Workflow API (Kotlin + GraphQL)
-cd workflow-api
-./gradlew bootRun                     # GraphiQL: http://localhost:4002/graphiql
+cd workflow-api && ./gradlew bootRun
 
 # 3. Admin API (Laravel)
-cd admin-api
-composer install                      # first time only
-cp .env.example .env                  # first time only
-php artisan key:generate              # first time only
-php artisan migrate --force           # first time only
-php artisan serve --port=4012
+cd admin-api && composer install && php artisan serve --port=4003
 
-# 4. Notification Worker (Kotlin + Kafka)
-cd notification-worker
-./gradlew bootRun
+# 4. Notification Worker
+cd notification-worker && ./gradlew bootRun
 
-# 5. Employee Portal (Vue)
-cd employee-portal
-echo "VITE_MOCK=false" > .env.local   # switch to real mode
-pnpm install && pnpm dev
+# 5. Employee Portal
+cd employee-portal && pnpm install && pnpm dev
 
-# 6. Admin Dashboard (Vue)
-cd admin-dashboard
-echo "VITE_MOCK=false" > .env.local   # switch to real mode
-pnpm install && pnpm dev
+# 6. Admin Dashboard
+cd admin-dashboard && pnpm install && pnpm dev
 ```
 
-#### Stop
+### Stop
 
 ```bash
-# Stop app services: Ctrl+C in each terminal
-
-# Stop Docker infrastructure
+# Ctrl+C each terminal, then:
 docker compose down
 ```
-
-### All Service URLs
-
-| Service | URL |
-|---------|-----|
-| Employee Portal | http://localhost:3002 |
-| Admin Dashboard | http://localhost:3012 |
-| Workflow API (GraphiQL) | http://localhost:4002/graphiql |
-| Admin API | http://localhost:4012/api/config |
-| Keycloak | http://localhost:8080 |
-| Temporal UI | http://localhost:8233 |
-| MailHog | http://localhost:8026 |
-| MinIO Console | http://localhost:9003 |
-| Unleash | http://localhost:4243 |
 
 ## Prerequisites
 
 - Node.js 20+ / pnpm 9+
-- JDK 21 (for Kotlin services)
-- PHP 8.3 + Composer (for Admin API)
+- JDK 17+
+- PHP 8.2+ / Composer
 - Docker + Docker Compose
+
+### Storybook
+
+```bash
+cd employee-portal && pnpm storybook   # http://localhost:6006
+```
 
 ## Documentation
 
-See [docs/](docs/) for architecture, technical design, ADRs, and development roadmap.
+See [docs/](docs/) for ConOps, PRD, UI/UX, Architecture, Technical Design, Roadmap, Testing.
