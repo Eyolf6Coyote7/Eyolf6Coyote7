@@ -1,6 +1,9 @@
 """Tests for FastAPI endpoints."""
 
+import io
+
 from fastapi.testclient import TestClient
+from PIL import Image
 
 from src.main import app
 
@@ -28,10 +31,6 @@ def test_tag_mock_endpoint():
 
 def test_tag_endpoint_with_image():
     # Create a simple 1x1 PNG
-    import io
-
-    from PIL import Image
-
     img = Image.new("RGB", (10, 10), color="blue")
     buf = io.BytesIO()
     img.save(buf, format="PNG")
