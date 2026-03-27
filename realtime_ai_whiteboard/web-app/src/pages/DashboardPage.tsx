@@ -308,16 +308,18 @@ export function DashboardPage() {
                       <div>
                         <div className={styles.boardCardHeader}>
                           <h3 className={styles.boardCardTitle}>{board.title}</h3>
-                          <button
-                            className={styles.boardCardMenu}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <svg width="4" height="16" viewBox="0 0 4 16" fill="none">
-                              <circle cx="2" cy="2" r="1.5" fill="currentColor" />
-                              <circle cx="2" cy="8" r="1.5" fill="currentColor" />
-                              <circle cx="2" cy="14" r="1.5" fill="currentColor" />
-                            </svg>
-                          </button>
+                          <DemoTooltip message={t('demo.editRequired')}>
+                            <button
+                              className={styles.boardCardMenu}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <svg width="4" height="16" viewBox="0 0 4 16" fill="none">
+                                <circle cx="2" cy="2" r="1.5" fill="currentColor" />
+                                <circle cx="2" cy="8" r="1.5" fill="currentColor" />
+                                <circle cx="2" cy="14" r="1.5" fill="currentColor" />
+                              </svg>
+                            </button>
+                          </DemoTooltip>
                         </div>
                         <p className={styles.boardCardDate}>{editTime}</p>
                       </div>

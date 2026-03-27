@@ -538,29 +538,33 @@ function TeamTab() {
             </div>
             <div className={styles.memberActions}>
               <div className={styles.roleBadge}>{m.role}</div>
-              <button className={styles.moreBtn}>
-                <svg width="4" height="16" viewBox="0 0 4 16" fill="none">
-                  <circle cx="2" cy="2" r="1.5" fill="currentColor" />
-                  <circle cx="2" cy="8" r="1.5" fill="currentColor" />
-                  <circle cx="2" cy="14" r="1.5" fill="currentColor" />
-                </svg>
-              </button>
+              <DemoTooltip message={t('demo.editRequired')}>
+                <button className={styles.moreBtn}>
+                  <svg width="4" height="16" viewBox="0 0 4 16" fill="none">
+                    <circle cx="2" cy="2" r="1.5" fill="currentColor" />
+                    <circle cx="2" cy="8" r="1.5" fill="currentColor" />
+                    <circle cx="2" cy="14" r="1.5" fill="currentColor" />
+                  </svg>
+                </button>
+              </DemoTooltip>
             </div>
           </div>
         ))}
         <div className={styles.loadMoreFooter}>
-          <button className={styles.loadMoreBtn}>
-            {t('settings.loadMore')}
-            <svg width="7" height="5" viewBox="0 0 7 5" fill="none">
-              <path
-                d="M1 1l2.5 3L6 1"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+          <DemoTooltip message={t('demo.loadMoreRequired')}>
+            <button className={styles.loadMoreBtn}>
+              {t('settings.loadMore')}
+              <svg width="7" height="5" viewBox="0 0 7 5" fill="none">
+                <path
+                  d="M1 1l2.5 3L6 1"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </DemoTooltip>
         </div>
       </div>
 
@@ -591,7 +595,9 @@ function TeamTab() {
               <div className={styles.pendingTime}>Sent 2 hours ago</div>
             </div>
           </div>
-          <button className={styles.resendBtn}>{t('settings.resend')}</button>
+          <DemoTooltip message={t('demo.resendRequired')}>
+            <button className={styles.resendBtn}>{t('settings.resend')}</button>
+          </DemoTooltip>
         </div>
       </div>
 

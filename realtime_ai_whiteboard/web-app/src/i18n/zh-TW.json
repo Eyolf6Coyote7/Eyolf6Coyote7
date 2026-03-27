@@ -216,7 +216,10 @@
     "transferRequired": "轉移需要後端",
     "planRequired": "方案管理需要後端",
     "contactRequired": "聯絡銷售需要後端",
-    "trialRequired": "免費試用需要後端"
+    "trialRequired": "免費試用需要後端",
+    "editRequired": "編輯需要後端",
+    "loadMoreRequired": "載入更多需要後端",
+    "resendRequired": "重新發送需要後端"
   },
   "footer": {
     "copyright": "© 2024 Whiteboard AI. The Ethereal Workshop.",

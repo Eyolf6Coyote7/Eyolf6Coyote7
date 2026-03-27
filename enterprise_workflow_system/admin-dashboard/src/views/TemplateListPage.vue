@@ -134,15 +134,21 @@ const cards = [
         <div class="tpl-footer">
           <span class="tpl-edited">Last edited: {{ c.draft ? 'Just now' : '2 days ago' }}</span>
           <div class="tpl-actions">
-            <button class="tpl-btn">
-              <span class="material-symbols-outlined" style="font-size: 14px">edit</span>
-            </button>
-            <button class="tpl-btn">
-              <span class="material-symbols-outlined" style="font-size: 14px">content_copy</span>
-            </button>
-            <button class="tpl-btn">
-              <span class="material-symbols-outlined" style="font-size: 14px">delete</span>
-            </button>
+            <DemoTooltip :message="$t('demo.actionRequired')">
+              <button class="tpl-btn">
+                <span class="material-symbols-outlined" style="font-size: 14px">edit</span>
+              </button>
+            </DemoTooltip>
+            <DemoTooltip :message="$t('demo.actionRequired')">
+              <button class="tpl-btn">
+                <span class="material-symbols-outlined" style="font-size: 14px">content_copy</span>
+              </button>
+            </DemoTooltip>
+            <DemoTooltip :message="$t('demo.actionRequired')">
+              <button class="tpl-btn">
+                <span class="material-symbols-outlined" style="font-size: 14px">delete</span>
+              </button>
+            </DemoTooltip>
           </div>
         </div>
       </div>
