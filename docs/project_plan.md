@@ -106,15 +106,15 @@ Every frontend has two API clients, switched by environment variable:
 ```
 src/api/
 ├─ client.interface.ts    ← abstract API interface
-├─ real-client.ts         ← fetch from local backend (npm run dev)
-├─ mock-client.ts         ← return mock JSON (npm run dev:mock)
+├─ real-client.ts         ← fetch from local backend (pnpm dev)
+├─ mock-client.ts         ← return mock JSON (pnpm dev:mock)
 └─ index.ts               ← auto-select based on VITE_API_URL env
 ```
 
 ```bash
-npm run dev          # .env.local   → VITE_API_URL=http://localhost:4001 (real backend)
-npm run dev:mock     # .env.mock    → uses mock data (no backend needed)
-npm run build:demo   # build static demo for GitHub Pages deployment
+pnpm dev          # .env.local   → VITE_API_URL=http://localhost:4001 (real backend)
+pnpm dev:mock     # .env.mock    → uses mock data (no backend needed)
+pnpm build:demo   # build static demo for GitHub Pages deployment
 ```
 
 ### Development Progress

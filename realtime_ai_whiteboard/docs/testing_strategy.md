@@ -109,7 +109,7 @@
 
 | Environment | Purpose | How to Run |
 |-------------|---------|-----------|
-| Local | Developer machine | `docker compose up -d` + `npm test` |
+| Local | Developer machine | `docker compose up -d` + `pnpm test` |
 | CI | GitHub Actions (ubuntu-latest) | Automated on every PR |
 | Staging | Pre-release validation | `docker compose -f docker-compose.yml up -d` + full E2E |
 
