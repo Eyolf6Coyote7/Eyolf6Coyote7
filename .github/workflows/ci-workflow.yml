@@ -225,7 +225,7 @@ jobs:
       - name: Extract coverage %
         id: cov
         run: |
-          PCT=$(grep -oP 'Lines:\s+\K[\d.]+' coverage-output.txt || echo "0")
+          PCT=$(grep -oP 'Lines:\s+\K[\d.]+' coverage-output.txt | head -1 || echo "0")
           echo "pct=${PCT%.*}" >> "$GITHUB_OUTPUT"
       - name: Update badge
         if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
