@@ -216,10 +216,7 @@
     "transferRequired": "Transfer requires backend",
     "planRequired": "Plan management requires backend",
     "contactRequired": "Contact sales requires backend",
-    "trialRequired": "Free trial requires backend",
-    "editRequired": "Edit requires backend",
-    "loadMoreRequired": "Load more requires backend",
-    "resendRequired": "Resend requires backend"
+    "trialRequired": "Free trial requires backend"
   },
   "footer": {
     "copyright": "© 2024 Whiteboard AI. The Ethereal Workshop.",
