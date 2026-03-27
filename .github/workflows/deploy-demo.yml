@@ -29,6 +29,8 @@ jobs:
         with:
           node-version: 20
 
+      # --- Demo Apps ---
+
       - name: Build Whiteboard Demo
         working-directory: realtime_ai_whiteboard/web-app
         env:
@@ -61,25 +63,50 @@ jobs:
           pnpm install
           npx vite build --base /Eyolf6Coyote7/3d-asset/
 
+      # --- Storybook ---
+
+      - name: Build Whiteboard Storybook
+        working-directory: realtime_ai_whiteboard/web-app
+        run: npx storybook build -o storybook-static
+
+      - name: Build Workflow Storybook
+        working-directory: enterprise_workflow_system/employee-portal
+        run: npx storybook build -o storybook-static
+
+      - name: Build Asset Portal Storybook
+        working-directory: 3d_asset_collaboration/asset-portal
+        run: npx storybook build -o storybook-static
+
+      # --- Assemble ---
+
       - name: Assemble site
         run: |
           mkdir -p _site/whiteboard _site/workflow _site/workflow-admin _site/3d-asset
+          mkdir -p _site/storybook/whiteboard _site/storybook/workflow _site/storybook/3d-asset
           cp -r realtime_ai_whiteboard/web-app/dist/* _site/whiteboard/
           cp -r enterprise_workflow_system/employee-portal/dist/* _site/workflow/
           cp -r enterprise_workflow_system/admin-dashboard/dist/* _site/workflow-admin/
           cp -r 3d_asset_collaboration/asset-portal/dist/* _site/3d-asset/
-          cat > _site/index.html << 'EOF'
+          cp -r realtime_ai_whiteboard/web-app/storybook-static/* _site/storybook/whiteboard/
+          cp -r enterprise_workflow_system/employee-portal/storybook-static/* _site/storybook/workflow/
+          cp -r 3d_asset_collaboration/asset-portal/storybook-static/* _site/storybook/3d-asset/
+          cat > _site/index.html << 'HTMLEOF'
           <!DOCTYPE html>
           <html><head><title>Fullstack AI Workspace</title>
-          <style>body{font-family:system-ui;max-width:600px;margin:60px auto;padding:0 20px}a{display:block;padding:16px;margin:8px 0;background:#f0f0f0;border-radius:8px;text-decoration:none;color:#333}a:hover{background:#e0e0e0}</style></head>
+          <style>body{font-family:system-ui;max-width:600px;margin:60px auto;padding:0 20px}h2{margin-top:32px}a{display:block;padding:16px;margin:8px 0;background:#f0f0f0;border-radius:8px;text-decoration:none;color:#333}a:hover{background:#e0e0e0}</style></head>
           <body><h1>Fullstack AI Workspace</h1>
-          <p>3 projects x 3 industries x 7 languages</p>
+          <p>3 projects · 3 industries · 7 frontends · 8 backends</p>
+          <h2>Live Demos</h2>
           <a href="whiteboard/">Realtime AI Whiteboard (SaaS)</a>
           <a href="workflow/">Employee Portal (Semiconductor)</a>
           <a href="workflow-admin/">Admin Dashboard (Semiconductor)</a>
           <a href="3d-asset/">3D Asset Portal (Media)</a>
+          <h2>Storybook</h2>
+          <a href="storybook/whiteboard/">Whiteboard Components</a>
+          <a href="storybook/workflow/">Workflow Components</a>
+          <a href="storybook/3d-asset/">3D Asset Components</a>
           </body></html>
-          EOF
+          HTMLEOF
 
       - uses: actions/upload-pages-artifact@v3
         with:
