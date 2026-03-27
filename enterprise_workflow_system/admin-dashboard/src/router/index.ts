@@ -38,19 +38,24 @@ const router = createRouter({
     {
       path: '/feature-flags',
       name: 'FeatureFlags',
-      component: () => import('@/views/DashboardPage.vue'),
+      component: () => import('@/views/FeatureTogglesPage.vue'),
     },
     {
       path: '/config',
       name: 'Config',
-      component: () => import('@/views/DashboardPage.vue'),
+      component: () => import('@/views/RemoteConfigPage.vue'),
     },
     { path: '/', redirect: '/dashboard' },
   ],
 })
 
-router.beforeEach((to) => {
+const isMock = import.meta.env.VITE_MOCK === 'true'
+
+router.beforeEach(async (to) => {
   const auth = useAuthStore()
+  if (isMock && !auth.isAuthenticated) {
+    await auth.login('admin', 'admin')
+  }
   if (!to.meta.public && !auth.isAuthenticated) {
     return '/login'
   }

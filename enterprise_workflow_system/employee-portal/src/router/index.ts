@@ -22,12 +22,12 @@ const router = createRouter({
     {
       path: '/requests/new',
       name: 'NewRequest',
-      component: () => import('@/views/RequestListPage.vue'),
+      component: () => import('@/views/NewRequestPage.vue'),
     },
     {
       path: '/requests/:id',
       name: 'RequestDetail',
-      component: () => import('@/views/RequestListPage.vue'),
+      component: () => import('@/views/RequestDetailPage.vue'),
     },
     {
       path: '/approvals',
@@ -42,13 +42,18 @@ const router = createRouter({
     {
       path: '/profile',
       name: 'Profile',
-      component: () => import('@/views/DashboardPage.vue'),
+      component: () => import('@/views/ProfilePage.vue'),
     },
   ],
 })
 
-router.beforeEach((to) => {
+const isMock = import.meta.env.VITE_MOCK === 'true'
+
+router.beforeEach(async (to) => {
   const auth = useAuthStore()
+  if (isMock && !auth.isAuthenticated) {
+    await auth.login('demo', 'demo')
+  }
   if (!to.meta.public && !auth.isAuthenticated) {
     return { name: 'Login' }
   }

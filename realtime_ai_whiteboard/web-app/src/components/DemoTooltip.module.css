@@ -1,13 +1,15 @@
 .wrapper {
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+}
+
+.wrapper > * {
+  width: 100%;
 }
 
 .tooltip {
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%);
+  position: fixed;
+  transform: translate(-50%, -100%);
   background: #1f2937;
   color: white;
   font-size: 12px;
@@ -15,9 +17,7 @@
   border-radius: 6px;
   white-space: nowrap;
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 150ms;
-  z-index: 100;
+  z-index: 9999;
 }
 
 .tooltip::after {
@@ -28,8 +28,4 @@
   transform: translateX(-50%);
   border: 5px solid transparent;
   border-top-color: #1f2937;
-}
-
-.wrapper:hover .tooltip {
-  opacity: 1;
 }

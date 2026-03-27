@@ -1,12 +1,13 @@
 .toolbar {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
-  padding: 8px;
-  background: rgba(255, 255, 255, 0.9);
+  padding: 16px 0;
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(12px);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0px 12px 40px -12px rgba(0, 74, 198, 0.08);
   width: 48px;
 }
 
@@ -23,11 +24,23 @@
 }
 
 .active {
-  background: #2563eb;
-  color: white;
+  background: #EFF6FF;
+  color: #2563EB;
 }
 
 .inactive {
   background: transparent;
-  color: #374151;
+  color: #64748B;
+}
+
+.inactive:hover {
+  background: #F1F5F9;
+}
+
+.divider {
+  width: 32px;
+  height: 1px;
+  background: #C3C6D7;
+  opacity: 0.2;
+  margin: 4px 0;
 }
