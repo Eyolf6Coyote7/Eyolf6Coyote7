@@ -1,11 +1,11 @@
 import { useState } from "react";
 
 const members = [
-  { name: "Sarah Bowerman", email: "sarah.b@nike.com", role: "Owner", joined: "Jan 12, 2024", removable: false },
-  { name: "Marcus Wood", email: "m.wood@nike.com", role: "Editor", joined: "Feb 05, 2024", removable: true },
-  { name: "Jessica Lane", email: "jess.l@nike.com", role: "Viewer", joined: "Mar 10, 2024", removable: true },
-  { name: "Tunde Kalu", email: "t.k@nike.com", role: "Editor", joined: "Mar 22, 2024", removable: true },
-  { name: "Elena Rossi", email: "e.rossi@nike.com", role: "Viewer", joined: "Apr 02, 2024", removable: true },
+  { name: "Sarah Bowerman", email: "sarah.b@acme-studio.io", role: "Owner", joined: "Jan 12, 2024", removable: false },
+  { name: "Marcus Wood", email: "m.wood@acme-studio.io", role: "Editor", joined: "Feb 05, 2024", removable: true },
+  { name: "Jessica Lane", email: "jess.l@acme-studio.io", role: "Viewer", joined: "Mar 10, 2024", removable: true },
+  { name: "Tunde Kalu", email: "t.k@acme-studio.io", role: "Editor", joined: "Mar 22, 2024", removable: true },
+  { name: "Elena Rossi", email: "e.rossi@acme-studio.io", role: "Viewer", joined: "Apr 02, 2024", removable: true },
 ];
 
 const sharedLinks = [
@@ -56,9 +56,9 @@ const sectionTitle: React.CSSProperties = {
 };
 
 export default function BrandSettingsPage() {
-  const [brandName, setBrandName] = useState("Nike");
+  const [brandName, setBrandName] = useState("Acme Studio");
   const [desc, setDesc] = useState(
-    "Nike\u2019s mission is to bring inspiration and innovation to every athlete* in the world. (*If you have a body, you are an athlete.)",
+    "Acme Studio\u2019s mission is to empower creative teams with collaborative 3D asset management. We make digital creation seamless and accessible for everyone.",
   );
 
   return (

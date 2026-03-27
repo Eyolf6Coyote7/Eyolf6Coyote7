@@ -11,7 +11,12 @@ export default function UploadPage() {
   const [dragging, setDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [progress, setProgress] = useState(0);
-  const [form, setForm] = useState({ name: "air-max-2026-hero", brand: "Nike", description: "", tags: ["Footwear"] });
+  const [form, setForm] = useState({
+    name: "product-hero-2026",
+    brand: "Acme Studio",
+    description: "",
+    tags: ["Footwear"],
+  });
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -354,8 +359,8 @@ export default function UploadPage() {
                     appearance: "auto",
                   }}
                 >
-                  <option>Nike</option>
-                  <option>Adidas</option>
+                  <option>Acme Studio</option>
+                  <option>Vertex Labs</option>
                   <option>Other</option>
                 </select>
               </div>

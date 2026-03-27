@@ -161,7 +161,7 @@ export default function App() {
               </svg>
             </div>
             <span style={{ fontFamily: "Inter, sans-serif", fontSize: 14, fontWeight: 500, color: "#141B2B" }}>
-              Nike
+              Acme Studio
             </span>
             <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
               <path d="M1 1L5 5L9 1" stroke="#64748B" strokeWidth="1.5" />

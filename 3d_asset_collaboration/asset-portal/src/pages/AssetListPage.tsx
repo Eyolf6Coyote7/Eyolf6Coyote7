@@ -13,7 +13,7 @@ const mockAssets = [
     format: "GLB",
     size: "52 MB",
     version: "v3",
-    brand: "Nike",
+    brand: "Acme Studio",
     timeAgo: "3D AGO",
   },
   {
@@ -22,7 +22,7 @@ const mockAssets = [
     format: "GLB",
     size: "124 MB",
     version: "v1",
-    brand: "Nike",
+    brand: "Acme Studio",
     timeAgo: "5D AGO",
   },
   {
@@ -31,17 +31,25 @@ const mockAssets = [
     format: "GLB",
     size: "86 MB",
     version: "v4",
-    brand: "Nike",
+    brand: "Acme Studio",
     timeAgo: "1W AGO",
   },
-  { id: "4", name: "Eco-Tough Flask", format: "GLB", size: "34 MB", version: "v2", brand: "Nike", timeAgo: "2W AGO" },
+  {
+    id: "4",
+    name: "Eco-Tough Flask",
+    format: "GLB",
+    size: "34 MB",
+    version: "v2",
+    brand: "Acme Studio",
+    timeAgo: "2W AGO",
+  },
   {
     id: "5",
     name: "Urban Nomad Pack",
     format: "GLB",
     size: "112 MB",
     version: "v5",
-    brand: "Nike",
+    brand: "Acme Studio",
     timeAgo: "1MO AGO",
   },
   {
@@ -50,7 +58,7 @@ const mockAssets = [
     format: "GLB",
     size: "18 MB",
     version: "v2",
-    brand: "Nike",
+    brand: "Acme Studio",
     timeAgo: "2MO AGO",
   },
 ];
@@ -78,7 +86,7 @@ export default function AssetListPage() {
           format: a.format,
           size: a.size,
           version: "v1",
-          brand: "Nike",
+          brand: "Acme Studio",
           timeAgo: "recently",
         }));
 

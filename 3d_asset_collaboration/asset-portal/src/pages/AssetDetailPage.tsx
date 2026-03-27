@@ -307,7 +307,7 @@ export default function AssetDetailPage() {
                 marginBottom: 8,
               }}
             >
-              NIKE
+              ACME STUDIO
             </span>
             <h2
               style={{
