@@ -1,37 +1,5 @@
 # UI/UX Design: Enterprise Workflow System
 
-## Table of Contents
-
-- [Design Principles](#design-principles)
-- [Figma Project Structure](#figma-project-structure)
-- [Web UI — Employee Portal](#web-ui-employee-portal)
-  - [Screen Inventory (Employee Portal)](#screen-inventory-employee-portal)
-  - [Employee Portal Layout](#employee-portal-layout)
-- [Web UI — Admin Dashboard](#web-ui-admin-dashboard)
-  - [Screen Inventory (Admin Dashboard)](#screen-inventory-admin-dashboard)
-  - [Admin Dashboard Layout](#admin-dashboard-layout)
-- [Mobile UI (iOS + Android)](#mobile-ui-ios-android)
-  - [Screen Inventory (Mobile)](#screen-inventory-mobile)
-  - [Mobile Layout](#mobile-layout)
-  - [Mobile-specific Patterns](#mobile-specific-patterns)
-- [Screen States](#screen-states)
-- [User Flows](#user-flows)
-  - [Submit Request Flow](#submit-request-flow)
-  - [Mobile Approval Flow](#mobile-approval-flow)
-  - [Admin Template Configuration Flow](#admin-template-configuration-flow)
-- [Interaction Specification](#interaction-specification)
-  - [Web Interactions](#web-interactions)
-  - [Mobile Interactions](#mobile-interactions)
-- [Key Components](#key-components)
-- [Design Tokens](#design-tokens)
-- [Responsive Breakpoints](#responsive-breakpoints)
-- [Handoff Notes](#handoff-notes)
-- [Accessibility (a11y) Checklist](#accessibility-a11y-checklist)
-- [Figma Version History](#figma-version-history)
-- [Screenshots](#screenshots)
-- [Stitch Prompts](#stitch-prompts)
-
----
 
 ## Design Principles
 
@@ -46,8 +14,8 @@
 | File | Content | Link |
 |------|---------|------|
 | Workflow — Design System | Shared components (Element Plus extended), tokens | [Figma URL TBD] |
+| Workflow — Design | High-fi mockups for all 24 screens (web + admin + mobile) | [Figma](https://www.figma.com/design/Uj6nyMA7fnlciLrBekuJ1Z/Workflow---Design) |
 | Workflow — Wireframes | Low-fi wireframes for all screens | [Figma URL TBD] |
-| Workflow — UI Design | High-fi mockups (final) | [Figma URL TBD] |
 | Workflow — Prototype | Interactive prototype with transitions | [Figma URL TBD] |
 
 ## Web UI — Employee Portal
@@ -320,59 +288,4 @@ graph TD
 - [ ] Touch targets ≥ 44x44px on mobile
 - [ ] Swipe actions have button fallback (for accessibility)
 
-## Figma Version History
-
-| Version | Git Tag | Date | Figma Page | What Changed |
-|---------|---------|------|-----------|-------------|
-| — | — | — | — | No designs yet — UI spec complete, ready to start Figma |
-
-> See [dev_guidelines.md](../../docs/dev_guidelines.md#figma--stitch-version-control) for Figma operation guide.
-
-## Screenshots
-
-```
-enterprise_workflow_system/docs/screenshots/
-├─ v0.1.0/
-│   ├─ dashboard.png
-│   ├─ approval-queue.png
-│   └─ admin-templates.png
-└─ v0.2.0/
-    └─ ...
-```
-
-> No screenshots yet — will be added when Figma designs are created.
-
-## Stitch Prompts
-
-Each screen has a dedicated Stitch prompt file in `docs/design/stitch_prompts/`. These contain detailed natural-language descriptions ready to paste into [Google Stitch](https://stitch.withgoogle.com) for rapid layout generation, plus design tokens, states to generate, and acceptance criteria.
-
-**Workflow**: Copy the "Stitch Prompt" section → paste into Stitch → pick best layout → recreate/refine in Figma.
-
-| # | Screen | Prompt File | Platform |
-|---|--------|------------|----------|
-| 01 | Login (SSO) | [01_login_sso.md](design/stitch_prompts/01_login_sso.md) | Web |
-| 02 | Employee Dashboard | [02_employee_dashboard.md](design/stitch_prompts/02_employee_dashboard.md) | Web |
-| 03 | New Request | [03_new_request.md](design/stitch_prompts/03_new_request.md) | Web |
-| 04 | Request Detail | [04_request_detail.md](design/stitch_prompts/04_request_detail.md) | Web |
-| 05 | Approval Queue | [05_approval_queue.md](design/stitch_prompts/05_approval_queue.md) | Web |
-| 06 | Approve/Reject Modal | [06_approve_reject_modal.md](design/stitch_prompts/06_approve_reject_modal.md) | Web |
-| 07 | My History | [07_my_history.md](design/stitch_prompts/07_my_history.md) | Web |
-| 08 | Employee Profile | [08_employee_profile.md](design/stitch_prompts/08_employee_profile.md) | Web |
-| 09 | Admin Dashboard | [09_admin_dashboard.md](design/stitch_prompts/09_admin_dashboard.md) | Web |
-| 10 | User Management | [10_user_management.md](design/stitch_prompts/10_user_management.md) | Web |
-| 11 | Workflow Templates | [11_workflow_templates.md](design/stitch_prompts/11_workflow_templates.md) | Web |
-| 12 | Template Editor | [12_template_editor.md](design/stitch_prompts/12_template_editor.md) | Web |
-| 13 | Audit Log | [13_audit_log.md](design/stitch_prompts/13_audit_log.md) | Web |
-| 14 | Feature Toggles | [14_feature_toggles.md](design/stitch_prompts/14_feature_toggles.md) | Web |
-| 15 | Remote Config | [15_remote_config.md](design/stitch_prompts/15_remote_config.md) | Web |
-| 16 | Mobile Splash | [16_mobile_splash.md](design/stitch_prompts/16_mobile_splash.md) | iOS + Android |
-| 17 | Mobile Login | [17_mobile_login.md](design/stitch_prompts/17_mobile_login.md) | iOS + Android |
-| 18 | Mobile Home | [18_mobile_home.md](design/stitch_prompts/18_mobile_home.md) | iOS + Android |
-| 19 | Mobile Approval Queue | [19_mobile_approval_queue.md](design/stitch_prompts/19_mobile_approval_queue.md) | iOS + Android |
-| 20 | Mobile Request Detail | [20_mobile_request_detail.md](design/stitch_prompts/20_mobile_request_detail.md) | iOS + Android |
-| 21 | Mobile Approve/Reject | [21_mobile_approve_reject.md](design/stitch_prompts/21_mobile_approve_reject.md) | iOS + Android |
-| 22 | Mobile My Requests | [22_mobile_my_requests.md](design/stitch_prompts/22_mobile_my_requests.md) | iOS + Android |
-| 23 | Mobile Notifications | [23_mobile_notifications.md](design/stitch_prompts/23_mobile_notifications.md) | iOS + Android |
-| 24 | Mobile Profile | [24_mobile_profile.md](design/stitch_prompts/24_mobile_profile.md) | iOS + Android |
-
-> See [dev_guidelines.md](../../docs/dev_guidelines.md#figma--stitch-version-control) for the full Claude → Stitch → Figma workflow.
+See [Design Map](design/design_map.md) for all Figma node links and Stitch prompts.
