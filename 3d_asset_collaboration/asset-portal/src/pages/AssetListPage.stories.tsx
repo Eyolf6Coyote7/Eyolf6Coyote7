@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import AssetListPage from "./AssetListPage";
-import { withProviders } from "../../.storybook/decorators";
+import { withProviders } from "../stories/decorators";
 
 const meta: Meta<typeof AssetListPage> = {
   title: "Pages/AssetListPage",

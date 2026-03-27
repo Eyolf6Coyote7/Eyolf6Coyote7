@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import UnityViewportPage from "./UnityViewportPage";
-import { withProviders } from "../../../.storybook/decorators";
+import { withProviders } from "../../stories/decorators";
 
 const meta: Meta<typeof UnityViewportPage> = {
   title: "Pages/Unity/Viewport",

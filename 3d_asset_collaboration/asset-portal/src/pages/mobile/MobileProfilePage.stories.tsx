@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import MobileProfilePage from "./MobileProfilePage";
-import { withProviders } from "../../../.storybook/decorators";
+import { withProviders } from "../../stories/decorators";
 
 const meta: Meta<typeof MobileProfilePage> = {
   title: "Pages/Mobile/Profile",

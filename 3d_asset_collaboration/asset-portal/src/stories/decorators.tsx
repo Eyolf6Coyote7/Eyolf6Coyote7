@@ -85,13 +85,13 @@ function createMockStore(selected: Asset | null = null) {
 }
 
 export function withProviders(initialRoute = "/", routePath = "/") {
-  return function Decorator(Story: React.ComponentType) {
+  return function Decorator(Story: () => React.JSX.Element) {
     return (
       <Provider store={createMockStore(mockAssets[0])}>
         <MemoryRouter initialEntries={[initialRoute]}>
           <Routes>
-            <Route path={routePath} element={<Story />} />
-            <Route path="*" element={<Story />} />
+            <Route path={routePath} element={Story()} />
+            <Route path="*" element={Story()} />
           </Routes>
         </MemoryRouter>
       </Provider>

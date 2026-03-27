@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import BrandSettingsPage from "./BrandSettingsPage";
-import { withProviders } from "../../.storybook/decorators";
+import { withProviders } from "../stories/decorators";
 
 const meta: Meta<typeof BrandSettingsPage> = {
   title: "Pages/BrandSettingsPage",

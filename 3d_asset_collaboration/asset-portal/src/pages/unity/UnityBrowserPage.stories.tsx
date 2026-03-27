@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import UnityBrowserPage from "./UnityBrowserPage";
-import { withProviders } from "../../../.storybook/decorators";
+import { withProviders } from "../../stories/decorators";
 
 const meta: Meta<typeof UnityBrowserPage> = {
   title: "Pages/Unity/Browser",

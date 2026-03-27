@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import UnityLoginPage from "./UnityLoginPage";
-import { withProviders } from "../../../.storybook/decorators";
+import { withProviders } from "../../stories/decorators";
 
 const meta: Meta<typeof UnityLoginPage> = {
   title: "Pages/Unity/Login",
