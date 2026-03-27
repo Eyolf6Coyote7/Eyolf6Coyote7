@@ -178,7 +178,9 @@
     "downloadRequired": "下載需要後端",
     "deleteRequired": "刪除需要後端",
     "generateKeyRequired": "生成 API 金鑰需要後端",
-    "loginRequired": "登入需要後端"
+    "loginRequired": "登入需要後端",
+    "paginationRequired": "分頁需要後端",
+    "editMetadataRequired": "編輯元資料需要後端"
   },
   "viewer3d": {
     "rotate": "旋轉",

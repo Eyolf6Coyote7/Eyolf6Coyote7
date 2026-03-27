@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace asset_api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1/[controller]")]
 public class AssetsController : ControllerBase
 {
     private readonly AssetDbContext _db;

@@ -3,7 +3,7 @@ import type { Asset } from "../store/assetSlice";
 import type { SensorData } from "./mock-client";
 
 const http = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE ?? "/api",
+  baseURL: import.meta.env.VITE_API_BASE ?? "/api/v1",
 });
 
 export async function fetchAssets(): Promise<Asset[]> {

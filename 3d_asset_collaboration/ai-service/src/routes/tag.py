@@ -2,7 +2,7 @@ from fastapi import APIRouter, File, UploadFile
 
 from src.models.tagger import MOCK_TAGS, tagger
 
-router = APIRouter(prefix="/api/tag", tags=["tagging"])
+router = APIRouter(prefix="/api/v1/tag", tags=["tagging"])
 
 
 @router.post("")

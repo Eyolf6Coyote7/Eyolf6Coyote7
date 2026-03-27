@@ -62,7 +62,7 @@ export default function AssetListPage() {
             {t("assets.title")}
           </span>
           <span style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "var(--text-muted)", marginLeft: 12 }}>
-            {t("assets.totalPieces", { count: 247 })}
+            {t("assets.totalPieces", { count: displayAssets.length })}
           </span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -258,27 +258,20 @@ export default function AssetListPage() {
       </div>
 
       {/* Pagination */}
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginTop: 48 }}>
-        <button
+      <DemoTooltip message={t("demo.paginationRequired")}>
+        <div
           style={{
-            width: 40,
-            height: 40,
-            borderRadius: 8,
             display: "flex",
-            alignItems: "center",
             justifyContent: "center",
-            border: "none",
-            cursor: "pointer",
-            background: "transparent",
+            alignItems: "center",
+            gap: 8,
+            marginTop: 48,
+            opacity: 0.5,
+            pointerEvents: "none",
           }}
         >
-          <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
-            <path d="M7 1L1 6L7 11" stroke="var(--text-secondary)" strokeWidth="1.5" />
-          </svg>
-        </button>
-        {[1, 2, 3].map((n) => (
           <button
-            key={n}
+            disabled
             style={{
               width: 40,
               height: 40,
@@ -287,58 +280,81 @@ export default function AssetListPage() {
               alignItems: "center",
               justifyContent: "center",
               border: "none",
-              cursor: "pointer",
-              fontFamily: "Inter, sans-serif",
-              fontSize: 16,
-              fontWeight: n === 1 ? 700 : 600,
-              background: n === 1 ? "#4648D4" : "transparent",
-              color: n === 1 ? "#FFF" : "var(--text-primary)",
-              boxShadow: n === 1 ? "0px 10px 15px -3px rgba(70,72,212,0.2)" : "none",
+              cursor: "not-allowed",
+              background: "transparent",
             }}
           >
-            {n}
+            <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
+              <path d="M7 1L1 6L7 11" stroke="var(--text-secondary)" strokeWidth="1.5" />
+            </svg>
           </button>
-        ))}
-        <span style={{ fontFamily: "Inter, sans-serif", fontSize: 16, color: "var(--text-muted)", padding: "0 8px" }}>
-          ...
-        </span>
-        <button
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: 8,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            border: "none",
-            cursor: "pointer",
-            fontFamily: "Inter, sans-serif",
-            fontSize: 16,
-            fontWeight: 600,
-            background: "transparent",
-            color: "var(--text-primary)",
-          }}
-        >
-          12
-        </button>
-        <button
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: 8,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            border: "none",
-            cursor: "pointer",
-            background: "transparent",
-          }}
-        >
-          <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
-            <path d="M1 1L7 6L1 11" stroke="var(--text-secondary)" strokeWidth="1.5" />
-          </svg>
-        </button>
-      </div>
+          {[1, 2, 3].map((n) => (
+            <button
+              key={n}
+              disabled
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 8,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                border: "none",
+                cursor: "not-allowed",
+                fontFamily: "Inter, sans-serif",
+                fontSize: 16,
+                fontWeight: n === 1 ? 700 : 600,
+                background: n === 1 ? "#4648D4" : "transparent",
+                color: n === 1 ? "#FFF" : "var(--text-primary)",
+                boxShadow: n === 1 ? "0px 10px 15px -3px rgba(70,72,212,0.2)" : "none",
+              }}
+            >
+              {n}
+            </button>
+          ))}
+          <span style={{ fontFamily: "Inter, sans-serif", fontSize: 16, color: "var(--text-muted)", padding: "0 8px" }}>
+            ...
+          </span>
+          <button
+            disabled
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 8,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              border: "none",
+              cursor: "not-allowed",
+              fontFamily: "Inter, sans-serif",
+              fontSize: 16,
+              fontWeight: 600,
+              background: "transparent",
+              color: "var(--text-primary)",
+            }}
+          >
+            12
+          </button>
+          <button
+            disabled
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 8,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              border: "none",
+              cursor: "not-allowed",
+              background: "transparent",
+            }}
+          >
+            <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
+              <path d="M1 1L7 6L1 11" stroke="var(--text-secondary)" strokeWidth="1.5" />
+            </svg>
+          </button>
+        </div>
+      </DemoTooltip>
     </div>
   );
 }
