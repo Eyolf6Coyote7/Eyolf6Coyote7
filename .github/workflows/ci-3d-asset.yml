@@ -79,7 +79,7 @@ jobs:
         with:
           node-version: 22
       - run: pnpm install
-      - run: pnpm vitest run --coverage
+      - run: VITE_MOCK=true pnpm vitest run --coverage
       - name: Extract coverage %
         id: cov
         run: |
