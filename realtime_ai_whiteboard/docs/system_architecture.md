@@ -436,4 +436,4 @@ graph LR
 - [ADR-0002: Why Ollama over cloud LLM](adrs/ADR-0002-why-ollama-over-cloud-llm.md)
 - [ADR-0003: Why schema-per-tenant](adrs/ADR-0003-why-schema-per-tenant.md)
 - [ADR-0004: Why NestJS Modular Monolith over microservices](adrs/ADR-0004-why-modular-monolith.md)
-- [ADR-0005: Why Redis Stream over Kafka for AI task queue](adrs/ADR-0005-why-redis-stream-over-kafka.md)
+- [ADR-0005: Why Kafka for AI Task Queue](adrs/ADR-0005-why-kafka-for-ai-queue.md)

@@ -23,7 +23,7 @@ describe('ExportController', () => {
     const result = await controller.exportBoard(
       { userId: 'u1', tenantId: 't1', role: 'owner' },
       'board-1',
-      { format: 'png' },
+      { format: 'png' as const } as any,
     );
 
     expect(result).toEqual({ downloadUrl: 'https://minio/export.png' });

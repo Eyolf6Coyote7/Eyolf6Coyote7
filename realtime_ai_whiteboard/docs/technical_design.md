@@ -607,4 +607,4 @@ Reconnect:
 - [ADR-0002: Why Ollama over cloud LLM](adrs/ADR-0002-why-ollama-over-cloud-llm.md)
 - [ADR-0003: Why schema-per-tenant](adrs/ADR-0003-why-schema-per-tenant.md)
 - [ADR-0004: Why NestJS Modular Monolith](adrs/ADR-0004-why-modular-monolith.md)
-- [ADR-0005: Why Kafka for Event Streaming](adrs/ADR-0005-why-kafka.md)
+- [ADR-0005: Why Kafka for AI Task Queue](adrs/ADR-0005-why-kafka-for-ai-queue.md)
