@@ -24,14 +24,14 @@
 | Asset Browser | [link](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design?node-id=41-2096&t=eg40m3sRYHemZv4L-4) | [11_unity_asset_browser](stitch_prompts/11_unity_asset_browser.md) |
 | 3D Viewport | [link](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design?node-id=41-3157&t=eg40m3sRYHemZv4L-4) | [12_unity_3d_viewport](stitch_prompts/12_unity_3d_viewport.md) |
 | IoT Overlay | [link](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design?node-id=41-2&t=eg40m3sRYHemZv4L-4) | [13_unity_iot_overlay](stitch_prompts/13_unity_iot_overlay.md) |
-| Asset Inspector | [link]() | [14_unity_asset_inspector](stitch_prompts/14_unity_asset_inspector.md) |
+| Asset Inspector | [link](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design?node-id=41-177&t=eg40m3sRYHemZv4L-4) | [14_unity_asset_inspector](stitch_prompts/14_unity_asset_inspector.md) |
 
 ## Mobile
 
 | Screen | Figma | Stitch Prompt |
 |--------|-------|--------------|
-| Login | [link]() | [15_mobile_login](stitch_prompts/15_mobile_login.md) |
-| Asset List | [link]() | [16_mobile_asset_list](stitch_prompts/16_mobile_asset_list.md) |
-| Asset Detail | [link]() | [17_mobile_asset_detail](stitch_prompts/17_mobile_asset_detail.md) |
-| Notifications | [link]() | [18_mobile_notifications](stitch_prompts/18_mobile_notifications.md) |
-| Profile | [link]() | [19_mobile_profile](stitch_prompts/19_mobile_profile.md) |
+| Login | [link](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design?node-id=41-447&t=eg40m3sRYHemZv4L-4) | [15_mobile_login](stitch_prompts/15_mobile_login.md) |
+| Asset List | [link](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design?node-id=41-514&t=eg40m3sRYHemZv4L-4) | [16_mobile_asset_list](stitch_prompts/16_mobile_asset_list.md) |
+| Asset Detail | [link](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design?node-id=41-708&t=eg40m3sRYHemZv4L-4) | [17_mobile_asset_detail](stitch_prompts/17_mobile_asset_detail.md) |
+| Notifications | [link](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design?node-id=41-858&t=eg40m3sRYHemZv4L-4) | [18_mobile_notifications](stitch_prompts/18_mobile_notifications.md) |
+| Profile | [link](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design?node-id=41-1011&t=eg40m3sRYHemZv4L-4) | [19_mobile_profile](stitch_prompts/19_mobile_profile.md) |
