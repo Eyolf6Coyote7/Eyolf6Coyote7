@@ -1,12 +1,14 @@
 module.exports = {
-  preset: "jest-expo",
-  transformIgnorePatterns: [
-    "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg|zustand)",
-  ],
-  setupFilesAfterSetup: ["./src/test-setup.js"],
+  testEnvironment: "node",
+  globals: { __DEV__: true },
+  transform: {
+    "^.+\\.tsx?$": [
+      "babel-jest",
+      { presets: [["@babel/preset-env", { targets: { node: "current" } }], "@babel/preset-typescript"] },
+    ],
+  },
   collectCoverageFrom: [
     "src/**/*.{ts,tsx}",
-    "!app/**/*",
     "!**/*.d.ts",
     "!src/__tests__/**",
   ],
