@@ -241,7 +241,7 @@ jobs:
           color: ${{ steps.cov.outputs.color }}
 
   test-mobile-android:
-    name: Test — Mobile Android
+    name: Test + Coverage — Mobile Android
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -252,10 +252,27 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - run: ./gradlew test
+      - run: ./gradlew testDebugUnitTest jacocoTestReport
+      - name: Extract coverage %
+        id: cov
+        run: |
+          PCT=$(grep -oP '<td>Total</td>.*?<td class="ctr2">\K\d+' app/build/reports/jacoco/jacocoTestReport/html/index.html || echo "0")
+          echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+          if [ "${PCT%.*}" -ge 80 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 60 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 40 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
+      - name: Update badge
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        continue-on-error: true
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ba5e6bd35946886986dbba31e9252f66
+          filename: workflow-mobile-android.json
+          label: android
+          message: ${{ steps.cov.outputs.pct }}%
+          color: ${{ steps.cov.outputs.color }}
 
   test-mobile-ios:
-    name: Test — Mobile iOS
+    name: Test + Coverage — Mobile iOS
     runs-on: macos-latest
     defaults:
       run:
@@ -269,4 +286,23 @@ jobs:
           -project WorkflowiOS.xcodeproj
           -scheme WorkflowiOS
           -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest'
+          -enableCodeCoverage YES
+          -resultBundlePath TestResults.xcresult
           2>&1 | tail -20
+      - name: Extract coverage %
+        id: cov
+        run: |
+          PCT=$(xcrun xccov view --report TestResults.xcresult --json | python3 -c "import sys,json;d=json.load(sys.stdin);print(round(d['lineCoverage']*100,1))" 2>/dev/null || echo "0")
+          echo "pct=$PCT" >> "$GITHUB_OUTPUT"
+          if [ "${PCT%.*}" -ge 80 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 60 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 40 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
+      - name: Update badge
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        continue-on-error: true
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ba5e6bd35946886986dbba31e9252f66
+          filename: workflow-mobile-ios.json
+          label: ios
+          message: ${{ steps.cov.outputs.pct }}%
+          color: ${{ steps.cov.outputs.color }}
