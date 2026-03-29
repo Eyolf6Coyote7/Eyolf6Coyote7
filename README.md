@@ -38,10 +38,16 @@
 <details>
 <summary>📱 Mobile Demo — React Native + Expo</summary>
 <br/>
-
-| Android | iOS |
-|---------|-----|
-| <video src="docs/demos/whiteboard-android.mp4" width="300" controls muted autoplay loop></video> | <video src="docs/demos/whiteboard-ios.mp4" width="300" controls muted autoplay loop></video> |
+<table>
+<tr>
+<th>Android</th>
+<th>iOS</th>
+</tr>
+<tr>
+<td><video src="https://github.com/user-attachments/assets/9942c4b9-e29a-4353-932c-e4267212d9c8" width="300" controls muted autoplay loop></video></td>
+<td><video src="https://github.com/user-attachments/assets/3b68ffb2-2c22-43b7-b9d7-baa172d2761b" width="300" controls muted autoplay loop></video></td>
+</tr>
+</table>
 
 > Splash → Board 列表 → 畫布工具列 → AI Chat → Settings
 
@@ -65,10 +71,16 @@
 <details>
 <summary>📱 Mobile Demo — Kotlin (Android) + Swift (iOS)</summary>
 <br/>
-
-| Android | iOS |
-|---------|-----|
-| <video src="docs/demos/workflow-android.mp4" width="300" controls muted autoplay loop></video> | <video src="docs/demos/workflow-ios.mp4" width="300" controls muted autoplay loop></video> |
+<table>
+<tr>
+<th>Android</th>
+<th>iOS</th>
+</tr>
+<tr>
+<td><video src="https://github.com/user-attachments/assets/858593ea-e630-4728-af4c-447d0138bc1d" width="300" controls muted autoplay loop></video></td>
+<td><video src="https://github.com/user-attachments/assets/05f50600-a115-4f99-bcb9-dd57b281c6cc" width="300" controls muted autoplay loop></video></td>
+</tr>
+</table>
 
 > Login (SSO) → Dashboard 統計卡片 → Approvals 審批列表 → Profile (2FA)
 
@@ -94,10 +106,16 @@
 <details>
 <summary>📱 Mobile Demo — React Native + Expo</summary>
 <br/>
-
-| Android | iOS |
-|---------|-----|
-| <video src="docs/demos/asset-android.mp4" width="300" controls muted autoplay loop></video> | <video src="docs/demos/asset-ios.mp4" width="300" controls muted autoplay loop></video> |
+<table>
+<tr>
+<th>Android</th>
+<th>iOS</th>
+</tr>
+<tr>
+<td><video src="https://github.com/user-attachments/assets/37cf3ad1-e0fd-4d79-8193-f1d9cef5b595" width="300" controls muted autoplay loop></video></td>
+<td><video src="https://github.com/user-attachments/assets/47cb0d0a-9aec-4acf-8562-ffa7642b8596" width="300" controls muted autoplay loop></video></td>
+</tr>
+</table>
 
 > Assets Grid (GLB/FBX/OBJ) → Notifications → Profile 統計
 
