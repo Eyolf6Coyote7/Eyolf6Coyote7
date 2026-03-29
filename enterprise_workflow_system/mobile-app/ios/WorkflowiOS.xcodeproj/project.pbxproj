@@ -13,10 +13,22 @@
 		867E7181F58C74147C6F339C /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CD6F70431436A21C1B99D2 /* ProfileView.swift */; };
 		93AB501A123F985417A90628 /* ApprovalItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C0A63A3741A428D80EC54C1 /* ApprovalItem.swift */; };
 		AAA63DB51A0E5301C0AAE5E0 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9229F5E7B8D770E18083CF4C /* MockData.swift */; };
+		AC726A0D78F7E4ADF29AEE7C /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCB45B4B893D606F7165D69 /* ModelTests.swift */; };
 		BEA28571F29627251A3ABC58 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF1F81F17C2B7433E867817 /* LoginView.swift */; };
+		C52DFAA3E1F1B0F3268406CE /* MockDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD38BAEA1B1142453A6128C2 /* MockDataTests.swift */; };
 		C72804DA5BF2C8BB1EB09417 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B34A4DEE9F351764FD91EA /* ContentView.swift */; };
 		F85AD5D120FE2B9FFCAE11BF /* WorkflowiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EF1D264F95E94924CAF179 /* WorkflowiOSApp.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7DE268FF1D59BECCC334E2C0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 57E588B8BC3D39D28013BBC9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 688C50EC1DA90403D78B568A;
+			remoteInfo = WorkflowiOS;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0A49761401FBD8241F0F6650 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
@@ -30,6 +42,9 @@
 		9229F5E7B8D770E18083CF4C /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
 		9D20DEB679D5C0FA03C93BE2 /* WorkflowiOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = WorkflowiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5EF1D264F95E94924CAF179 /* WorkflowiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkflowiOSApp.swift; sourceTree = "<group>"; };
+		CDCB45B4B893D606F7165D69 /* ModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; };
+		D10D0F45B33439F8DE7AF2EC /* WorkflowiOSTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = WorkflowiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FD38BAEA1B1142453A6128C2 /* MockDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -46,8 +61,18 @@
 			isa = PBXGroup;
 			children = (
 				849281A3931BB8ACBED46447 /* WorkflowiOS */,
+				3DE9606CC2D42340BD335ACC /* WorkflowiOSTests */,
 				960F0855236AB15095A3F2FA /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		3DE9606CC2D42340BD335ACC /* WorkflowiOSTests */ = {
+			isa = PBXGroup;
+			children = (
+				FD38BAEA1B1142453A6128C2 /* MockDataTests.swift */,
+				CDCB45B4B893D606F7165D69 /* ModelTests.swift */,
+			);
+			path = WorkflowiOSTests;
 			sourceTree = "<group>";
 		};
 		505752DBBA2EBD56CAD1011A /* Data */ = {
@@ -86,6 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				9D20DEB679D5C0FA03C93BE2 /* WorkflowiOS.app */,
+				D10D0F45B33439F8DE7AF2EC /* WorkflowiOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -109,6 +135,24 @@
 			productName = WorkflowiOS;
 			productReference = 9D20DEB679D5C0FA03C93BE2 /* WorkflowiOS.app */;
 			productType = "com.apple.product-type.application";
+		};
+		B855FC31711146FC6398BF7D /* WorkflowiOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5E2A0B413A8492768A7504B3 /* Build configuration list for PBXNativeTarget "WorkflowiOSTests" */;
+			buildPhases = (
+				4515233850EBAD2EFF62C0B0 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C1EF3821828E139E227FC4CE /* PBXTargetDependency */,
+			);
+			name = WorkflowiOSTests;
+			packageProductDependencies = (
+			);
+			productName = WorkflowiOSTests;
+			productReference = D10D0F45B33439F8DE7AF2EC /* WorkflowiOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -139,6 +183,7 @@
 			projectRoot = "";
 			targets = (
 				688C50EC1DA90403D78B568A /* WorkflowiOS */,
+				B855FC31711146FC6398BF7D /* WorkflowiOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -160,7 +205,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4515233850EBAD2EFF62C0B0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C52DFAA3E1F1B0F3268406CE /* MockDataTests.swift in Sources */,
+				AC726A0D78F7E4ADF29AEE7C /* ModelTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C1EF3821828E139E227FC4CE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 688C50EC1DA90403D78B568A /* WorkflowiOS */;
+			targetProxy = 7DE268FF1D59BECCC334E2C0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		18C6CD44E623421E9D4BD857 /* Debug */ = {
@@ -180,6 +242,22 @@
 			};
 			name = Debug;
 		};
+		23378CB64CAB41E20F522B2A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.workflow.WorkflowiOSTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WorkflowiOS.app/WorkflowiOS";
+			};
+			name = Release;
+		};
 		317BEA9BC342900BBCEBDE87 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -196,6 +274,22 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
+		};
+		BABFD26DCFDAB021DD1581A0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.workflow.WorkflowiOSTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WorkflowiOS.app/WorkflowiOS";
+			};
+			name = Debug;
 		};
 		DF115C657BAF39656A57D178 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -324,6 +418,15 @@
 			buildConfigurations = (
 				E238AF955A13D9FDC155145F /* Debug */,
 				DF115C657BAF39656A57D178 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5E2A0B413A8492768A7504B3 /* Build configuration list for PBXNativeTarget "WorkflowiOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BABFD26DCFDAB021DD1581A0 /* Debug */,
+				23378CB64CAB41E20F522B2A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
