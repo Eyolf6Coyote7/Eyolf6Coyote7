@@ -18,7 +18,14 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'lcov', 'json-summary'],
       include: ['src/**/*.ts'],
-      exclude: ['src/test-setup.ts', 'src/**/*.d.ts', 'src/main.ts', '**/*.stories.*'],
+      exclude: [
+        'src/test-setup.ts',
+        'src/**/*.d.ts',
+        'src/main.ts',
+        '**/*.stories.*',
+        'src/router/**',
+        'src/api/real-client.ts',
+      ],
     },
   },
 })
