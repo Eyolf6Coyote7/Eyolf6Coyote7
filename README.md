@@ -35,6 +35,18 @@
 
 📐 [Figma](https://www.figma.com/design/mIygAbHRH0NbXxXO5K4yV6/Whiteboard---Design) · 🚀 [Live Demo](https://eyolf6coyote7.github.io/Eyolf6Coyote7/whiteboard/) · 📚 [Storybook](https://eyolf6coyote7.github.io/Eyolf6Coyote7/storybook/whiteboard/) · 📖 [Docs](realtime_ai_whiteboard/docs/)
 
+<details>
+<summary>📱 Mobile Demo — React Native + Expo</summary>
+<br/>
+
+| Android | iOS |
+|---------|-----|
+| <video src="docs/demos/whiteboard-android.mp4" width="300" controls muted autoplay loop></video> | <video src="docs/demos/whiteboard-ios.mp4" width="300" controls muted autoplay loop></video> |
+
+> Splash → Board 列表 → 畫布工具列 → AI Chat → Settings
+
+</details>
+
 | System | Tech |
 |--------|------|
 | Web App | ![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black) ![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white) ![Zustand](https://img.shields.io/badge/Zustand-443E38?logoColor=white) ![Yjs](https://img.shields.io/badge/Yjs_CRDT-F97316?logoColor=white) |
@@ -49,6 +61,18 @@
 > Multi-step approval with Temporal orchestration + Kafka event sourcing + immutable audit trail.
 
 📐 [Figma](https://www.figma.com/design/Uj6nyMA7fnlciLrBekuJ1Z/Workflow---Design) · 🚀 Demos: [Employee](https://eyolf6coyote7.github.io/Eyolf6Coyote7/workflow/) / [Admin](https://eyolf6coyote7.github.io/Eyolf6Coyote7/workflow-admin/) · 📚 [Storybook](https://eyolf6coyote7.github.io/Eyolf6Coyote7/storybook/workflow/) · 📖 [Docs](enterprise_workflow_system/docs/)
+
+<details>
+<summary>📱 Mobile Demo — Kotlin (Android) + Swift (iOS)</summary>
+<br/>
+
+| Android | iOS |
+|---------|-----|
+| <video src="docs/demos/workflow-android.mp4" width="300" controls muted autoplay loop></video> | <video src="docs/demos/workflow-ios.mp4" width="300" controls muted autoplay loop></video> |
+
+> Login (SSO) → Dashboard 統計卡片 → Approvals 審批列表 → Profile (2FA)
+
+</details>
 
 | System | Tech |
 |--------|------|
@@ -66,6 +90,18 @@
 > DAM + Digital Twin + IoT. gRPC streaming for large files + Three.js browser preview.
 
 📐 [Figma](https://www.figma.com/design/CAwm8PZw10ch6ynVjWVwXf/Asset---Design) · 🚀 [Live Demo](https://eyolf6coyote7.github.io/Eyolf6Coyote7/3d-asset/) · 📚 [Storybook](https://eyolf6coyote7.github.io/Eyolf6Coyote7/storybook/3d-asset/) · 📖 [Docs](3d_asset_collaboration/docs/)
+
+<details>
+<summary>📱 Mobile Demo — React Native + Expo</summary>
+<br/>
+
+| Android | iOS |
+|---------|-----|
+| <video src="docs/demos/asset-android.mp4" width="300" controls muted autoplay loop></video> | <video src="docs/demos/asset-ios.mp4" width="300" controls muted autoplay loop></video> |
+
+> Assets Grid (GLB/FBX/OBJ) → Notifications → Profile 統計
+
+</details>
 
 | System | Tech |
 |--------|------|
