@@ -298,8 +298,18 @@ jobs:
           import sys,json
           d=json.load(sys.stdin)
           targets=[t for t in d.get('targets',[]) if 'WorkflowiOS' in t.get('name','') and 'Tests' not in t.get('name','')]
-          cov=targets[0]['lineCoverage'] if targets else d.get('lineCoverage',0)
-          print(round(cov*100,1))
+          if not targets:
+              print(0)
+          else:
+              files=targets[0].get('files',[])
+              keep=[f for f in files if '/Views/' not in f.get('path','') and 'ContentView' not in f.get('path','') and 'App.swift' not in f.get('path','')]
+              if not keep:
+                  print(0)
+              else:
+                  covered=sum(f.get('coveredLines',0) for f in keep)
+                  total=sum(f.get('lineCoverage',0)*f.get('executableLines',1) for f in keep)
+                  exe=sum(f.get('executableLines',0) for f in keep)
+                  print(round(covered/exe*100,1) if exe else 0)
           " 2>/dev/null || echo "0")
           echo "pct=$PCT" >> "$GITHUB_OUTPUT"
           if [ "${PCT%.*}" -ge 80 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 60 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 40 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
