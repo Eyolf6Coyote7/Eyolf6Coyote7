@@ -17,5 +17,7 @@ targets:
     platform: iOS
     sources:
       - WorkflowiOSTests
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
     dependencies:
       - target: WorkflowiOS
