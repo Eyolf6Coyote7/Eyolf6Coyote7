@@ -86,7 +86,7 @@ tasks.register<JacocoReport>("jacocoTestReport") {
                 "**/MainActivity*",
                 "**/WorkflowApp*",
                 "**/ui/screens/**",
-                "**/ui/theme/Theme*",
+                "**/ui/theme/**",
                 "**/ComposableSingletons*",
             )
         },
