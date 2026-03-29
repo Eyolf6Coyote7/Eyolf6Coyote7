@@ -38,10 +38,16 @@
 <details>
 <summary>📱 Mobile Demo — React Native + Expo</summary>
 <br/>
-
-| Android | iOS |
-|---------|-----|
-| <video src="docs/demos/whiteboard-android.mp4" width="300" controls muted autoplay loop></video> | <video src="docs/demos/whiteboard-ios.mp4" width="300" controls muted autoplay loop></video> |
+<table>
+<tr>
+<th>Android</th>
+<th>iOS</th>
+</tr>
+<tr>
+<td><video src="https://github.com/Eyolf6Coyote7/Eyolf6Coyote7/raw/dev/docs/demos/whiteboard-android.mp4" width="300" controls muted autoplay loop></video></td>
+<td><video src="https://github.com/Eyolf6Coyote7/Eyolf6Coyote7/raw/dev/docs/demos/whiteboard-ios.mp4" width="300" controls muted autoplay loop></video></td>
+</tr>
+</table>
 
 > Splash → Board 列表 → 畫布工具列 → AI Chat → Settings
 
@@ -65,10 +71,16 @@
 <details>
 <summary>📱 Mobile Demo — Kotlin (Android) + Swift (iOS)</summary>
 <br/>
-
-| Android | iOS |
-|---------|-----|
-| <video src="docs/demos/workflow-android.mp4" width="300" controls muted autoplay loop></video> | <video src="docs/demos/workflow-ios.mp4" width="300" controls muted autoplay loop></video> |
+<table>
+<tr>
+<th>Android</th>
+<th>iOS</th>
+</tr>
+<tr>
+<td><video src="https://github.com/Eyolf6Coyote7/Eyolf6Coyote7/raw/dev/docs/demos/workflow-android.mp4" width="300" controls muted autoplay loop></video></td>
+<td><video src="https://github.com/Eyolf6Coyote7/Eyolf6Coyote7/raw/dev/docs/demos/workflow-ios.mp4" width="300" controls muted autoplay loop></video></td>
+</tr>
+</table>
 
 > Login (SSO) → Dashboard 統計卡片 → Approvals 審批列表 → Profile (2FA)
 
@@ -94,10 +106,16 @@
 <details>
 <summary>📱 Mobile Demo — React Native + Expo</summary>
 <br/>
-
-| Android | iOS |
-|---------|-----|
-| <video src="docs/demos/asset-android.mp4" width="300" controls muted autoplay loop></video> | <video src="docs/demos/asset-ios.mp4" width="300" controls muted autoplay loop></video> |
+<table>
+<tr>
+<th>Android</th>
+<th>iOS</th>
+</tr>
+<tr>
+<td><video src="https://github.com/Eyolf6Coyote7/Eyolf6Coyote7/raw/dev/docs/demos/asset-android.mp4" width="300" controls muted autoplay loop></video></td>
+<td><video src="https://github.com/Eyolf6Coyote7/Eyolf6Coyote7/raw/dev/docs/demos/asset-ios.mp4" width="300" controls muted autoplay loop></video></td>
+</tr>
+</table>
 
 > Assets Grid (GLB/FBX/OBJ) → Notifications → Profile 統計
 
