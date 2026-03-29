@@ -59,16 +59,20 @@ jacoco {
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
-    classDirectories.setFrom(files(classDirectories.files.map {
-        fileTree(it) {
-            exclude(
-                "**/WorkflowApplication*",
-                "**/config/**",
-                "**/domain/model/**",
-                "**/repository/**"
-            )
-        }
-    }))
+    classDirectories.setFrom(
+        files(
+            classDirectories.files.map {
+                fileTree(it) {
+                    exclude(
+                        "**/WorkflowApplication*",
+                        "**/config/**",
+                        "**/domain/model/**",
+                        "**/repository/**",
+                    )
+                }
+            },
+        ),
+    )
     reports {
         xml.required.set(true)
         html.required.set(true)
