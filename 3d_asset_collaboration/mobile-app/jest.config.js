@@ -6,8 +6,9 @@ module.exports = {
   setupFilesAfterSetup: ["./src/test-setup.js"],
   collectCoverageFrom: [
     "src/**/*.{ts,tsx}",
-    "app/**/*.{ts,tsx}",
+    "!app/**/*",
     "!**/*.d.ts",
+    "!src/__tests__/**",
   ],
   coverageDirectory: "coverage",
   coverageReporters: ["text", "lcov", "json-summary"],

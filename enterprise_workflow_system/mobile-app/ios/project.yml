@@ -12,3 +12,10 @@ targets:
     settings:
       DEVELOPMENT_TEAM: ""
       INFOPLIST_FILE: WorkflowiOS/Info.plist
+  WorkflowiOSTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - WorkflowiOSTests
+    dependencies:
+      - target: WorkflowiOS
