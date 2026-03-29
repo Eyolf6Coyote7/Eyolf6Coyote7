@@ -5,9 +5,11 @@ on:
     branches: [dev, stable]
     paths:
       - 'enterprise_workflow_system/**'
+      - '.github/workflows/ci-workflow.yml'
   pull_request:
     paths:
       - 'enterprise_workflow_system/**'
+      - '.github/workflows/ci-workflow.yml'
 
 jobs:
   lint-kotlin:
@@ -288,11 +290,17 @@ jobs:
           -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest'
           -enableCodeCoverage YES
           -resultBundlePath TestResults.xcresult
-          2>&1 | tail -20
+          | xcpretty || true
       - name: Extract coverage %
         id: cov
         run: |
-          PCT=$(xcrun xccov view --report TestResults.xcresult --json | python3 -c "import sys,json;d=json.load(sys.stdin);print(round(d['lineCoverage']*100,1))" 2>/dev/null || echo "0")
+          PCT=$(xcrun xccov view --report --json TestResults.xcresult | python3 -c "
+          import sys,json
+          d=json.load(sys.stdin)
+          targets=[t for t in d.get('targets',[]) if 'WorkflowiOS' in t.get('name','') and 'Tests' not in t.get('name','')]
+          cov=targets[0]['lineCoverage'] if targets else d.get('lineCoverage',0)
+          print(round(cov*100,1))
+          " 2>/dev/null || echo "0")
           echo "pct=$PCT" >> "$GITHUB_OUTPUT"
           if [ "${PCT%.*}" -ge 80 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 60 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 40 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
       - name: Update badge
