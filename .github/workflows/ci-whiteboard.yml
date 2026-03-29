@@ -5,9 +5,11 @@ on:
     branches: [dev, stable]
     paths:
       - 'realtime_ai_whiteboard/**'
+      - '.github/workflows/ci-whiteboard.yml'
   pull_request:
     paths:
       - 'realtime_ai_whiteboard/**'
+      - '.github/workflows/ci-whiteboard.yml'
 
 jobs:
   lint-bff:

@@ -82,7 +82,13 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     sourceDirectories.setFrom(files("src/main/kotlin"))
     classDirectories.setFrom(
         fileTree("build/tmp/kotlin-classes/debug") {
-            exclude("**/MainActivity*", "**/ui/theme/**")
+            exclude(
+                "**/MainActivity*",
+                "**/WorkflowApp*",
+                "**/ui/screens/**",
+                "**/ui/theme/Theme*",
+                "**/ComposableSingletons*",
+            )
         },
     )
     executionData.setFrom(

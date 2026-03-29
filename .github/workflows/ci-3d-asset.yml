@@ -5,9 +5,11 @@ on:
     branches: [dev, stable]
     paths:
       - '3d_asset_collaboration/**'
+      - '.github/workflows/ci-3d-asset.yml'
   pull_request:
     paths:
       - '3d_asset_collaboration/**'
+      - '.github/workflows/ci-3d-asset.yml'
 
 jobs:
   build-asset-api:
