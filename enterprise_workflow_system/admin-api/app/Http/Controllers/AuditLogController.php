@@ -11,7 +11,7 @@ class AuditLogController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = AuditLog::with('user')->latest();
+        $query = AuditLog::latest();
 
         if ($request->has('action')) {
             $query->where('action', $request->input('action'));

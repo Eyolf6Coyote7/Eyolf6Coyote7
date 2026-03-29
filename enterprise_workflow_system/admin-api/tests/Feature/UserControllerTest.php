@@ -14,7 +14,7 @@ class UserControllerTest extends TestCase
     {
         User::factory()->count(3)->create();
 
-        $response = $this->getJson('/api/users');
+        $response = $this->getJson('/api/v1/users');
 
         $response->assertStatus(200)
             ->assertJsonStructure(['data', 'current_page', 'per_page']);
@@ -22,7 +22,7 @@ class UserControllerTest extends TestCase
 
     public function test_store_creates_user_with_valid_data(): void
     {
-        $response = $this->postJson('/api/users', [
+        $response = $this->postJson('/api/v1/users', [
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'password123',
@@ -37,7 +37,7 @@ class UserControllerTest extends TestCase
 
     public function test_store_validates_required_fields(): void
     {
-        $response = $this->postJson('/api/users', []);
+        $response = $this->postJson('/api/v1/users', []);
 
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['name', 'email', 'password']);
@@ -47,7 +47,7 @@ class UserControllerTest extends TestCase
     {
         User::factory()->create(['email' => 'taken@example.com']);
 
-        $response = $this->postJson('/api/users', [
+        $response = $this->postJson('/api/v1/users', [
             'name' => 'User',
             'email' => 'taken@example.com',
             'password' => 'password123',
@@ -59,7 +59,7 @@ class UserControllerTest extends TestCase
 
     public function test_store_validates_role_enum(): void
     {
-        $response = $this->postJson('/api/users', [
+        $response = $this->postJson('/api/v1/users', [
             'name' => 'User',
             'email' => 'user@example.com',
             'password' => 'password123',
@@ -74,7 +74,7 @@ class UserControllerTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->getJson("/api/users/{$user->id}");
+        $response = $this->getJson("/api/v1/users/{$user->id}");
 
         $response->assertStatus(200)
             ->assertJsonFragment(['id' => $user->id]);
@@ -82,7 +82,7 @@ class UserControllerTest extends TestCase
 
     public function test_show_returns_404_for_missing_user(): void
     {
-        $response = $this->getJson('/api/users/9999');
+        $response = $this->getJson('/api/v1/users/9999');
 
         $response->assertStatus(404);
     }
@@ -91,7 +91,7 @@ class UserControllerTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->putJson("/api/users/{$user->id}", [
+        $response = $this->putJson("/api/v1/users/{$user->id}", [
             'name' => 'Updated Name',
         ]);
 
@@ -103,7 +103,7 @@ class UserControllerTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->deleteJson("/api/users/{$user->id}");
+        $response = $this->deleteJson("/api/v1/users/{$user->id}");
 
         $response->assertStatus(200)
             ->assertJsonFragment(['message' => 'User deleted']);
