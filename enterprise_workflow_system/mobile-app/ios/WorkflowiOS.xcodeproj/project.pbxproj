@@ -1,0 +1,343 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		21E250B8CA2422A8A5106F26 /* WorkflowRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371C666852A6F7971476627E /* WorkflowRequest.swift */; };
+		26A53B7F80F330094CFA9024 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A49761401FBD8241F0F6650 /* DashboardView.swift */; };
+		61D78495A88AB224CB454582 /* ApprovalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC5D67A6BF15EFD54EC3536 /* ApprovalsView.swift */; };
+		867E7181F58C74147C6F339C /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CD6F70431436A21C1B99D2 /* ProfileView.swift */; };
+		93AB501A123F985417A90628 /* ApprovalItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C0A63A3741A428D80EC54C1 /* ApprovalItem.swift */; };
+		AAA63DB51A0E5301C0AAE5E0 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9229F5E7B8D770E18083CF4C /* MockData.swift */; };
+		BEA28571F29627251A3ABC58 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF1F81F17C2B7433E867817 /* LoginView.swift */; };
+		C72804DA5BF2C8BB1EB09417 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B34A4DEE9F351764FD91EA /* ContentView.swift */; };
+		F85AD5D120FE2B9FFCAE11BF /* WorkflowiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EF1D264F95E94924CAF179 /* WorkflowiOSApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0A49761401FBD8241F0F6650 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		19B34A4DEE9F351764FD91EA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		371C666852A6F7971476627E /* WorkflowRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkflowRequest.swift; sourceTree = "<group>"; };
+		3BF1F81F17C2B7433E867817 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		4C0A63A3741A428D80EC54C1 /* ApprovalItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApprovalItem.swift; sourceTree = "<group>"; };
+		5AC5D67A6BF15EFD54EC3536 /* ApprovalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApprovalsView.swift; sourceTree = "<group>"; };
+		5C4EC6248AB7BCB546CD4B22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		90CD6F70431436A21C1B99D2 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		9229F5E7B8D770E18083CF4C /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
+		9D20DEB679D5C0FA03C93BE2 /* WorkflowiOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = WorkflowiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C5EF1D264F95E94924CAF179 /* WorkflowiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkflowiOSApp.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		15002464C7DB6EFF6CB42B44 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				4C0A63A3741A428D80EC54C1 /* ApprovalItem.swift */,
+				371C666852A6F7971476627E /* WorkflowRequest.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		2343BA840FA88C0AE03FF513 = {
+			isa = PBXGroup;
+			children = (
+				849281A3931BB8ACBED46447 /* WorkflowiOS */,
+				960F0855236AB15095A3F2FA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		505752DBBA2EBD56CAD1011A /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				9229F5E7B8D770E18083CF4C /* MockData.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		6D8E0BDAEDF3E5F95F96048D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5AC5D67A6BF15EFD54EC3536 /* ApprovalsView.swift */,
+				0A49761401FBD8241F0F6650 /* DashboardView.swift */,
+				3BF1F81F17C2B7433E867817 /* LoginView.swift */,
+				90CD6F70431436A21C1B99D2 /* ProfileView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		849281A3931BB8ACBED46447 /* WorkflowiOS */ = {
+			isa = PBXGroup;
+			children = (
+				19B34A4DEE9F351764FD91EA /* ContentView.swift */,
+				5C4EC6248AB7BCB546CD4B22 /* Info.plist */,
+				C5EF1D264F95E94924CAF179 /* WorkflowiOSApp.swift */,
+				505752DBBA2EBD56CAD1011A /* Data */,
+				15002464C7DB6EFF6CB42B44 /* Models */,
+				6D8E0BDAEDF3E5F95F96048D /* Views */,
+			);
+			path = WorkflowiOS;
+			sourceTree = "<group>";
+		};
+		960F0855236AB15095A3F2FA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9D20DEB679D5C0FA03C93BE2 /* WorkflowiOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		688C50EC1DA90403D78B568A /* WorkflowiOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B46241C3CAF0C12EB85CC0BB /* Build configuration list for PBXNativeTarget "WorkflowiOS" */;
+			buildPhases = (
+				3712084A556C7BBEA1851851 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WorkflowiOS;
+			packageProductDependencies = (
+			);
+			productName = WorkflowiOS;
+			productReference = 9D20DEB679D5C0FA03C93BE2 /* WorkflowiOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		57E588B8BC3D39D28013BBC9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					688C50EC1DA90403D78B568A = {
+						DevelopmentTeam = "";
+					};
+				};
+			};
+			buildConfigurationList = 58CB2E24405A112581D459B8 /* Build configuration list for PBXProject "WorkflowiOS" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 2343BA840FA88C0AE03FF513;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 960F0855236AB15095A3F2FA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				688C50EC1DA90403D78B568A /* WorkflowiOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3712084A556C7BBEA1851851 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				93AB501A123F985417A90628 /* ApprovalItem.swift in Sources */,
+				61D78495A88AB224CB454582 /* ApprovalsView.swift in Sources */,
+				C72804DA5BF2C8BB1EB09417 /* ContentView.swift in Sources */,
+				26A53B7F80F330094CFA9024 /* DashboardView.swift in Sources */,
+				BEA28571F29627251A3ABC58 /* LoginView.swift in Sources */,
+				AAA63DB51A0E5301C0AAE5E0 /* MockData.swift in Sources */,
+				867E7181F58C74147C6F339C /* ProfileView.swift in Sources */,
+				21E250B8CA2422A8A5106F26 /* WorkflowRequest.swift in Sources */,
+				F85AD5D120FE2B9FFCAE11BF /* WorkflowiOSApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		18C6CD44E623421E9D4BD857 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = WorkflowiOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.workflow.WorkflowiOS;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		317BEA9BC342900BBCEBDE87 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = WorkflowiOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.workflow.WorkflowiOS;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		DF115C657BAF39656A57D178 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		E238AF955A13D9FDC155145F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		58CB2E24405A112581D459B8 /* Build configuration list for PBXProject "WorkflowiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E238AF955A13D9FDC155145F /* Debug */,
+				DF115C657BAF39656A57D178 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B46241C3CAF0C12EB85CC0BB /* Build configuration list for PBXNativeTarget "WorkflowiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				18C6CD44E623421E9D4BD857 /* Debug */,
+				317BEA9BC342900BBCEBDE87 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 57E588B8BC3D39D28013BBC9 /* Project object */;
+}

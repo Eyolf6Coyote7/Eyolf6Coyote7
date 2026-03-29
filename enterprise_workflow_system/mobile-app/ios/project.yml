@@ -1,0 +1,14 @@
+name: WorkflowiOS
+options:
+  bundleIdPrefix: com.workflow
+  deploymentTarget:
+    iOS: "17.0"
+targets:
+  WorkflowiOS:
+    type: application
+    platform: iOS
+    sources:
+      - WorkflowiOS
+    settings:
+      DEVELOPMENT_TEAM: ""
+      INFOPLIST_FILE: WorkflowiOS/Info.plist
