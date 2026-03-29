@@ -19,7 +19,7 @@ All local, no cloud: PostgreSQL, Redis, MinIO, Docker Compose, Keycloak, MQTT (M
 - **Default branch**: `dev`
 - **Stable branch**: `stable` (demo ready)
 - **Feature branches**: `<type>/#<issue>-<description>`
-- **Commit format**: `<emoji><type>#<issue>: <description>`
+- **Commit format**: `<type>#<issue>: <description>` (no emoji — release-please requires clean conventional commit prefix)
 - **Conventional Commits** — version bumps are determined by commit types
 - **Tag format**: `<project>/v<major>.<minor>.<patch>`
 - Always create an issue before committing. Never push without an issue reference.
