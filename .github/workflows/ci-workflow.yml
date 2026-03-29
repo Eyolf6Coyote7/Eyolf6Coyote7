@@ -162,7 +162,7 @@ jobs:
       - name: Extract coverage %
         id: cov
         run: |
-          PCT=$(grep -oP 'INSTRUCTION.*?(\d+)%' build/reports/jacoco/test/html/index.html | grep -oP '\d+' | head -1 || echo "0")
+          PCT=$(grep -oP '<td>Total</td>.*?<td class="ctr2">\K\d+' build/reports/jacoco/test/html/index.html || echo "0")
           echo "pct=$PCT" >> "$GITHUB_OUTPUT"
           if [ "${PCT%.*}" -ge 80 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 60 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 40 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
       - name: Update badge
@@ -193,7 +193,7 @@ jobs:
       - name: Extract coverage %
         id: cov
         run: |
-          PCT=$(grep -oP 'INSTRUCTION.*?(\d+)%' build/reports/jacoco/test/html/index.html | grep -oP '\d+' | head -1 || echo "0")
+          PCT=$(grep -oP '<td>Total</td>.*?<td class="ctr2">\K\d+' build/reports/jacoco/test/html/index.html || echo "0")
           echo "pct=$PCT" >> "$GITHUB_OUTPUT"
           if [ "${PCT%.*}" -ge 80 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 60 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "${PCT%.*}" -ge 40 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
       - name: Update badge
