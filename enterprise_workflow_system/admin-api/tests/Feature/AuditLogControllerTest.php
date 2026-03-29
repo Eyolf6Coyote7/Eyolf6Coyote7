@@ -14,7 +14,7 @@ class AuditLogControllerTest extends TestCase
     {
         AuditLog::factory()->count(5)->create();
 
-        $response = $this->getJson('/api/audit-log');
+        $response = $this->getJson('/api/v1/audit-log');
 
         $response->assertStatus(200)
             ->assertJsonStructure(['data', 'current_page']);
@@ -25,7 +25,7 @@ class AuditLogControllerTest extends TestCase
         AuditLog::factory()->create(['action' => 'Created']);
         AuditLog::factory()->create(['action' => 'Deleted']);
 
-        $response = $this->getJson('/api/audit-log?action=Created');
+        $response = $this->getJson('/api/v1/audit-log?action=Created');
 
         $response->assertStatus(200);
         $data = $response->json('data');
@@ -39,7 +39,7 @@ class AuditLogControllerTest extends TestCase
         AuditLog::factory()->create(['entity_type' => 'User']);
         AuditLog::factory()->create(['entity_type' => 'Workflow']);
 
-        $response = $this->getJson('/api/audit-log?entity_type=User');
+        $response = $this->getJson('/api/v1/audit-log?entity_type=User');
 
         $response->assertStatus(200);
     }

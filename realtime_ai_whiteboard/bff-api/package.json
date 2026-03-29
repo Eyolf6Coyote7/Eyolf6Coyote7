@@ -87,7 +87,13 @@
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s",
-      "!**/*.stories.*"
+      "!**/*.stories.*",
+      "!**/*.module.ts",
+      "!**/main.ts",
+      "!**/*.middleware.ts",
+      "!**/*.strategy.ts",
+      "!**/*.decorator.ts",
+      "!**/*.d.ts"
     ],
     "coverageDirectory": "../coverage",
     "coverageReporters": ["text", "json-summary"],

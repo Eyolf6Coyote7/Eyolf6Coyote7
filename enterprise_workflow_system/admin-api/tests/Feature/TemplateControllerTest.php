@@ -14,7 +14,7 @@ class TemplateControllerTest extends TestCase
     {
         WorkflowTemplate::factory()->count(3)->create();
 
-        $response = $this->getJson('/api/templates');
+        $response = $this->getJson('/api/v1/templates');
 
         $response->assertStatus(200)
             ->assertJsonStructure(['data', 'current_page']);
@@ -22,7 +22,7 @@ class TemplateControllerTest extends TestCase
 
     public function test_store_creates_template(): void
     {
-        $response = $this->postJson('/api/templates', [
+        $response = $this->postJson('/api/v1/templates', [
             'name' => 'Expense Approval',
             'description' => 'Standard expense workflow',
             'schema' => ['steps' => ['submit', 'review', 'approve']],
@@ -35,7 +35,7 @@ class TemplateControllerTest extends TestCase
 
     public function test_store_validates_name_required(): void
     {
-        $response = $this->postJson('/api/templates', []);
+        $response = $this->postJson('/api/v1/templates', []);
 
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['name']);
