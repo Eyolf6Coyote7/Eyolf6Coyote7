@@ -219,6 +219,6 @@ jobs:
           auth: ${{ secrets.GIST_TOKEN }}
           gistID: ba5e6bd35946886986dbba31e9252f66
           filename: asset-mobile.json
-          label: mobile
+          label: react-native
           message: ${{ steps.cov.outputs.pct }}%
           color: ${{ steps.cov.outputs.color }}
