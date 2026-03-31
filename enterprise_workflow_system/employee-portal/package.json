@@ -20,7 +20,7 @@
   "dependencies": {
     "@apollo/client": "^3.10.0",
     "@element-plus/icons-vue": "^2.3.0",
-    "axios": "^1.7.0",
+    "axios": "1.14.0",
     "element-plus": "^2.7.0",
     "graphql": "^16.9.0",
     "pinia": "^2.1.0",
