@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { DemoTooltip } from "../components/DemoTooltip";
 
-const isMock = import.meta.env.VITE_MOCK === "true";
-
 export default function LoginPage() {
   const { t } = useTranslation();
   const [email, setEmail] = useState("");

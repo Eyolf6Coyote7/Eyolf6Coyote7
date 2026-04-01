@@ -223,7 +223,7 @@ export default function MobileAssetListPage() {
 
       {/* Asset list */}
       <div style={{ paddingBottom: 88 }}>
-        {assets.map((a, i) => (
+        {assets.map((a) => (
           <Link to={`/mobile/assets/${a.id}`} key={a.id} style={{ textDecoration: "none", color: "inherit" }}>
             <div
               style={{

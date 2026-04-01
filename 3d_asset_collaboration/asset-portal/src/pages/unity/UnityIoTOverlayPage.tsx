@@ -326,7 +326,7 @@ export default function UnityIoTOverlayPage() {
               ["UNIT C4 STATUS", ""],
               ["Throughput", "1,340 p/h"],
               ["Ovr.Load", "12.4 kW"],
-            ].map(([l, v], i) => (
+            ].map(([l, v]) => (
               <div key={l}>
                 <div
                   style={{

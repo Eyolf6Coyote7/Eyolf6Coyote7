@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DemoTooltip } from "../components/DemoTooltip";
 
-const isMock = import.meta.env.VITE_MOCK === "true";
-
 const apiKeys = [
   { name: "Unity Client", lastUsed: "Last used 2h ago", key: "sk_••••••••••••v9f7", created: "Oct 12, 2023" },
   { name: "CI/CD Pipeline", lastUsed: "Last used 1d ago", key: "sk_••••••••••••n2k1", created: "Aug 01, 2023" },

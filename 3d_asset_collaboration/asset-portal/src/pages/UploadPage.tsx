@@ -2,8 +2,6 @@ import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { DemoTooltip } from "../components/DemoTooltip";
 
-const isMock = import.meta.env.VITE_MOCK === "true";
-
 const stepKeys = ["upload.dropzone", "upload.metadata", "common.submit"];
 const aiTags = ["shoe", "sneaker", "hero-shot"];
 

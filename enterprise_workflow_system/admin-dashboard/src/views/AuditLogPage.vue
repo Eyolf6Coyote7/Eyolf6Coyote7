@@ -5,7 +5,7 @@ import { api } from '@/api'
 import type { AuditEntry } from '@/api'
 import DemoTooltip from '@/components/DemoTooltip.vue'
 
-const { t } = useI18n()
+useI18n()
 const entries = ref<AuditEntry[]>([])
 const loading = ref(true)
 const eventFilter = ref('all')

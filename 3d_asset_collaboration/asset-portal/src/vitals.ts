@@ -2,7 +2,9 @@ import type { Metric } from "web-vitals";
 import { onCLS, onFCP, onINP, onLCP, onTTFB } from "web-vitals";
 
 function sendMetric(metric: Metric) {
-  console.log("[Web Vitals]", metric.name, metric.value, metric);
+  if (import.meta.env.DEV) {
+    console.log("[Web Vitals]", metric.name, metric.value, metric);
+  }
 }
 
 export function initWebVitals() {
