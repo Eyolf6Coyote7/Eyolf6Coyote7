@@ -29,3 +29,6 @@ app.use(ElementPlus)
 app.use(i18n)
 
 app.mount('#app')
+
+import { initWebVitals } from './vitals'
+initWebVitals()

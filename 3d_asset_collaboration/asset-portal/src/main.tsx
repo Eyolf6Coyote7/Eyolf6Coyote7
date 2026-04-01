@@ -6,6 +6,9 @@ import "./i18n";
 import "./theme.css";
 import { store } from "./store";
 import { router } from "./router";
+import { initWebVitals } from "./vitals";
+
+initWebVitals();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

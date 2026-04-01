@@ -28,3 +28,6 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 
 app.mount('#app')
+
+import { initWebVitals } from './vitals'
+initWebVitals()
