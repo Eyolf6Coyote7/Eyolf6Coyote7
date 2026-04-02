@@ -165,7 +165,7 @@ jobs:
       - run: pnpm build
       - uses: treosh/lighthouse-ci-action@v12
         with:
-          configPath: enterprise_workflow_system/employee-portal/lighthouserc.js
+          configPath: enterprise_workflow_system/employee-portal/lighthouserc.cjs
           uploadArtifacts: true
 
   lighthouse-admin-dashboard:
@@ -185,7 +185,7 @@ jobs:
       - run: pnpm build
       - uses: treosh/lighthouse-ci-action@v12
         with:
-          configPath: enterprise_workflow_system/admin-dashboard/lighthouserc.js
+          configPath: enterprise_workflow_system/admin-dashboard/lighthouserc.cjs
           uploadArtifacts: true
 
   test-workflow-api:
