@@ -166,6 +166,7 @@ jobs:
       - uses: treosh/lighthouse-ci-action@v12
         with:
           configPath: enterprise_workflow_system/employee-portal/lighthouserc.cjs
+          staticDistDir: enterprise_workflow_system/employee-portal/dist
           uploadArtifacts: true
 
   lighthouse-admin-dashboard:
@@ -186,6 +187,7 @@ jobs:
       - uses: treosh/lighthouse-ci-action@v12
         with:
           configPath: enterprise_workflow_system/admin-dashboard/lighthouserc.cjs
+          staticDistDir: enterprise_workflow_system/admin-dashboard/dist
           uploadArtifacts: true
 
   test-workflow-api:

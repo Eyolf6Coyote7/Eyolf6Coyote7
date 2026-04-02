@@ -1,7 +1,6 @@
 module.exports = {
   ci: {
     collect: {
-      staticDistDir: './dist',
       isSinglePageApplication: true,
     },
     assert: {
