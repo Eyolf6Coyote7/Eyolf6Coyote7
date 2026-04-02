@@ -167,6 +167,7 @@ jobs:
         with:
           configPath: enterprise_workflow_system/employee-portal/lighthouserc.cjs
           uploadArtifacts: true
+          artifactName: lighthouse-employee-portal
 
   lighthouse-admin-dashboard:
     name: Lighthouse CI — Admin Dashboard
@@ -187,6 +188,7 @@ jobs:
         with:
           configPath: enterprise_workflow_system/admin-dashboard/lighthouserc.cjs
           uploadArtifacts: true
+          artifactName: lighthouse-admin-dashboard
 
   test-workflow-api:
     name: Test + Coverage — Workflow API

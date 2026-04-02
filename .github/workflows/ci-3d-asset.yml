@@ -121,6 +121,7 @@ jobs:
         with:
           configPath: 3d_asset_collaboration/asset-portal/lighthouserc.cjs
           uploadArtifacts: true
+          artifactName: lighthouse-asset-portal
 
   test-asset-api:
     name: Test + Coverage — Asset API
