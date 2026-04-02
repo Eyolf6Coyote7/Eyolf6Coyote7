@@ -164,10 +164,30 @@ jobs:
       - run: pnpm install
       - run: npx vite build --mode development
       - uses: treosh/lighthouse-ci-action@v12
+        id: lhci
         with:
           configPath: enterprise_workflow_system/employee-portal/lighthouserc.cjs
           uploadArtifacts: true
           artifactName: lighthouse-employee-portal
+      - name: Extract Lighthouse score
+        id: lh
+        run: |
+          JSON=$(find ${{ steps.lhci.outputs.resultsPath }} -name '*.json' -not -name 'manifest.json' | head -1)
+          PERF=$(node -e "const r=require('$JSON');console.log(Math.round(r.categories.performance.score*100))")
+          echo "perf=$PERF" >> "$GITHUB_OUTPUT"
+          if [ "$PERF" -ge 90 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "$PERF" -ge 70 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "$PERF" -ge 50 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
+        working-directory: .
+      - name: Update Lighthouse badge
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        continue-on-error: true
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ba5e6bd35946886986dbba31e9252f66
+          filename: workflow-portal-lighthouse.json
+          label: lighthouse
+          message: ${{ steps.lh.outputs.perf }}
+          color: ${{ steps.lh.outputs.color }}
 
   lighthouse-admin-dashboard:
     name: Lighthouse CI — Admin Dashboard
@@ -185,10 +205,30 @@ jobs:
       - run: pnpm install
       - run: npx vite build --mode development
       - uses: treosh/lighthouse-ci-action@v12
+        id: lhci
         with:
           configPath: enterprise_workflow_system/admin-dashboard/lighthouserc.cjs
           uploadArtifacts: true
           artifactName: lighthouse-admin-dashboard
+      - name: Extract Lighthouse score
+        id: lh
+        run: |
+          JSON=$(find ${{ steps.lhci.outputs.resultsPath }} -name '*.json' -not -name 'manifest.json' | head -1)
+          PERF=$(node -e "const r=require('$JSON');console.log(Math.round(r.categories.performance.score*100))")
+          echo "perf=$PERF" >> "$GITHUB_OUTPUT"
+          if [ "$PERF" -ge 90 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "$PERF" -ge 70 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "$PERF" -ge 50 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
+        working-directory: .
+      - name: Update Lighthouse badge
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        continue-on-error: true
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ba5e6bd35946886986dbba31e9252f66
+          filename: workflow-admin-lighthouse.json
+          label: lighthouse
+          message: ${{ steps.lh.outputs.perf }}
+          color: ${{ steps.lh.outputs.color }}
 
   test-workflow-api:
     name: Test + Coverage — Workflow API
