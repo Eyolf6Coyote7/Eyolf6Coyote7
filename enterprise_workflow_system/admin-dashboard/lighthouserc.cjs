@@ -1,6 +1,7 @@
 module.exports = {
   ci: {
     collect: {
+      staticDistDir: './enterprise_workflow_system/admin-dashboard/dist',
       isSinglePageApplication: true,
     },
     assert: {

@@ -120,7 +120,6 @@ jobs:
       - uses: treosh/lighthouse-ci-action@v12
         with:
           configPath: 3d_asset_collaboration/asset-portal/lighthouserc.cjs
-          staticDistDir: 3d_asset_collaboration/asset-portal/dist
           uploadArtifacts: true
 
   test-asset-api:

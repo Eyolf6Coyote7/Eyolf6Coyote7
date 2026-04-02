@@ -1,6 +1,7 @@
 module.exports = {
   ci: {
     collect: {
+      staticDistDir: './3d_asset_collaboration/asset-portal/dist',
       isSinglePageApplication: true,
     },
     assert: {
