@@ -162,7 +162,7 @@ jobs:
         with:
           node-version: 22
       - run: pnpm install
-      - run: pnpm build
+      - run: npx vite build --mode development
       - uses: treosh/lighthouse-ci-action@v12
         with:
           configPath: enterprise_workflow_system/employee-portal/lighthouserc.cjs
@@ -182,7 +182,7 @@ jobs:
         with:
           node-version: 22
       - run: pnpm install
-      - run: pnpm build
+      - run: npx vite build --mode development
       - uses: treosh/lighthouse-ci-action@v12
         with:
           configPath: enterprise_workflow_system/admin-dashboard/lighthouserc.cjs
