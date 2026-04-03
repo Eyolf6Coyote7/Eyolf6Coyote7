@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { api } from '@/api'
 import type { Template } from '@/api'
 import DemoTooltip from '@/components/DemoTooltip.vue'
 
-const router = useRouter()
-const { t } = useI18n()
+useI18n()
 const templates = ref<Template[]>([])
 const loading = ref(true)
 

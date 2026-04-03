@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DemoTooltip } from "../components/DemoTooltip";
 
-const isMock = import.meta.env.VITE_MOCK === "true";
-
 const members = [
   { name: "Sarah Bowerman", email: "sarah.b@acme-studio.io", role: "Owner", joined: "Jan 12, 2024", removable: false },
   { name: "Marcus Wood", email: "m.wood@acme-studio.io", role: "Editor", joined: "Feb 05, 2024", removable: true },

@@ -62,7 +62,7 @@ const alertData = [
 ];
 
 export default function IoTDashboardPage() {
-  const [sensors, setSensors] = useState<SensorData[]>([]);
+  const [_sensors, setSensors] = useState<SensorData[]>([]);
   const [activeRange, setActiveRange] = useState("24h");
   const [autoRefresh, setAutoRefresh] = useState(true);
 

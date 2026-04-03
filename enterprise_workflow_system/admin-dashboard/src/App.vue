@@ -7,7 +7,7 @@ import { useAuthStore } from '@/stores/auth'
 const router = useRouter()
 const route = useRoute()
 const auth = useAuthStore()
-const { t, locale } = useI18n()
+const { locale } = useI18n()
 
 function toggleLang() {
   locale.value = locale.value === 'en' ? 'zh-TW' : 'en'

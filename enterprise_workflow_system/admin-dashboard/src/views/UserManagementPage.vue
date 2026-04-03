@@ -5,7 +5,7 @@ import { api } from '@/api'
 import type { User } from '@/api'
 import DemoTooltip from '@/components/DemoTooltip.vue'
 
-const { t } = useI18n()
+useI18n()
 const users = ref<User[]>([])
 const loading = ref(true)
 const search = ref('')
@@ -134,7 +134,7 @@ function statusColor(status: string) {
             </td>
             <td>
               {{
-                u.role === 'admin' ? $t('departments.engineering') : $t('departments.operations')
+                u.role === 'Admin' ? $t('departments.engineering') : $t('departments.operations')
               }}
             </td>
             <td>

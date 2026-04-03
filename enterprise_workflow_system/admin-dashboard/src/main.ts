@@ -6,6 +6,7 @@ import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import App from './App.vue'
 import router from './router'
+import { initWebVitals } from './vitals'
 import en from './i18n/en.json'
 import zhTW from './i18n/zh-TW.json'
 
@@ -28,3 +29,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 
 app.mount('#app')
+
+initWebVitals()

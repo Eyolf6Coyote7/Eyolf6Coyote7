@@ -7,6 +7,7 @@ import { createI18n } from 'vue-i18n'
 
 import App from './App.vue'
 import router from './router'
+import { initWebVitals } from './vitals'
 import en from './i18n/en.json'
 import zhTW from './i18n/zh-TW.json'
 
@@ -29,3 +30,5 @@ app.use(ElementPlus)
 app.use(i18n)
 
 app.mount('#app')
+
+initWebVitals()
