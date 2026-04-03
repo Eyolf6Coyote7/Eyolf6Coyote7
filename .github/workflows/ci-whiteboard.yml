@@ -104,6 +104,8 @@ jobs:
           node-version: 22
       - run: pnpm install
       - run: npx vite build --mode development
+        env:
+          VITE_MOCK: 'true'
       - uses: treosh/lighthouse-ci-action@v12
         id: lhci
         with:

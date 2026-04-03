@@ -3,6 +3,11 @@ module.exports = {
     collect: {
       staticDistDir: './realtime_ai_whiteboard/web-app/dist',
       isSinglePageApplication: true,
+      settings: {
+        maxWaitForFcp: 30000,
+        maxWaitForLoad: 45000,
+        chromeFlags: ['--no-sandbox', '--disable-gpu', '--disable-software-rasterizer'],
+      },
     },
     assert: {
       assertions: {
