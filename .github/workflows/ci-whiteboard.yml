@@ -116,9 +116,9 @@ jobs:
         id: lh
         run: |
           JSON=$(find ${{ steps.lhci.outputs.resultsPath }} -name '*.json' -not -name 'manifest.json' | head -1)
-          PERF=$(node -e "const r=require('$JSON');console.log(Math.round(r.categories.performance.score*100))")
-          echo "perf=$PERF" >> "$GITHUB_OUTPUT"
-          if [ "$PERF" -ge 90 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "$PERF" -ge 70 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "$PERF" -ge 50 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
+          A11Y=$(node -e "const r=require('$JSON');console.log(Math.round(r.categories.accessibility.score*100))")
+          echo "a11y=$A11Y" >> "$GITHUB_OUTPUT"
+          if [ "$A11Y" -ge 90 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "$A11Y" -ge 70 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "$A11Y" -ge 50 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi
         working-directory: .
       - name: Update Lighthouse badge
         if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
@@ -128,8 +128,8 @@ jobs:
           auth: ${{ secrets.GIST_TOKEN }}
           gistID: ba5e6bd35946886986dbba31e9252f66
           filename: whiteboard-web-lighthouse.json
-          label: lighthouse
-          message: ${{ steps.lh.outputs.perf }}
+          label: a11y
+          message: ${{ steps.lh.outputs.a11y }}
           color: ${{ steps.lh.outputs.color }}
 
   test-bff:
