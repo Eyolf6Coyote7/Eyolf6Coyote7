@@ -1,0 +1,28 @@
+{
+  "default": "claude-sonnet-4-6",
+  "routing": {
+    "fe-csr-architect":  "claude-opus-4-6",
+    "fe-csr-implementer": "claude-sonnet-4-6",
+    "fe-csr-reviewer":    "claude-sonnet-4-6",
+    "fe-csr-tester":      "claude-sonnet-4-6",
+    "fe-csr-deploy":      "claude-haiku-4-5",
+    "fe-csr-obs":         "claude-sonnet-4-6",
+
+    "be-architect":   "claude-opus-4-6",
+    "be-implementer": "claude-sonnet-4-6",
+    "be-reviewer":    "claude-sonnet-4-6",
+    "be-tester":      "claude-sonnet-4-6",
+    "be-deploy":      "claude-sonnet-4-6",
+    "be-obs":         "claude-sonnet-4-6",
+
+    "precommit-agent": "claude-haiku-4-5",
+    "security-agent":  "claude-sonnet-4-6",
+    "cicd-agent":      "claude-sonnet-4-6",
+    "iterate-agent":   "claude-sonnet-4-6"
+  },
+  "rationale": {
+    "haiku":  "Low-complexity tasks such as precommit lint/format, CSR static deploy to CDN.",
+    "sonnet": "Default for implementation, review, test, observability — balances quality and cost.",
+    "opus":   "Architecture decisions across the React + Yjs CRDT + NestJS + Redis Stream stack require deep reasoning about concurrency and data flow."
+  }
+}

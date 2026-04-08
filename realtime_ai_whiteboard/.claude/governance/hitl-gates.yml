@@ -1,0 +1,52 @@
+# Human-in-the-loop gates for realtime_ai_whiteboard
+# Lists actions that MUST be approved by a human and cannot be auto-executed by AI.
+
+gates:
+  - name: prisma-migration
+    description: Any Prisma schema migration must be human-reviewed before running against a real database.
+    triggers:
+      - file_pattern: "bff-api/prisma/migrations/**"
+      - command_pattern: "npx prisma migrate deploy*"
+      - command_pattern: "npx prisma migrate reset*"
+    approval_method: pull_request_review
+    required_approvers: 1
+    notify: ["#backend", "#data-eng"]
+
+  - name: prod-deploy
+    description: Any production deploy must be human-approved.
+    triggers:
+      - subagent: fe-csr-deploy
+        condition: environment == "production"
+      - subagent: be-deploy
+        condition: environment == "production"
+      - command_pattern: "vercel deploy --prod"
+      - command_pattern: "kubectl apply"
+    approval_method: pull_request_review
+    required_approvers: 1
+    notify: ["#oncall", "#harness-deploys"]
+
+  - name: security-high
+    description: SAST / dependency audit findings at critical or high severity must be human-reviewed.
+    triggers:
+      - subagent: security-agent
+        condition: severity in [critical, high]
+    approval_method: pull_request_review
+    required_approvers: 2
+    notify: ["#security"]
+
+  - name: yjs-gateway-auth-change
+    description: Changes to the Yjs WebSocket JWT validation logic must be reviewed — this gates the whole collaboration layer.
+    triggers:
+      - file_pattern: "bff-api/src/**/y-websocket*"
+      - file_pattern: "bff-api/src/**/yjs*.gateway.ts"
+    approval_method: pull_request_review
+    required_approvers: 1
+    notify: ["#backend", "#security"]
+
+  - name: ai-service-model-change
+    description: Changes to the LangGraph agent prompt or Redis Stream consumer group must be reviewed because they affect async job ordering.
+    triggers:
+      - file_pattern: "ai-service/**/*.py"
+    approval_method: pull_request_review
+    required_approvers: 1
+    notify: ["#ai-platform"]

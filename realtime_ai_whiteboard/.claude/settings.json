@@ -1,0 +1,88 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Write(web-app/src/**)",
+      "Write(web-app/__tests__/**)",
+      "Write(web-app/e2e/**)",
+      "Write(mobile-app/app/**)",
+      "Write(mobile-app/src/**)",
+      "Write(bff-api/src/**)",
+      "Write(bff-api/test/**)",
+      "Write(bff-api/prisma/schema.prisma)",
+      "Write(ai-service/**)",
+      "Write(.harness/**)",
+      "Write(docs/adr/**)",
+      "Edit(web-app/src/**)",
+      "Edit(web-app/__tests__/**)",
+      "Edit(mobile-app/app/**)",
+      "Edit(mobile-app/src/**)",
+      "Edit(bff-api/src/**)",
+      "Edit(bff-api/test/**)",
+      "Edit(ai-service/**)",
+      "Bash(pnpm:*)",
+      "Bash(pnpm test:*)",
+      "Bash(pnpm run build)",
+      "Bash(pnpm nest:*)",
+      "Bash(npx prisma generate)",
+      "Bash(npx prisma format)",
+      "Bash(npx prisma validate)",
+      "Bash(python:*)",
+      "Bash(pytest:*)",
+      "Bash(pip install:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(jq:*)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(**/secrets.yml)",
+      "Read(**/secrets.yaml)",
+      "Read(**/credentials*)",
+      "Read(**/*.key)",
+      "Read(**/*.pem)",
+      "Write(.env)",
+      "Write(.env.*)",
+      "Write(**/migrations/**)",
+      "Write(infra/prod/**)",
+      "Write(k8s/prod/**)",
+      "Write(.github/workflows/deploy*.yml)",
+      "Bash(npx prisma migrate deploy*)",
+      "Bash(npx prisma migrate reset*)",
+      "Bash(kubectl apply*)",
+      "Bash(terraform apply*)",
+      "Bash(helm upgrade*)",
+      "Bash(vercel deploy --prod*)",
+      "Bash(rm -rf:*)",
+      "Bash(git push --force*)",
+      "Bash(git reset --hard*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/preToolUse_redLine.sh" },
+          { "type": "command", "command": ".claude/hooks/preToolUse_secretScan.sh" }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/preToolUse_redLine.sh" }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/postToolUse_auditLog.sh" }
+        ]
+      }
+    ]
+  }
+}

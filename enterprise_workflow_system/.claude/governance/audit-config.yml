@@ -1,0 +1,39 @@
+# Audit log configuration for enterprise_workflow_system.
+# Enterprise has stricter audit requirements than the other projects because it handles approval workflows,
+# which are themselves auditable business events in a regulated environment.
+
+local:
+  dir: .harness/audit/
+  format: jsonl
+  rotation: daily
+  retention_days: 90     # stricter than the default 30
+
+central:
+  collector: github-actions
+  workflow: .github/workflows/harness-verify.yml
+  store: s3://harness-audit-enterprise-workflow/
+  retention_days: 1095   # 3 years — matches the workflow approval retention policy
+
+hooks_writing:
+  - postToolUse_auditLog.sh
+
+required_fields:
+  - timestamp
+  - session_id
+  - tool
+  - user
+  - cell
+  - commit_sha
+
+# Extra required field for enterprise: which approval workflow the AI touched.
+# Populated by a workflow-specific hook in a future version.
+optional_fields:
+  - workflow_template_id
+
+forbidden_fields:
+  - prompt_content
+  - file_content
+  - chat_history
+  - email
+  - PII
+  - approval_decision  # the business-level approval/rejection decision belongs in the product audit log, not here

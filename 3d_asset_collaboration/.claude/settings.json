@@ -1,0 +1,106 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Write(asset-portal/src/**)",
+      "Write(asset-portal/__tests__/**)",
+      "Write(asset-portal/e2e/**)",
+      "Write(mobile-app/app/**)",
+      "Write(mobile-app/src/**)",
+      "Write(asset-api/Controllers/**)",
+      "Write(asset-api/Hubs/**)",
+      "Write(asset-api/Models/**)",
+      "Write(asset-api/Data/**)",
+      "Write(asset-api/Services/**)",
+      "Write(asset-api.Tests/**)",
+      "Write(iot-consumer/**)",
+      "Write(iot-consumer.Tests/**)",
+      "Write(ai-service/src/**)",
+      "Write(ai-service/tests/**)",
+      "Write(.harness/**)",
+      "Write(docs/adr/**)",
+      "Edit(asset-portal/src/**)",
+      "Edit(mobile-app/app/**)",
+      "Edit(mobile-app/src/**)",
+      "Edit(asset-api/Controllers/**)",
+      "Edit(asset-api/Hubs/**)",
+      "Edit(asset-api/Models/**)",
+      "Edit(asset-api/Data/**)",
+      "Edit(iot-consumer/**)",
+      "Edit(ai-service/src/**)",
+      "Bash(pnpm:*)",
+      "Bash(pnpm test:*)",
+      "Bash(pnpm run build)",
+      "Bash(dotnet build)",
+      "Bash(dotnet test)",
+      "Bash(dotnet format)",
+      "Bash(dotnet ef migrations add *)",
+      "Bash(dotnet ef dbcontext:*)",
+      "Bash(pytest:*)",
+      "Bash(ruff:*)",
+      "Bash(uvicorn:*)",
+      "Bash(pip install:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(jq:*)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(**/secrets.yml)",
+      "Read(**/secrets.yaml)",
+      "Read(**/credentials*)",
+      "Read(**/*.key)",
+      "Read(**/*.pem)",
+      "Read(asset-api/appsettings.Production.json)",
+      "Read(iot-consumer/appsettings.Production.json)",
+      "Write(.env)",
+      "Write(.env.*)",
+      "Write(asset-api/Migrations/**)",
+      "Write(asset-api/bin/**)",
+      "Write(asset-api/obj/**)",
+      "Write(iot-consumer/bin/**)",
+      "Write(iot-consumer/obj/**)",
+      "Write(asset-api/appsettings.Production.json)",
+      "Write(iot-consumer/appsettings.Production.json)",
+      "Write(infra/prod/**)",
+      "Write(k8s/prod/**)",
+      "Write(.github/workflows/deploy*.yml)",
+      "Bash(dotnet ef database update*)",
+      "Bash(dotnet ef database drop*)",
+      "Bash(dotnet publish -c Release*)",
+      "Bash(kubectl apply*)",
+      "Bash(terraform apply*)",
+      "Bash(helm upgrade*)",
+      "Bash(rm -rf:*)",
+      "Bash(git push --force*)",
+      "Bash(git reset --hard*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/preToolUse_redLine.sh" },
+          { "type": "command", "command": ".claude/hooks/preToolUse_secretScan.sh" }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/preToolUse_redLine.sh" }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/postToolUse_auditLog.sh" }
+        ]
+      }
+    ]
+  }
+}

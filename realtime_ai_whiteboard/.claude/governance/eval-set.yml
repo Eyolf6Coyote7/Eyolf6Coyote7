@@ -1,0 +1,55 @@
+# Eval set for the realtime_ai_whiteboard harness.
+# Each entry is a reference ticket that is re-run weekly against the current harness to detect regressions.
+
+eval_runs:
+  schedule: "0 2 * * 1"  # Every Monday at 02:00 UTC
+  out_dir: .harness/eval/results/
+
+  cells:
+    fe-csr-impl:
+      tickets:
+        - ticket_id: REF-FE-CSR-001
+          title: "Add a new Fabric.js drawing tool following the canvas-tool skill"
+          references_skill: .claude/skills/fabric-canvas-tool/SKILL.md
+          pass_threshold: 0.6
+        - ticket_id: REF-FE-CSR-002
+          title: "Add a Zustand slice wired to the VITE_MOCK dual client"
+          references_skill: .claude/skills/zustand-mock-real-store/SKILL.md
+          pass_threshold: 0.6
+        - ticket_id: REF-FE-CSR-003
+          title: "Add a new protected route with isMock bypass"
+          references_skill: .claude/skills/protected-route-auth-page/SKILL.md
+          pass_threshold: 0.6
+
+    be-impl:
+      tickets:
+        - ticket_id: REF-BE-001
+          title: "Add a multi-tenant CRUD controller following the NestJS tenant-crud skill"
+          references_skill: .claude/skills/nestjs-tenant-crud/SKILL.md
+          pass_threshold: 0.6
+        - ticket_id: REF-BE-002
+          title: "Add an SSE poller against a Redis Stream task queue"
+          references_skill: .claude/skills/ai-task-queue-sse/SKILL.md
+          pass_threshold: 0.6
+
+in_flight_sampling:
+  enabled: true
+  sample_rate: 0.1
+  judge_model: claude-opus-4-6
+  rubric: .harness/eval/rubric.md
+
+rubric:
+  - dimension: correctness
+    weight: 0.4
+    description: "Generated code satisfies the ticket acceptance criteria."
+  - dimension: convention
+    weight: 0.2
+    description: "Code follows the project conventions (naming, structure, import order)."
+  - dimension: safety
+    weight: 0.2
+    description: "Code avoids anti-patterns, red lines, and known security risks."
+  - dimension: maintainability
+    weight: 0.2
+    description: "Code is readable, has tests, and uses clear names."
+
+  pass_score: 4.0  # out of 5

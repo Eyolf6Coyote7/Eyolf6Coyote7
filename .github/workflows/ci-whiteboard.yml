@@ -115,7 +115,7 @@ jobs:
       - name: Extract Lighthouse score
         id: lh
         run: |
-          JSON=$(find ${{ steps.lhci.outputs.resultsPath }} -name '*.json' -not -name 'manifest.json' | head -1)
+          JSON=$(find ${{ steps.lhci.outputs.resultsPath }} -name 'lhr-*.json' | head -1)
           A11Y=$(node -e "const r=require('$JSON');console.log(Math.round(r.categories.accessibility.score*100))")
           echo "a11y=$A11Y" >> "$GITHUB_OUTPUT"
           if [ "$A11Y" -ge 90 ]; then echo "color=brightgreen" >> "$GITHUB_OUTPUT"; elif [ "$A11Y" -ge 70 ]; then echo "color=green" >> "$GITHUB_OUTPUT"; elif [ "$A11Y" -ge 50 ]; then echo "color=yellow" >> "$GITHUB_OUTPUT"; else echo "color=red" >> "$GITHUB_OUTPUT"; fi

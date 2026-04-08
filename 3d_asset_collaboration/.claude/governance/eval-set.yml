@@ -1,0 +1,71 @@
+# Eval set for the 3d_asset_collaboration harness.
+# This is the most cross-language project — C# + Python + TypeScript backend, React + r3f frontend.
+
+eval_runs:
+  schedule: "0 2 * * 1"
+  out_dir: .harness/eval/results/
+
+  cells:
+    fe-csr-react-impl:
+      tickets:
+        - ticket_id: REF-REACT-001
+          title: "Add an IoT telemetry dashboard with hand-SVG charts and auto-refresh toggle"
+          references_skill: .claude/skills/iot-realtime-dashboard/SKILL.md
+          pass_threshold: 0.6
+        - ticket_id: REF-REACT-002
+          title: "Add a 3-step file upload wizard with AI tag chips"
+          references_skill: .claude/skills/upload-wizard-stepper/SKILL.md
+          pass_threshold: 0.6
+        - ticket_id: REF-REACT-003
+          title: "Add a side-by-side version comparison page"
+          references_skill: .claude/skills/version-compare-split-view/SKILL.md
+          pass_threshold: 0.6
+
+    fe-csr-r3f-impl:
+      tickets:
+        - ticket_id: REF-R3F-001
+          title: "Add a 3D viewer component with OrbitControls, Environment, and useFrame animation"
+          references_skill: .claude/skills/three-viewer-r3f/SKILL.md
+          pass_threshold: 0.6
+
+    be-dotnet-impl:
+      tickets:
+        - ticket_id: REF-DOTNET-001
+          title: "Add a new ASP.NET Core controller with EF Core CRUD and Include()"
+          references_skill: .claude/skills/aspnet-ef-crud-pagination/SKILL.md
+          pass_threshold: 0.6
+        - ticket_id: REF-DOTNET-002
+          title: "Add a new SignalR hub with broadcast + room support"
+          references_skill: .claude/skills/signalr-realtime-hubs/SKILL.md
+          pass_threshold: 0.6
+
+    be-kafka-impl:
+      tickets:
+        - ticket_id: REF-KAFKA-001
+          title: "Add a new .NET BackgroundService consuming a Kafka topic and writing to TimescaleDB"
+          references_skill: .claude/skills/kafka-timescale-iot-pipeline/SKILL.md
+          pass_threshold: 0.6
+
+    be-python-fastapi-impl:
+      tickets:
+        - ticket_id: REF-FASTAPI-001
+          title: "Add a new FastAPI inference endpoint gated by MOCK_MODE"
+          references_skill: .claude/skills/kafka-timescale-iot-pipeline/SKILL.md  # same skill covers the AI sidecar
+          pass_threshold: 0.6
+
+in_flight_sampling:
+  enabled: true
+  sample_rate: 0.1
+  judge_model: claude-opus-4-6
+  rubric: .harness/eval/rubric.md
+
+rubric:
+  - dimension: correctness
+    weight: 0.4
+  - dimension: convention
+    weight: 0.2
+  - dimension: safety
+    weight: 0.2
+  - dimension: maintainability
+    weight: 0.2
+  pass_score: 4.0

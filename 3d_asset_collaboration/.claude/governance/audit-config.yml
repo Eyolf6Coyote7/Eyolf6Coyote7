@@ -1,0 +1,32 @@
+# Audit log configuration for 3d_asset_collaboration.
+
+local:
+  dir: .harness/audit/
+  format: jsonl
+  rotation: daily
+  retention_days: 60
+
+central:
+  collector: github-actions
+  workflow: .github/workflows/harness-verify.yml
+  store: s3://harness-audit-3d-asset-collaboration/
+  retention_days: 730   # 2 years
+
+hooks_writing:
+  - postToolUse_auditLog.sh
+
+required_fields:
+  - timestamp
+  - session_id
+  - tool
+  - user
+  - cell
+  - service       # asset-api / iot-consumer / ai-service / asset-portal / mobile-app — extra granularity for the polyglot stack
+
+forbidden_fields:
+  - prompt_content
+  - file_content
+  - chat_history
+  - email
+  - PII
+  - onnx_model_weights   # model binaries must never appear in audit logs

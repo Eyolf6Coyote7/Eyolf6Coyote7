@@ -1,0 +1,52 @@
+# Token-cost budget caps for enterprise_workflow_system
+# Enterprise is the heaviest project because of polyglot backend (Kotlin + PHP + Kafka)
+# plus dual Vue frontends plus two native mobile apps.
+
+global:
+  daily_cap_usd: 250
+  monthly_cap_usd: 5000
+  alert_threshold_pct: 80
+  hard_stop_threshold_pct: 100
+
+per_user:
+  daily_cap_usd: 25
+  monthly_cap_usd: 500
+  alert_at_pct: 80
+
+per_cell:
+  fe-csr-vue-impl:
+    monthly_cap_usd: 1000
+    rationale: "Largest surface — admin-dashboard + employee-portal both Vue 3, plus Element Plus, echarts, i18n, Pinia, RBAC flow."
+  fe-csr-vue-test:
+    monthly_cap_usd: 400
+  fe-csr-vue-review:
+    monthly_cap_usd: 250
+
+  fe-csr-compose-impl:
+    monthly_cap_usd: 300
+  fe-csr-swiftui-impl:
+    monthly_cap_usd: 300
+
+  be-kotlin-impl:
+    monthly_cap_usd: 600
+    rationale: "Spring Boot + DGS GraphQL + JPA — cross-cutting schema design."
+  be-kotlin-test:
+    monthly_cap_usd: 300
+  be-kotlin-review:
+    monthly_cap_usd: 250
+
+  be-laravel-impl:
+    monthly_cap_usd: 400
+  be-laravel-test:
+    monthly_cap_usd: 200
+
+  be-kafka-impl:
+    monthly_cap_usd: 400
+    rationale: "Notification worker — event-driven, idempotency design, careful testing."
+  be-kafka-test:
+    monthly_cap_usd: 200
+
+alerts:
+  channel: "#harness-cost"
+  email: "harness-cost@example.com"
+  pagerduty_service: null

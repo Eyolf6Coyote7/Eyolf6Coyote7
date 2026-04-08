@@ -1,0 +1,32 @@
+# Audit log configuration for realtime_ai_whiteboard
+# Every tool call Claude Code makes is appended to the local audit log by postToolUse_auditLog.sh.
+
+local:
+  dir: .harness/audit/
+  format: jsonl
+  rotation: daily
+  retention_days: 30
+
+central:
+  collector: github-actions
+  workflow: .github/workflows/harness-verify.yml
+  store: s3://harness-audit-realtime-whiteboard/
+  retention_days: 365
+
+hooks_writing:
+  - postToolUse_auditLog.sh
+
+required_fields:
+  - timestamp
+  - session_id
+  - tool
+  - user
+  - cell
+
+# Fields that MUST NOT be logged (privacy guardrail).
+forbidden_fields:
+  - prompt_content
+  - file_content
+  - chat_history
+  - email
+  - PII
