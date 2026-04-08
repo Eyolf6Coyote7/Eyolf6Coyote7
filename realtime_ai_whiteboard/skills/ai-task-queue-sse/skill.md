@@ -55,7 +55,7 @@ Decorate the method with @Sse('stream/:taskId'). Build an Observable<MessageEven
         await r.xgroup_create(STREAM_KEY, GROUP_NAME, id='0', mkstream=True)
     except redis.ResponseError:
         pass
-    while running:
+    while True:
         messages = await r.xreadgroup(GROUP_NAME, consumer, {STREAM_KEY: '>'}, count=1, block=5000)
         for _stream, entries in messages:
             for msg_id, data in entries:

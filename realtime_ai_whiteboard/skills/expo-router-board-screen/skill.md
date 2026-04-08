@@ -47,7 +47,7 @@ See app/board/[id].tsx lines 1-144 for the full canvas variant and lines 145-344
 
 ### Floating toolbar cluster idiom
 
-Position absolute, bottom 32, left and right 5 percent. A circular AI sparkle button (46x46, radii.pill, colors.white, shadowOpacity 0.08) sits ABOVE the main toolbar (rounded pill, rgba white 0.9, card shadow). Two rows of 4 buttons each with 24px gap. Active button uses background 0050D4 with matching shadow. See app/board/[id].tsx lines 292-344 for the full StyleSheet.
+Position absolute, bottom 32, left and right 5 percent. A circular AI sparkle button (46x46, radii.pill, colors.white, shadowOpacity 0.08) sits ABOVE the main toolbar (rounded pill, rgba white 0.9, card shadow). Two rows of 4 buttons each with 24px gap. Active button uses background `#0050D4` with matching shadow. See app/board/[id].tsx lines 292-344 for the full StyleSheet.
 
 ### Axios base URL pattern
 

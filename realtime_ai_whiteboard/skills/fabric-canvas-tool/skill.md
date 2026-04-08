@@ -46,16 +46,16 @@ When fixing a 'shapes get duplicated' bug, verify canvas.off('mouse:down') / can
 
 ### Standard colour palette (must match)
 
-    FILL_BLUE    DBEAFE   rect
-    FILL_RED     FEE2E2   circle
-    FILL_YELLOW  FEF3C7   sticky
-    STROKE_BLUE    2563EB
-    STROKE_RED     EF4444
-    STROKE_YELLOW  F59E0B
-    STROKE_NEUTRAL 374151
-    TEXT_DARK      191C1D
-    TEXT_NEUTRAL   374151
-    TEXT_AMBER     92400E
+    FILL_BLUE      #DBEAFE   rect
+    FILL_RED       #FEE2E2   circle
+    FILL_YELLOW    #FEF3C7   sticky
+    STROKE_BLUE    #2563EB
+    STROKE_RED     #EF4444
+    STROKE_YELLOW  #F59E0B
+    STROKE_NEUTRAL #374151
+    TEXT_DARK      #191C1D
+    TEXT_NEUTRAL   #374151
+    TEXT_AMBER     #92400E
 
 ### Tool case template (arrow)
 

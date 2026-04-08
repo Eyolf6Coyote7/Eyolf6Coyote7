@@ -50,9 +50,28 @@ When fixing a connection bug, check: (a) VITE_YJS_WS_URL env var fallback is ws:
 
     const COLORS = ['#2563EB', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
 
+    // Throttle with leading + trailing edge so the final cursor position is
+    // always synchronized after the user stops moving.
     function throttle(fn, ms) {
       let last = 0;
-      return (...args) => { const now = Date.now(); if (now - last >= ms) { last = now; fn(...args); } };
+      let timer = null;
+      let lastArgs = null;
+      return (...args) => {
+        const now = Date.now();
+        const remaining = ms - (now - last);
+        lastArgs = args;
+        if (remaining <= 0) {
+          if (timer) { clearTimeout(timer); timer = null; }
+          last = now;
+          fn(...args);
+        } else if (!timer) {
+          timer = setTimeout(() => {
+            last = Date.now();
+            timer = null;
+            fn(...lastArgs);
+          }, remaining);
+        }
+      };
     }
 
     export function useYjs(boardId) {
@@ -61,6 +80,7 @@ When fixing a connection bug, check: (a) VITE_YJS_WS_URL env var fallback is ws:
       const [cursors, setCursors] = useState([]);
       const [onlineCount, setOnlineCount] = useState(0);
       const token = useAuthStore(s => s.token);
+      const user = useAuthStore(s => s.user);
 
       useEffect(() => {
         const doc = new Y.Doc();
@@ -70,6 +90,11 @@ When fixing a connection bug, check: (a) VITE_YJS_WS_URL env var fallback is ws:
         new IndexeddbPersistence(boardId, doc);
         provider.on('status', e => setConnected(e.status === 'connected'));
         const awareness = provider.awareness;
+        // Stable per-user color picked deterministically from COLORS by userId hash.
+        const userId = user?.id ?? 'anonymous';
+        const name = user?.name ?? 'Guest';
+        const colorIndex = Math.abs(String(userId).split('').reduce((h, c) => h * 31 + c.charCodeAt(0), 0)) % COLORS.length;
+        const color = COLORS[colorIndex];
         awareness.setLocalStateField('user', { userId, name, color });
         const updateCursors = () => {
           const states = Array.from(awareness.getStates().entries());
