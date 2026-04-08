@@ -1,0 +1,41 @@
+{
+  "default": "claude-sonnet-4-6",
+  "routing": {
+    "fe-csr-react-architect":   "claude-opus-4-6",
+    "fe-csr-react-implementer": "claude-sonnet-4-6",
+    "fe-csr-react-reviewer":    "claude-sonnet-4-6",
+    "fe-csr-react-tester":      "claude-sonnet-4-6",
+    "fe-csr-react-obs":         "claude-sonnet-4-6",
+
+    "fe-csr-r3f-architect":   "claude-opus-4-6",
+    "fe-csr-r3f-implementer": "claude-sonnet-4-6",
+    "fe-csr-r3f-reviewer":    "claude-sonnet-4-6",
+
+    "fe-csr-rn-implementer": "claude-sonnet-4-6",
+    "fe-csr-rn-reviewer":    "claude-sonnet-4-6",
+
+    "be-dotnet-architect":    "claude-opus-4-6",
+    "be-dotnet-implementer":  "claude-sonnet-4-6",
+    "be-dotnet-reviewer":     "claude-sonnet-4-6",
+    "be-dotnet-tester":       "claude-sonnet-4-6",
+    "be-signalr-implementer": "claude-sonnet-4-6",
+    "be-signalr-reviewer":    "claude-sonnet-4-6",
+
+    "be-kafka-architect":   "claude-opus-4-6",
+    "be-kafka-implementer": "claude-sonnet-4-6",
+    "be-kafka-reviewer":    "claude-sonnet-4-6",
+
+    "be-python-fastapi-implementer": "claude-sonnet-4-6",
+    "be-python-fastapi-reviewer":    "claude-sonnet-4-6",
+
+    "precommit-agent": "claude-haiku-4-5",
+    "security-agent":  "claude-sonnet-4-6",
+    "cicd-agent":      "claude-sonnet-4-6",
+    "iterate-agent":   "claude-sonnet-4-6"
+  },
+  "rationale": {
+    "haiku":  "Precommit lint (eslint / dotnet format / ruff) is deterministic and cheap.",
+    "sonnet": "Default for implementation, review, and test across React + r3f + RN + ASP.NET + .NET Kafka + Python FastAPI.",
+    "opus":   "The r3f viewer (WebGL concurrency), the ASP.NET SignalR real-time layer, and the Kafka → TimescaleDB → FastAPI ONNX data plane all need deep architectural reasoning — especially cross-service ones like 'how does an IoT event end up rendered over the 3D scene.'"
+  }
+}

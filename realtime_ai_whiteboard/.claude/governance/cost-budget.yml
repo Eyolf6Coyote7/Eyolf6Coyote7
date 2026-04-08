@@ -1,0 +1,36 @@
+# Token-cost budget caps for realtime_ai_whiteboard
+# Enforced by the userPromptSubmit_costTrack hook (if installed) and reported to the central harness dashboard.
+
+global:
+  daily_cap_usd: 150
+  monthly_cap_usd: 3000
+  alert_threshold_pct: 80
+  hard_stop_threshold_pct: 100
+
+per_user:
+  daily_cap_usd: 15
+  monthly_cap_usd: 300
+  alert_at_pct: 80
+
+# Per-cell caps — "cell" = harness × SDLC stage
+# See harness classification on each SKILL.md frontmatter `harness:` field.
+per_cell:
+  fe-csr-impl:
+    monthly_cap_usd: 800
+    rationale: "Largest cell — canvas work, Yjs CRDT wiring, Zustand state, SSE streaming UI, i18n."
+  fe-csr-test:
+    monthly_cap_usd: 300
+  fe-csr-review:
+    monthly_cap_usd: 200
+  be-impl:
+    monthly_cap_usd: 500
+    rationale: "NestJS controllers, Redis Stream producer, Yjs gateway, Prisma schema."
+  be-test:
+    monthly_cap_usd: 300
+  be-review:
+    monthly_cap_usd: 200
+
+alerts:
+  channel: "#harness-cost"
+  email: "harness-cost@example.com"
+  pagerduty_service: null  # cost alerts are not prod incidents

@@ -1,0 +1,96 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Write(admin-dashboard/src/**)",
+      "Write(admin-dashboard/tests/**)",
+      "Write(employee-portal/src/**)",
+      "Write(employee-portal/tests/**)",
+      "Write(mobile-app/android/app/src/main/**)",
+      "Write(mobile-app/android/app/src/test/**)",
+      "Write(mobile-app/ios/WorkflowiOS/**)",
+      "Write(workflow-api/src/main/**)",
+      "Write(workflow-api/src/test/**)",
+      "Write(admin-api/app/**)",
+      "Write(admin-api/tests/**)",
+      "Write(notification-worker/src/main/**)",
+      "Write(notification-worker/src/test/**)",
+      "Write(.harness/**)",
+      "Write(docs/adr/**)",
+      "Edit(admin-dashboard/src/**)",
+      "Edit(employee-portal/src/**)",
+      "Edit(mobile-app/android/app/src/main/**)",
+      "Edit(mobile-app/ios/WorkflowiOS/**)",
+      "Edit(workflow-api/src/main/**)",
+      "Edit(admin-api/app/**)",
+      "Edit(notification-worker/src/main/**)",
+      "Bash(pnpm:*)",
+      "Bash(pnpm test:*)",
+      "Bash(./gradlew test)",
+      "Bash(./gradlew build)",
+      "Bash(./gradlew bootJar)",
+      "Bash(./gradlew ktlintCheck)",
+      "Bash(composer:*)",
+      "Bash(php artisan test)",
+      "Bash(php artisan route:list)",
+      "Bash(php artisan make:*)",
+      "Bash(xcodebuild:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(jq:*)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(**/secrets.yml)",
+      "Read(**/secrets.yaml)",
+      "Read(**/credentials*)",
+      "Read(**/*.key)",
+      "Read(**/*.pem)",
+      "Write(.env)",
+      "Write(.env.*)",
+      "Write(**/migrations/**)",
+      "Write(**/resources/db/migration/**)",
+      "Write(admin-api/database/migrations/**)",
+      "Write(infra/prod/**)",
+      "Write(k8s/prod/**)",
+      "Write(.github/workflows/deploy*.yml)",
+      "Bash(./gradlew publishToNexus*)",
+      "Bash(./gradlew flywayMigrate*)",
+      "Bash(php artisan migrate --force*)",
+      "Bash(php artisan migrate:fresh*)",
+      "Bash(kubectl apply*)",
+      "Bash(terraform apply*)",
+      "Bash(helm upgrade*)",
+      "Bash(rm -rf:*)",
+      "Bash(git push --force*)",
+      "Bash(git reset --hard*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/preToolUse_redLine.sh" },
+          { "type": "command", "command": ".claude/hooks/preToolUse_secretScan.sh" }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/preToolUse_redLine.sh" }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/postToolUse_auditLog.sh" }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,63 @@
+# Human-in-the-loop gates for enterprise_workflow_system
+# Lists actions that MUST be approved by a human and cannot be auto-executed by AI.
+
+gates:
+  - name: jpa-schema-migration
+    description: Any Flyway migration under workflow-api must be human-reviewed before running against a real database.
+    triggers:
+      - file_pattern: "workflow-api/src/main/resources/db/migration/**"
+      - command_pattern: "./gradlew flywayMigrate*"
+    approval_method: pull_request_review
+    required_approvers: 1
+    notify: ["#backend", "#data-eng"]
+
+  - name: laravel-migration
+    description: Laravel schema migrations under admin-api must be human-reviewed.
+    triggers:
+      - file_pattern: "admin-api/database/migrations/**"
+      - command_pattern: "php artisan migrate --force*"
+      - command_pattern: "php artisan migrate:fresh*"
+    approval_method: pull_request_review
+    required_approvers: 1
+    notify: ["#backend"]
+
+  - name: graphql-schema-change
+    description: Any change to the DGS GraphQL schema (`.graphqls`) must be reviewed — breaking changes impact all frontend consumers (admin-dashboard + employee-portal + both mobile apps).
+    triggers:
+      - file_pattern: "workflow-api/src/main/resources/schema/**"
+    approval_method: pull_request_review
+    required_approvers: 2
+    notify: ["#backend", "#frontend"]
+
+  - name: kafka-topic-config
+    description: Changes to Kafka topic names, partitions, or retention in notification-worker must be reviewed.
+    triggers:
+      - file_pattern: "notification-worker/src/main/resources/application.yml"
+      - file_pattern: "notification-worker/src/main/**/KafkaConfig*.kt"
+    approval_method: pull_request_review
+    required_approvers: 1
+    notify: ["#platform", "#data-eng"]
+
+  - name: prod-deploy
+    description: Any production deploy must be human-approved.
+    triggers:
+      - subagent: fe-csr-vue-reviewer
+        condition: environment == "production"
+      - subagent: be-kotlin-reviewer
+        condition: environment == "production"
+      - command_pattern: "./gradlew publishToNexus*"
+      - command_pattern: "kubectl apply"
+      - command_pattern: "terraform apply"
+      - command_pattern: "helm upgrade"
+    approval_method: pull_request_review
+    required_approvers: 1
+    notify: ["#oncall", "#harness-deploys"]
+
+  - name: security-high
+    description: SAST / dependency audit findings at critical or high severity must be human-reviewed.
+    triggers:
+      - subagent: security-agent
+        condition: severity in [critical, high]
+    approval_method: pull_request_review
+    required_approvers: 2
+    notify: ["#security"]

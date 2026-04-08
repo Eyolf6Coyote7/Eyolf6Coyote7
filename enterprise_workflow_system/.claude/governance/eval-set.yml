@@ -1,0 +1,78 @@
+# Eval set for the enterprise_workflow_system harness.
+# This project has the widest test matrix — 3 backend languages plus 4 frontend stacks (Vue web × 2, Compose, SwiftUI).
+
+eval_runs:
+  schedule: "0 2 * * 1"  # Every Monday at 02:00 UTC
+  out_dir: .harness/eval/results/
+
+  cells:
+    fe-csr-vue-impl:
+      tickets:
+        - ticket_id: REF-VUE-001
+          title: "Add a 3-step form wizard for a new request type"
+          references_skill: .claude/skills/vue-multi-step-form-wizard/SKILL.md
+          pass_threshold: 0.6
+        - ticket_id: REF-VUE-002
+          title: "Add a filterable list page with stat chips + search"
+          references_skill: .claude/skills/vue-filterable-data-table/SKILL.md
+          pass_threshold: 0.6
+        - ticket_id: REF-VUE-003
+          title: "Add a KPI dashboard page with 4 charts"
+          references_skill: .claude/skills/vue-echarts-kpi-dashboard/SKILL.md
+          pass_threshold: 0.6
+        - ticket_id: REF-VUE-004
+          title: "Add an audit-log viewer with live indicator"
+          references_skill: .claude/skills/vue-audit-log-viewer/SKILL.md
+          pass_threshold: 0.6
+
+    fe-csr-compose-impl:
+      tickets:
+        - ticket_id: REF-COMPOSE-001
+          title: "Add an approval queue screen with segmented control + priority-tinted cards"
+          references_skill: .claude/skills/compose-approval-queue-screen/SKILL.md
+          pass_threshold: 0.6
+
+    fe-csr-swiftui-impl:
+      tickets:
+        - ticket_id: REF-SWIFTUI-001
+          title: "Add an approval queue view with NavigationStack + custom segmented control"
+          references_skill: .claude/skills/swiftui-approval-queue-screen/SKILL.md
+          pass_threshold: 0.6
+
+    be-kotlin-impl:
+      tickets:
+        - ticket_id: REF-DGS-001
+          title: "Add a new GraphQL type with Query + Mutation + JPA repository + Flyway migration"
+          references_skill: .claude/skills/kotlin-dgs-graphql-jpa-crud/SKILL.md
+          pass_threshold: 0.6
+
+    be-laravel-impl:
+      tickets:
+        - ticket_id: REF-LARAVEL-001
+          title: "Add a thin REST CRUD controller with inline validation"
+          references_skill: .claude/skills/laravel-rest-crud-with-audit/SKILL.md
+          pass_threshold: 0.6
+
+    be-kafka-impl:
+      tickets:
+        - ticket_id: REF-KAFKA-001
+          title: "Add a new @KafkaListener for a new topic with idempotency wrapper"
+          references_skill: .claude/skills/kotlin-kafka-notification-worker/SKILL.md
+          pass_threshold: 0.6
+
+in_flight_sampling:
+  enabled: true
+  sample_rate: 0.1
+  judge_model: claude-opus-4-6
+  rubric: .harness/eval/rubric.md
+
+rubric:
+  - dimension: correctness
+    weight: 0.4
+  - dimension: convention
+    weight: 0.2
+  - dimension: safety
+    weight: 0.2
+  - dimension: maintainability
+    weight: 0.2
+  pass_score: 4.0

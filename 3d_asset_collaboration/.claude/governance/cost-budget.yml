@@ -1,0 +1,51 @@
+# Token-cost budget caps for 3d_asset_collaboration
+# This project has the most heterogeneous backend stack (C# + Python), so the cost profile is wider.
+
+global:
+  daily_cap_usd: 200
+  monthly_cap_usd: 4000
+  alert_threshold_pct: 80
+  hard_stop_threshold_pct: 100
+
+per_user:
+  daily_cap_usd: 20
+  monthly_cap_usd: 400
+  alert_at_pct: 80
+
+per_cell:
+  fe-csr-react-impl:
+    monthly_cap_usd: 800
+    rationale: "Largest FE surface — asset-portal with 3 layout skins (default web, Unity, mobile)."
+  fe-csr-react-test:
+    monthly_cap_usd: 300
+  fe-csr-react-review:
+    monthly_cap_usd: 200
+
+  fe-csr-r3f-impl:
+    monthly_cap_usd: 400
+    rationale: "3D viewer work — WebGL, Three.js, drei, useFrame animation."
+  fe-csr-r3f-review:
+    monthly_cap_usd: 200
+
+  fe-csr-rn-impl:
+    monthly_cap_usd: 300
+
+  be-dotnet-impl:
+    monthly_cap_usd: 500
+    rationale: "ASP.NET Core + EF Core + SignalR, biggest backend service."
+  be-dotnet-test:
+    monthly_cap_usd: 250
+  be-signalr-impl:
+    monthly_cap_usd: 200
+
+  be-kafka-impl:
+    monthly_cap_usd: 400
+    rationale: "iot-consumer + TimescaleDB writes."
+  be-python-fastapi-impl:
+    monthly_cap_usd: 300
+    rationale: "ai-service — small, but ONNX inference experimentation is expensive."
+
+alerts:
+  channel: "#harness-cost"
+  email: "harness-cost@example.com"
+  pagerduty_service: null

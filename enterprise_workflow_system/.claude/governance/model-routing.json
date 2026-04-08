@@ -1,0 +1,38 @@
+{
+  "default": "claude-sonnet-4-6",
+  "routing": {
+    "fe-csr-vue-architect":  "claude-opus-4-6",
+    "fe-csr-vue-implementer": "claude-sonnet-4-6",
+    "fe-csr-vue-reviewer":    "claude-sonnet-4-6",
+    "fe-csr-vue-tester":      "claude-sonnet-4-6",
+    "fe-csr-vue-obs":         "claude-sonnet-4-6",
+
+    "fe-csr-compose-implementer": "claude-sonnet-4-6",
+    "fe-csr-compose-reviewer":    "claude-sonnet-4-6",
+    "fe-csr-swiftui-implementer": "claude-sonnet-4-6",
+    "fe-csr-swiftui-reviewer":    "claude-sonnet-4-6",
+
+    "be-kotlin-architect":   "claude-opus-4-6",
+    "be-kotlin-implementer": "claude-sonnet-4-6",
+    "be-kotlin-reviewer":    "claude-sonnet-4-6",
+    "be-kotlin-tester":      "claude-sonnet-4-6",
+
+    "be-laravel-implementer": "claude-sonnet-4-6",
+    "be-laravel-reviewer":    "claude-sonnet-4-6",
+    "be-laravel-tester":      "claude-sonnet-4-6",
+
+    "be-kafka-architect":   "claude-opus-4-6",
+    "be-kafka-implementer": "claude-sonnet-4-6",
+    "be-kafka-reviewer":    "claude-sonnet-4-6",
+
+    "precommit-agent":  "claude-haiku-4-5",
+    "security-agent":   "claude-sonnet-4-6",
+    "cicd-agent":       "claude-sonnet-4-6",
+    "iterate-agent":    "claude-sonnet-4-6"
+  },
+  "rationale": {
+    "haiku":  "Precommit lint (ktlint / eslint / phpcs / prettier) is deterministic and cheap.",
+    "sonnet": "Default for implementation, review, and test across Vue 3, Compose, SwiftUI, Spring Boot, Laravel, and Kafka workers.",
+    "opus":   "Architecture decisions that span GraphQL schema + JPA entity + Kafka event shape need deep cross-service reasoning, and the polyglot nature of the backend (Kotlin + PHP + Kafka) amplifies the stakes of a wrong decision."
+  }
+}

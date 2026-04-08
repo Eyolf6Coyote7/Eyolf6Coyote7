@@ -1,0 +1,68 @@
+# Human-in-the-loop gates for 3d_asset_collaboration
+
+gates:
+  - name: ef-core-migration
+    description: Any EF Core migration must be human-reviewed before applying to a real database.
+    triggers:
+      - file_pattern: "asset-api/Migrations/**"
+      - command_pattern: "dotnet ef database update*"
+      - command_pattern: "dotnet ef database drop*"
+    approval_method: pull_request_review
+    required_approvers: 1
+    notify: ["#backend", "#data-eng"]
+
+  - name: timescale-hypertable-change
+    description: Any change to the TimescaleDB hypertable shape in iot-consumer must be reviewed because it affects hot data.
+    triggers:
+      - file_pattern: "iot-consumer/**/Migrations/**"
+      - file_pattern: "iot-consumer/**/*.sql"
+    approval_method: pull_request_review
+    required_approvers: 1
+    notify: ["#data-eng", "#iot-platform"]
+
+  - name: signalr-hub-change
+    description: Changes to SignalR hubs (AssetHub / IoTHub) must be reviewed because they break all real-time consumers at once.
+    triggers:
+      - file_pattern: "asset-api/Hubs/*.cs"
+    approval_method: pull_request_review
+    required_approvers: 1
+    notify: ["#backend", "#frontend"]
+
+  - name: onnx-model-swap
+    description: Replacing the ONNX model used by the ai-service requires review (affects all AI tag suggestions).
+    triggers:
+      - file_pattern: "ai-service/models/**"
+      - file_pattern: "ai-service/src/models/*.py"
+    approval_method: pull_request_review
+    required_approvers: 1
+    notify: ["#ai-platform"]
+
+  - name: prod-deploy
+    description: Any production deploy must be human-approved.
+    triggers:
+      - subagent: be-dotnet-reviewer
+        condition: environment == "production"
+      - command_pattern: "dotnet publish -c Release"
+      - command_pattern: "kubectl apply"
+      - command_pattern: "terraform apply"
+      - command_pattern: "helm upgrade"
+    approval_method: pull_request_review
+    required_approvers: 1
+    notify: ["#oncall", "#harness-deploys"]
+
+  - name: security-high
+    description: SAST / dependency audit findings at critical or high severity must be human-reviewed.
+    triggers:
+      - subagent: security-agent
+        condition: severity in [critical, high]
+    approval_method: pull_request_review
+    required_approvers: 2
+    notify: ["#security"]
+
+  - name: unity-client-change
+    description: Any change under unity-client must be human-reviewed because Unity artifacts are opaque to AI code review.
+    triggers:
+      - file_pattern: "unity-client/**"
+    approval_method: pull_request_review
+    required_approvers: 1
+    notify: ["#unity"]
