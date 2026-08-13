@@ -3,6 +3,18 @@
 > 3 projects · 3 industries · 7 frontends · 8 backends · 24 infra services
 
 
+<a href="./docs/media/portfolio-overview.mp4"><img src="./docs/media/portfolio-overview.gif" width="760" alt="Three cross-platform product demos running side by side" /></a>
+
+## Executive snapshot
+
+| Product | Business scenario | Engineering signal |
+|---|---|---|
+| Realtime AI Whiteboard | Collaborative SaaS ideation | CRDT sync, AI agent workflow, RAG/MCP, web + mobile |
+| Enterprise Workflow | Semiconductor approvals and auditability | Temporal orchestration, Kafka events, immutable audit trail, SSO |
+| 3D Asset Collaboration | Media asset operations and digital twins | Three.js, gRPC streaming, IoT ingestion, search, web + Unity + mobile |
+
+This workspace demonstrates platform thinking across three domains: shared infrastructure and governance underneath, product-specific boundaries above, and multiple client surfaces at the edge. The demos are portfolio environments; linked documentation identifies the implemented, simulated, and integration-ready boundaries.
+
 ## 🏗️ Shared Platform
 
 | Role | Tech |
